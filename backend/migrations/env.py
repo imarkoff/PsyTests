@@ -1,7 +1,6 @@
 import os
 from logging.config import fileConfig
 
-from dotenv import load_dotenv
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -19,18 +18,20 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../.env'))
-database = {
-    "user": os.getenv("POSTGRES_USER"),
-    "password": os.getenv("POSTGRES_PASSWORD"),
-    "port": f"{os.getenv("POSTGRES_PORT")}0",
-    "database": os.getenv("POSTGRES_DB"),
-}
+# load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '../../.env'))
+# database = {
+#     "user": os.getenv("POSTGRES_USER"),
+#     "password": os.getenv("POSTGRES_PASSWORD"),
+#     "port": f"{os.getenv("POSTGRES_PORT")}0",
+#     "database": os.getenv("POSTGRES_DB"),
+# }
+#
+# postgres_url = f"postgresql+psycopg2://{database['user']}:{database['password']}@localhost:{database['port']}/{database['database']}"
+#
+# if os.getenv("POSTGRES_USER"):
+#     config.set_main_option("sqlalchemy.url", postgres_url)
 
-postgres_url = f"postgresql+psycopg2://{database['user']}:{database['password']}@localhost:{database['port']}/{database['database']}"
-
-if os.getenv("POSTGRES_USER"):
-    config.set_main_option("sqlalchemy.url", postgres_url)
+config.set_main_option("sqlalchemy.url", os.getenv("POSTGRESQL_URL"))
 
 target_metadata = Base.metadata
 
