@@ -12,6 +12,15 @@ class UserCreate(BaseModel):
 
     class Config:
         from_attributes = True
+        json_schema_extra = {
+            "example": {
+                "name": "John",
+                "surname": "Doe",
+                "email": "johndoe@gmail.com",
+                "password": "password1234",
+                "role": "patient"
+            }
+        }
 
 
 class UserLogin(BaseModel):
@@ -20,3 +29,26 @@ class UserLogin(BaseModel):
 
     class Config:
         from_attributes = True
+        json_schema_extra = {
+            "example": {
+                "email": "johndoe@gmail.com",
+                "password": "password1234"
+            }
+        }
+
+class UserDto(BaseModel):
+    name: str
+    surname: str
+    email: str
+    role: Role
+
+    class Config:
+        from_attributes = True
+        json_schema_extra = {
+            "example": {
+                "name": "John",
+                "surname": "Doe",
+                "email": "johndoe@gmail.com",
+                "role": "patient"
+            }
+        }

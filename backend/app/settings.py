@@ -5,7 +5,9 @@ class Settings:
     DEBUG: bool = True
     DATABASE_URL: str = os.getenv("POSTGRESQL_URL", "postgresql://user:password@localhost/db")
     SECRET_KEY: str = os.getenv("SECRET_KEY", "secret")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE: int = 15   # minutes
+    REFRESH_TOKEN_EXPIRE: int = 14  # days
+    TOKEN_ALGORITHM: str = "HS256"
 
     class Config:
         env_file = ".env"
