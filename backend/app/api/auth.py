@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from starlette.responses import Response
 
 from app.settings import settings
-from app.db.models.user import User
-from app.db.session import get_db
+from app.db.postgresql.models.user import User
+from app.db.postgresql.session import get_postgresql_db
 from app.schemas.user_auth import UserCreate, UserLogin
 from app.services.user_service import register_user, get_user_by_email
 from app.core.create_tokens import create_tokens
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
         201: {"content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}}, "description": "Access token"},
     }
 )
-async def sign_up(data: UserCreate, db: Session = Depends(get_db)):
+async def sign_up(data: UserCreate, db: Session = Depends(get_postgresql_db)):
     if db.query(User).filter(User.email == data.email).first():
         return Response(status_code=409)
 
@@ -43,7 +43,7 @@ async def sign_up(data: UserCreate, db: Session = Depends(get_db)):
         200: {"content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}}, "description": "Access token"}
     }
 )
-async def login_user(data: UserLogin, db: Session = Depends(get_db)):
+async def login_user(data: UserLogin, db: Session = Depends(get_postgresql_db)):
     user = get_user_by_email(data.email, db)
 
     if not user or not verify_password(data.password, user.password, user.password_salt):

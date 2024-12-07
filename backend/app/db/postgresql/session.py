@@ -4,10 +4,10 @@ from app.settings import settings
 
 Base = declarative_base()
 
-engine = create_engine(settings.DATABASE_URL, echo=True)
+engine = create_engine(settings.POSTGRESQL_URL, echo=True)
 session = sessionmaker(engine, autocommit=False, autoflush=False)
 
-async def get_db():
+async def get_postgresql_db():
     db = session()
     try:
         yield db

@@ -4,10 +4,12 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from app.core.bearer import JWTBearer
-from app.db.session import get_db
+from app.db.postgresql.session import get_postgresql_db
 from app.services.user_service import user_by_id
 
+
 router = APIRouter(prefix="/token", tags=["token"])
+
 
 @router.post("/refresh", summary="Refresh access token",
     response_class=Response, responses={
@@ -17,7 +19,7 @@ router = APIRouter(prefix="/token", tags=["token"])
 )
 async def refresh_token(
     request: Request,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_postgresql_db)
 ):
     token = request.cookies.get("refresh_token")
 

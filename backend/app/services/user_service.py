@@ -1,7 +1,7 @@
 from pydantic.v1 import UUID4
 from sqlalchemy.orm import Session
 
-from app.db.models.user import User
+from app.db.postgresql.models.user import User
 from app.schemas.user_auth import UserCreate
 from app.core.password import cache_password
 

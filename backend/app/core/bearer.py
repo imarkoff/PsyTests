@@ -8,7 +8,7 @@ from pydantic import UUID4
 from sqlalchemy.orm import Session
 
 from app.settings import settings
-from app.db.models.user import User
+from app.db.postgresql.models.user import User
 from app.schemas.user_auth import UserDto
 from app.services.user_service import user_by_id
 
@@ -33,7 +33,7 @@ class JWTBearer:
         if not user:
             raise HTTPException(status_code=401)
 
-        return UserDto.model_validate(user)
+        return user
 
     @staticmethod
     def verify(token: str) -> bool:
