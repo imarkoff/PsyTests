@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import "./login/login.scss"
+import "./login.scss"
 
 export default function Home() {
 
@@ -35,7 +35,6 @@ export default function Home() {
           <a href="">Sing up</a>
         </div>
       </form>
-      <div className="backgr"></div>
     </main>
   );
 }
