@@ -1,0 +1,37 @@
+import {
+    Box,
+    Button,
+    Card,
+    FormControl,
+    FormLabel,
+    OutlinedInput,
+    Typography,
+} from "@mui/material";
+import PasswordInput from "@/app/login/components/PasswordInput";
+import SignInContainer from "@/app/login/components/SignInContainer";
+
+export default function Page() {
+  return (
+      <SignInContainer>
+          <Card variant={"outlined"} className={"max-w-[400px] w-full box-border m-3 flex flex-col gap-3"}>
+              <h2>PsyTest</h2>
+              <Typography component={"h1"} className={"text-4xl font-semibold"}>Вхід</Typography>
+              <Box component={"form"} className={"flex flex-col gap-5 w-full"} noValidate>
+                  <FormControl>
+                      <FormLabel htmlFor={"email"}>Електронна скринька</FormLabel>
+                      <OutlinedInput
+                          id={"email"}
+                          type={"email"}
+                          placeholder={"your@email.com"}
+                          error={false} // TODO: add error state
+                          fullWidth
+                          size={"small"}
+                      />
+                  </FormControl>
+                  <PasswordInput />
+                  <Button variant={"contained"} fullWidth className={"mt-2"} type={"submit"}>Увійти</Button>
+              </Box>
+          </Card>
+      </SignInContainer>
+  );
+}
