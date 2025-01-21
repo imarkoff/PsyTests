@@ -1,7 +1,7 @@
 import uuid
 
 from sqlalchemy import Column, String, Enum, LargeBinary, UUID
-from app.db.postgresql.session import Base
+from app.db.session import Base
 from app.schemas.role import Role
 
 

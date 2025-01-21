@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from starlette.responses import Response
 
 from app.settings import settings
-from app.db.postgresql.models.user import User
-from app.db.postgresql.session import get_postgresql_db
+from app.db.models.user import User
+from app.db.session import get_postgresql_db
 from app.schemas.user_auth import UserCreate, UserLogin
 from app.services.user_service import register_user, get_user_by_email
 from app.core.create_tokens import create_tokens

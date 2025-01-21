@@ -8,7 +8,7 @@ from pydantic import UUID4
 from sqlalchemy.orm import Session
 
 from app.settings import settings
-from app.db.postgresql.models.user import User
+from app.db.models.user import User
 from app.schemas.user_auth import UserDto
 from app.services.user_service import user_by_id
 

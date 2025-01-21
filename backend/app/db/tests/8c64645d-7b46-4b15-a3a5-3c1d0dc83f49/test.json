@@ -1,0 +1,30 @@
+{
+  "name": "Кольорові прогресивні матриці (TEST)",
+  "description": "Тест на знання кольорових прогресивних матриць",
+  "questions": [
+    {
+      "image": "./0/question.png",
+      "answers": [
+        {
+          "image": "./0/1.png"
+        },
+        {
+          "image": "./0/2.png"
+        },
+        {
+          "image": "./0/3.png"
+        },
+        {
+          "image": "./0/4.png",
+          "isCorrect": true
+        },
+        {
+          "image": "./0/5.png"
+        },
+        {
+          "image": "./0/6.png"
+        }
+      ]
+    }
+  ]
+}

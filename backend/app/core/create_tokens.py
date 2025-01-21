@@ -1,5 +1,5 @@
 from app.core.bearer import JWTBearer
-from app.db.postgresql.models.user import User
+from app.db.models.user import User
 
 
 def create_tokens(user: User):

@@ -1,26 +1,25 @@
-from datetime import datetime
-from typing import Annotated, Optional
+from typing import Optional
 
-from pydantic import BaseModel, BeforeValidator, Field, ConfigDict
-from pydantic import UUID4
-
-PyObjectId = Annotated[str, BeforeValidator(str)]
+from pydantic import BaseModel, Field, ConfigDict, UUID4
 
 
 class Answer(BaseModel):
-    answer: str = Field(..., title="Answer")
-    is_correct: bool = Field(..., title="Is Correct")
+    answer: Optional[str] = Field(None, title="Answer")
+    image: Optional[str] = Field(None, title="Image")
+    is_correct: Optional[bool] = Field(False, title="Is Correct")
 
 
 class Question(BaseModel):
-    question: str = Field(..., title="Question")
+    question: Optional[str] = Field(None, title="Question")
+    image: Optional[str] = Field(None, title="Image")
     answers: list[Answer] = Field(..., title="Answers")
-    points: int = Field(..., title="Points")
+    points: Optional[int] = Field(1, title="Points")
 
 
-class TestDto(BaseModel):
+class Test(BaseModel):
+    id: UUID4 = Field(..., title="ID")
     name: str = Field(..., title="Name")
-    description: Optional[str] = Field(..., title="Description")
+    description: Optional[str] = Field(None, title="Description")
     questions: list[Question] = Field(..., title="Questions")
 
     model_config = ConfigDict(
@@ -28,17 +27,19 @@ class TestDto(BaseModel):
         json_schema_extra={
             "example": {
                 "name": "Test",
-                "description": "Test description",
-                "questions": [
+                "description": "Test description",  # optional
+                "questions": [  # must contain image or question text
                     {
                         "question": "Question",
-                        "answers": [
+                        "image": "./relative/path/to/image.jpg",
+                        "answers": [  # must contain image or answer text. at least one correct answer
                             {
                                 "answer": "Answer",
-                                "is_correct": True
+                                "image": "./relative/path/to/image.jpg",
+                                "is_correct": True  # optional
                             }
                         ],
-                        "points": 1
+                        "points": 1  # optional
                     }
                 ]
             }

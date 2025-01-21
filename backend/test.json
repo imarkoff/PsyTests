@@ -1,0 +1,22 @@
+{
+  "name": "Test",
+  "_description": "description is optional",
+  "description": "Test description",
+  "questions": [
+    {
+      "_": "each question should have at least text or image",
+      "question": "answer text",
+      "image": "./relative/path/to/image.jpg",
+      "answers": [
+        {
+          "_": "each answer should have at least text or image. At least one answer should be correct",
+          "answer": "answer text",
+          "image": "./relative/path/to/image.jpg",
+          "is_correct": true
+        }
+      ],
+      "_points": "point is optional",
+      "points": 1
+    }
+  ]
+}

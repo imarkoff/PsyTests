@@ -4,7 +4,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from app.core.bearer import JWTBearer
-from app.db.postgresql.session import get_postgresql_db
+from app.db.session import get_postgresql_db
 from app.services.user_service import user_by_id
 
 

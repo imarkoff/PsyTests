@@ -3,7 +3,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.core.bearer import JWTBearer
-from app.db.postgresql.session import get_postgresql_db
+from app.db.session import get_postgresql_db
 from app.schemas.user_auth import UserDto
 
 
