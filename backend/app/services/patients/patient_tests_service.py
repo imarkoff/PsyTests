@@ -10,7 +10,7 @@ from app.schemas.patients.patient_test import PatientTestDto
 from app.services.tests_service import get_test
 
 
-async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: UUID) -> PatientTest:
+async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: UUID) -> PatientTestDto:
     """
     Assign test to patient
 
@@ -41,7 +41,7 @@ async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: U
     db.add(new_test)
     db.commit()
 
-    return new_test
+    return await test_to_dto(new_test)
 
 
 async def get_patient_tests(db: Session, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
@@ -84,6 +84,50 @@ async def get_patient_test(db: Session, test_id: UUID) -> PatientTestDto:
         raise NotFoundError
 
     return await test_to_dto(test)
+
+
+async def unassign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: UUID) -> None:
+    """
+    Unassign test from patient
+
+    Raises:
+        NotFoundError: If test not found
+    """
+
+    test = db.query(PatientTest).filter(
+        PatientTest.patient_id == patient_id,
+        PatientTest.id == test_id,
+        DoctorPatient.doctor_id == doctor_id
+    ).first()
+
+    if not test:
+        raise NotFoundError
+
+    db.delete(test)
+    db.commit()
+
+
+async def unassign_doctor_tests(db: Session, doctor_id: UUID, patient_id: UUID) -> None:
+    """
+    Unassign all tests from patient
+
+    Raises:
+        NotFoundError: If patient not found
+    """
+
+    user = db.query(DoctorPatient).filter(
+        DoctorPatient.patient_id == patient_id,
+        DoctorPatient.doctor_id == doctor_id
+    ).first()
+
+    if not user:
+        raise NotFoundError
+
+    db.query(PatientTest).filter(
+        PatientTest.patient_id == patient_id,
+        PatientTest.assigned_by_id == doctor_id
+    ).delete()
+    db.commit()
 
 
 async def test_to_dto(test: PatientTest) -> PatientTestDto:

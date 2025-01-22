@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, ClassVar
 
 from pydantic import BaseModel, Field, ConfigDict, UUID4
 
@@ -26,6 +26,7 @@ class Test(BaseModel):
         arbitrary_types_allowed=True,
         json_schema_extra={
             "example": {
+                "id": "f3847ce2-553a-422b-a2ac-57910619cb6d",
                 "name": "Test",
                 "description": "Test description",  # optional
                 "questions": [  # must contain image or question text

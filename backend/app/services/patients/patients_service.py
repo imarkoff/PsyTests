@@ -124,6 +124,7 @@ async def delete_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> None
     ).first()
 
     if doctor_patient:
+        await patient_tests_service.unassign_doctor_tests(db, doctor_id, patient_id)
         db.delete(doctor_patient)
         db.commit()
     else:
