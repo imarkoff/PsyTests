@@ -15,11 +15,10 @@ from app.schemas.role import Role
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 
-router = APIRouter(prefix="/patients", tags=["patients"])
+router = APIRouter(prefix="/patients")
+patients_router = APIRouter(tags=["doctor_patients"])
 
-router.include_router(patient_tests.router)
-
-@router.get("/", summary="Get doctor patients", response_model=list[UserDto])
+@patients_router.get("/", summary="Get doctor patients", response_model=list[UserDto])
 async def get_patients(
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
         db: Session = Depends(get_postgresql_db)
@@ -28,7 +27,7 @@ async def get_patients(
     return await patients_service.get_patients(db, doctor.id)
 
 
-@router.get("/find", summary="Find patient in database by name, surname, phone number or email",
+@patients_router.get("/find", summary="Find patient in database by name, surname, phone number or email",
             response_model=list[UserDto])
 async def find_patient(
         search: str,
@@ -39,7 +38,7 @@ async def find_patient(
     return await patients_service.find_patient(db, search)
 
 
-@router.get("/{patient_id}", summary="Get patient info", response_model=PatientInfoDto)
+@patients_router.get("/{patient_id}", summary="Get patient info", response_model=PatientInfoDto)
 async def get_patient(
         patient_id: UUID,
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
@@ -53,7 +52,7 @@ async def get_patient(
         return Response(status_code=404)
 
 
-@router.post("/{patient_id}", summary="Add patient to doctor patients", status_code=201,
+@patients_router.post("/{patient_id}", summary="Add patient to doctor patients", status_code=201,
              response_class=Response, responses={
         409: {"description": "Doctor already has this patient"},
         201: {"content": {"application/json": UserDto.Config.json_schema_extra}}
@@ -71,7 +70,7 @@ async def add_patient(
         return Response(status_code=409)
 
 
-@router.post("/", summary="Create new patient and add to doctor patients. "
+@patients_router.post("/", summary="Create new patient and add to doctor patients. "
                           "If patient already exists, add to doctor patients",
              status_code=201, response_class=Response, responses={
         409: {"description": "Patient already exists"},
@@ -90,7 +89,7 @@ async def create_patient(
         return Response(status_code=409)
 
 
-@router.delete("/{patient_id}", summary="Delete patient from doctor patients. Also unassign doctor tests",
+@patients_router.delete("/{patient_id}", summary="Delete patient from doctor patients. Also unassign doctor tests",
                status_code=204, responses={
         404: {"description": "Patient not found or not assigned to doctor"},
         204: {"description": "Patient deleted"}
@@ -106,3 +105,7 @@ async def delete_patient(
         return Response(status_code=204)
     except NotFoundError:
         return Response(status_code=404)
+
+
+router.include_router(patient_tests.router)
+router.include_router(patients_router)

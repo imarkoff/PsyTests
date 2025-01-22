@@ -1,3 +1,7 @@
+"""
+Service for managing doctor patients
+"""
+
 from uuid import UUID
 
 from sqlalchemy import or_

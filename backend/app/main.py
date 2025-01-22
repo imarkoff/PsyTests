@@ -4,6 +4,7 @@ from fastapi import FastAPI, APIRouter
 
 from app.api import auth, token, users, tests
 from app.api.doctor import doctor
+from app.api.patient import patient
 from app.settings import settings
 
 tags_metadata = [
@@ -24,17 +25,17 @@ tags_metadata = [
         "description": "Operations with global tests.",
     },
     {
-        "name": "patients",
-        "description": "Manage doctor patients.",
-    },
-    {
         "name": "patient_tests",
         "description": "Operations with patient tests.",
     },
     {
-        "name": "doctor",
-        "description": "Doctor operations.",
+        "name": "doctor_patients",
+        "description": "Manage doctor patients.",
     },
+    {
+        "name": "doctor_patients_tests",
+        "description": "Manage tests for doctor patients.",
+    }
 ]
 app = FastAPI(title=settings.APP_NAME, version="0.0.1", openapi_tags=tags_metadata)
 
@@ -44,6 +45,7 @@ api.include_router(users.router)
 api.include_router(token.router)
 api.include_router(tests.router)
 api.include_router(doctor.router)
+api.include_router(patient.router)
 
 app.include_router(api)
 

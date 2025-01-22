@@ -12,7 +12,7 @@ from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
 from app.services.patients import patient_tests_service
 
-router = APIRouter(prefix="/{patient_id}/tests", tags=["patient_tests"], responses={
+router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"], responses={
     401: {"description": "Unauthorized"},
     403: {"description": "Forbidden"},
 })
