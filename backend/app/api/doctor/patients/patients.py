@@ -5,7 +5,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
-from app.api.patients import patient_tests
+from app.api.doctor.patients import patient_tests
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
 from app.exceptions import AlreadyExistsError, NotFoundError
@@ -15,10 +15,7 @@ from app.schemas.role import Role
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 
-router = APIRouter(prefix="/patients", tags=["patients"], responses={
-    401: {"description": "Unauthorized"},
-    403: {"description": "Forbidden"},
-})
+router = APIRouter(prefix="/patients", tags=["patients"])
 
 router.include_router(patient_tests.router)
 
@@ -93,9 +90,11 @@ async def create_patient(
         return Response(status_code=409)
 
 
-@router.delete("/{patient_id}", summary="Delete patient from doctor patients", responses={
-    404: {"description": "Patient not found or not assigned to doctor"},
-})
+@router.delete("/{patient_id}", summary="Delete patient from doctor patients. Also unassign doctor tests",
+               status_code=204, responses={
+        404: {"description": "Patient not found or not assigned to doctor"},
+        204: {"description": "Patient deleted"}
+    })
 async def delete_patient(
         patient_id: UUID,
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
@@ -103,6 +102,7 @@ async def delete_patient(
 ):
     doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
     try:
-        return await patients_service.delete_patient(db, doctor.id, patient_id)
+        await patients_service.delete_patient(db, doctor.id, patient_id)
+        return Response(status_code=204)
     except NotFoundError:
         return Response(status_code=404)

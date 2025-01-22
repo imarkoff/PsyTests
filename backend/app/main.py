@@ -3,7 +3,7 @@ import logging
 from fastapi import FastAPI, APIRouter
 
 from app.api import auth, token, users, tests
-from app.api.patients import patients
+from app.api.doctor import doctor
 from app.settings import settings
 
 tags_metadata = [
@@ -25,12 +25,16 @@ tags_metadata = [
     },
     {
         "name": "patients",
-        "description": "Manage doctor patients. Requires doctor role.",
+        "description": "Manage doctor patients.",
     },
     {
         "name": "patient_tests",
         "description": "Operations with patient tests.",
-    }
+    },
+    {
+        "name": "doctor",
+        "description": "Doctor operations.",
+    },
 ]
 app = FastAPI(title=settings.APP_NAME, version="0.0.1", openapi_tags=tags_metadata)
 
@@ -39,7 +43,7 @@ api.include_router(auth.router)
 api.include_router(users.router)
 api.include_router(token.router)
 api.include_router(tests.router)
-api.include_router(patients.router)
+api.include_router(doctor.router)
 
 app.include_router(api)
 
