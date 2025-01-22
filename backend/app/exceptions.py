@@ -1,0 +1,15 @@
+class NotFoundError(Exception):
+    """Raised when a resource is not found"""
+    pass
+
+class AlreadyExistsError(Exception):
+    """Raised when a resource already exists"""
+    pass
+
+class ForbiddenError(Exception):
+    """Raised when a user is not allowed to access a resource"""
+    pass
+
+class UnauthorizedError(Exception):
+    """Raised when a user is not authenticated"""
+    pass

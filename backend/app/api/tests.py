@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter
 from fastapi.params import Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -28,7 +30,7 @@ async def get_tests(
 @router.get("/{test_id}", summary="Get test info", response_model=Test, responses={
     404: {"description": "Test not found"},
 })
-async def get_test(test_id: str):
+async def get_test(test_id: UUID):
     try:
         return await tests_service.get_test(test_id)
     except FileNotFoundError:
@@ -39,7 +41,7 @@ async def get_test(test_id: str):
     404: {"description": "Test or image not found"},
     200: {"content": {"image/jpeg": {}}}
 })
-async def get_test_image(test_id: str, image_path: str):
+async def get_test_image(test_id: UUID, image_path: str):
     try:
         image = await tests_service.get_test_image(test_id, image_path)
         return Response(content=image, media_type="image/jpeg")

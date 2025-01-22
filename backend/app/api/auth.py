@@ -8,7 +8,7 @@ from app.settings import settings
 from app.db.models.user import User
 from app.db.session import get_postgresql_db
 from app.schemas.user_auth import UserCreate, UserLogin
-from app.services.user_service import register_user, get_user_by_email
+from app.services.user_service import register_user, get_user_by_phone
 from app.core.create_tokens import create_tokens
 from app.core.password import verify_password
 
@@ -16,14 +16,14 @@ from app.core.password import verify_password
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register", summary="Register a new user",
+@router.post("/register", summary="Register a new user", deprecated=True,
     status_code=201, response_class=Response, responses={
         409: {"description": "User already exists"},
         201: {"content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}}, "description": "Access token"},
     }
 )
 async def sign_up(data: UserCreate, db: Session = Depends(get_postgresql_db)):
-    if db.query(User).filter(User.email == data.email).first():
+    if db.query(User).filter(User.phone == data.phone).first():
         return Response(status_code=409)
 
     new_user: User = register_user(data, db)
@@ -44,7 +44,7 @@ async def sign_up(data: UserCreate, db: Session = Depends(get_postgresql_db)):
     }
 )
 async def login_user(data: UserLogin, db: Session = Depends(get_postgresql_db)):
-    user = get_user_by_email(data.email, db)
+    user = get_user_by_phone(data.email, db)
 
     if not user or not verify_password(data.password, user.password, user.password_salt):
         return Response(status_code=404)

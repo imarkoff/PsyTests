@@ -6,13 +6,13 @@ from app.schemas.user_auth import UserCreate
 from app.core.password import cache_password
 
 
-def register_user(user_dto: UserCreate, db: Session):
+def register_user(user_dto: UserCreate, db: Session) -> User:
     (password, password_salt) = cache_password(user_dto.password)
 
     new_user = User(
         name=user_dto.name,
         surname=user_dto.surname,
-        email=user_dto.email,
+        phone=user_dto.phone,
         password=password,
         password_salt=password_salt,
         role=user_dto.role
@@ -27,5 +27,5 @@ def register_user(user_dto: UserCreate, db: Session):
 def user_by_id(user_id: UUID4, db: Session):
     return db.query(User).filter(User.id == user_id).first()
 
-def get_user_by_email(email: str, db: Session):
-    return db.query(User).filter(User.email == email).first()
+def get_user_by_phone(phone: str, db: Session):
+    return db.query(User).filter(User.phone == phone).first()
