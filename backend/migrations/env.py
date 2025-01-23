@@ -10,6 +10,7 @@ from app.db.session import Base
 from app.db.models.user import User
 from app.db.models.patient_test import PatientTest
 from app.db.models.doctor_patient import DoctorPatient
+from app.db.models.test_history import TestHistory
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

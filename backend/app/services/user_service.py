@@ -1,4 +1,5 @@
-from pydantic.v1 import UUID4
+from uuid import UUID
+
 from sqlalchemy.orm import Session
 
 from app.db.models.user import User
@@ -24,8 +25,10 @@ def register_user(user_dto: UserCreate, db: Session) -> User:
 
     return new_user
 
-def user_by_id(user_id: UUID4, db: Session):
+
+def user_by_id(user_id: UUID, db: Session) -> User | None:
     return db.query(User).filter(User.id == user_id).first()
 
-def get_user_by_phone(phone: str, db: Session):
+
+def get_user_by_phone(phone: str, db: Session) -> User | None:
     return db.query(User).filter(User.phone == phone).first()

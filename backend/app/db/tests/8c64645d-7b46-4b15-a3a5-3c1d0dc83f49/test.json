@@ -16,7 +16,7 @@
         },
         {
           "image": "./0/4.png",
-          "isCorrect": true
+          "is_correct": true
         },
         {
           "image": "./0/5.png"
@@ -26,5 +26,12 @@
         }
       ]
     }
-  ]
+  ],
+  "marks": {
+    "5": "Low intelligence",
+    "24": "Below average intelligence",
+    "74": "Intermediate intelligence",
+    "94": "Upper intermediate intelligence",
+    "100": "High intelligence"
+  }
 }

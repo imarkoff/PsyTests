@@ -44,7 +44,7 @@ async def sign_up(data: UserCreate, db: Session = Depends(get_postgresql_db)):
     }
 )
 async def login_user(data: UserLogin, db: Session = Depends(get_postgresql_db)):
-    user = get_user_by_phone(data.email, db)
+    user = get_user_by_phone(data.phone, db)
 
     if not user or not verify_password(data.password, user.password, user.password_salt):
         return Response(status_code=404)

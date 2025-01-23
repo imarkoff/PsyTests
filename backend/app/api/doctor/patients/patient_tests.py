@@ -10,6 +10,8 @@ from app.db.session import get_postgresql_db
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
+from app.schemas.test_result import TestResultDto
+from app.services import test_history_service
 from app.services.patients import patient_tests_service
 
 router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"], responses={
@@ -29,9 +31,20 @@ async def get_patient_tests(
     doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
 
     try:
-        return await patient_tests_service.get_patient_tests(db, doctor_id=doctor.id, patient_id=patient_id)
+        return await patient_tests_service.get_patient_tests_by_doctor(db, doctor_id=doctor.id, patient_id=patient_id)
     except NotFoundError:
         return Response("Patient not found", status_code=404, media_type="text/plain")
+
+
+@router.get("/history", summary="Get patient tests history", response_model=list[TestResultDto])
+async def get_patient_history(
+        patient_id: UUID,
+        db: Session = Depends(get_postgresql_db),
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+):
+    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+
+    return await test_history_service.get_tests_history(db, patient_id=patient_id, show_correct_answers=True)
 
 
 @router.post("/{test_id}", summary="Assign test to patient", status_code=201,

@@ -18,12 +18,13 @@ async def get_tests() -> list[Test]:
                     test_data = json.load(file)
                     test_data['id'] = test_folder
                     test = Test(**test_data)
+
                     test_list.append(test)
 
     return test_list
 
 
-async def get_test(test_id: UUID) -> Test:
+async def get_test(test_id: UUID, show_correct_answers=False) -> Test:
     """
     Get test by id
 
@@ -35,7 +36,15 @@ async def get_test(test_id: UUID) -> Test:
     with open(test_file, 'r') as file:
         test_data = json.load(file)
         test_data['id'] = test_id
-        return Test(**test_data)
+
+        test = Test(**test_data)
+
+        if not show_correct_answers:
+            for question in test.questions:
+                for answer in question.answers:
+                    answer.is_correct = False
+
+        return test
 
 
 async def get_test_image(test_id: UUID, image_name: str) -> bytes:

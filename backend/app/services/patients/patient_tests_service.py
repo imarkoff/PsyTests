@@ -41,12 +41,21 @@ async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: U
     db.add(new_test)
     db.commit()
 
-    return await test_to_dto(new_test)
+    return await test_to_dto(new_test, True)
 
 
-async def get_patient_tests(db: Session, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
+async def get_patient_tests(db: Session, patient_id: UUID) -> list[PatientTestDto]:
     """
     Get patient tests
+    """
+
+    tests = db.query(PatientTest).filter(PatientTest.patient_id == patient_id).all()
+    return [await test_to_dto(test) for test in tests]
+
+
+async def get_patient_tests_by_doctor(db: Session, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
+    """
+    Get patient tests by doctor
 
     Raises:
         NotFoundError: If patient not found
@@ -67,10 +76,10 @@ async def get_patient_tests(db: Session, doctor_id: UUID, patient_id: UUID) -> l
         if not user:
             raise NotFoundError
 
-    return [await test_to_dto(test) for test in tests]
+    return [await test_to_dto(test, True) for test in tests]
 
 
-async def get_patient_test(db: Session, test_id: UUID) -> PatientTestDto:
+async def get_patient_test(db: Session, patient_id: UUID, test_id: UUID) -> PatientTestDto:
     """
     Get patient test
 
@@ -81,6 +90,9 @@ async def get_patient_test(db: Session, test_id: UUID) -> PatientTestDto:
     test = db.query(PatientTest).filter(PatientTest.id == test_id).first()
 
     if not test:
+        raise NotFoundError
+
+    if test.patient_id != patient_id:
         raise NotFoundError
 
     return await test_to_dto(test)
@@ -130,11 +142,11 @@ async def unassign_doctor_tests(db: Session, doctor_id: UUID, patient_id: UUID) 
     db.commit()
 
 
-async def test_to_dto(test: PatientTest) -> PatientTestDto:
+async def test_to_dto(test: PatientTest, show_correct_answers = False) -> PatientTestDto:
     return PatientTestDto(
         id=test.id,
         patient_id=test.patient_id,
         assigned_by_id=test.assigned_by_id,
-        test=await get_test(test.test_id),
+        test=await get_test(test.test_id, show_correct_answers),
         assigned_at=test.assigned_at
     )

@@ -1,6 +1,8 @@
 from uuid import UUID, uuid4
 from typing import List, Optional, TYPE_CHECKING
 
+from app.db.models.test_history import TestHistory
+
 if TYPE_CHECKING:
     from app.db.models.doctor_patient import DoctorPatient
     from app.db.models.patient_test import PatientTest
@@ -18,7 +20,7 @@ from app.schemas.role import Role
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid4())
+    id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid4, unique=True)
     name: Mapped[str] = mapped_column(index=True, nullable=False)
     surname: Mapped[Optional[str]] = mapped_column(String, index=True)
     phone: Mapped[str] = mapped_column(String, index=True)
@@ -37,6 +39,9 @@ class User(Base):
     doctor_patient_doctor: Mapped[List[DoctorPatient]] = relationship(back_populates="doctor",
                                                                       foreign_keys="[DoctorPatient.doctor_id]",
                                                                       cascade="all, delete-orphan")
+    tests_history: Mapped[List[TestHistory]] = relationship(back_populates="patient",
+                                                            foreign_keys=[TestHistory.patient_id],
+                                                            cascade="all, delete-orphan")
 
 @validates("phone")
 def validate_phone(self, key, phone):

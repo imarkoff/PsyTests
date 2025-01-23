@@ -7,4 +7,4 @@ router = APIRouter(prefix="/patient", responses={
     403: {"description": "Role differs from patient"},
 })
 
-# router.include_router(patient_tests.router)
+router.include_router(patient_tests.router)

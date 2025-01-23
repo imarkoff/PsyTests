@@ -11,7 +11,7 @@ from app.db.session import Base
 class DoctorPatient(Base):
     __tablename__ = "doctor_patients"
 
-    id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid4())
+    id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid4, unique=True)
     doctor_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True, nullable=False)
     doctor: Mapped["User"] = relationship(back_populates="doctor_patient_doctor", foreign_keys=[doctor_id])
     patient_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True, nullable=False)

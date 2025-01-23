@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
@@ -27,11 +27,19 @@ async def get_tests(
     return await tests_service.get_tests()
 
 
-@router.get("/{test_id}", summary="Get test info", response_model=Test, responses={
-    404: {"description": "Test not found"},
-})
-async def get_test(test_id: UUID):
+@router.get("/{test_id}", summary="Get test info. If doctor, show correct answers",
+            response_model=Test, responses={
+        404: {"description": "Test not found"},
+    })
+async def get_test(
+        test_id: UUID,
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
+        db: Session = Depends(get_postgresql_db)
+):
     try:
+        JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+        return await tests_service.get_test(test_id, True)
+    except HTTPException:
         return await tests_service.get_test(test_id)
     except FileNotFoundError:
         return Response(status_code=404)

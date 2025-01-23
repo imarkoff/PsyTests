@@ -1,4 +1,4 @@
-from typing import Optional, ClassVar
+from typing import Optional
 
 from pydantic import BaseModel, Field, ConfigDict, UUID4
 
@@ -21,6 +21,7 @@ class Test(BaseModel):
     name: str = Field(..., title="Name")
     description: Optional[str] = Field(None, title="Description")
     questions: list[Question] = Field(..., title="Questions")
+    marks: dict[str, str] = Field(..., title="Marks")
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
@@ -42,7 +43,16 @@ class Test(BaseModel):
                         ],
                         "points": 1  # optional
                     }
-                ]
+                ],
+                "marks": {
+                    "_": "Each mark means range of points percentage. "
+                         "Example: 25-75 (75 is inclusive): Intermediate intelligence",
+                    "5": "Low intelligence",
+                    "25": "Below average intelligence",
+                    "75": "Intermediate intelligence",
+                    "95": "Upper intermediate intelligence",
+                    "100": "High intelligence"
+                }
             }
         }
     )

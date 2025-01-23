@@ -42,7 +42,7 @@ async def get_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> Patient
         raise NotFoundError
 
     patient_dto = UserDto.model_validate(doctor_patient.patient)
-    patient_tests = await patient_tests_service.get_patient_tests(db, doctor_id, patient_id)
+    patient_tests = await patient_tests_service.get_patient_tests_by_doctor(db, doctor_id, patient_id)
 
     return PatientInfoDto(patient=patient_dto, tests=patient_tests)
 
