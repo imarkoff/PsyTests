@@ -58,17 +58,20 @@ async def pass_test(db: Session, assigned_test_id: UUID, patient_id: UUID, answe
     return test_result_to_dto(new_history, test, result)
 
 
-async def get_tests_history(db: Session, patient_id: UUID, show_correct_answers=False) -> list[TestResultDto]:
+async def get_tests_history(db: Session, patient_id: UUID) -> list[TestResultDto]:
     """
     Get tests history
     """
 
-    tests: list[TestHistory] = db.query(TestHistory).filter(TestHistory.patient_id == patient_id).all()
+    tests: list[TestHistory] = (db.query(TestHistory)
+                                .order_by(TestHistory.passed_at.desc())
+                                .filter(TestHistory.patient_id == patient_id)
+                                .all())
 
     tests_results = []
 
     for db_test in tests:
-        test = await get_test(db_test.test_id, show_correct_answers)
+        test = await get_test(db_test.test_id)
         result = get_test_result(test=test, test_result=db_test)
         tests_results.append(test_result_to_dto(db_test, test, result))
 

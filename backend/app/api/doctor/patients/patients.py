@@ -53,9 +53,8 @@ async def get_patient(
 
 
 @patients_router.post("/{patient_id}", summary="Add patient to doctor patients", status_code=201,
-             response_class=Response, responses={
+             response_model=UserDto, responses={
         409: {"description": "Doctor already has this patient"},
-        201: {"content": {"application/json": UserDto.Config.json_schema_extra}}
     })
 async def add_patient(
         patient_id: UUID,
@@ -70,11 +69,9 @@ async def add_patient(
         return Response(status_code=409)
 
 
-@patients_router.post("/", summary="Create new patient and add to doctor patients. "
-                          "If patient already exists, add to doctor patients",
-             status_code=201, response_class=Response, responses={
-        409: {"description": "Patient already exists"},
-        201: {"content": {"application/json": UserDto.Config.json_schema_extra}}
+@patients_router.post("/", summary="Create new patient and add to doctor patients",
+             status_code=201, response_model=UserDto, responses={
+        409: {"description": "Patient with this phone already exists"},
     })
 async def create_patient(
         patient: PatientCreateDto,

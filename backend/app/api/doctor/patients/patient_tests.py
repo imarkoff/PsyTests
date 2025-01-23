@@ -43,8 +43,7 @@ async def get_patient_history(
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
 ):
     JWTBearer.auth(credentials, db, role=Role.DOCTOR)
-
-    return await test_history_service.get_tests_history(db, patient_id=patient_id, show_correct_answers=True)
+    return await test_history_service.get_tests_history(db, patient_id=patient_id)
 
 
 @router.post("/{test_id}", summary="Assign test to patient", status_code=201,
