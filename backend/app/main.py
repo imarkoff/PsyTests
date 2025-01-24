@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import auth, token, users, tests
 from app.api.doctor import doctor
@@ -38,6 +39,14 @@ tags_metadata = [
     }
 ]
 app = FastAPI(title=settings.APP_NAME, version="0.0.1", openapi_tags=tags_metadata)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 api = APIRouter(prefix="/api")
 api.include_router(auth.router)

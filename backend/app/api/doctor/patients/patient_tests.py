@@ -20,7 +20,7 @@ router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"],
 })
 
 
-@router.get("/", summary="Get patient tests", response_model=list[PatientTestDto], responses={
+@router.get("/", summary="Get tests assigned to patient", response_model=list[PatientTestDto], responses={
     404: {"description": "Patient not found"},
 })
 async def get_patient_tests(
@@ -36,7 +36,7 @@ async def get_patient_tests(
         return Response("Patient not found", status_code=404, media_type="text/plain")
 
 
-@router.get("/history", summary="Get patient tests history", response_model=list[TestResultDto])
+@router.get("/history", summary="Get passed tests history of patient", response_model=list[TestResultDto])
 async def get_patient_history(
         patient_id: UUID,
         db: Session = Depends(get_postgresql_db),

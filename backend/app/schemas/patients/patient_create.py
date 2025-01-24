@@ -1,9 +1,11 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
 class PatientCreateDto(BaseModel):
     name: str
-    surname: str
+    surname: Optional[str] = None
     phone: str
     password: str
 

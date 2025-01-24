@@ -8,7 +8,7 @@ from app.schemas.role import Role
 
 class UserCreate(BaseModel):
     name: str
-    surname: str
+    surname: Optional[str] = None
     phone: str
     password: str
     role: Optional[Role] = None
@@ -42,7 +42,7 @@ class UserLogin(BaseModel):
 class UserDto(BaseModel):
     id: UUID
     name: str
-    surname: str
+    surname: Optional[str] = None
     phone: str
     role: Role
 
