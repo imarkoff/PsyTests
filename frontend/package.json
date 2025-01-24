@@ -13,10 +13,12 @@
     "@emotion/styled": "^11.13.5",
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",
+    "axios": "^1.7.9",
     "i18next": "^24.0.5",
     "next": "^15.0.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "swr": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^20",
