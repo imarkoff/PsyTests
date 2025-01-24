@@ -62,4 +62,3 @@ async def login_user(data: UserLogin, db: Session = Depends(get_postgresql_db)):
              response_class=Response, responses={200: {"description": "Logged out"}})
 async def logout_user(response: Response):
     response.delete_cookie("refresh_token")
-    return Response(status_code=200)

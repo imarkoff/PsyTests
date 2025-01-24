@@ -23,7 +23,7 @@ async def refresh_token(
 ):
     token = request.cookies.get("refresh_token")
 
-    if not JWTBearer.verify(token):
+    if not token or not JWTBearer.verify(token):
         raise HTTPException(status_code=401)
 
     payload = JWTBearer.decode(token)
