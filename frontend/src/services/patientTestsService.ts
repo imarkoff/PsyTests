@@ -18,5 +18,5 @@ export const passTest = (attempt: PassTest) =>
 export const getTestsHistory = () =>
     apiPrivate.get<TestResult[]>(`${endpoint}/history`).then(res => res.data);
 
-export const getTestResult = (assignedTestId: string) =>
-    apiPrivate.get<TestResult>(`${endpoint}/${assignedTestId}`).then(res => res.data);
+export const getTest = (assignedTestId: string) =>
+    apiPrivate.get<PatientTest>(`${endpoint}/${assignedTestId}`).then(res => res.data);

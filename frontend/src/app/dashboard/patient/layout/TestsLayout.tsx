@@ -13,7 +13,7 @@ export default function TestsLayout() {
 
     return (
         <TestsLayoutBox title={"Доступні тести"}>
-            <Box sx={{display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))", gap: 2}}>
+            <Box sx={{display: "grid", gridTemplateColumns: {sm: "repeat(auto-fill, minmax(400px, 1fr))"}, gap: 2}}>
                 {tests?.map(test => <AvailableTestCard key={test.id} test={test} />)}
             </Box>
         </TestsLayoutBox>

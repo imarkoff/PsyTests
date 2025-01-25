@@ -21,7 +21,8 @@ export default function NavigationLayout() {
 
     useEffect(() => {
         if (notLoggedIn) redirect("/login");
-        if (me) {
+        const location = window.location.pathname;
+        if (me && location === "/dashboard") {
             if (me.role === Roles.patient) router.push("/dashboard/patient");
             if (me.role === Roles.doctor) router.push("/dashboard/doctor");
         }
