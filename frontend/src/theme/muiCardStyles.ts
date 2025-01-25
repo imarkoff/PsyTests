@@ -5,8 +5,6 @@ const muiCardStyles: Components<Theme> = {
         styleOverrides: {
             root: ({ theme }) => {
                 return {
-                    padding: 24,
-                    gap: 16,
                     transition: 'all 100ms ease',
                     backgroundColor: 'hsl(220, 35%, 97%)',
                     borderRadius: 12,

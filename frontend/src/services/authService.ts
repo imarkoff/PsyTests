@@ -3,18 +3,17 @@
  */
 
 import api from "@/api/api";
-import {setToken} from "@/api/apiPrivate";
+import apiPrivate, {setToken} from "@/api/apiPrivate";
 
 export const endpoint = "/auth";
 
 export const login = async (phone: string, password: string) => {
-    const response = await api.post<string>(`${endpoint}/login`, {phone, password});
-    setToken(response.data);
-    return response;
+    const { data } = await api.post<string>(`${endpoint}/login`, {phone, password});
+    setToken(data);
+    return data;
 };
 
 export const logout = async () => {
-    const response = await api.post<void>(`${endpoint}/logout`);
+    await apiPrivate.post<void>(`${endpoint}/logout`);
     setToken(undefined);
-    return response;
 };

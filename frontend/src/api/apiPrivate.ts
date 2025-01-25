@@ -27,8 +27,7 @@ apiPrivate.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            const refreshResponse = await refreshToken();
-            token = refreshResponse.data;
+            token = await refreshToken();
             return apiPrivate(originalRequest);
         }
         return Promise.reject(error);

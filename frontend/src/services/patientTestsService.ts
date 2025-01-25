@@ -9,14 +9,14 @@ import TestResult from "@/schemas/TestResult";
 
 export const endpoint = "/patient/tests";
 
-export const getTests = async () =>
-    await apiPrivate.get<PatientTest[]>(endpoint);
+export const getTests = () =>
+    apiPrivate.get<PatientTest[]>(endpoint).then(res => res.data);
 
-export const passTest = async (attempt: PassTest) =>
-    await apiPrivate.post<TestResult>(endpoint, attempt);
+export const passTest = (attempt: PassTest) =>
+    apiPrivate.post<TestResult>(endpoint, attempt).then(res => res.data);
 
-export const getTestsHistory = async () =>
-    await apiPrivate.get<TestResult[]>(`${endpoint}/history`);
+export const getTestsHistory = () =>
+    apiPrivate.get<TestResult[]>(`${endpoint}/history`).then(res => res.data);
 
-export const getTestResult = async (assignedTestId: string) =>
-    await apiPrivate.get<TestResult>(`${endpoint}/${assignedTestId}`);
+export const getTestResult = (assignedTestId: string) =>
+    apiPrivate.get<TestResult>(`${endpoint}/${assignedTestId}`).then(res => res.data);

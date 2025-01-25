@@ -9,7 +9,7 @@ import User from "@/schemas/User";
 export const endpoint = "/users";
 
 export const getMe = async () =>
-    await apiPrivate.get<User>(`${endpoint}/me`);
+    await apiPrivate.get<User>(`${endpoint}/me`).then((res) => res.data);
 
 export const getUser = async (userId: string) =>
-    await api.get<User>(`${endpoint}/${userId}`);
+    await api.get<User>(`${endpoint}/${userId}`).then((res) => res.data);

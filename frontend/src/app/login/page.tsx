@@ -13,7 +13,11 @@ import SignInContainer from "@/app/login/components/SignInContainer";
 export default function Page() {
   return (
       <SignInContainer>
-          <Card variant={"outlined"} className={"max-w-[400px] w-full box-border m-3 flex flex-col gap-3"}>
+          <Card
+              variant={"outlined"}
+              className={"max-w-[400px] w-full box-border m-3 flex flex-col"}
+              sx={{ padding: 3, gap: 3 }}
+          >
               <h2>PsyTest</h2>
               <Typography component={"h1"} className={"text-4xl font-semibold"}>Вхід</Typography>
               <Box component={"form"} className={"flex flex-col gap-5 w-full"} noValidate>
