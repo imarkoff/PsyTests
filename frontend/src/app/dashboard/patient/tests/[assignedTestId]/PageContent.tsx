@@ -1,0 +1,40 @@
+import {useTestContext} from "@/app/dashboard/patient/tests/[assignedTestId]/context/TestContext";
+import {FormProvider, useForm} from "react-hook-form";
+import {Box, Typography} from "@mui/material";
+import LeaveTestButton from "@/app/dashboard/patient/tests/[assignedTestId]/components/LeaveTestButton";
+import QuestionCard from "@/app/dashboard/patient/tests/[assignedTestId]/components/QuestionCard/QuesitonCard";
+import PassTestButton from "@/app/dashboard/patient/tests/[assignedTestId]/components/PassTestButton";
+
+/**
+ * Renders the test page content. Separated for SSR.
+ */
+export default function PageContent() {
+    const {test, passTest, result} = useTestContext();
+    const methods = useForm<{ [questionId: number]: string }>();
+
+    return (
+        <Box sx={{maxWidth: 600, marginX: "auto", display: "flex", flexDirection: "column", gap: 1}}>
+            <Box sx={{paddingX: 2, display: "flex", flexDirection: "column", gap: 1, alignItems: "start"}}>
+                <LeaveTestButton />
+                <Typography variant={"h5"}>
+                    {test?.test.name}
+                </Typography>
+            </Box>
+
+            <form onSubmit={methods.handleSubmit(passTest)}>
+                <FormProvider {...methods}>
+                    {test?.test.questions.map((question, index) => (
+                        <QuestionCard
+                            question={question}
+                            key={index}
+                            index={index}
+                            testId={test.test.id}
+                            disabled={!!result}
+                        />
+                    ))}
+                    <PassTestButton />
+                </FormProvider>
+            </form>
+        </Box>
+    );
+}

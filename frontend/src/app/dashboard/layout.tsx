@@ -14,7 +14,7 @@ export default function DashboardLayout({children}: { children: ReactNode }) {
                 </Toolbar>
             </AppBar>
             <Box sx={{
-                padding: 2,
+                padding: {xs: 1.5, sm: 2},
                 display: "flex", flexDirection: "column", gap: "1rem",
             }}>
                 {children}
