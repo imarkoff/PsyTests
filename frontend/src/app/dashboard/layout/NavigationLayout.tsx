@@ -7,6 +7,7 @@ import ExitButton from "@/app/dashboard/components/ExitButtton";
 import {redirect, useRouter} from "next/navigation";
 import { Roles } from "@/schemas/Role";
 import {useEffect} from "react";
+import DoctorNav from "@/app/dashboard/doctor/DoctorNav";
 
 export default function NavigationLayout() {
     const {
@@ -31,7 +32,9 @@ export default function NavigationLayout() {
     return (
         <>
             <Box sx={{display: "flex", flexGrow: 1, justifyContent: "space-between"}}>
-                <Box sx={{flexGrow: 1}} />
+                <Box sx={{display: "flex", flexGrow: 1, gap: 1}}>
+                    {me?.role === Roles.doctor && <DoctorNav />}
+                </Box>
                 <Box sx={{display: "flex", alignItems: "center", gap: "1rem"}}>
                     <Typography>
                         {me?.name} {me?.surname}

@@ -4,9 +4,9 @@ import {ReactNode} from "react";
 
 export default function DashboardLayout({children}: { children: ReactNode }) {
     return (
-        <Box>
+        <Box sx={{minHeight: "100%", display: "flex", flexDirection: "column"}}>
             <AppBar position={"sticky"} color={"default"}>
-                <Toolbar>
+                <Toolbar sx={{gap: 3}}>
                     <Typography variant={"h5"} fontWeight={600}>
                         Тести
                     </Typography>
@@ -16,6 +16,7 @@ export default function DashboardLayout({children}: { children: ReactNode }) {
             <Box sx={{
                 padding: {xs: 1.5, sm: 2},
                 display: "flex", flexDirection: "column", gap: "1rem",
+                flexGrow: 1
             }}>
                 {children}
             </Box>
