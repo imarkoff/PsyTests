@@ -35,7 +35,8 @@ async def get_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> Patient
         NotFoundError: If doctor_patient not found
     """
     doctor_patient = db.query(DoctorPatient).filter(
-        DoctorPatient.doctor_id == doctor_id and DoctorPatient.patient_id == patient_id
+        DoctorPatient.doctor_id == doctor_id,
+        DoctorPatient.patient_id == patient_id
     ).first()
 
     if not doctor_patient:
@@ -124,7 +125,8 @@ async def delete_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> None
         NotFoundError: If doctor_patient not found
     """
     doctor_patient = db.query(DoctorPatient).filter(
-        DoctorPatient.doctor_id == doctor_id and DoctorPatient.patient_id == patient_id
+        DoctorPatient.doctor_id == doctor_id,
+        DoctorPatient.patient_id == patient_id
     ).first()
 
     if doctor_patient:

@@ -21,7 +21,8 @@ async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: U
     """
 
     user = db.query(DoctorPatient).filter(
-        DoctorPatient.patient_id == patient_id and DoctorPatient.doctor_id == doctor_id
+        DoctorPatient.patient_id == patient_id,
+        DoctorPatient.doctor_id == doctor_id
     ).first()
 
     if not user:
@@ -30,7 +31,8 @@ async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: U
     await get_test(test_id)
 
     existing_test = db.query(PatientTest).filter(
-        PatientTest.patient_id == patient_id and PatientTest.test_id == test_id
+        PatientTest.patient_id == patient_id,
+        PatientTest.test_id == test_id
     ).first()
 
     if existing_test:
