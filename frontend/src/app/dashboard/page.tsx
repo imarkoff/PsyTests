@@ -1,5 +1,1 @@
-export default function Dashboard() {
-    return (
-        <></>
-    );
-}
+export default function Dashboard() {}

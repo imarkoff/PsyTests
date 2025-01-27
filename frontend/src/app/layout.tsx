@@ -4,6 +4,12 @@ import AppTheme from "@/theme/AppTheme";
 import {ReactNode} from "react";
 import {CssBaseline} from "@mui/material";
 
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
+
 export const metadata: Metadata = {
   title: "PsyTest",
   description: "PsyTest - тестування на психічні характеристики",

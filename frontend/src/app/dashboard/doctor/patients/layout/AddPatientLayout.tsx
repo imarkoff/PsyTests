@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import {ReactNode, SyntheticEvent, useState} from "react";
-import CreatePatient from "@/app/dashboard/doctor/layout/CreatePatient";
+import CreatePatient from "@/app/dashboard/doctor/patients/layout/CreatePatient";
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -42,7 +42,7 @@ export default function AddPatientLayout() {
 
     return (
         <Box sx={{width: {xs: "100%", sm: 400}}}>
-            <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 3, marginBottom: 2 }}>
+            <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 3, marginBottom: 2, overflow: "hidden" }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
                     <Tab label="Створити пацієнта" {...a11yProps(0)} />
                     <Tab label="Знайти пацієнта" {...a11yProps(1)} />

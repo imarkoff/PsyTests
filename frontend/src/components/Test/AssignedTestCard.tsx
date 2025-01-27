@@ -4,14 +4,15 @@ import Marks from "@/components/Test/Marks";
 import AssignedBy from "@/app/dashboard/patient/components/AssignedBy";
 import {dateMed} from "@/utils/formatDate";
 import TestValues from "@/components/Test/TestValues";
-import {redirect} from "next/navigation";
 
-export default function AvailableTestCard({test}: {test: PatientTest}) {
+interface AvailableTestCardProps {
+    test: PatientTest;
+    onStart?: () => void;
+    onDelete?: (testId: string) => void;
+}
+
+export default function AssignedTestCard({test, onStart, onDelete}: AvailableTestCardProps) {
     const questionsCount = test.test.questions.length;
-
-    const onStartTest = () => {
-        redirect(`/dashboard/patient/tests/${test.id}`);
-    }
 
     return (
         <Card variant={"outlined"}>
@@ -26,9 +27,16 @@ export default function AvailableTestCard({test}: {test: PatientTest}) {
 
             <CardActions sx={{justifyContent: "space-between"}}>
                 <Marks marks={test.test.marks} />
-                <Button variant="contained" color="primary" onClick={onStartTest}>
-                    Почати тест
-                </Button>
+                {onDelete && (
+                    <Button variant="outlined" color="error" onClick={() => onDelete(test.id)}>
+                        Забрати доступ
+                    </Button>
+                )}
+                {onStart && (
+                    <Button variant="contained" color="primary" onClick={onStart}>
+                        Почати тест
+                    </Button>
+                )}
             </CardActions>
         </Card>
     );

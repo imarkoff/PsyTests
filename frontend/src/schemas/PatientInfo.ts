@@ -1,7 +1,7 @@
 import User from "@/schemas/User";
-import Test from "@/schemas/Test";
+import PatientTest from "@/schemas/PatientTest";
 
 export default interface PatientInfo {
     patient: User;
-    tests: Test[];
+    tests: PatientTest[];
 }

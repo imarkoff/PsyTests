@@ -3,6 +3,7 @@
 import {ReactNode} from "react";
 import {createTheme, ThemeProvider} from "@mui/material";
 import muiCardStyles from "./muiCardStyles";
+import muiMenuStyles from "@/theme/muiMenuStyles";
 
 /**
  * AppTheme component that provides a custom Material-UI theme to its children.
@@ -27,6 +28,13 @@ export default function AppTheme({children}: {children: ReactNode}) {
                     }
                 }
             },
+            MuiToggleButton: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: 6
+                    }
+                }
+            },
             MuiOutlinedInput: {
                 styleOverrides: {
                     root: {
@@ -34,7 +42,15 @@ export default function AppTheme({children}: {children: ReactNode}) {
                     }
                 }
             },
-            ...muiCardStyles
+            MuiDialog: {
+                styleOverrides: {
+                    paper: {
+                        borderRadius: 10
+                    }
+                }
+            },
+            ...muiCardStyles,
+            ...muiMenuStyles
         }
     });
 

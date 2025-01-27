@@ -1,6 +1,6 @@
 import {Box, Button, Card, TextField, Typography} from "@mui/material";
 import {useForm} from "react-hook-form";
-import {usePatientsContext} from "@/app/dashboard/doctor/context/PatientsContext";
+import {usePatientsContext} from "@/app/dashboard/doctor/patients/context/PatientsContext";
 import PatientCreate from "@/schemas/PatientCreate";
 import {useState} from "react";
 import {AxiosError} from "axios";
