@@ -3,8 +3,9 @@ import Image from "next/image";
 import {testImage} from "@/services/testsService";
 import React from "react";
 import {Answer} from "@/schemas/Test";
-import {QuestionBaseProps} from "@/app/dashboard/patient/tests/[assignedTestId]/components/QuestionCard/QuesitonCard";
+import {QuestionBaseProps} from "@/components/QuestionCard/QuesitonCard";
 import {useFormContext} from "react-hook-form";
+import LazyImage from "@/components/LazyImage";
 
 type TestAnswerProps = { questionIndex: number, answer: Answer } & QuestionBaseProps;
 
@@ -44,10 +45,9 @@ const AnswerLabel = (
         <Typography variant={"h6"}>{answer.answer}</Typography>
 
         {answer.image && (
-            <Image
-                loader={({src, width, quality}) => `${src}&w=${width}&q=${quality || 75}`}
+            <LazyImage
                 src={testImage(testId, answer.image)}
-                alt={`${index + 1}`}
+                alt={answer.answer || `${index + 1}`}
                 width={150}
                 height={100}
                 style={{pointerEvents: "none", height: "auto"}}

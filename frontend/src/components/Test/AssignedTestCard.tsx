@@ -33,7 +33,7 @@ export default function AssignedTestCard({test, onStart, onDelete}: AvailableTes
             </CardContent>
 
             <CardActions sx={{justifyContent: "space-between"}}>
-                <Marks marks={test.test.marks} />
+                {test.test.marks && <Marks marks={test.test.marks} />}
                 {onDelete && (
                     <Button variant="outlined" color="error" onClick={() => onDelete(test.id)}>
                         Забрати доступ

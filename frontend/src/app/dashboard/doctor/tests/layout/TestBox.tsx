@@ -11,6 +11,7 @@ export default function TestBox({test, onClose}: {test?: Test, onClose: () => vo
                 borderRadius: 5,
                 width: {xs: "100%", md: 600},
                 maxHeight: "100%",
+                position: "relative",
                 display: {xs: "none", lg: "flex"},
                 flexDirection: "column",
                 p: 1,

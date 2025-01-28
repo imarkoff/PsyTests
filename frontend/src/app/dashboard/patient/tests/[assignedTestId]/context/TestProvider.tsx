@@ -7,19 +7,20 @@ import useSWR from "swr";
 import TestResult from "@/schemas/TestResult";
 import PassTest from "@/schemas/PassTest";
 
-export type AssignedTestIdParams = Promise<{ assignedTestId: string }>
-
 /**
  * Provides test-related data and actions to its children via context.
  *
  * @param props
- * @param props.params - The parameters containing the assigned test ID.
+ * @param props.assignedTestId - The ID of the assigned test.
  * @param props.children - The child components that will consume the context.
  */
-export default function TestProvider({params, children}: { params: AssignedTestIdParams, children: ReactNode }) {
+export default function TestProvider({assignedTestId, children}: { assignedTestId: string, children: ReactNode }) {
     const {
         data: test
-    } = useSWR(getTest.name, async () => getTest((await params).assignedTestId));
+    } = useSWR(
+        `${getTest.name}/${assignedTestId}`,
+        () => getTest(assignedTestId)
+    );
 
     const [result, setResult] = useState<TestResult>();
 

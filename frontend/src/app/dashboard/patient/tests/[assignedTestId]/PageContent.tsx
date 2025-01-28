@@ -2,7 +2,7 @@ import {useTestContext} from "@/app/dashboard/patient/tests/[assignedTestId]/con
 import {FormProvider, useForm} from "react-hook-form";
 import {Box, Typography} from "@mui/material";
 import LeaveTestButton from "@/app/dashboard/patient/tests/[assignedTestId]/components/LeaveTestButton";
-import QuestionCard from "@/app/dashboard/patient/tests/[assignedTestId]/components/QuestionCard/QuesitonCard";
+import QuestionCard from "@/components/QuestionCard/QuesitonCard";
 import PassTestButton from "@/app/dashboard/patient/tests/[assignedTestId]/components/PassTestButton";
 
 /**

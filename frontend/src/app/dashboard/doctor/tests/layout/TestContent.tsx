@@ -1,7 +1,7 @@
 import Test from "@/schemas/Test";
 import {Box, Typography} from "@mui/material";
 import Marks from "@/components/Test/Marks";
-import QuestionCard from "@/app/dashboard/patient/tests/[assignedTestId]/components/QuestionCard/QuesitonCard";
+import QuestionCard from "@/components/QuestionCard/QuesitonCard";
 import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
 
 export default function TestContent({test}: {test?: Test}) {
@@ -22,7 +22,7 @@ export default function TestContent({test}: {test?: Test}) {
                 </Typography>
                 <Box sx={{display: "flex", alignItems: "center", gap: 1, py: 1}}>
                     <AssignTestButton testId={test.id} />
-                    <Marks marks={test.marks} />
+                    {test.marks && <Marks marks={test.marks} />}
                 </Box>
             </Box>
 

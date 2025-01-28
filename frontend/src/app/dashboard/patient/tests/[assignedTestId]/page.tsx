@@ -1,11 +1,14 @@
 "use client";
 
-import TestProvider, {AssignedTestIdParams} from "@/app/dashboard/patient/tests/[assignedTestId]/context/TestProvider";
+import TestProvider from "@/app/dashboard/patient/tests/[assignedTestId]/context/TestProvider";
 import PageContent from "@/app/dashboard/patient/tests/[assignedTestId]/PageContent";
+import {useParams} from "next/navigation";
 
-export default function Page({ params }: { params: AssignedTestIdParams }) {
+export default function Page() {
+    const { assignedTestId } = useParams<{ assignedTestId: string }>();
+
     return (
-        <TestProvider params={params}>
+        <TestProvider assignedTestId={assignedTestId}>
             <PageContent />
         </TestProvider>
     );
