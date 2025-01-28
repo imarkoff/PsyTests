@@ -21,7 +21,7 @@ class Test(BaseModel):
     name: str = Field(..., title="Name")
     description: Optional[str] = Field(None, title="Description")
     questions: list[Question] = Field(..., title="Questions")
-    marks: dict[str, str] = Field(..., title="Marks")
+    marks: Optional[dict[str, str]] = Field(None, title="Marks")
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
