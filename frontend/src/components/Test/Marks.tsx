@@ -4,6 +4,11 @@ import {TestMarks} from "@/schemas/Test";
 import {Box, Button, Popover, Typography} from "@mui/material";
 import React, {useState} from "react";
 
+/**
+ * Display test marks system. Shows a button which opens a popover with marks system.
+ * @param marks
+ * @constructor
+ */
 export default function Marks({marks}: {marks: TestMarks}) {
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 

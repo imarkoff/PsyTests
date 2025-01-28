@@ -3,6 +3,11 @@ import {Card, CardActions, CardContent, CardHeader, Typography} from "@mui/mater
 import TestValues from "@/components/Test/TestValues";
 import {dateMed} from "@/utils/formatDate";
 
+/**
+ * Displays a card with information about the test result.
+ * @param test
+ * @constructor
+ */
 export default function TestHistoryCard({test}: {test: TestResult}) {
     return (
         <Card variant={"outlined"}>

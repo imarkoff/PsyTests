@@ -2,7 +2,7 @@ import Test from "@/schemas/Test";
 import {Box, Typography} from "@mui/material";
 import Marks from "@/components/Test/Marks";
 import QuestionCard from "@/app/dashboard/patient/tests/[assignedTestId]/components/QuestionCard/QuesitonCard";
-import AssignTestButton from "@/app/dashboard/doctor/tests/components/AssignTestButton";
+import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
 
 export default function TestContent({test}: {test?: Test}) {
     const totalQuestions = test?.questions.length;

@@ -11,6 +11,13 @@ interface AvailableTestCardProps {
     onDelete?: (testId: string) => void;
 }
 
+/**
+ * Card for assigned test. Used on doctor and patient dashboards.
+ * @param test
+ * @param onStart - function to start test
+ * @param onDelete - function to delete test
+ * @constructor
+ */
 export default function AssignedTestCard({test, onStart, onDelete}: AvailableTestCardProps) {
     const questionsCount = test.test.questions.length;
 
