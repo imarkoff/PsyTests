@@ -4,13 +4,13 @@ import {ReactNode} from "react";
 
 export default function DashboardLayout({children}: { children: ReactNode }) {
     return (
-        <Box sx={{minHeight: "100%", display: "flex", flexDirection: "column"}}>
+        <Box sx={{height: "100%", display: "flex", flexDirection: "column", overflow: "hidden"}}>
             <NavigationBar />
 
-            <Box sx={{
+            <Box component={"main"} sx={{
                 padding: {xs: 1.5, sm: 2, lg: 3},
                 display: "flex", flexDirection: "column", gap: "1rem",
-                flexGrow: 1
+                flexGrow: 1, overflow: "auto",
             }}>
                 {children}
             </Box>

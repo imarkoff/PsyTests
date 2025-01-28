@@ -28,11 +28,12 @@ export default function Hamburger({user, navMenu, onLeaveAction}: NavigationMenu
     return (
         <>
             <IconButton
-                sx={{display: {xs: "static", md: "none"}}}
+                sx={{display: {xs: "static", md: "none", alignSelf: "center"}}}
                 onClick={handleClick}
             >
                 <MenuIcon />
             </IconButton>
+
             <Menu
                 anchorEl={anchorEl}
                 id="account-menu"

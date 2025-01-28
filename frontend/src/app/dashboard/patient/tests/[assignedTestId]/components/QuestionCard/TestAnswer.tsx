@@ -11,15 +11,14 @@ type TestAnswerProps = { questionIndex: number, answer: Answer } & QuestionBaseP
 export default function TestAnswer(
     {questionIndex, answer, testId, index, disabled}: TestAnswerProps
 ) {
-    const { register } = useFormContext();
+    const { register } = useFormContext() || { register: () => {} };
 
     return (
         <FormControlLabel
             {...register(questionIndex.toString(), { required: true })}
             value={index}
-            control={<Radio/>}
-            sx={{position: "relative"}}
-            disabled={disabled}
+            control={ <Radio color={answer.is_correct ? "success" : undefined} /> }
+            sx={{ position: "relative", pointerEvents: disabled ? "none" : undefined }}
             label={
                 <AnswerLabel
                     testId={testId}

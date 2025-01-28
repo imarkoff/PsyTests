@@ -31,13 +31,14 @@ type QuestionCardProps = {
 export default function QuestionCard(
     {question, index, testId, disabled}: QuestionCardProps
 ) {
-    const {formState: {errors}} = useFormContext();
+    const {formState: {errors}} = useFormContext() || {formState: {errors: []}};
     const isError = errors[index];
 
     return (
         <Card variant={"outlined"} sx={{
             borderColor: isError ? "error.main" : undefined,
             borderWidth: isError ? "2px" : undefined,
+            overflow: "visible"
         }}>
             <CardHeader
                 title={`${index+1}. ${question.question ?? ""}`}
@@ -60,6 +61,7 @@ export default function QuestionCard(
                         gap: "1rem",
                         justifyItems: "center",
                     }}
+                    defaultValue={question.answers.findIndex(answer => answer.is_correct)}
                     name={`question-${index}`}
                 >
                     {question.answers.map((answer, j) => (
