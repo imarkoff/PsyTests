@@ -4,13 +4,13 @@
 
 import api from "@/api/api";
 import apiPrivate, {setToken} from "@/api/apiPrivate";
+import UserLogin from "@/schemas/UserLogin";
 
 export const endpoint = "/auth";
 
-export const login = async (phone: string, password: string) => {
-    const { data } = await api.post<string>(`${endpoint}/login`, {phone, password});
-    setToken(data);
-    return data;
+export const login = async (data: UserLogin) => {
+    const { data: token } = await api.post<string>(`${endpoint}/login`, data);
+    setToken(token);
 };
 
 export const logout = async () => {
