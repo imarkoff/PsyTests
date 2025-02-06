@@ -1,0 +1,845 @@
+{
+    "name": "Кольорові прогресивні матриці",
+    "questions": [
+        {
+            "image": "./A/1/A1.png",
+            "answers": [
+                {
+                    "image": "./A/1/A1.1.png"
+                },
+                {
+                    "image": "./A/1/A1.2.png"
+                },
+                {
+                    "image": "./A/1/A1.3.png"
+                },
+                {
+                    "image": "./A/1/A1.4.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/1/A1.5.png"
+                },
+                {
+                    "image": "./A/1/A1.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./A/2/A2.png",
+            "answers": [
+                {
+                    "image": "./A/2/A2.1.png"
+                },
+                {
+                    "image": "./A/2/A2.2.png"
+                },
+                {
+                    "image": "./A/2/A2.3.png"
+                },
+                {
+                    "image": "./A/2/A2.4.png"
+                },
+                {
+                    "image": "./A/2/A2.5.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/2/A2.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./A/3/A3.png",
+            "answers": [
+                {
+                    "image": "./A/3/A3.1.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/3/A3.2.png"
+                },
+                {
+                    "image": "./A/3/A3.3.png"
+                },
+                {
+                    "image": "./A/3/A3.4.png"
+                },
+                {
+                    "image": "./A/3/A3.5.png"
+                },
+                {
+                    "image": "./A/3/A3.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./A/4/A4.png",
+            "answers": [
+                {
+                    "image": "./A/4/A4.1.png"
+                },
+                {
+                    "image": "./A/4/A4.2.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/4/A4.3.png"
+                },
+                {
+                    "image": "./A/4/A4.4.png"
+                },
+                {
+                    "image": "./A/4/A4.5.png"
+                },
+                {
+                    "image": "./A/4/A4.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./A/5/A5.png",
+            "answers": [
+                {
+                    "image": "./A/5/A5.1.png"
+                },
+                {
+                    "image": "./A/5/A5.2.png"
+                },
+                {
+                    "image": "./A/5/A5.3.png"
+                },
+                {
+                    "image": "./A/5/A5.4.png"
+                },
+                {
+                    "image": "./A/5/A5.5.png"
+                },
+                {
+                    "image": "./A/5/A5.6.png",
+                    "is_correct": true
+                }
+            ]
+        },
+        {
+            "image": "./A/6/A6.png",
+            "answers": [
+                {
+                    "image": "./A/6/A6.1.png"
+                },
+                {
+                    "image": "./A/6/A6.2.png"
+                },
+                {
+                    "image": "./A/6/A6.3.png"
+                },
+                {
+                    "image": "./A/6/A6.4.png"
+                },
+                {
+                    "image": "./A/6/A6.5.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/6/A6.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./A/7/A7.png",
+            "answers": [
+                {
+                    "image": "./A/7/A7.1.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/7/A7.2.png"
+                },
+                {
+                    "image": "./A/7/A7.3.png"
+                },
+                {
+                    "image": "./A/7/A7.4.png"
+                },
+                {
+                    "image": "./A/7/A7.5.png"
+                },
+                {
+                    "image": "./A/7/A7.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./A/8/A8.png",
+            "answers": [
+                {
+                    "image": "./A/8/A8.1.png"
+                },
+                {
+                    "image": "./A/8/A8.2.png"
+                },
+                {
+                    "image": "./A/8/A8.3.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/8/A8.4.png"
+                },
+                {
+                    "image": "./A/8/A8.5.png"
+                },
+                {
+                    "image": "./A/8/A8.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./A/9/A9.png",
+            "answers": [
+                {
+                    "image": "./A/9/A9.1.png"
+                },
+                {
+                    "image": "./A/9/A9.2.png"
+                },
+                {
+                    "image": "./A/9/A9.3.png"
+                },
+                {
+                    "image": "./A/9/A9.4.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./A/9/A9.5.png"
+                },
+                {
+                    "image": "./A/9/A9.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/10/AB10.png",
+            "answers": [
+                {
+                    "image": "./AB/10/AB10.1.png"
+                },
+                {
+                    "image": "./AB/10/AB10.2.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/10/AB10.3.png"
+                },
+                {
+                    "image": "./AB/10/AB10.4.png"
+                },
+                {
+                    "image": "./AB/10/AB10.5.png"
+                },
+                {
+                    "image": "./AB/10/AB10.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/11/AB11.png",
+            "answers": [
+                {
+                    "image": "./AB/11/AB11.1.png"
+                },
+                {
+                    "image": "./AB/11/AB11.2.png"
+                },
+                {
+                    "image": "./AB/11/AB11.3.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/11/AB11.4.png"
+                },
+                {
+                    "image": "./AB/11/AB11.5.png"
+                },
+                {
+                    "image": "./AB/11/AB11.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/12/AB12.png",
+            "answers": [
+                {
+                    "image": "./AB/12/AB12.1.png"
+                },
+                {
+                    "image": "./AB/12/AB12.2.png"
+                },
+                {
+                    "image": "./AB/12/AB12.3.png"
+                },
+                {
+                    "image": "./AB/12/AB12.4.png"
+                },
+                {
+                    "image": "./AB/12/AB12.5.png"
+                },
+                {
+                    "image": "./AB/12/AB12.6.png",
+                    "is_correct": true
+                }
+            ]
+        },
+        {
+            "image": "./AB/1/AB1.png",
+            "answers": [
+                {
+                    "image": "./AB/1/AB1.1.png"
+                },
+                {
+                    "image": "./AB/1/AB1.2.png"
+                },
+                {
+                    "image": "./AB/1/AB1.3.png"
+                },
+                {
+                    "image": "./AB/1/AB1.4.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/1/AB1.5.png"
+                },
+                {
+                    "image": "./AB/1/AB1.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/2/AB2.png",
+            "answers": [
+                {
+                    "image": "./AB/2/AB2.1.png"
+                },
+                {
+                    "image": "./AB/2/AB2.2.png"
+                },
+                {
+                    "image": "./AB/2/AB2.3.png"
+                },
+                {
+                    "image": "./AB/2/AB2.4.png"
+                },
+                {
+                    "image": "./AB/2/AB2.5.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/2/AB2.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/3/AB3.png",
+            "answers": [
+                {
+                    "image": "./AB/3/AB3.1.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/3/AB3.2.png"
+                },
+                {
+                    "image": "./AB/3/AB3.3.png"
+                },
+                {
+                    "image": "./AB/3/AB3.4.png"
+                },
+                {
+                    "image": "./AB/3/AB3.5.png"
+                },
+                {
+                    "image": "./AB/3/AB3.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/4/AB4.png",
+            "answers": [
+                {
+                    "image": "./AB/4/AB4.1.png"
+                },
+                {
+                    "image": "./AB/4/AB4.2.png"
+                },
+                {
+                    "image": "./AB/4/AB4.3.png"
+                },
+                {
+                    "image": "./AB/4/AB4.4.png"
+                },
+                {
+                    "image": "./AB/4/AB4.5.png"
+                },
+                {
+                    "image": "./AB/4/AB4.6.png",
+                    "is_correct": true
+                }
+            ]
+        },
+        {
+            "image": "./AB/5/AB5.png",
+            "answers": [
+                {
+                    "image": "./AB/5/AB5.1.png"
+                },
+                {
+                    "image": "./AB/5/AB5.2.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/5/AB5.3.png"
+                },
+                {
+                    "image": "./AB/5/AB5.4.png"
+                },
+                {
+                    "image": "./AB/5/AB5.5.png"
+                },
+                {
+                    "image": "./AB/5/AB5.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/6/AB6.png",
+            "answers": [
+                {
+                    "image": "./AB/6/AB6.1.png"
+                },
+                {
+                    "image": "./AB/6/AB6.2.png"
+                },
+                {
+                    "image": "./AB/6/AB6.3.png"
+                },
+                {
+                    "image": "./AB/6/AB6.4.png"
+                },
+                {
+                    "image": "./AB/6/AB6.5.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/6/AB6.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/7/AB7.png",
+            "answers": [
+                {
+                    "image": "./AB/7/AB7.1.png"
+                },
+                {
+                    "image": "./AB/7/AB7.2.png"
+                },
+                {
+                    "image": "./AB/7/AB7.3.png"
+                },
+                {
+                    "image": "./AB/7/AB7.4.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/7/AB7.5.png"
+                },
+                {
+                    "image": "./AB/7/AB7.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/8/AB8.png",
+            "answers": [
+                {
+                    "image": "./AB/8/AB8.1.png"
+                },
+                {
+                    "image": "./AB/8/AB8.2.png"
+                },
+                {
+                    "image": "./AB/8/AB8.3.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/8/AB8.4.png"
+                },
+                {
+                    "image": "./AB/8/AB8.5.png"
+                },
+                {
+                    "image": "./AB/8/AB8.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/9/AB9.png",
+            "answers": [
+                {
+                    "image": "./AB/9/AB9.1.png"
+                },
+                {
+                    "image": "./AB/9/AB9.2.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/9/AB9.3.png"
+                },
+                {
+                    "image": "./AB/9/AB9.4.png"
+                },
+                {
+                    "image": "./AB/9/AB9.5.png"
+                },
+                {
+                    "image": "./AB/9/AB9.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/10/AB10.png",
+            "answers": [
+                {
+                    "image": "./AB/10/AB10.1.png"
+                },
+                {
+                    "image": "./AB/10/AB10.2.png"
+                },
+                {
+                    "image": "./AB/10/AB10.3.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/10/AB10.4.png"
+                },
+                {
+                    "image": "./AB/10/AB10.5.png"
+                },
+                {
+                    "image": "./AB/10/AB10.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/11/AB11.png",
+            "answers": [
+                {
+                    "image": "./AB/11/AB11.1.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./AB/11/AB11.2.png"
+                },
+                {
+                    "image": "./AB/11/AB11.3.png"
+                },
+                {
+                    "image": "./AB/11/AB11.4.png"
+                },
+                {
+                    "image": "./AB/11/AB11.5.png"
+                },
+                {
+                    "image": "./AB/11/AB11.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./AB/12/AB12.png",
+            "answers": [
+                {
+                    "image": "./AB/12/AB12.1.png"
+                },
+                {
+                    "image": "./AB/12/AB12.2.png"
+                },
+                {
+                    "image": "./AB/12/AB12.3.png"
+                },
+                {
+                    "image": "./AB/12/AB12.4.png"
+                },
+                {
+                    "image": "./AB/12/AB12.5.png"
+                },
+                {
+                    "image": "./AB/12/AB12.6.png",
+                    "is_correct": true
+                }
+            ]
+        },
+        {
+            "image": "./B/2/B2.png",
+            "answers": [
+                {
+                    "image": "./B/2/B2.1.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/2/B2.2.png"
+                },
+                {
+                    "image": "./B/2/B2.3.png"
+                },
+                {
+                    "image": "./B/2/B2.4.png"
+                },
+                {
+                    "image": "./B/2/B2.5.png"
+                },
+                {
+                    "image": "./B/2/B2.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/3/B3.png",
+            "answers": [
+                {
+                    "image": "./B/3/B3.1.png"
+                },
+                {
+                    "image": "./B/3/B3.2.png"
+                },
+                {
+                    "image": "./B/3/B3.3.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/3/B3.4.png"
+                },
+                {
+                    "image": "./B/3/B3.5.png"
+                },
+                {
+                    "image": "./B/3/B3.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/4/B4.png",
+            "answers": [
+                {
+                    "image": "./B/4/B4.1.png"
+                },
+                {
+                    "image": "./B/4/B4.2.png"
+                },
+                {
+                    "image": "./B/4/B4.3.png"
+                },
+                {
+                    "image": "./B/4/B4.4.png"
+                },
+                {
+                    "image": "./B/4/B4.5.png"
+                },
+                {
+                    "image": "./B/4/B4.6.png",
+                    "is_correct": true
+                }
+            ]
+        },
+        {
+            "image": "./B/5/B5.png",
+            "answers": [
+                {
+                    "image": "./B/5/B5.1.png"
+                },
+                {
+                    "image": "./B/5/B5.2.png"
+                },
+                {
+                    "image": "./B/5/B5.3.png"
+                },
+                {
+                    "image": "./B/5/B5.4.png"
+                },
+                {
+                    "image": "./B/5/B5.5.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/5/B5.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/6/B6.png",
+            "answers": [
+                {
+                    "image": "./B/6/B6.1.png"
+                },
+                {
+                    "image": "./B/6/B6.2.png"
+                },
+                {
+                    "image": "./B/6/B6.3.png"
+                },
+                {
+                    "image": "./B/6/B6.4.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/6/B6.5.png"
+                },
+                {
+                    "image": "./B/6/B6.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/7/B7.png",
+            "answers": [
+                {
+                    "image": "./B/7/B7.1.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/7/B7.2.png"
+                },
+                {
+                    "image": "./B/7/B7.3.png"
+                },
+                {
+                    "image": "./B/7/B7.4.png"
+                },
+                {
+                    "image": "./B/7/B7.5.png"
+                },
+                {
+                    "image": "./B/7/B7.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/8/B8.png",
+            "answers": [
+                {
+                    "image": "./B/8/B8.1.png"
+                },
+                {
+                    "image": "./B/8/B8.2.png"
+                },
+                {
+                    "image": "./B/8/B8.3.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/8/B8.4.png"
+                },
+                {
+                    "image": "./B/8/B8.5.png"
+                },
+                {
+                    "image": "./B/8/B8.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/9/B9.png",
+            "answers": [
+                {
+                    "image": "./B/9/B9.1.png"
+                },
+                {
+                    "image": "./B/9/B9.2.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/9/B9.3.png"
+                },
+                {
+                    "image": "./B/9/B9.4.png"
+                },
+                {
+                    "image": "./B/9/B9.5.png"
+                },
+                {
+                    "image": "./B/9/B9.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/10/B10.png",
+            "answers": [
+                {
+                    "image": "./B/10/B10.1.png"
+                },
+                {
+                    "image": "./B/10/B10.2.png"
+                },
+                {
+                    "image": "./B/10/B10.3.png"
+                },
+                {
+                    "image": "./B/10/B10.4.png"
+                },
+                {
+                    "image": "./B/10/B10.5.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/10/B10.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/11/B11.png",
+            "answers": [
+                {
+                    "image": "./B/11/B11.1.png"
+                },
+                {
+                    "image": "./B/11/B11.2.png",
+                    "is_correct": true
+                },
+                {
+                    "image": "./B/11/B11.3.png"
+                },
+                {
+                    "image": "./B/11/B11.4.png"
+                },
+                {
+                    "image": "./B/11/B11.5.png"
+                },
+                {
+                    "image": "./B/11/B11.6.png"
+                }
+            ]
+        },
+        {
+            "image": "./B/12/B12.png",
+            "answers": [
+                {
+                    "image": "./B/12/B12.1.png"
+                },
+                {
+                    "image": "./B/12/B12.2.png"
+                },
+                {
+                    "image": "./B/12/B12.3.png"
+                },
+                {
+                    "image": "./B/12/B12.4.png"
+                },
+                {
+                    "image": "./B/12/B12.5.png"
+                },
+                {
+                    "image": "./B/12/B12.6.png",
+                    "is_correct": true
+                }
+            ]
+        }
+    ]
+}
