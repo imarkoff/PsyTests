@@ -24,7 +24,7 @@ export default function TestsPage() {
             gap: 3,
             gridTemplateColumns: {xs: "1fr", lg: "1fr 1fr"},
         }}>
-            <Box sx={{overflow: "scroll", display: "flex", flexDirection: "column", gap: 1}}>
+            <Box sx={{overflowY: "scroll", display: "flex", px: {lg: 1}, flexDirection: "column", gap: 1}}>
                 <Typography variant={"h5"} fontWeight={600} component={"h1"} textAlign={"center"}>Тести</Typography>
                 {tests?.map(test => (
                     <TestPreview

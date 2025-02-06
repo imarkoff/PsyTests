@@ -12,7 +12,7 @@ class TestShortDto(BaseModel):
     id: UUID
     name: str
     description: Optional[str]
-    marks: dict[str, str]
+    marks: Optional[dict[str, str]]
     questions_count: int
 
     model_config = ConfigDict(

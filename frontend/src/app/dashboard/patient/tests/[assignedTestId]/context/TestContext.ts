@@ -1,6 +1,6 @@
 import {createContext, useContext} from "react";
 import PatientTest from "@/schemas/PatientTest";
-import TestResult from "@/schemas/TestResult";
+import TestShortResult from "@/schemas/TestShortResult";
 
 /**
  * Context for managing test-related data and actions.
@@ -14,7 +14,9 @@ const TestContext = createContext<{
      */
     passTest: (data: {[questionId: number]: string}) => Promise<void>;
     /** The result of the test. */
-    result?: TestResult;
+    result?: TestShortResult;
+    /** The correct answers for the test. */
+    correctAnswers?: number[];
 }>({
     passTest: async () => {},
 });

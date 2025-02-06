@@ -1,4 +1,4 @@
-import TestResult from "@/schemas/TestResult";
+import TestShortResult from "@/schemas/TestShortResult";
 import {Card, CardActions, CardContent, CardHeader, Typography} from "@mui/material";
 import TestValues from "@/components/Test/TestValues";
 import {dateMed} from "@/utils/formatDate";
@@ -8,7 +8,7 @@ import {dateMed} from "@/utils/formatDate";
  * @param test
  * @constructor
  */
-export default function TestHistoryCard({test}: {test: TestResult}) {
+export default function TestHistoryCard({test}: {test: TestShortResult}) {
     return (
         <Card variant={"outlined"}>
             <CardHeader title={test.test.name} />

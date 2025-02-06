@@ -1,5 +1,5 @@
 import User from "@/schemas/User";
-import {Button, Card, CardActionArea, CardContent, CardHeader} from "@mui/material";
+import {Button, Card, CardActionArea, CardContent, CardHeader, Theme} from "@mui/material";
 import formatPhone from "@/utils/formatPhone";
 
 interface PatientCardProps {
@@ -24,18 +24,17 @@ export default function PatientCard({patient, onDetails, onChoose, selected}: Pa
         alignItems: "center",
     };
 
-    const cardSelectedSx = {
-        borderWidth: 2,
-        borderColor: "primary.main",
-    }
+    const cardSelectedSx = (theme: Theme) => ({
+        boxShadow: "0 0 0 2px " + theme.palette.primary.main,
+    });
 
     return (
         <Card
             variant={"outlined"}
-            sx={{
+            sx={(theme) =>({
                 ...(onChoose ? {} : cardSx),
-                ...(selected ? cardSelectedSx : {}),
-            }}
+                ...(selected ? cardSelectedSx(theme) : {}),
+            })}
         >
             {onChoose
                 ? (

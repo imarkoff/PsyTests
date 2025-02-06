@@ -27,7 +27,14 @@ export default function TestContent({test}: {test?: Test}) {
             </Box>
 
             {test.questions.map((question, index) => (
-                <QuestionCard question={question} key={index} testId={test.id} index={index} disabled />
+                <QuestionCard
+                    question={question}
+                    correctAnswer={question.answers.findIndex(answer => answer.is_correct)}
+                    key={`${test.id}/question/${index}`} // prevent showing checked answers from other tests
+                    testId={test.id}
+                    index={index}
+                    disabled
+                />
             ))}
         </>)
         : (

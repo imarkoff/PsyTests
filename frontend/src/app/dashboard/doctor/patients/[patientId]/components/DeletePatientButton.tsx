@@ -22,7 +22,7 @@ export default function DeletePatientButton({ patientId }: { patientId: string }
             <Button
                 variant={"outlined"}
                 color={"error"}
-                sx={{marginLeft: {xs: 0, sm: "auto"}}}
+                sx={{marginLeft: {xs: 0, sm: "auto", alignSelf: "center"}}}
                 onClick={handleOpen}
             >
                 Видалити пацієнта

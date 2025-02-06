@@ -7,6 +7,7 @@ from app.db.models.test_history import TestHistory
 from app.exceptions import NotFoundError
 from app.schemas.test import Test
 from app.schemas.test_result import TestResultDto
+from app.schemas.test_short_result import TestShortResultDto
 from app.schemas.test_short import TestShortDto
 from app.services.tests_service import get_test
 from app.utils.convert_test_to_short import convert_test_to_short
@@ -55,10 +56,18 @@ async def pass_test(db: Session, assigned_test_id: UUID, patient_id: UUID, answe
     db.add(new_history)
     db.commit()
 
-    return test_result_to_dto(new_history, test, result)
+    return TestResultDto(
+        id=new_history.id,
+        test=test,
+        patient_id=patient_id,
+        total_points=total_points,
+        correct_points=correct_points,
+        result=result,
+        passed_at=new_history.passed_at
+    )
 
 
-async def get_tests_history(db: Session, patient_id: UUID) -> list[TestResultDto]:
+async def get_tests_history(db: Session, patient_id: UUID) -> list[TestShortResultDto]:
     """
     Get tests history
     """
@@ -78,14 +87,14 @@ async def get_tests_history(db: Session, patient_id: UUID) -> list[TestResultDto
     return tests_results
 
 
-def test_result_to_dto(test_result: TestHistory, test: Test, result: str | None) -> TestResultDto:
+def test_result_to_dto(test_result: TestHistory, test: Test, result: str | None) -> TestShortResultDto:
     """
     Convert test result to DTO
     """
 
     shortened_test = convert_test_to_short(test)
 
-    return TestResultDto(
+    return TestShortResultDto(
         id=test_result.id,
         test=TestShortDto(**shortened_test.model_dump()),  # throws validation error if passed var directly
         patient_id=test_result.patient_id,

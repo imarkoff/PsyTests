@@ -12,11 +12,14 @@ export default function TestPreview({test, onClick, selected}: TestPreviewProps)
         <Card
             onClick={onClick}
             variant={"outlined"}
-            sx={selected ? {
-                borderColor: "primary.main",
-                borderWidth: "2px",
-                overflow: "visible"
-            } : undefined}
+            sx={(theme) => ({
+                boxSizing: "border-box",
+                width: "100%",
+                ...(selected && {
+                    boxShadow: "0 0 0 2px " + theme.palette.primary.main,
+                    overflow: "visible"
+                }),
+            })}
         >
             <CardActionArea>
                 <CardHeader

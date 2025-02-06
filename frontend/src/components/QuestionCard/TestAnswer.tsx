@@ -1,5 +1,4 @@
 import {FormControlLabel, Radio, Typography} from "@mui/material";
-import Image from "next/image";
 import {testImage} from "@/services/testsService";
 import React from "react";
 import {Answer} from "@/schemas/Test";
@@ -10,7 +9,7 @@ import LazyImage from "@/components/LazyImage";
 type TestAnswerProps = { questionIndex: number, answer: Answer } & QuestionBaseProps;
 
 export default function TestAnswer(
-    {questionIndex, answer, testId, index, disabled}: TestAnswerProps
+    {questionIndex, answer, testId, index, disabled, correctAnswer}: TestAnswerProps
 ) {
     const { register } = useFormContext() || { register: () => {} };
 
@@ -18,7 +17,12 @@ export default function TestAnswer(
         <FormControlLabel
             {...register(questionIndex.toString(), { required: true })}
             value={index}
-            control={ <Radio color={answer.is_correct ? "success" : undefined} /> }
+            control={
+                <Radio
+                    color={correctAnswer !== undefined ? (correctAnswer === index ? "success" : "error") : undefined}
+                    checked={correctAnswer === index ? true : undefined}
+                />
+            }
             sx={{ position: "relative", pointerEvents: disabled ? "none" : undefined }}
             label={
                 <AnswerLabel

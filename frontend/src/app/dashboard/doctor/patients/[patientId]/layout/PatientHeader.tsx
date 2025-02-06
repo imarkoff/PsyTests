@@ -8,7 +8,7 @@ export default function PatientHeader({patient}: {patient?: User}) {
         <Box sx={{
             display: "flex",
             flexWrap: "wrap",
-            alignItems: "center",
+            alignItems: {xs: "center", sm: "baseline"},
             flexDirection: {xs: "column", sm: "row"},
             justifyContent: {xs: "center", sm: "flex-start"},
             columnGap: 3,

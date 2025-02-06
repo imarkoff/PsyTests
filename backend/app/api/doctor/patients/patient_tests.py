@@ -10,7 +10,7 @@ from app.db.session import get_postgresql_db
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
-from app.schemas.test_result import TestResultDto
+from app.schemas.test_short_result import TestShortResultDto
 from app.services import test_history_service
 from app.services.patients import patient_tests_service
 
@@ -36,7 +36,7 @@ async def get_patient_tests(
         return Response("Patient not found", status_code=404, media_type="text/plain")
 
 
-@router.get("/history", summary="Get passed tests history of patient", response_model=list[TestResultDto])
+@router.get("/history", summary="Get passed tests history of patient", response_model=list[TestShortResultDto])
 async def get_patient_history(
         patient_id: UUID,
         db: Session = Depends(get_postgresql_db),

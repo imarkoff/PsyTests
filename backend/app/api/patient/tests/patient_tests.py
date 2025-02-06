@@ -12,6 +12,7 @@ from app.schemas.pass_test import PassTestDto
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
 from app.schemas.test_result import TestResultDto
+from app.schemas.test_short_result import TestShortResultDto
 from app.services import test_history_service
 from app.services.patients import patient_tests_service
 
@@ -47,7 +48,7 @@ async def pass_test(
         return Response(status_code=404)
 
 
-@router.get("/history", summary="Get tests history", response_model=list[TestResultDto])
+@router.get("/history", summary="Get tests history", response_model=list[TestShortResultDto])
 async def get_tests_history(
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
         db: Session = Depends(get_postgresql_db)

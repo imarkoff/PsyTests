@@ -20,6 +20,8 @@ export type QuestionBaseProps = {
     testId: string;
     /** Whether the question is disabled */
     disabled: boolean;
+    /** Correct answer for the question */
+    correctAnswer?: number;
 }
 
 type QuestionCardProps = {
@@ -31,7 +33,7 @@ type QuestionCardProps = {
  * Renders a single question with its answers.
  */
 export default function QuestionCard(
-    {question, index, testId, disabled}: QuestionCardProps
+    {question, index, testId, disabled, correctAnswer}: QuestionCardProps
 ) {
     const {formState: {errors}} = useFormContext() || {formState: {errors: []}};
     const isError = errors[index];
@@ -82,6 +84,7 @@ export default function QuestionCard(
                                 testId={testId}
                                 answer={answer}
                                 questionIndex={index}
+                                correctAnswer={correctAnswer}
                                 disabled={disabled}
                             />
                         ))}
