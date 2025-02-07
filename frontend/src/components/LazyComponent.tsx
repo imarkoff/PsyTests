@@ -7,6 +7,7 @@ import {Property} from "csstype";
 interface LazyComponentProps {
     height: Property.Height;
     children: ReactNode;
+    visibleChildren?: ReactNode;
     IntersectionOptions?: IntersectionOptions;
 }
 
@@ -14,10 +15,13 @@ interface LazyComponentProps {
  * Lazy loads the children when they are in view.
  * @param height - height of the placeholder
  * @param children - the children to render
+ * @param visibleChildren - the children which are always visible
  * @param IntersectionOptions - options for the IntersectionObserver
  * @constructor
  */
-export default function LazyComponent({ height, children, IntersectionOptions }: LazyComponentProps) {
+export default function LazyComponent(
+    { height, children, visibleChildren, IntersectionOptions }: LazyComponentProps
+) {
     const { ref, inView } = useInView({
         triggerOnce: true,
         threshold: 0.1,
@@ -26,6 +30,7 @@ export default function LazyComponent({ height, children, IntersectionOptions }:
 
     return (
         <div ref={ref} style={{overflow: "visible"}}>
+            {visibleChildren}
             {inView ? children : <div style={{height: height}}/>}
         </div>
     );

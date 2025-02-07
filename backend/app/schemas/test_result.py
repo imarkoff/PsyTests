@@ -4,11 +4,12 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-from app.schemas.test import Test
+from app.schemas.test_short import TestShortDto
+
 
 class TestResultDto(BaseModel):
     id: UUID
-    test: Test
+    test: TestShortDto
     patient_id: UUID
     total_points: int
     correct_points: int
@@ -20,7 +21,7 @@ class TestResultDto(BaseModel):
         json_schema_extra={
             "example": {
                 "id": "399738b5-7f16-44b7-8e75-314a65e75868",
-                "test": Test.model_json_schema()["example"],
+                "test": TestShortDto.model_json_schema()["example"],
                 "patient_id": "123e4567-e89b-12d3-a456-426614174000",
                 "total_points": 5,
                 "correct_points": 3,

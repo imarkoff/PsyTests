@@ -2,25 +2,27 @@ import {FormControlLabel, Radio, Typography} from "@mui/material";
 import {testImage} from "@/services/testsService";
 import React from "react";
 import {Answer} from "@/schemas/Test";
-import {QuestionBaseProps} from "@/components/QuestionCard/QuesitonCard";
-import {useFormContext} from "react-hook-form";
 import LazyImage from "@/components/LazyImage";
+import {QuestionBaseProps} from "@/components/QuestionCard/QuesitonCard";
 
-type TestAnswerProps = { questionIndex: number, answer: Answer } & QuestionBaseProps;
+type TestAnswerProps = {
+    answer: Answer,
+    onChange: (index: number) => void,
+    chosenAnswer?: number,
+    correctAnswer?: number,
+} & QuestionBaseProps;
 
 export default function TestAnswer(
-    {questionIndex, answer, testId, index, disabled, correctAnswer}: TestAnswerProps
+    {answer, testId, index, disabled, onChange, chosenAnswer, correctAnswer}: TestAnswerProps
 ) {
-    const { register } = useFormContext() || { register: () => {} };
-
     return (
         <FormControlLabel
-            {...register(questionIndex.toString(), { required: true })}
             value={index}
+            onChange={() => onChange(index)}
             control={
                 <Radio
                     color={correctAnswer !== undefined ? (correctAnswer === index ? "success" : "error") : undefined}
-                    checked={correctAnswer === index ? true : undefined}
+                    checked={(correctAnswer === index || chosenAnswer === index) ? true : undefined}
                 />
             }
             sx={{ position: "relative", pointerEvents: disabled ? "none" : undefined }}

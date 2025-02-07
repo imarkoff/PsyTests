@@ -9,9 +9,8 @@ import PassTestButton from "@/app/dashboard/patient/tests/[assignedTestId]/compo
  * Renders the test page content. Separated for SSR.
  */
 export default function PageContent() {
-    const {test, passTest, result, correctAnswers} = useTestContext();
+    const {test, passTest, result} = useTestContext();
     const methods = useForm<{ [questionId: number]: string }>();
-    console.log(correctAnswers);
 
     return (
         <Box sx={{maxWidth: 600, marginX: "auto", display: "flex", flexDirection: "column", gap: 1}}>
@@ -22,12 +21,11 @@ export default function PageContent() {
                 </Typography>
             </Box>
 
-            <form onSubmit={methods.handleSubmit(passTest)}>
+            <Box component={"form"} onSubmit={methods.handleSubmit(passTest)} sx={{display: "grid", gap: 2}}>
                 <FormProvider {...methods}>
                     {test?.test.questions.map((question, index) => (
                         <QuestionCard
                             question={question}
-                            correctAnswer={correctAnswers?.[index]}
                             key={index}
                             index={index}
                             testId={test.test.id}
@@ -36,7 +34,7 @@ export default function PageContent() {
                     ))}
                     <PassTestButton />
                 </FormProvider>
-            </form>
+            </Box>
         </Box>
     );
 }

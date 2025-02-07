@@ -19,7 +19,7 @@ interface AvailableTestCardProps {
  * @constructor
  */
 export default function AssignedTestCard({test, onStart, onDelete}: AvailableTestCardProps) {
-    const questionsCount = test.test.questions.length;
+    const questionsCount = test?.test.questions.length;
 
     return (
         <Card variant={"outlined"}>

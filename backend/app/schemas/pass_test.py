@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 class PassTestDto(BaseModel):
     assigned_test_id: UUID
-    answers: list[int]
+    answers: list[int | None]
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,

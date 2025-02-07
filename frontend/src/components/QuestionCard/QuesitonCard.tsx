@@ -7,7 +7,7 @@ import {
     RadioGroup,
 } from "@mui/material";
 import {testImage} from "@/services/testsService";
-import React from "react";
+import React, {useState} from "react";
 import TestAnswer from "@/components/QuestionCard/TestAnswer";
 import {useFormContext} from "react-hook-form";
 import LazyImage from "@/components/LazyImage";
@@ -35,11 +35,22 @@ type QuestionCardProps = {
 export default function QuestionCard(
     {question, index, testId, disabled, correctAnswer}: QuestionCardProps
 ) {
-    const {formState: {errors}} = useFormContext() || {formState: {errors: []}};
+    const {register, formState: {errors}, setValue} = useFormContext() || {formState: {errors: []}};
     const isError = errors[index];
 
+    // used for showing answers from hidden input.
+    // using hidden input because of LazyComponent cannot register all inputs at once
+    const [chosenAnswer, setChosenAnswer] = useState<number>();
+    const handleAnswerChange = (chosenNumber: number) => {
+        setChosenAnswer(chosenNumber);
+        setValue(`${index}`, chosenNumber);
+    };
+
     return (
-        <LazyComponent height={"400px"}>
+        <LazyComponent
+            height={"400px"}
+            visibleChildren={<input type="hidden" {...register?.(`${index}`)} />}
+        >
             <Card variant={"outlined"} sx={{
                 borderColor: isError ? "error.main" : undefined,
                 borderWidth: isError ? "2px" : undefined,
@@ -48,9 +59,13 @@ export default function QuestionCard(
                 <CardHeader
                     title={`${index+1}. ${question.question ?? ""}`}
                     subheader={isError && "Оберіть відповідь"}
-                    subheaderTypographyProps={{
-                        color: "error",
-                        variant: "caption",
+                    slotProps={{
+                        subheader: {
+                            sx: {
+                                color: "error",
+                                variant: "caption",
+                            }
+                        }
                     }}
                 />
 
@@ -83,7 +98,8 @@ export default function QuestionCard(
                                 index={j}
                                 testId={testId}
                                 answer={answer}
-                                questionIndex={index}
+                                onChange={handleAnswerChange}
+                                chosenAnswer={chosenAnswer}
                                 correctAnswer={correctAnswer}
                                 disabled={disabled}
                             />
