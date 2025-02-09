@@ -5,15 +5,17 @@ from sqlalchemy.orm import Session
 from app.db.models.patient_test import PatientTest
 from app.db.models.test_history import TestHistory
 from app.exceptions import NotFoundError
-from app.schemas.test import Test
+from app.schemas.pass_test import PassTestDto
+from app.schemas.test.test import Test
 from app.schemas.test_result import TestResultDto
 from app.schemas.test_short import TestShortDto
 from app.services.tests_service import get_test
+from app.utils.calculate_points import calculate_points
 from app.utils.convert_test_to_short import convert_test_to_short
 from app.utils.get_test_result import get_test_result
 
 
-async def pass_test(db: Session, assigned_test_id: UUID, patient_id: UUID, answers: list[int | None]) -> TestResultDto:
+async def pass_test(db: Session, patient_id: UUID, pass_dto: PassTestDto) -> TestResultDto:
     """
     Pass test
 
@@ -23,26 +25,14 @@ async def pass_test(db: Session, assigned_test_id: UUID, patient_id: UUID, answe
         ValueError: If answers count is not equal to questions count
     """
 
-    doctor_test: PatientTest | None = db.query(PatientTest).filter(PatientTest.id == assigned_test_id).first()
+    doctor_test: PatientTest | None = db.query(PatientTest).filter(PatientTest.id == pass_dto.assigned_test_id).first()
 
     if not doctor_test:
         raise NotFoundError
 
     test = await get_test(doctor_test.test_id, True)
 
-    if len(test.questions) != len(answers):
-        raise ValueError
-
-    total_points = 0
-    correct_points = 0
-
-    for i, answer in enumerate(answers):
-        question = test.questions[i]
-        points = question.points if question.points else 1
-        total_points += points
-
-        if answer is not None and question.answers[answer].is_correct:
-            correct_points += points
+    (total_points, correct_points) = calculate_points(test, pass_dto.answers)
 
     new_history = TestHistory(
         test_id=test.id,

@@ -22,6 +22,8 @@ export type QuestionBaseProps = {
     disabled: boolean;
     /** Correct answer for the question */
     correctAnswer?: number;
+    /** Module where the question belongs */
+    module?: { name: string; path: string; }
 }
 
 type QuestionCardProps = {
@@ -33,23 +35,26 @@ type QuestionCardProps = {
  * Renders a single question with its answers.
  */
 export default function QuestionCard(
-    {question, index, testId, disabled, correctAnswer}: QuestionCardProps
+    {question, index, testId, disabled, module, correctAnswer}: QuestionCardProps
 ) {
     const {register, formState: {errors}, setValue} = useFormContext() || {formState: {errors: []}};
-    const isError = errors[index];
+    const isError = Boolean(errors[index]);
+
+    const fieldName = `${module ? module.name : "_"}.${index}`;
+    const defaultAnswer = question.answers.findIndex(answer => answer.is_correct);
 
     // used for showing answers from hidden input.
     // using hidden input because of LazyComponent cannot register all inputs at once
     const [chosenAnswer, setChosenAnswer] = useState<number>();
-    const handleAnswerChange = (chosenNumber: number) => {
+    const handleAnswerChange = (moduleName: string | undefined, chosenNumber: number) => {
         setChosenAnswer(chosenNumber);
-        setValue(`${index}`, chosenNumber);
+        setValue(`${moduleName ?? "_"}.${index}`, chosenNumber);
     };
 
     return (
         <LazyComponent
             height={"400px"}
-            visibleChildren={<input type="hidden" {...register?.(`${index}`)} />}
+            visibleChildren={<input type="hidden" {...register?.(fieldName)} />}
         >
             <Card variant={"outlined"} sx={{
                 borderColor: isError ? "error.main" : undefined,
@@ -57,14 +62,11 @@ export default function QuestionCard(
                 overflow: "visible"
             }}>
                 <CardHeader
-                    title={`${index+1}. ${question.question ?? ""}`}
-                    subheader={isError && "Оберіть відповідь"}
+                    title={`${module?.name ?? ""} ${index+1}. ${question.question ?? ""}`}
+                    subheader={isError ? "Оберіть відповідь" : undefined}
                     slotProps={{
                         subheader: {
-                            sx: {
-                                color: "error",
-                                variant: "caption",
-                            }
+                            sx: { color: "error", variant: "caption" }
                         }
                     }}
                 />
@@ -72,7 +74,7 @@ export default function QuestionCard(
                 {question.image && (
                     <CardMedia>
                         <LazyImage
-                            src={testImage(testId, question.image)}
+                            src={testImage(testId, module?.path ?? null, question.image)}
                             alt={question.question || `${index + 1}`}
                             width={600}
                             height={250}
@@ -89,7 +91,7 @@ export default function QuestionCard(
                             gap: "1rem",
                             justifyItems: "center",
                         }}
-                        defaultValue={question.answers.findIndex(answer => answer.is_correct)}
+                        defaultValue={defaultAnswer}
                         name={`question-${index}`}
                     >
                         {question.answers.map((answer, j) => (
@@ -98,6 +100,7 @@ export default function QuestionCard(
                                 index={j}
                                 testId={testId}
                                 answer={answer}
+                                module={module}
                                 onChange={handleAnswerChange}
                                 chosenAnswer={chosenAnswer}
                                 correctAnswer={correctAnswer}

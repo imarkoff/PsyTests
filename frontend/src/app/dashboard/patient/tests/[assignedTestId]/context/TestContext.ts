@@ -1,6 +1,7 @@
 import {createContext, useContext} from "react";
 import PatientTest from "@/schemas/PatientTest";
 import TestResult from "@/schemas/TestResult";
+import PassTestData from "@/app/dashboard/patient/tests/[assignedTestId]/schemas/PassTestData";
 
 /**
  * Context for managing test-related data and actions.
@@ -10,9 +11,9 @@ const TestContext = createContext<{
     test?: PatientTest;
     /**
      * Function to handle passing the test.
-     * @param data - The answers data where keys are question IDs and values are answer IDs.
+     * @param data - The data to send to the server.
      */
-    passTest: (data: {[questionId: number]: string}) => Promise<void>;
+    passTest: (data: PassTestData) => Promise<void>;
     /** The result of the test. */
     result?: TestResult;
 }>({

@@ -1,5 +1,5 @@
 from app.db.models.test_history import TestHistory
-from app.schemas.test import Test
+from app.schemas.test.test import Test
 
 
 def get_test_result(test: Test, test_result: TestHistory) -> str | None:

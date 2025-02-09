@@ -6,6 +6,7 @@ import {getTest, passTest} from "@/services/patientTestsService";
 import useSWR from "swr";
 import TestResult from "@/schemas/TestResult";
 import PassTest from "@/schemas/PassTest";
+import PassTestData from "@/app/dashboard/patient/tests/[assignedTestId]/schemas/PassTestData";
 
 /**
  * Provides test-related data and actions to its children via context.
@@ -26,14 +27,18 @@ export default function TestProvider({assignedTestId, children}: { assignedTestI
 
     /**
      * Function to handle passing the test.
-     * @param data - The answers data where keys are question IDs and values are answer IDs.
+     * @param data
      */
-    const onPass = async (data: {[questionId: number]: string}) => {
+    const onPass = async (data: PassTestData) => {
         if (!test || result) return;
 
         const testData: PassTest = {
             assigned_test_id: test.id,
-            answers: Object.values(data).map(answerId => answerId !== "" ? parseInt(answerId) : null)
+            // Convert empty strings to null
+            answers: Object.keys(data).reduce((acc, pathName) => {
+                acc[pathName] = data[pathName].map(answerId => answerId === "" ? null : answerId);
+                return acc;
+            }, {} as PassTest["answers"])
         }
 
         const responseData = await passTest(testData);

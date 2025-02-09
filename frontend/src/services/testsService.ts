@@ -14,5 +14,6 @@ export const getTests = async () =>
 export const getTest = async (testId: string) =>
     await apiPrivate.get<Test>(`${endpoint}/${testId}`).then(res => res.data);
 
-export const testImage = (testId: string, imagePath: string) =>
-    `${api.defaults.baseURL}${endpoint}/${testId}/image?image_path=${imagePath}`;
+export const testImage =
+    (testId: string, modulePath: string | undefined | null, imagePath: string) =>
+    `${api.defaults.baseURL}${endpoint}/${testId}/image?image_path=${imagePath}${modulePath ? `&module_path=${modulePath}` : ""}`;

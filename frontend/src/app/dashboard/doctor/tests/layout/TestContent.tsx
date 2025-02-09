@@ -3,11 +3,10 @@ import {Box, Typography} from "@mui/material";
 import Marks from "@/components/Test/Marks";
 import QuestionCard from "@/components/QuestionCard/QuesitonCard";
 import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
+import countTestQuestions from "@/utils/countTestQuestions";
 
 export default function TestContent({test}: {test?: Test}) {
-    const totalQuestions = test?.questions.length;
-    const totalPoints = test?.questions.reduce(
-        (acc, question) => acc + (question.points || 1), 0);
+    const {totalQuestions, totalPoints} = countTestQuestions(test);
 
     return (test
         ? (<>
@@ -26,7 +25,7 @@ export default function TestContent({test}: {test?: Test}) {
                 </Box>
             </Box>
 
-            {test.questions.map((question, index) => (
+            {test.questions?.map((question, index) => (
                 <QuestionCard
                     question={question}
                     correctAnswer={question.answers.findIndex(answer => answer.is_correct)}
@@ -35,6 +34,19 @@ export default function TestContent({test}: {test?: Test}) {
                     index={index}
                     disabled
                 />
+            ))}
+            {test.modules.map((module, index) => (
+                module.questions.map((question, j) => (
+                    <QuestionCard
+                        question={question}
+                        correctAnswer={question.answers.findIndex(answer => answer.is_correct)}
+                        key={`${test.id}/module/${index}/question/${j}`}
+                        module={{name: module.name, path: module.path}}
+                        testId={test.id}
+                        index={j}
+                        disabled
+                    />
+                ))
             ))}
         </>)
         : (

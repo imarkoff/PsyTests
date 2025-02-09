@@ -2,8 +2,16 @@ export default interface Test {
     id: string;
     name: string;
     description?: string;
-    questions: Question[];
+    questions?: Question[];
+    modules: TestModule[];
     marks: TestMarks;
+}
+
+export interface TestModule {
+    name: string;
+    description?: string;
+    path: string;
+    questions: Question[];
 }
 
 /**

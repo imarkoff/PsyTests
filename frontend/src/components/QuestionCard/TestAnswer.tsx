@@ -7,28 +7,32 @@ import {QuestionBaseProps} from "@/components/QuestionCard/QuesitonCard";
 
 type TestAnswerProps = {
     answer: Answer,
-    onChange: (index: number) => void,
+    onChange: (moduleName: string | undefined, index: number) => void,
     chosenAnswer?: number,
     correctAnswer?: number,
 } & QuestionBaseProps;
 
 export default function TestAnswer(
-    {answer, testId, index, disabled, onChange, chosenAnswer, correctAnswer}: TestAnswerProps
+    {answer, testId, index, module, disabled, onChange, chosenAnswer, correctAnswer}: TestAnswerProps
 ) {
+    const radioColor = correctAnswer !== undefined ? (correctAnswer === index ? "success" : "error") : undefined;
+    const isChecked = correctAnswer === index || chosenAnswer === index;
+
     return (
         <FormControlLabel
             value={index}
-            onChange={() => onChange(index)}
+            onChange={() => onChange(module?.name, index)}
             control={
                 <Radio
-                    color={correctAnswer !== undefined ? (correctAnswer === index ? "success" : "error") : undefined}
-                    checked={(correctAnswer === index || chosenAnswer === index) ? true : undefined}
+                    color={radioColor}
+                    checked={isChecked}
                 />
             }
             sx={{ position: "relative", pointerEvents: disabled ? "none" : undefined }}
             label={
                 <AnswerLabel
                     testId={testId}
+                    modulePath={module?.path}
                     answer={answer}
                     index={index}
                 />
@@ -38,7 +42,7 @@ export default function TestAnswer(
 }
 
 const AnswerLabel = (
-    {testId, answer, index}: { testId: string, answer: Answer, index: number }
+    {testId, answer, index, modulePath}: { testId: string, answer: Answer, index: number, modulePath?: string }
 ) => (
     <>
         <Typography
@@ -52,7 +56,7 @@ const AnswerLabel = (
 
         {answer.image && (
             <LazyImage
-                src={testImage(testId, answer.image)}
+                src={testImage(testId, modulePath, answer.image)}
                 alt={answer.answer || `${index + 1}`}
                 width={150}
                 height={100}

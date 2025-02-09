@@ -38,8 +38,7 @@ async def pass_test(
     patient = JWTBearer.auth(credentials, db, role=Role.PATIENT)
 
     try:
-        result = await test_history_service.pass_test(db, patient_id=patient.id,
-                                                    assigned_test_id=test.assigned_test_id, answers=test.answers)
+        result = await test_history_service.pass_test(db, patient_id=patient.id, pass_dto=test)
         return Response(status_code=201, content=result.model_dump_json(), media_type="application/json")
     except ValueError:
         return Response(status_code=400, content="Answers count is not equal to questions count")

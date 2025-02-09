@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
@@ -9,7 +10,7 @@ from starlette.responses import Response
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
 from app.schemas.role import Role
-from app.schemas.test import Test
+from app.schemas.test.test import Test
 from app.services import tests_service
 
 router = APIRouter(prefix="/tests", tags=["tests"])
@@ -49,9 +50,9 @@ async def get_test(
     404: {"description": "Test or image not found"},
     200: {"content": {"image/jpeg": {}}}
 })
-async def get_test_image(test_id: UUID, image_path: str):
+async def get_test_image(test_id: UUID, image_path: str, module_path: Optional[str] = ""):
     try:
-        image = await tests_service.get_test_image(test_id, image_path)
+        image = await tests_service.get_test_image(test_id, module_path, image_path)
         return Response(content=image, media_type="image/jpeg")
     except FileNotFoundError:
         return Response(status_code=404)
