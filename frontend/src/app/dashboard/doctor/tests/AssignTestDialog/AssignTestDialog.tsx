@@ -2,8 +2,6 @@
 
 import Button from '@mui/material/Button';
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import DialogContent from "@mui/material/DialogContent";
 import Typography from "@mui/material/Typography";
 import DialogActions from "@mui/material/DialogActions";
@@ -12,6 +10,7 @@ import usePatients from "@/app/dashboard/doctor/tests/AssignTestDialog/usePatien
 import {useState} from "react";
 import PatientCard from "@/components/PatientCard";
 import User from "@/schemas/User";
+import DialogCloseButton from "@/components/DialogCloseButton";
 
 interface AssignTestDialogProps {
     testId: string;
@@ -51,7 +50,7 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
             maxWidth={"sm"}
             fullWidth
             scroll={"paper"}
-            PaperProps={{elevation: 1}}
+            slotProps={{ paper: { elevation: 1 } }}
         >
             <DialogTitle
                 sx={{ display: "flex", alignItems: "center" }}
@@ -61,7 +60,7 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
                 <Typography component={"span"} variant={"h6"}>
                     Назначити тест
                 </Typography>
-                <CloseButton onClose={onClose} />
+                <DialogCloseButton onClose={onClose} />
             </DialogTitle>
 
             <DialogContent sx={{
@@ -95,21 +94,5 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
                 </Button>
             </DialogActions>
         </Dialog>
-    );
-}
-
-const CloseButton = ({onClose}: {onClose: () => void}) => {
-    return (
-        <IconButton
-            aria-label="close"
-            onClick={onClose}
-            sx={{
-                marginLeft: "auto",
-                marginRight: -1.5,
-                color: "text.secondary"
-            }}
-        >
-            <CloseIcon />
-        </IconButton>
     );
 }

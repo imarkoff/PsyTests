@@ -3,7 +3,7 @@
 import {Box} from "@mui/material";
 import useSWR from "swr";
 import {getTestsHistory} from "@/services/patientTestsService";
-import TestHistoryCard from "@/components/Test/TestHistoryCard";
+import TestHistoryCard from "@/components/Test/TestHistoryCard/TestHistoryCard";
 import TestsLayoutBox from "@/app/dashboard/patient/components/TestsLayoutBox";
 
 export default function TestsHistoryLayout() {

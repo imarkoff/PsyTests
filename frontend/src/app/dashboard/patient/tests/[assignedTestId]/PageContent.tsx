@@ -14,7 +14,7 @@ export default function PageContent() {
     const methods = useForm<PassTestData>();
 
     return (
-        <Box sx={{maxWidth: 600, marginX: "auto", display: "flex", flexDirection: "column", gap: 1}}>
+        <Box sx={{maxWidth: 600, width: "100%", marginX: "auto", display: "flex", flexDirection: "column", gap: 1}}>
             <Box sx={{paddingX: 2, display: "flex", flexDirection: "column", gap: 1, alignItems: "start"}}>
                 <LeaveTestButton />
                 <Typography variant={"h5"}>

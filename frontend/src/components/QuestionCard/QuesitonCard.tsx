@@ -59,7 +59,8 @@ export default function QuestionCard(
             <Card variant={"outlined"} sx={{
                 borderColor: isError ? "error.main" : undefined,
                 borderWidth: isError ? "2px" : undefined,
-                overflow: "visible"
+                overflow: "visible",
+                width: "100%"
             }}>
                 <CardHeader
                     title={`${module?.name ?? ""} ${index+1}. ${question.question ?? ""}`}

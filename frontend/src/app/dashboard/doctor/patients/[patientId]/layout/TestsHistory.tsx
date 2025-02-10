@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import {getHistory} from "@/services/doctorPatientsTestsService";
-import TestHistoryCard from "@/components/Test/TestHistoryCard";
+import TestHistoryCard from "@/components/Test/TestHistoryCard/TestHistoryCard";
 import PatientSection from "@/app/dashboard/doctor/patients/[patientId]/components/PatientSection";
 import {Typography} from "@mui/material";
 
