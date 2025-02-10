@@ -4,7 +4,7 @@ import {refreshToken} from "@/services/tokenService";
 let token: string | undefined = undefined;
 
 const apiPrivate = axios.create({
-    baseURL: "http://localhost:8000/api",  // TODO: Use env variable
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
         "Content-Type": "application/json",
     },

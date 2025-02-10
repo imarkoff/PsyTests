@@ -1,14 +1,41 @@
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8001:80"
+      - "8443:8443"
+    volumes:
+      - ./nginx/entrypoint.sh:/entrypoint.sh
+      - ./nginx/nginx.http.conf:/etc/nginx/nginx.http.conf
+      - ./nginx/nginx.https.conf:/etc/nginx/nginx.https.conf
+      - ./certs:/etc/letsencrypt/live/${DOMAIN} # For local development
+      - ./certbot/www:/var/www/certbot:ro
+    depends_on:
+      - app
+    environment:
+      - DOMAIN=${DOMAIN}
+    command: /bin/sh /entrypoint.sh
+    restart: unless-stopped
+
+  app:
+    build: ./frontend
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
   backend:
     build: ./backend
+    ports:
+      - "8000:8000"
     volumes:
       - ./backend/:/code:ro
-    ports:
-      - "8000:80"
+      - ./certs:/etc/letsencrypt/live/${DOMAIN} # For local development
     depends_on:
       - postgres
     environment:
       - POSTGRESQL_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+      - DOMAIN=${DOMAIN}
 
   postgres:
     image: "postgres:17.2"
@@ -32,4 +59,5 @@ services:
       - POSTGRESQL_URL=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
 
 volumes:
-    postgres-data:
+  postgres-data:
+  letsencrypt:

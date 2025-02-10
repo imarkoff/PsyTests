@@ -45,8 +45,11 @@ app.add_middleware(
     allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["Authorization", "Content-Type"],
+    max_age=3600,
 )
+
+print(settings.CORS_ORIGINS)
 
 api = APIRouter(prefix="/api")
 api.include_router(auth.router)

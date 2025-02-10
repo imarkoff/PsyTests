@@ -1,3 +1,4 @@
+import logging
 import os
 
 class Settings:
@@ -8,7 +9,7 @@ class Settings:
     ACCESS_TOKEN_EXPIRE: int = 15   # minutes
     REFRESH_TOKEN_EXPIRE: int = 14  # days
     TOKEN_ALGORITHM: str = "HS256"
-    CORS_ORIGINS: list = ["http://localhost", "http://localhost:8080", "http://localhost:8000", "http://localhost:3000"]
+    CORS_ORIGINS: list = os.getenv("CORS_ORIGINS", "").split(",")
 
     class Config:
         env_file = ".env"

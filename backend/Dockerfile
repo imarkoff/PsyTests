@@ -17,4 +17,7 @@ COPY ./migrations /code/migrations
 COPY ./alembic.ini /code/alembic.ini
 
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["/bin/sh", "-c", "uvicorn app.main:app \
+        --host 0.0.0.0 --port 8000 \
+        --ssl-keyfile /etc/letsencrypt/live/$DOMAIN/privkey.pem \
+        --ssl-certfile /etc/letsencrypt/live/$DOMAIN/fullchain.pem"]
