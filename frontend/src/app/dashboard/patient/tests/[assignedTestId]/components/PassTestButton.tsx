@@ -1,11 +1,11 @@
-import {Box, Chip, Fab, Paper} from "@mui/material";
+import {Box, Fab} from "@mui/material";
 import DoneIcon from '@mui/icons-material/Done';
-import {useTestContext} from "@/app/dashboard/patient/tests/[assignedTestId]/context/TestContext";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import onLeaveClick from "@/app/dashboard/patient/tests/[assignedTestId]/components/onLeaveClick";
+import {useTestContext} from "@/app/dashboard/patient/tests/[assignedTestId]/context/TestContext";
 
 export default function PassTestButton() {
-    const { result } = useTestContext();
+    const { passed } = useTestContext();
 
     return (
         <Box sx={{height: 60}}>
@@ -17,21 +17,13 @@ export default function PassTestButton() {
                 gap: 1,
                 justifyItems: "end",
             }}>
-                {result && (
-                    <>
-                        <PaperChip
-                            label={`Результат: ${result.correct_points}/${result.total_points}`}
-                        />
-                        {result.result && <PaperChip label={`Висновок: ${result.result}`} />}
-                    </>
-                )}
                 <Fab
                     variant={"extended"}
-                    onClick={!!result ? onLeaveClick : undefined}
-                    type={result ? "button" : "submit"}
+                    onClick={passed ? onLeaveClick : undefined}
+                    type={passed ? "button" : "submit"}
                     color={"primary"}
                 >
-                    {result
+                    {passed
                         ? <>
                             <ArrowBackIcon sx={{ mr: 1 }}/>
                             Покинути тест
@@ -46,9 +38,3 @@ export default function PassTestButton() {
         </Box>
     )
 }
-
-const PaperChip = ({label}: {label: string}) => (
-    <Paper sx={{ borderRadius: 999 }} elevation={0}>
-        <Chip label={label} />
-    </Paper>
-)

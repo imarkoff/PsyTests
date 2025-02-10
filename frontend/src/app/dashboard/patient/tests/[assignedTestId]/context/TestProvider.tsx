@@ -4,7 +4,6 @@ import {ReactNode, useState} from "react";
 import TestContext from "./TestContext";
 import {getTest, passTest} from "@/services/patientTestsService";
 import useSWR from "swr";
-import TestResult from "@/schemas/TestResult";
 import PassTest from "@/schemas/PassTest";
 import PassTestData from "@/app/dashboard/patient/tests/[assignedTestId]/schemas/PassTestData";
 
@@ -23,14 +22,14 @@ export default function TestProvider({assignedTestId, children}: { assignedTestI
         () => getTest(assignedTestId)
     );
 
-    const [result, setResult] = useState<TestResult>();
+    const [passed, setPassed] = useState(false);
 
     /**
      * Function to handle passing the test.
      * @param data
      */
     const onPass = async (data: PassTestData) => {
-        if (!test || result) return;
+        if (!test) return;
 
         const testData: PassTest = {
             assigned_test_id: test.id,
@@ -41,13 +40,13 @@ export default function TestProvider({assignedTestId, children}: { assignedTestI
             }, {} as PassTest["answers"])
         }
 
-        const responseData = await passTest(testData);
-        setResult(responseData);
+        await passTest(testData);
+        setPassed(true);
     }
 
     return (
         <TestContext.Provider value={{
-            test, passTest: onPass, result
+            test, passTest: onPass, passed
         }}>
             {children}
         </TestContext.Provider>

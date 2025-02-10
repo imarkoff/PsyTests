@@ -1,6 +1,5 @@
 import {createContext, useContext} from "react";
 import PatientTest from "@/schemas/PatientTest";
-import TestResult from "@/schemas/TestResult";
 import PassTestData from "@/app/dashboard/patient/tests/[assignedTestId]/schemas/PassTestData";
 
 /**
@@ -14,10 +13,10 @@ const TestContext = createContext<{
      * @param data - The data to send to the server.
      */
     passTest: (data: PassTestData) => Promise<void>;
-    /** The result of the test. */
-    result?: TestResult;
+    passed: boolean;
 }>({
     passTest: async () => {},
+    passed: false
 });
 
 /** Custom hook to use the TestContext. */

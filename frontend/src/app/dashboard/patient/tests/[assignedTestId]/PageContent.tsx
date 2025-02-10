@@ -10,7 +10,7 @@ import PassTestData from "@/app/dashboard/patient/tests/[assignedTestId]/schemas
  * Renders the test page content. Separated for SSR.
  */
 export default function PageContent() {
-    const {test, passTest, result} = useTestContext();
+    const {test, passTest, passed} = useTestContext();
     const methods = useForm<PassTestData>();
 
     return (
@@ -30,7 +30,7 @@ export default function PageContent() {
                             key={index}
                             index={index}
                             testId={test.test.id}
-                            disabled={!!result}
+                            disabled={passed}
                         />
                     ))}
                     {test?.test.modules?.map(module =>
@@ -41,7 +41,7 @@ export default function PageContent() {
                                 index={index}
                                 testId={test.test.id}
                                 module={{name: module.name, path: module.path}}
-                                disabled={!!result}
+                                disabled={passed}
                             />
                         )))
                     }

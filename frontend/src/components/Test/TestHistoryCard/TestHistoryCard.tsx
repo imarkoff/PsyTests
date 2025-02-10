@@ -24,7 +24,7 @@ export default function TestHistoryCard({test}: {test: TestResult}) {
             </CardContent>
 
             <CardActions>
-                <ResultsDialog test={test} correctAnswers={correctAnswers} />
+                <ResultsDialog test={test} />
             </CardActions>
         </Card>
     );
