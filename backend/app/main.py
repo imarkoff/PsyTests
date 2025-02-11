@@ -1,5 +1,7 @@
 import logging
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -49,7 +51,7 @@ app.add_middleware(
     max_age=3600,
 )
 
-print(settings.CORS_ORIGINS)
+logging.info("CORS_ORIGINS: " + ", ".join(settings.CORS_ORIGINS))
 
 api = APIRouter(prefix="/api")
 api.include_router(auth.router)
@@ -60,6 +62,3 @@ api.include_router(doctor.router)
 api.include_router(patient.router)
 
 app.include_router(api)
-
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
