@@ -7,7 +7,7 @@ import TestValues from "@/components/Test/TestValues";
 export default function AssignedBy({assignedBy}: {assignedBy: string}) {
     const {
         data: user
-    } = useSWR(getUser.name, () => getUser(assignedBy));
+    } = useSWR(getUser.name + assignedBy, () => getUser(assignedBy));
 
     return user && (
         <TestValues title={"Назначив (-ла)"}>

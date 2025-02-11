@@ -79,7 +79,7 @@ const AnswerCell = ({answer}: {answer: ResultsAnswer}) => {
 
     return (
         <TableCell align={"center"} sx={{textWrap: "nowrap"}}>
-            {user_answer ? user_answer+1 : ""} {notCorrect && `(${correct_answer+1})`}
+            {user_answer !== null ? user_answer+1 : ""} {notCorrect && `(${correct_answer+1})`}
         </TableCell>
     );
 }
