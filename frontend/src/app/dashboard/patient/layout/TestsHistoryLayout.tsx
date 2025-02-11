@@ -14,7 +14,9 @@ export default function TestsHistoryLayout() {
     return (
         <TestsLayoutBox title={"Історія проходження тестів"}>
             <Box sx={{display: "grid", gridTemplateColumns: {sm: "repeat(auto-fill, minmax(400px, 1fr))"}, gap: 2}}>
-                {testsHistory?.map(test => <TestHistoryCard test={test} key={test.id} />)}
+                {testsHistory && testsHistory.map(test =>
+                    <TestHistoryCard test={test} key={test.id} />
+                )}
             </Box>
         </TestsLayoutBox>
     );

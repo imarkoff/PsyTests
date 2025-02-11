@@ -26,7 +26,7 @@ export default function TestsPage() {
         }}>
             <Box sx={{overflowY: "scroll", display: "flex", px: {lg: 1}, flexDirection: "column", gap: 1}}>
                 <Typography variant={"h5"} fontWeight={600} component={"h1"} textAlign={"center"}>Тести</Typography>
-                {tests?.map(test => (
+                {tests && tests.map(test => (
                     <TestPreview
                         test={test}
                         key={test.id}

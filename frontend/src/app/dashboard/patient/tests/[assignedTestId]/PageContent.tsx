@@ -13,6 +13,8 @@ export default function PageContent() {
     const {test, passTest, passed} = useTestContext();
     const methods = useForm<PassTestData>();
 
+    const {questions, modules} = test?.test || {};
+
     return (
         <Box sx={{maxWidth: 600, width: "100%", marginX: "auto", display: "flex", flexDirection: "column", gap: 1}}>
             <Box sx={{paddingX: 2, display: "flex", flexDirection: "column", gap: 1, alignItems: "start"}}>
@@ -24,22 +26,22 @@ export default function PageContent() {
 
             <Box component={"form"} onSubmit={methods.handleSubmit(passTest)} sx={{display: "grid", gap: 2}}>
                 <FormProvider {...methods}>
-                    {test?.test.questions?.map((question, index) => (
+                    {questions && questions.map((question, index) => (
                         <QuestionCard
                             question={question}
                             key={index}
                             index={index}
-                            testId={test.test.id}
+                            testId={test!.test.id}
                             disabled={passed}
                         />
                     ))}
-                    {test?.test.modules?.map(module =>
+                    {modules && modules.map(module =>
                         module.questions.map((question, index) => (
                             <QuestionCard
                                 question={question}
                                 key={index}
                                 index={index}
-                                testId={test.test.id}
+                                testId={test!.test.id}
                                 module={{name: module.name, path: module.path}}
                                 disabled={passed}
                             />

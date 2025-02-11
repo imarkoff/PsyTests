@@ -17,7 +17,7 @@ export default function PatientEntities() {
 
 
     return (
-        patients?.map((patient, index) => (
+        patients && patients.map((patient, index) => (
             <PatientCard patient={patient} onDetails={onDetails} key={index} />
         ))
     );

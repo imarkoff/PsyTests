@@ -9,7 +9,7 @@ import TestResult from "@/schemas/TestResult";
 
 export const endpoint = "/patient/tests";
 
-export const getTests = () =>
+export const getAssignedTests = () =>
     apiPrivate.get<PatientTest[]>(endpoint).then(res => res.data);
 
 export const passTest = (attempt: PassTest) =>

@@ -25,7 +25,7 @@ export default function TestContent({test}: {test?: Test}) {
                 </Box>
             </Box>
 
-            {test.questions?.map((question, index) => (
+            {test.questions && test.questions.map((question, index) => (
                 <QuestionCard
                     question={question}
                     correctAnswer={question.answers.findIndex(answer => answer.is_correct)}

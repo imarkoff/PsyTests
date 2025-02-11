@@ -69,7 +69,7 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
                 gridTemplateColumns: "repeat(auto-fill, minmax(275px, 1fr))",
                 gap: 1
             }} dividers>
-                {patients?.map((patient) => (
+                {patients && patients.map((patient) => (
                     <PatientCard
                         patient={patient}
                         key={patient.id}

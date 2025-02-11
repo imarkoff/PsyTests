@@ -16,7 +16,7 @@ export default function TestsHistory({patientId}: {patientId: string}) {
 
     return (
         <PatientSection title={"Історія проходження тестів"} colSize={400}>
-            {tests?.map(test => (
+            {tests && tests.map(test => (
                 <TestHistoryCard test={test} key={test.id} />
             ))}
             {!tests?.length && (

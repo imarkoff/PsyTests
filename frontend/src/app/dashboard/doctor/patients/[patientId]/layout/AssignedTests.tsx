@@ -17,7 +17,7 @@ export default function AssignedTests({tests, unassignAction}: AssignedTestsProp
 
     return (
         <PatientSection title={"Назначені тести"}>
-            {tests?.map(test => (
+            {tests && tests.map(test => (
                 <AssignedTestCard
                     key={test.id}
                     test={test}
