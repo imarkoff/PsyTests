@@ -8,14 +8,14 @@ from app.exceptions import NotFoundError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.test.test import Test
 from app.schemas.test.test_history_results import Results
-from app.schemas.test_result import TestResultDto
+from app.schemas.test_result import TestResultDto, TestResultShortDto
 from app.schemas.test_short import TestShortDto
 from app.services.tests_service import get_test
 from app.utils.convert_results import convert_results
 from app.utils.convert_test_to_short import convert_test_to_short
 
 
-async def pass_test(db: Session, patient_id: UUID, pass_dto: PassTestDto) -> TestResultDto:
+async def pass_test(db: Session, patient_id: UUID, pass_dto: PassTestDto) -> TestResultShortDto:
     """
     Pass test
 
@@ -40,10 +40,15 @@ async def pass_test(db: Session, patient_id: UUID, pass_dto: PassTestDto) -> Tes
     db.add(new_history)
     db.commit()
 
-    return test_result_to_dto(new_history, test)
+    return TestResultShortDto(
+        id=new_history.id,
+        test_id=test.id,
+        test_name=test.name,
+        passed_at=new_history.passed_at
+    )
 
 
-async def get_tests_history(db: Session, patient_id: UUID) -> list[TestResultDto]:
+async def get_tests_history(db: Session, patient_id: UUID, short: bool = False) -> list[TestResultDto]:
     """
     Get tests history
     """
@@ -58,7 +63,16 @@ async def get_tests_history(db: Session, patient_id: UUID) -> list[TestResultDto
     for db_test in tests:
         test = await get_test(db_test.test_id)
 
-        tests_results.append(test_result_to_dto(db_test, test))
+        tests_results.append(
+            test_result_to_dto(db_test, test)
+            if not short else
+            TestResultShortDto(
+                id=db_test.id,
+                test_id=test.id,
+                test_name=test.name,
+                passed_at=db_test.passed_at
+            )
+        )
 
     return tests_results
 

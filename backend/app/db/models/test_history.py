@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
@@ -23,7 +23,7 @@ class TestHistory(Base):
     test_id: Mapped[UUID] = mapped_column(nullable=False)
     patient_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True, nullable=False)
     patient: Mapped[User] = relationship(back_populates="tests_history", foreign_keys=[patient_id])
-    passed_at: Mapped[datetime] = mapped_column(default=datetime.now)
+    passed_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
     results: Mapped[dict[str, list[dict[str, int | None]]]] = mapped_column(JSON, nullable=False)
 
     def __init__(self, **kwargs):

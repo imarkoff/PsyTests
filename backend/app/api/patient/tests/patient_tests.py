@@ -11,7 +11,7 @@ from app.exceptions import NotFoundError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
-from app.schemas.test_result import TestResultDto
+from app.schemas.test_result import TestResultShortDto
 from app.services import test_history_service
 from app.services.patients import patient_tests_service
 
@@ -26,7 +26,7 @@ async def get_tests(
     return await patient_tests_service.get_patient_tests(db, patient_id=patient.id)
 
 
-@router.post("/", summary="Pass test", response_model=TestResultDto, status_code=201, responses={
+@router.post("/", summary="Pass test", response_model=TestResultShortDto, status_code=201, responses={
     400: {"description": "Answers count is not equal to questions count"},
     404: {"description": "Test not found"}
 })
@@ -46,13 +46,13 @@ async def pass_test(
         return Response(status_code=404)
 
 
-@router.get("/history", summary="Get tests history", response_model=list[TestResultDto])
+@router.get("/history", summary="Get tests history", response_model=list[TestResultShortDto])
 async def get_tests_history(
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
         db: Session = Depends(get_postgresql_db)
 ):
     patient = JWTBearer.auth(credentials, db, role=Role.PATIENT)
-    return await test_history_service.get_tests_history(db, patient_id=patient.id)
+    return await test_history_service.get_tests_history(db, patient_id=patient.id, short=True)
 
 
 @router.get("/{assigned_test_id}", summary="Get test", response_model=PatientTestDto)
