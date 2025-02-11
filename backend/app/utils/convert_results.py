@@ -16,7 +16,7 @@ def convert_results(test: Test, result: dict[str, list[int]]) -> Results:
         questions: list[Question] = test.get_module(module).questions if module != "_" else test.questions
 
         for i, answer in enumerate(answers):
-            correct_answer: int = find_correct_answer_index(questions)
+            correct_answer: int = find_correct_answer_index(questions[i])
             points: int | None = questions[i].points
 
             answers_list.append(
@@ -32,14 +32,13 @@ def convert_results(test: Test, result: dict[str, list[int]]) -> Results:
     return Results.model_validate(modules)
 
 
-def find_correct_answer_index(questions: list[Question]) -> int | None:
+def find_correct_answer_index(question: Question) -> int | None:
     """
     Find correct answer
     """
 
-    for question in questions:
-        for i, answer in enumerate(question.answers):
-            if answer.is_correct:
+    for i, answer in enumerate(question.answers):
+        if answer.is_correct:
                 return i
 
     return None
