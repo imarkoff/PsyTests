@@ -8,7 +8,7 @@ import {AxiosError} from "axios";
  * Hook for getting patients and assigning tests to them
  */
 export default function usePatients() {
-    const { data: patients } = useSWR(getPatients.name, getPatients);
+    const { data: patients } = useSWR("getPatients", getPatients);
     const [assignError, setAssignError] = useState<string>();
 
     const onAssign = async (patientId: string, testId: string) => {

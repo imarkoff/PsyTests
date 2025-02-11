@@ -13,7 +13,7 @@ interface AssignedTestsProps {
 }
 
 export default function AssignedTests({tests, unassignAction}: AssignedTestsProps) {
-    const { data: me } = useSWR(getMe.name, getMe);
+    const { data: me } = useSWR("getMe", getMe);
 
     return (
         <PatientSection title={"Назначені тести"}>

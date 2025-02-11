@@ -18,7 +18,7 @@ export default function TestProvider({assignedTestId, children}: { assignedTestI
     const {
         data: test
     } = useSWR(
-        `${getTest.name}/${assignedTestId}`,
+        `getTest/${assignedTestId}`,
         () => getTest(assignedTestId)
     );
 

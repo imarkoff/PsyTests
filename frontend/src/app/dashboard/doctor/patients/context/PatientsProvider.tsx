@@ -10,7 +10,7 @@ export default function PatientsProvider({children}: { children: ReactNode }) {
     const {
         data: patients,
         mutate
-    } = useSWR(getPatients.name, getPatients);
+    } = useSWR("getPatients", getPatients);
 
     const onCreate = async (patient: PatientCreate) => {
         const newPatient = await createPatient({

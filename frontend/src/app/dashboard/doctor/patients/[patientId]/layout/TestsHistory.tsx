@@ -10,7 +10,7 @@ export default function TestsHistory({patientId}: {patientId: string}) {
     const {
         data: tests
     } = useSWR(
-        `${getHistory.name}/${patientId}`,
+        `getHistory/${patientId}`,
         () => getHistory(patientId)
     );
 

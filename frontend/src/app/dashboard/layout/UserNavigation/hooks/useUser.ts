@@ -10,7 +10,7 @@ export default function useUser() {
         error,
         isLoading,
         mutate
-    } = useSWR(getMe.name, getMe);
+    } = useSWR("getMe", getMe);
 
     const router = useRouter();
 

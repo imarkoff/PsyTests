@@ -9,7 +9,7 @@ import TestsLayoutBox from "@/app/dashboard/patient/components/TestsLayoutBox";
 export default function TestsHistoryLayout() {
     const {
         data: testsHistory,
-    } = useSWR(getTestsHistory.name, getTestsHistory);
+    } = useSWR("getTestsHistory", getTestsHistory);
 
     return (
         <TestsLayoutBox title={"Історія проходження тестів"}>

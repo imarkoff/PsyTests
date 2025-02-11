@@ -9,7 +9,7 @@ import Test from "@/schemas/Test";
 import TestBox from "@/app/dashboard/doctor/tests/layout/TestBox";
 
 export default function TestsPage() {
-    const {data: tests} = useSWR(getTests.name, getTests);
+    const {data: tests} = useSWR("getTests", getTests);
 
     const [selectedTest, setSelectedTest] = useState<Test>();
 

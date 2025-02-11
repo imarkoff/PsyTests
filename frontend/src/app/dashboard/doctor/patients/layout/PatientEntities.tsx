@@ -9,7 +9,7 @@ import User from "@/schemas/User";
 export default function PatientEntities() {
     const {
         data: patients
-    } = useSWR(getPatients.name, getPatients);
+    } = useSWR("getPatients", getPatients);
 
     const router = useRouter();
     const onDetails = (patient: User) =>

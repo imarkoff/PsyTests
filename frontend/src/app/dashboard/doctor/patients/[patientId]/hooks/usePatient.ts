@@ -7,7 +7,7 @@ export default function usePatient(patientId: string) {
         data: userInfo,
         mutate
     } = useSWR(
-        `${getPatient.name}/${patientId}`,
+        `getPatient/${patientId}`,
         () => getPatient(patientId)
     );
 
