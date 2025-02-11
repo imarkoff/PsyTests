@@ -8,7 +8,7 @@ import NavItem from "@/app/dashboard/layout/UserNavigation/NavItem";
 import {logout} from "@/services/authService";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import useUser from "@/app/dashboard/layout/UserNavigation/hooks/useUser";
+import {useUser} from "@/app/dashboard/context/UserContext";
 
 export default function UserNavigation() {
     const {me, mutate} = useUser();

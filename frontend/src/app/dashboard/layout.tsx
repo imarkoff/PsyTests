@@ -1,20 +1,23 @@
 import {AppBar, Box, Toolbar, Typography} from "@mui/material";
 import UserNavigation from "@/app/dashboard/layout/UserNavigation/UserNavigation";
 import {ReactNode} from "react";
+import UserProvider from "@/app/dashboard/context/UserProvider";
 
 export default function DashboardLayout({children}: { children: ReactNode }) {
     return (
-        <Box sx={{height: "100%", display: "flex", flexDirection: "column", overflow: "hidden"}}>
-            <NavigationBar />
+        <UserProvider>
+            <Box sx={{height: "100%", display: "flex", flexDirection: "column", overflow: "hidden"}}>
+                <NavigationBar />
 
-            <Box component={"main"} sx={{
-                padding: {xs: 1.5, sm: 2, lg: 3},
-                display: "flex", flexDirection: "column", gap: "1rem",
-                flexGrow: 1, overflow: "auto",
-            }}>
-                {children}
+                <Box component={"main"} sx={{
+                    padding: {xs: 1.5, sm: 2, lg: 3},
+                    display: "flex", flexDirection: "column", gap: "1rem",
+                    flexGrow: 1, overflow: "auto",
+                }}>
+                    {children}
+                </Box>
             </Box>
-        </Box>
+        </UserProvider>
     );
 }
 
