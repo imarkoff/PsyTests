@@ -14,9 +14,11 @@ const TestContext = createContext<{
      */
     passTest: (data: PassTestData) => Promise<void>;
     passed: boolean;
+    loading: boolean;
 }>({
     passTest: async () => {},
-    passed: false
+    passed: false,
+    loading: false,
 });
 
 /** Custom hook to use the TestContext. */

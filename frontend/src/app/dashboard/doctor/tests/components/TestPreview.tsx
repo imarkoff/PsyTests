@@ -16,7 +16,7 @@ export default function TestPreview({test, onClick, selected}: TestPreviewProps)
                 boxSizing: "border-box",
                 width: "100%",
                 ...(selected && {
-                    boxShadow: "0 0 0 2px " + theme.palette.primary.main,
+                    boxShadow: "inset 0 0 0 2px " + theme.palette.primary.main,
                     overflow: "visible"
                 }),
             })}
@@ -25,7 +25,7 @@ export default function TestPreview({test, onClick, selected}: TestPreviewProps)
                 <CardHeader
                     title={test.name}
                     subheader={test.description}
-                    subheaderTypographyProps={{ textOverflow: "ellipsis" }}
+                    slotProps={{ subheader: {textOverflow: "ellipsis"} }}
                 />
             </CardActionArea>
         </Card>

@@ -5,7 +5,7 @@
 import apiPrivate from "@/api/apiPrivate";
 import PatientTest from "@/schemas/PatientTest";
 import PassTest from "@/schemas/PassTest";
-import TestResult from "@/schemas/TestResult";
+import TestResultShort from "@/schemas/TestResultShort";
 
 export const endpoint = "/patient/tests";
 
@@ -13,10 +13,10 @@ export const getAssignedTests = () =>
     apiPrivate.get<PatientTest[]>(endpoint).then(res => res.data);
 
 export const passTest = (attempt: PassTest) =>
-    apiPrivate.post<TestResult>(endpoint, attempt).then(res => res.data);
+    apiPrivate.post<TestResultShort>(endpoint, attempt).then(res => res.data);
 
 export const getTestsHistory = () =>
-    apiPrivate.get<TestResult[]>(`${endpoint}/history`).then(res => res.data);
+    apiPrivate.get<TestResultShort[]>(`${endpoint}/history`).then(res => res.data);
 
 export const getTest = (assignedTestId: string) =>
     apiPrivate.get<PatientTest>(`${endpoint}/${assignedTestId}`).then(res => res.data);
