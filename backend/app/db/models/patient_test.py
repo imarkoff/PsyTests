@@ -17,4 +17,4 @@ class PatientTest(Base):
     patient: Mapped["User"] = relationship(foreign_keys=[patient_id])
     assigned_by_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
     assigned_by: Mapped["User"] = relationship(foreign_keys=[assigned_by_id])
-    assigned_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC))
+    assigned_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
