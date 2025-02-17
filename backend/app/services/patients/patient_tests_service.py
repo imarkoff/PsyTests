@@ -1,4 +1,4 @@
-import logging
+from datetime import datetime, UTC
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -32,7 +32,8 @@ async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: U
 
     existing_test = db.query(PatientTest).filter(
         PatientTest.patient_id == patient_id,
-        PatientTest.test_id == test_id
+        PatientTest.test_id == test_id,
+        PatientTest.unassigned_at == None
     ).first()
 
     if existing_test:
@@ -43,7 +44,7 @@ async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: U
     db.add(new_test)
     db.commit()
 
-    return await test_to_dto(new_test, True)
+    return await PatientTestDto.create(new_test, True)
 
 
 async def get_patient_tests(db: Session, patient_id: UUID) -> list[PatientTestDto]:
@@ -51,8 +52,12 @@ async def get_patient_tests(db: Session, patient_id: UUID) -> list[PatientTestDt
     Get patient tests
     """
 
-    tests = db.query(PatientTest).filter(PatientTest.patient_id == patient_id).all()
-    return [await test_to_dto(test) for test in tests]
+    tests = db.query(PatientTest).filter(
+        PatientTest.patient_id == patient_id,
+        PatientTest.unassigned_at == None
+    ).all()
+
+    return [await PatientTestDto.create(test) for test in tests]
 
 
 async def get_patient_tests_by_doctor(db: Session, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
@@ -65,10 +70,9 @@ async def get_patient_tests_by_doctor(db: Session, doctor_id: UUID, patient_id: 
 
     tests = db.query(PatientTest).filter(
         PatientTest.patient_id == patient_id,
-        DoctorPatient.doctor_id == doctor_id
+        DoctorPatient.doctor_id == doctor_id,
+        PatientTest.unassigned_at == None
     ).all()
-
-    logging.info(tests)
 
     if not tests:
         user = db.query(DoctorPatient).filter(
@@ -78,7 +82,7 @@ async def get_patient_tests_by_doctor(db: Session, doctor_id: UUID, patient_id: 
         if not user:
             raise NotFoundError
 
-    return [await test_to_dto(test, True) for test in tests]
+    return [await PatientTestDto.create(test, True) for test in tests]
 
 
 async def get_patient_test(db: Session, patient_id: UUID, test_id: UUID) -> PatientTestDto:
@@ -89,7 +93,10 @@ async def get_patient_test(db: Session, patient_id: UUID, test_id: UUID) -> Pati
         NotFoundError: If test not found
     """
 
-    test = db.query(PatientTest).filter(PatientTest.id == test_id).first()
+    test = db.query(PatientTest).filter(
+        PatientTest.id == test_id,
+        PatientTest.patient_id == patient_id
+    ).first()
 
     if not test:
         raise NotFoundError
@@ -97,7 +104,7 @@ async def get_patient_test(db: Session, patient_id: UUID, test_id: UUID) -> Pati
     if test.patient_id != patient_id:
         raise NotFoundError
 
-    return await test_to_dto(test)
+    return await PatientTestDto.create(test)
 
 
 async def unassign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: UUID) -> None:
@@ -108,7 +115,7 @@ async def unassign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id:
         NotFoundError: If test not found
     """
 
-    test = db.query(PatientTest).filter(
+    test: PatientTest | None = db.query(PatientTest).filter(
         PatientTest.patient_id == patient_id,
         PatientTest.id == test_id,
         DoctorPatient.doctor_id == doctor_id
@@ -117,38 +124,21 @@ async def unassign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id:
     if not test:
         raise NotFoundError
 
-    db.delete(test)
+    test.unassigned_at = datetime.now(UTC)
     db.commit()
 
 
 async def unassign_doctor_tests(db: Session, doctor_id: UUID, patient_id: UUID) -> None:
     """
     Unassign all tests from patient
-
-    Raises:
-        NotFoundError: If patient not found
     """
-
-    user = db.query(DoctorPatient).filter(
-        DoctorPatient.patient_id == patient_id,
-        DoctorPatient.doctor_id == doctor_id
-    ).first()
-
-    if not user:
-        raise NotFoundError
 
     db.query(PatientTest).filter(
         PatientTest.patient_id == patient_id,
         PatientTest.assigned_by_id == doctor_id
-    ).delete()
-    db.commit()
-
-
-async def test_to_dto(test: PatientTest, show_correct_answers = False) -> PatientTestDto:
-    return PatientTestDto(
-        id=test.id,
-        patient_id=test.patient_id,
-        assigned_by_id=test.assigned_by_id,
-        test=await get_test(test.test_id, show_correct_answers),
-        assigned_at=test.assigned_at
+    ).update(
+        {PatientTest.unassigned_at: datetime.now(UTC)},
+        synchronize_session=False
     )
+
+    db.commit()

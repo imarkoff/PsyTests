@@ -13,6 +13,8 @@ def register_user(user_dto: UserCreate, db: Session) -> User:
     new_user = User(
         name=user_dto.name,
         surname=user_dto.surname,
+        patronymic=user_dto.patronymic,
+        birth_date=user_dto.birth_date,
         phone=user_dto.phone,
         password=password,
         password_salt=password_salt,

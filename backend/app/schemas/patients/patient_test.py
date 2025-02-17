@@ -1,9 +1,12 @@
 from datetime import datetime
+from typing import Type, cast
 from uuid import UUID
 
 from pydantic import ConfigDict, BaseModel
 
+from app.db.models.patient_test import PatientTest
 from app.schemas.test.test import Test
+from app.services import tests_service
 
 
 class PatientTestDto(BaseModel):
@@ -25,3 +28,17 @@ class PatientTestDto(BaseModel):
             }
         }
     )
+
+    @classmethod
+    async def create(cls, patient_test: PatientTest | Type[PatientTest], show_correct_answers: bool = False):
+        if isinstance(patient_test, type):
+            patient_test = cast(PatientTest, patient_test)
+
+        test = await tests_service.get_test(patient_test.test_id, show_correct_answers)
+        return cls(
+            id=patient_test.id,
+            patient_id=patient_test.patient_id,
+            assigned_by_id=patient_test.assigned_by_id,
+            test=test,
+            assigned_at=patient_test.assigned_at
+        )

@@ -10,24 +10,24 @@ from sqlalchemy.orm import Session
 from app.db.models.doctor_patient import DoctorPatient
 from app.db.models.user import User
 from app.exceptions import NotFoundError, AlreadyExistsError
+from app.schemas.doctor_patient_dto import DoctorPatientDto
 from app.schemas.patients.patient_create import PatientCreateDto
-from app.schemas.patients.patient_info import PatientInfoDto
 from app.schemas.role import Role
 from app.schemas.user_auth import UserDto, UserCreate
 from app.services import user_service
 from app.services.patients import patient_tests_service
 
 
-async def get_patients(db: Session, doctor_id: UUID) -> list[UserDto]:
+async def get_patients(db: Session, doctor_id: UUID) -> list[DoctorPatientDto]:
     """
     Get doctor patients
     """
     doctor_patients = db.query(DoctorPatient).filter(DoctorPatient.doctor_id == doctor_id).all()
 
-    return [UserDto.model_validate(doctor_patient.patient) for doctor_patient in doctor_patients]
+    return [DoctorPatientDto.create(doctor_patient) for doctor_patient in doctor_patients]
 
 
-async def get_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> PatientInfoDto:
+async def get_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> DoctorPatientDto:
     """
     Get patient info
 
@@ -42,10 +42,7 @@ async def get_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> Patient
     if not doctor_patient:
         raise NotFoundError
 
-    patient_dto = UserDto.model_validate(doctor_patient.patient)
-    patient_tests = await patient_tests_service.get_patient_tests_by_doctor(db, doctor_id, patient_id)
-
-    return PatientInfoDto(patient=patient_dto, tests=patient_tests)
+    return DoctorPatientDto.create(doctor_patient)
 
 
 async def find_patient(db: Session, search: str) -> list[UserDto]:
@@ -63,7 +60,7 @@ async def find_patient(db: Session, search: str) -> list[UserDto]:
     return [UserDto.model_validate(patient) for patient in patients]
 
 
-async def assign_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> UserDto:
+async def assign_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> DoctorPatientDto:
     """
     Add patient to doctor patients
 
@@ -83,10 +80,10 @@ async def assign_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> User
     db.add(doctor_patient)
     db.commit()
 
-    return UserDto.model_validate(doctor_patient.patient)
+    return DoctorPatientDto.create(doctor_patient)
 
 
-async def create_patient(db: Session, doctor_id: UUID, patient: PatientCreateDto) -> UserDto:
+async def create_patient(db: Session, doctor_id: UUID, patient: PatientCreateDto) -> DoctorPatientDto:
     """
     Create new patient and add to doctor patients
 
@@ -102,6 +99,8 @@ async def create_patient(db: Session, doctor_id: UUID, patient: PatientCreateDto
     new_user = UserCreate(
         name=patient.name,
         surname=patient.surname,
+        patronymic=patient.patronymic,
+        birth_date=patient.birth_date,
         phone=patient.phone,
         role=Role.PATIENT,
         password=patient.password
@@ -114,7 +113,20 @@ async def create_patient(db: Session, doctor_id: UUID, patient: PatientCreateDto
     db.add(doctor_patient)
     db.commit()
 
-    return UserDto.model_validate(user)
+    return DoctorPatientDto.create(doctor_patient)
+
+
+async def change_attention(db: Session, patient_id: UUID, needs_attention: bool) -> None:
+    """
+    Change patient needs attention status
+    """
+    db.query(DoctorPatient).filter(
+        DoctorPatient.patient_id == patient_id
+    ).update(
+        {DoctorPatient.needs_attention: needs_attention},
+        synchronize_session=False
+    )
+    db.commit()
 
 
 async def delete_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> None:

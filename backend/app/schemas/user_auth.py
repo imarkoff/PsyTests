@@ -1,9 +1,10 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Type, cast
 from uuid import UUID
 
 from pydantic import BaseModel
 
+from app.db.models.user import User
 from app.schemas.role import Role
 
 
@@ -63,3 +64,18 @@ class UserDto(BaseModel):
                 "role": "patient"
             }
         }
+
+    @classmethod
+    def create(cls, user: User | Type[User]):
+        if isinstance(user, type):
+            user = cast(User, user)
+
+        return cls(
+            id=user.id,
+            name=user.name,
+            surname=user.surname,
+            patronymic=user.patronymic,
+            birth_date=user.birth_date,
+            phone=user.phone,
+            role=user.role
+        )

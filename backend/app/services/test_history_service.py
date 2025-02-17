@@ -1,3 +1,4 @@
+from typing import cast
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -10,6 +11,7 @@ from app.schemas.test.test import Test
 from app.schemas.test.test_history_results import Results
 from app.schemas.test_result import TestResultDto, TestResultShortDto
 from app.schemas.test_short import TestShortDto
+from app.services.patients import patients_service
 from app.services.tests_service import get_test
 from app.utils.convert_results import convert_results
 from app.utils.convert_test_to_short import convert_test_to_short
@@ -40,6 +42,8 @@ async def pass_test(db: Session, patient_id: UUID, pass_dto: PassTestDto) -> Tes
     db.add(new_history)
     db.commit()
 
+    await patients_service.change_attention(db, patient_id, True)
+
     return TestResultShortDto(
         id=new_history.id,
         test_id=test.id,
@@ -53,14 +57,15 @@ async def get_tests_history(db: Session, patient_id: UUID, short: bool = False) 
     Get tests history
     """
 
-    tests: list[TestHistory] = (db.query(TestHistory)
-                                .order_by(TestHistory.passed_at.desc())
-                                .filter(TestHistory.patient_id == patient_id)
-                                .all())
+    tests= (db.query(TestHistory)
+        .order_by(TestHistory.passed_at.desc())
+        .filter(TestHistory.patient_id == patient_id)
+        .all())
 
     tests_results = []
 
     for db_test in tests:
+        db_test = cast(TestHistory, db_test)
         test = await get_test(db_test.test_id)
 
         tests_results.append(

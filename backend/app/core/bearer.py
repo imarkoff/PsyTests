@@ -33,7 +33,7 @@ class JWTBearer:
         if not user:
             raise HTTPException(status_code=401)
 
-        return user
+        return UserDto.create(user)
 
     @staticmethod
     def verify(token: str) -> bool:

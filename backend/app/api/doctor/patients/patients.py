@@ -9,8 +9,8 @@ from app.api.doctor.patients import patient_tests
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
 from app.exceptions import AlreadyExistsError, NotFoundError
+from app.schemas.doctor_patient_dto import DoctorPatientDto
 from app.schemas.patients.patient_create import PatientCreateDto
-from app.schemas.patients.patient_info import PatientInfoDto
 from app.schemas.role import Role
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
@@ -18,7 +18,7 @@ from app.services.patients import patients_service
 router = APIRouter(prefix="/patients")
 patients_router = APIRouter(tags=["doctor_patients"])
 
-@patients_router.get("/", summary="Get doctor patients", response_model=list[UserDto])
+@patients_router.get("/", summary="Get doctor patients", response_model=list[DoctorPatientDto])
 async def get_patients(
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
         db: Session = Depends(get_postgresql_db)
@@ -38,7 +38,7 @@ async def find_patient(
     return await patients_service.find_patient(db, search)
 
 
-@patients_router.get("/{patient_id}", summary="Get patient info", response_model=PatientInfoDto)
+@patients_router.get("/{patient_id}", summary="Get patient info", response_model=DoctorPatientDto)
 async def get_patient(
         patient_id: UUID,
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
@@ -52,8 +52,19 @@ async def get_patient(
         return Response(status_code=404)
 
 
+@patients_router.patch("/{patient_id}/read", summary="Mark patient messages as read", status_code=204)
+async def mark_patient_as_read(
+        patient_id: UUID,
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
+        db: Session = Depends(get_postgresql_db)
+):
+    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    await patients_service.change_attention(db, patient_id, False)
+    return Response(status_code=204)
+
+
 @patients_router.post("/{patient_id}", summary="Add patient to doctor patients", status_code=201,
-             response_model=UserDto, responses={
+             response_model=DoctorPatientDto, responses={
         409: {"description": "Doctor already has this patient"},
     })
 async def add_patient(
@@ -70,7 +81,7 @@ async def add_patient(
 
 
 @patients_router.post("/", summary="Create new patient and add to doctor patients",
-             status_code=201, response_model=UserDto, responses={
+             status_code=201, response_model=DoctorPatientDto, responses={
         409: {"description": "Patient with this phone already exists"},
     })
 async def create_patient(
