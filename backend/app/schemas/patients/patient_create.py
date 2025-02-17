@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -6,6 +7,8 @@ from pydantic import BaseModel
 class PatientCreateDto(BaseModel):
     name: str
     surname: Optional[str] = None
+    patronymic: Optional[str] = None
+    birth_date: datetime
     phone: str
     password: str
 

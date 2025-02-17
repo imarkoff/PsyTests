@@ -1,3 +1,4 @@
+from datetime import datetime
 from uuid import UUID, uuid4
 from typing import List, Optional, TYPE_CHECKING
 
@@ -23,7 +24,9 @@ class User(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid4, unique=True)
     name: Mapped[str] = mapped_column(index=True, nullable=False)
     surname: Mapped[Optional[str]] = mapped_column(String, index=True)
+    patronymic: Mapped[Optional[str]] = mapped_column(String, index=True)
     phone: Mapped[str] = mapped_column(String, index=True)
+    birth_date: Mapped[datetime] = mapped_column(nullable=False)
     password: Mapped[bytes] = mapped_column(nullable=False)
     password_salt: Mapped[bytes] = mapped_column(nullable=False)
     role: Mapped[Role] = mapped_column(Enum(Role), default=Role.PATIENT)

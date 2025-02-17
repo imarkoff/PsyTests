@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
@@ -9,6 +10,8 @@ from app.schemas.role import Role
 class UserCreate(BaseModel):
     name: str
     surname: Optional[str] = None
+    patronymic: Optional[str] = None
+    birth_date: datetime
     phone: str
     password: str
     role: Optional[Role] = None
@@ -43,6 +46,8 @@ class UserDto(BaseModel):
     id: UUID
     name: str
     surname: Optional[str] = None
+    patronymic: Optional[str] = None
+    birth_date: datetime
     phone: str
     role: Role
 
