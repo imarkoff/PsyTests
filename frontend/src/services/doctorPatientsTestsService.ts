@@ -9,7 +9,7 @@ import TestResult from "@/schemas/TestResult";
 export const endpoint = "/doctor/patients";
 export const getEndpoint = (patientId: string) => `${endpoint}/${patientId}/tests`;
 
-export const getTests = async (patientId: string) =>
+export const getPatientTests = async (patientId: string) =>
     await apiPrivate.get<PatientTest[]>(getEndpoint(patientId)).then(response => response.data);
 
 export const getHistory = async (patientId: string) =>

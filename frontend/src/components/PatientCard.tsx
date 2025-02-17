@@ -1,9 +1,10 @@
 import User from "@/schemas/User";
 import {Button, Card, CardActionArea, CardContent, CardHeader, Theme} from "@mui/material";
 import formatPhone from "@/utils/formatPhone";
+import DoctorPatient from "@/schemas/DoctorPatient";
 
 interface PatientCardProps {
-    patient: User;
+    patient: DoctorPatient;
     onDetails?: (patient: User) => void;
     onChoose?: (patient: User) => void;
     selected?: boolean;
@@ -39,13 +40,13 @@ export default function PatientCard({patient, onDetails, onChoose, selected}: Pa
             {onChoose
                 ? (
                     <CardActionArea
-                        onClick={() => onChoose(patient)}
+                        onClick={() => onChoose(patient.patient)}
                         sx={cardSx}
                     >
-                        <PatientContent patient={patient} />
+                        <PatientContent patient={patient.patient} />
                     </CardActionArea>
                 )
-                : <PatientContent patient={patient} onDetails={onDetails} />
+                : <PatientContent patient={patient.patient} onDetails={onDetails} />
             }
         </Card>
     );
@@ -56,7 +57,7 @@ const PatientContent = (
 ) => (
     <>
         <CardHeader
-            title={`${patient.name} ${patient.surname || ""}`}
+            title={`${patient.name} ${patient.surname || ""} ${patient.patronymic || ""}`}
             subheader={formatPhone(patient.phone)}
         />
 

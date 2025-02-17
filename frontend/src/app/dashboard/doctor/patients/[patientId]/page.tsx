@@ -17,7 +17,7 @@ export default function ClientPage() {
         <Box sx={{display: "grid", gap: 3}}>
             <BackButton />
 
-            <PatientHeader patient={patient} />
+            <PatientHeader patient={patient?.patient} />
 
             <AssignedTests tests={tests} unassignAction={onUnassign} />
 

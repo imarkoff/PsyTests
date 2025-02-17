@@ -1,27 +1,32 @@
 import useSWR from "swr";
 import {getPatient} from "@/services/doctorPatientsService";
-import {unassignTest} from "@/services/doctorPatientsTestsService";
+import {getPatientTests, unassignTest} from "@/services/doctorPatientsTestsService";
 
 export default function usePatient(patientId: string) {
-    const {
-        data: userInfo,
-        mutate
-    } = useSWR(
+    const { data: userInfo } = useSWR(
         `getPatient/${patientId}`,
         () => getPatient(patientId)
     );
 
+    const {
+        data: tests,
+        mutate: testsMutate
+    } = useSWR(
+        `getPatientTests/${patientId}`,
+        () => getPatientTests(patientId)
+    )
+
     const onUnassign = async (testId: string) => {
         await unassignTest(patientId, testId);
-        await mutate(prev => prev && ({
+        await testsMutate(prev => prev && ({
             ...prev,
-            tests: prev.tests.filter(test => test.id !== testId)
+            tests: prev.filter(test => test.id !== testId)
         }), false);
     }
 
     return {
-        patient: userInfo?.patient,
-        tests: userInfo?.tests,
+        patient: userInfo,
+        tests: tests,
         onUnassign
     };
 }
