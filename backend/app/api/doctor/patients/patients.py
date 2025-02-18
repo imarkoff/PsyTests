@@ -18,7 +18,7 @@ from app.services.patients import patients_service
 router = APIRouter(prefix="/patients")
 patients_router = APIRouter(tags=["doctor_patients"])
 
-@patients_router.get("/", summary="Get doctor patients", response_model=list[DoctorPatientDto])
+@patients_router.get("/", summary="Get active doctor patients", response_model=list[DoctorPatientDto])
 async def get_patients(
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
         db: Session = Depends(get_postgresql_db)

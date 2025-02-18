@@ -21,9 +21,12 @@ from app.services.patients import patient_tests_service
 
 async def get_patients(db: Session, doctor_id: UUID) -> list[DoctorPatientDto]:
     """
-    Get doctor patients
+    Get active doctor patients
     """
-    doctor_patients = db.query(DoctorPatient).filter(DoctorPatient.doctor_id == doctor_id).all()
+    doctor_patients = db.query(DoctorPatient).filter(
+        DoctorPatient.doctor_id == doctor_id,
+        DoctorPatient.is_active.is_(True)
+    ).all()
 
     return [DoctorPatientDto.create(doctor_patient) for doctor_patient in doctor_patients]
 
