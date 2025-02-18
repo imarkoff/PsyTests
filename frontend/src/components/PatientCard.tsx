@@ -1,13 +1,14 @@
 import User from "@/schemas/User";
-import {Card, CardActionArea, CardActions, CardHeader, Theme} from "@mui/material";
+import {Card, CardActionArea, CardActions, CardHeader, Chip, Theme} from "@mui/material";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import formatPhone from "@/utils/formatPhone";
-import DoctorPatient from "@/schemas/DoctorPatient";
 import {ReactNode} from "react";
 
 interface PatientCardProps {
-    patient: DoctorPatient;
+    patient: User;
     footer?: ReactNode;
-    onClick?: (patient: DoctorPatient) => void;
+    needsAttention?: boolean;
+    onClick?: (patient: User) => void;
     selected?: boolean;
 }
 
@@ -19,7 +20,7 @@ interface PatientCardProps {
  * @param selected - whether the patient is selected
  * @constructor
  */
-export default function PatientCard({patient, footer, onClick, selected}: PatientCardProps) {
+export default function PatientCard({patient, footer, needsAttention, onClick, selected}: PatientCardProps) {
     const cardSelectedSx = (theme: Theme) => ({
         boxShadow: "0 0 0 2px " + theme.palette.primary.main,
     });
@@ -29,6 +30,8 @@ export default function PatientCard({patient, footer, onClick, selected}: Patien
             variant={"outlined"}
             sx={(theme) =>({
                 ...(selected ? cardSelectedSx(theme) : {}),
+                position: "relative",
+                overflow: "visible"
             })}
         >
             {onClick
@@ -36,11 +39,20 @@ export default function PatientCard({patient, footer, onClick, selected}: Patien
                     <CardActionArea
                         onClick={() => onClick(patient)}
                     >
-                        <PatientContent patient={patient.patient} />
+                        <PatientContent patient={patient} />
                     </CardActionArea>
                 )
-                : <PatientContent patient={patient.patient} footer={footer} />
+                : <PatientContent patient={patient} footer={footer} />
             }
+            {needsAttention && (
+                <Chip
+                    sx={{position: "absolute", top: 0, right: 12, transform: "translateY(-50%)"}}
+                    label={"Потребує уваги"}
+                    size={"small"}
+                    color={"warning"}
+                    icon={<ErrorOutlineIcon />}
+                />
+            )}
         </Card>
     );
 }
@@ -52,13 +64,8 @@ const PatientContent = (
         <CardHeader
             title={`${patient.surname || ""} ${patient.name} ${patient.patronymic || ""}`}
             subheader={formatPhone(patient.phone)}
-            slotProps={{ title: { variant: "h6" } }}
+            slotProps={{ title: { variant: "h6", sx: { lineHeight: 1.25 } } }}
         />
-
-        {footer && (
-            <CardActions sx={{pt: 0}}>
-                {footer}
-            </CardActions>
-        )}
+        {footer}
     </>
 );

@@ -2,23 +2,25 @@
 
 import useSWR from "swr";
 import {getPatients} from "@/services/doctorPatientsService";
-import PatientCard from "@/components/PatientCard";
-import {useRouter} from "next/navigation";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatientCard from "@/app/dashboard/doctor/patients/components/DoctorPatientCard";
 
 export default function PatientEntities() {
     const {
         data: patients
     } = useSWR("getPatients", getPatients);
-
-    const router = useRouter();
-    const onDetails = (patient: DoctorPatient) =>
-        router.push(`${window.location.pathname}/${patient.patient.id}`);
+    
+    const needsAttention = patients?.filter(patient => patient.needs_attention);
+    const normal = patients?.filter(patient => !patient.needs_attention);
 
 
     return (
-        patients && patients.map((patient, index) => (
-            <PatientCard patient={patient} onClick={onDetails} key={index} />
-        ))
+        <>
+            {needsAttention?.map(patient => (
+                <DoctorPatientCard patient={patient} key={patient.id} />
+            ))}
+            {normal?.map(patient => (
+                <DoctorPatientCard patient={patient} key={patient.id} />
+            ))}
+        </>
     );
 }

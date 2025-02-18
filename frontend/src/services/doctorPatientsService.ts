@@ -3,9 +3,9 @@
  */
 
 import apiPrivate from "@/api/apiPrivate";
-import User from "@/schemas/User";
 import PatientCreate from "@/schemas/PatientCreate";
 import DoctorPatient from "@/schemas/DoctorPatient";
+import PatientSearch from "@/schemas/PatientSearch";
 
 export const endpoint = "/doctor/patients";
 
@@ -16,7 +16,7 @@ export const createPatient = async (patient: PatientCreate) =>
     await apiPrivate.post<DoctorPatient>(endpoint, patient).then(res => res.data);
 
 export const findPatient = async (search: string) =>
-    await apiPrivate.get<User[]>(`${endpoint}/find`, { params: { search } }).then(res => res.data);
+    await apiPrivate.get<PatientSearch>(`${endpoint}/find`, { params: { search } }).then(res => res.data);
 
 export const getPatient = async (patientId: string) =>
     await apiPrivate.get<DoctorPatient>(`${endpoint}/${patientId}`).then(res => res.data);
