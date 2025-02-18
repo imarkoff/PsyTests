@@ -13,6 +13,7 @@ export default function DeletePatientButton({ patientId }: { patientId: string }
     const handleClose = () => setOpen(false);
 
     const onDelete = async () => {
+        if (!patientId) return;
         await removePatient(patientId);
         router.push("/dashboard/doctor/patients");
     }
@@ -22,8 +23,8 @@ export default function DeletePatientButton({ patientId }: { patientId: string }
             <Button
                 variant={"outlined"}
                 color={"error"}
-                sx={{marginLeft: {xs: 0, sm: "auto", alignSelf: "center"}}}
                 onClick={handleOpen}
+                disabled={!patientId}
             >
                 Видалити пацієнта
             </Button>

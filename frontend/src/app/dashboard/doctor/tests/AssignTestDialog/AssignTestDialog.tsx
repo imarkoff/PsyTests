@@ -9,8 +9,8 @@ import {Dialog} from "@mui/material";
 import usePatients from "@/app/dashboard/doctor/tests/AssignTestDialog/usePatients";
 import {useState} from "react";
 import PatientCard from "@/components/PatientCard";
-import User from "@/schemas/User";
 import DialogCloseButton from "@/components/DialogCloseButton";
+import DoctorPatient from "@/schemas/DoctorPatient";
 
 interface AssignTestDialogProps {
     testId: string;
@@ -27,15 +27,15 @@ interface AssignTestDialogProps {
  */
 export default function AssignTestDialog({testId, open, setOpenAction}: AssignTestDialogProps) {
     const { patients, onAssign, assignError, setAssignError } = usePatients();
-    const [selectedPatient, setSelectedPatient] = useState<User>();
+    const [selectedPatient, setSelectedPatient] = useState<DoctorPatient>();
 
     const handleAssign = async () => {
         if (!selectedPatient) return;
-        await onAssign(selectedPatient.id, testId);
+        await onAssign(selectedPatient.patient.id, testId);
         setOpenAction(false);
     };
 
-    const onChoose = (patient: User) => {
+    const onChoose = (patient: DoctorPatient) => {
         setSelectedPatient(patient);
         setAssignError(undefined);
     };
@@ -73,7 +73,7 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
                     <PatientCard
                         patient={patient}
                         key={patient.id}
-                        onChoose={onChoose}
+                        onClick={onChoose}
                         selected={patient.id === selectedPatient?.id}
                     />
                 ))}
@@ -90,7 +90,7 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
                     </Typography>
                 )}
                 <Button autoFocus onClick={handleAssign} disabled={!selectedPatient}>
-                    Назначити {selectedPatient && `для ${selectedPatient.name}`}
+                    Назначити {selectedPatient && `для ${selectedPatient.patient.name}`}
                 </Button>
             </DialogActions>
         </Dialog>

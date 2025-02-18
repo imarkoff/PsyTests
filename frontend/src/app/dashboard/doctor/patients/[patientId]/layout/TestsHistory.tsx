@@ -1,19 +1,9 @@
-"use client";
-
-import useSWR from "swr";
-import {getHistory} from "@/services/doctorPatientsTestsService";
 import TestHistoryCard from "@/components/Test/TestHistoryCard/TestHistoryCard";
 import PatientSection from "@/app/dashboard/doctor/patients/[patientId]/components/PatientSection";
 import {Typography} from "@mui/material";
+import TestResult from "@/schemas/TestResult";
 
-export default function TestsHistory({patientId}: {patientId: string}) {
-    const {
-        data: tests
-    } = useSWR(
-        `getHistory/${patientId}`,
-        () => getHistory(patientId)
-    );
-
+export default function TestsHistory({tests}: {tests?: TestResult[]}) {
     return (
         <PatientSection title={"Історія проходження тестів"} colSize={400}>
             {tests && tests.map(test => (

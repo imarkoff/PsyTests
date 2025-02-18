@@ -1,32 +1,32 @@
-import useSWR from "swr";
-import {getPatient} from "@/services/doctorPatientsService";
-import {getPatientTests, unassignTest} from "@/services/doctorPatientsTestsService";
+import usePatientInfo from "@/app/dashboard/doctor/patients/[patientId]/hooks/usePatientInfo";
+import usePatientTests from "@/app/dashboard/doctor/patients/[patientId]/hooks/usePatientTests";
+import {useEffect} from "react";
 
 export default function usePatient(patientId: string) {
-    const { data: userInfo } = useSWR(
-        `getPatient/${patientId}`,
-        () => getPatient(patientId)
-    );
+    const {
+        patient,
+        isLoading: patientLoading, error: patientError,
+        onChangeStatus, onReadPatient
+    } = usePatientInfo(patientId);
 
     const {
-        data: tests,
-        mutate: testsMutate
-    } = useSWR(
-        `getPatientTests/${patientId}`,
-        () => getPatientTests(patientId)
-    )
+        tests,
+        isLoading: testsLoading,
+        error: testsError,
+        onUnassign
+    } = usePatientTests(patientId);
 
-    const onUnassign = async (testId: string) => {
-        await unassignTest(patientId, testId);
-        await testsMutate(prev => prev && ({
-            ...prev,
-            tests: prev.filter(test => test.id !== testId)
-        }), false);
-    }
+    const shouldRead = !!patient && !!tests && patient.needs_attention;
+    useEffect(() => {
+        if (shouldRead) onReadPatient().then();
+    }, [shouldRead, onReadPatient]);
 
     return {
-        patient: userInfo,
-        tests: tests,
+        patient,
+        tests,
+        isLoading: patientLoading || testsLoading,
+        error: patientError || testsError,
+        onChangeStatus,
         onUnassign
     };
 }

@@ -1,12 +1,13 @@
 import User from "@/schemas/User";
-import {Button, Card, CardActionArea, CardContent, CardHeader, Theme} from "@mui/material";
+import {Card, CardActionArea, CardActions, CardHeader, Theme} from "@mui/material";
 import formatPhone from "@/utils/formatPhone";
 import DoctorPatient from "@/schemas/DoctorPatient";
+import {ReactNode} from "react";
 
 interface PatientCardProps {
     patient: DoctorPatient;
-    onDetails?: (patient: User) => void;
-    onChoose?: (patient: User) => void;
+    footer?: ReactNode;
+    onClick?: (patient: DoctorPatient) => void;
     selected?: boolean;
 }
 
@@ -14,17 +15,11 @@ interface PatientCardProps {
  * Patient card component. Used in doctor's interface.
  * @param patient
  * @param onDetails - callback to handle details button click
- * @param onChoose - callback to handle choose button click
+ * @param footer - additional content to display in the card
  * @param selected - whether the patient is selected
  * @constructor
  */
-export default function PatientCard({patient, onDetails, onChoose, selected}: PatientCardProps) {
-    const cardSx = {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-    };
-
+export default function PatientCard({patient, footer, onClick, selected}: PatientCardProps) {
     const cardSelectedSx = (theme: Theme) => ({
         boxShadow: "0 0 0 2px " + theme.palette.primary.main,
     });
@@ -33,40 +28,37 @@ export default function PatientCard({patient, onDetails, onChoose, selected}: Pa
         <Card
             variant={"outlined"}
             sx={(theme) =>({
-                ...(onChoose ? {} : cardSx),
                 ...(selected ? cardSelectedSx(theme) : {}),
             })}
         >
-            {onChoose
+            {onClick
                 ? (
                     <CardActionArea
-                        onClick={() => onChoose(patient.patient)}
-                        sx={cardSx}
+                        onClick={() => onClick(patient)}
                     >
                         <PatientContent patient={patient.patient} />
                     </CardActionArea>
                 )
-                : <PatientContent patient={patient.patient} onDetails={onDetails} />
+                : <PatientContent patient={patient.patient} footer={footer} />
             }
         </Card>
     );
 }
 
 const PatientContent = (
-    {patient, onDetails}: {patient: User, onDetails?: (patient: User) => void}
+    {patient, footer}: {patient: User, footer?: ReactNode}
 ) => (
     <>
         <CardHeader
-            title={`${patient.name} ${patient.surname || ""} ${patient.patronymic || ""}`}
+            title={`${patient.surname || ""} ${patient.name} ${patient.patronymic || ""}`}
             subheader={formatPhone(patient.phone)}
+            slotProps={{ title: { variant: "h6" } }}
         />
 
-        {onDetails && (
-            <CardContent sx={{paddingY: "0 !important"}}>
-                <Button size={"small"} onClick={() => onDetails(patient)}>
-                    Детальніше
-                </Button>
-            </CardContent>
+        {footer && (
+            <CardActions sx={{pt: 0}}>
+                {footer}
+            </CardActions>
         )}
     </>
 );

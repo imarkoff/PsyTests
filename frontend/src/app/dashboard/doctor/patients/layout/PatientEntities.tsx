@@ -4,7 +4,7 @@ import useSWR from "swr";
 import {getPatients} from "@/services/doctorPatientsService";
 import PatientCard from "@/components/PatientCard";
 import {useRouter} from "next/navigation";
-import User from "@/schemas/User";
+import DoctorPatient from "@/schemas/DoctorPatient";
 
 export default function PatientEntities() {
     const {
@@ -12,13 +12,13 @@ export default function PatientEntities() {
     } = useSWR("getPatients", getPatients);
 
     const router = useRouter();
-    const onDetails = (patient: User) =>
-        router.push(`${window.location.pathname}/${patient.id}`);
+    const onDetails = (patient: DoctorPatient) =>
+        router.push(`${window.location.pathname}/${patient.patient.id}`);
 
 
     return (
         patients && patients.map((patient, index) => (
-            <PatientCard patient={patient} onDetails={onDetails} key={index} />
+            <PatientCard patient={patient} onClick={onDetails} key={index} />
         ))
     );
 }

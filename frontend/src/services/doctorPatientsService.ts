@@ -26,3 +26,10 @@ export const addPatient = async (patientId: string) =>
 
 export const removePatient = async (patientId: string) =>
     await apiPrivate.delete<void>(`${endpoint}/${patientId}`).then(res => res.data);
+
+export const readPatient = async (patientId: string) =>
+    await apiPrivate.patch<void>(`${endpoint}/${patientId}/read`).then(res => res.data);
+
+export const changePatientStatus = async (patientId: string, isActive: boolean) =>
+    await apiPrivate.patch<void>(`${endpoint}/${patientId}/status`, null, { params: { status: isActive } })
+        .then(res => res.data);
