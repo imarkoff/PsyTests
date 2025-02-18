@@ -120,12 +120,29 @@ async def change_attention(db: Session, patient_id: UUID, needs_attention: bool)
     """
     Change patient needs attention status
     """
+
     db.query(DoctorPatient).filter(
         DoctorPatient.patient_id == patient_id
     ).update(
         {DoctorPatient.needs_attention: needs_attention},
         synchronize_session=False
     )
+
+    db.commit()
+
+
+async def change_status(db: Session, patient_id: UUID, is_active: bool) -> None:
+    """
+    Change patient status
+    """
+
+    db.query(DoctorPatient).filter(
+        DoctorPatient.patient_id == patient_id
+    ).update(
+        {DoctorPatient.is_active: is_active},
+        synchronize_session=False
+    )
+
     db.commit()
 
 

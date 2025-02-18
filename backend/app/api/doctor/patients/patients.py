@@ -63,6 +63,18 @@ async def mark_patient_as_read(
     return Response(status_code=204)
 
 
+@patients_router.patch("/{patient_id}/status", summary="Change patient status", status_code=204)
+async def change_patient_status(
+        patient_id: UUID,
+        status: bool,
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
+        db: Session = Depends(get_postgresql_db)
+):
+    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    await patients_service.change_status(db, patient_id, status)
+    return Response(status_code=204)
+
+
 @patients_router.post("/{patient_id}", summary="Add patient to doctor patients", status_code=201,
              response_model=DoctorPatientDto, responses={
         409: {"description": "Doctor already has this patient"},
