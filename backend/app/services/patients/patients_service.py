@@ -12,8 +12,9 @@ from app.db.models.user import User
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.doctor_patient_dto import DoctorPatientDto
 from app.schemas.patients.patient_create import PatientCreateDto
+from app.schemas.patients.patient_search_dto import PatientSearchDto
 from app.schemas.role import Role
-from app.schemas.user_auth import UserDto, UserCreate
+from app.schemas.user_auth import UserCreate
 from app.services import user_service
 from app.services.patients import patient_tests_service
 
@@ -45,11 +46,14 @@ async def get_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> DoctorP
     return DoctorPatientDto.create(doctor_patient)
 
 
-async def find_patient(db: Session, search: str) -> list[UserDto]:
+async def find_patient(db: Session, doctor_id: UUID, search: str) -> PatientSearchDto:
     """
-    Find patient in database by name, surname, phone number or email
+    Find patient in database by name, surname, phone number or email.
+    Also sort patients by doctor patients and other patients
     """
+
     patients = db.query(User).filter(
+        User.role == Role.PATIENT,
         or_(
             User.name.ilike(f"%{search}%"),
             User.surname.ilike(f"%{search}%"),
@@ -57,7 +61,15 @@ async def find_patient(db: Session, search: str) -> list[UserDto]:
         )
     ).all()
 
-    return [UserDto.model_validate(patient) for patient in patients]
+    doctor_patients = db.query(DoctorPatient).filter(
+        DoctorPatient.doctor_id == doctor_id,
+        DoctorPatient.patient_id.in_([patient.id for patient in patients])
+    ).all()
+
+    doctor_patient_ids = {doctor_patient.patient_id for doctor_patient in doctor_patients}
+    other_patients = [patient for patient in patients if patient.id not in doctor_patient_ids]
+
+    return PatientSearchDto.create(doctor_patients, other_patients)
 
 
 async def assign_patient(db: Session, doctor_id: UUID, patient_id: UUID) -> DoctorPatientDto:

@@ -11,8 +11,8 @@ from app.db.session import get_postgresql_db
 from app.exceptions import AlreadyExistsError, NotFoundError
 from app.schemas.doctor_patient_dto import DoctorPatientDto
 from app.schemas.patients.patient_create import PatientCreateDto
+from app.schemas.patients.patient_search_dto import PatientSearchDto
 from app.schemas.role import Role
-from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 
 router = APIRouter(prefix="/patients")
@@ -27,15 +27,17 @@ async def get_patients(
     return await patients_service.get_patients(db, doctor.id)
 
 
-@patients_router.get("/find", summary="Find patient in database by name, surname, phone number or email",
-            response_model=list[UserDto])
+@patients_router.get("/find",
+                     summary="Find patient in database by name, surname, phone number or email."
+                             " Also sort patients by doctor patients and other patients",
+                     response_model=PatientSearchDto)
 async def find_patient(
         search: str,
         credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
         db: Session = Depends(get_postgresql_db)
 ):
-    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
-    return await patients_service.find_patient(db, search)
+    doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    return await patients_service.find_patient(db, doctor.id, search)
 
 
 @patients_router.get("/{patient_id}", summary="Get patient info", response_model=DoctorPatientDto)
