@@ -1,0 +1,2 @@
+app/temp/*
+!app/temp/__init__.py

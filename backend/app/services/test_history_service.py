@@ -2,6 +2,7 @@ from typing import cast
 from uuid import UUID
 
 from sqlalchemy.orm import Session
+from sqlalchemy.testing.config import db_url
 
 from app.db.models.patient_test import PatientTest
 from app.db.models.test_history import TestHistory
@@ -80,6 +81,25 @@ async def get_tests_history(db: Session, patient_id: UUID, short: bool = False) 
         )
 
     return tests_results
+
+
+async def get_test_history(db: Session, patient_id: UUID, test_id: UUID) -> TestResultDto:
+    """
+    Get test history
+    """
+
+    db_test_history = (db.query(TestHistory).filter(
+        TestHistory.patient_id == patient_id,
+        TestHistory.id == test_id
+    ).first())
+
+    if not db_test_history:
+        raise NotFoundError
+
+    test_history = cast(TestHistory, db_test_history)
+    test = await get_test(test_history.test_id)
+
+    return test_result_to_dto(test_history, test)
 
 
 def test_result_to_dto(test_result: TestHistory, test: Test) -> TestResultDto:

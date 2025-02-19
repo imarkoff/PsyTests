@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
-from starlette.responses import Response
+from starlette.responses import Response, FileResponse
 
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
@@ -12,7 +12,9 @@ from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
 from app.schemas.test_result import TestResultDto
 from app.services import test_history_service
-from app.services.patients import patient_tests_service
+from app.services.patients import patient_tests_service, patients_service
+from app.utils import media_types
+from app.utils.results_to_docx import ResultsToDocx
 
 router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"], responses={
     401: {"description": "Unauthorized"},
@@ -44,6 +46,38 @@ async def get_patient_history(
 ):
     JWTBearer.auth(credentials, db, role=Role.DOCTOR)
     return await test_history_service.get_tests_history(db, patient_id=patient_id)
+
+
+@router.get("/history/{test_id}", summary="Get passed test history of patient", response_model=TestResultDto)
+async def get_patient_test_history(
+        patient_id: UUID, test_id: UUID,
+        db: Session = Depends(get_postgresql_db),
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+):
+    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    return await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
+
+
+@router.get("/history/{test_id}/export",
+            summary="Export passed test history in Word format",
+            response_class=FileResponse,
+            responses={ 200: {"content": {media_types.docx: {}}}}
+            )
+async def export_patient_test_history(
+        patient_id: UUID, test_id: UUID,
+        db: Session = Depends(get_postgresql_db),
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+):
+    doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    test_result = await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
+    patient = await patients_service.get_patient(db, doctor_id=doctor.id, patient_id=patient_id)
+    document_path = ResultsToDocx(test_result, patient.patient).path
+
+    return FileResponse(
+        path=document_path,
+        media_type=media_types.docx,
+        filename=document_path.split('/')[-1]
+    )
 
 
 @router.post("/{test_id}", summary="Assign test to patient", status_code=201,
