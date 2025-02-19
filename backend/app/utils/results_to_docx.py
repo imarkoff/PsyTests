@@ -1,4 +1,5 @@
 import os.path
+import tempfile
 
 from docx import Document
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
@@ -8,8 +9,8 @@ from docx.shared import Pt
 from app.schemas.test.test_history_results import Results, Answer
 from app.schemas.test_result import TestResultDto
 from app.schemas.user_auth import UserDto
-import app.temp as temp
 
+temp_dir = tempfile.gettempdir()
 
 class ResultsToDocx:
     def __init__(self, test_result: TestResultDto, user_info: UserDto):
@@ -39,7 +40,7 @@ class ResultsToDocx:
         )
         test_name = "_".join(self.test_result.test.name.split())
         file_name = f"{credentials}_{test_name}.docx"
-        path = os.path.join(temp.temp_path, file_name)
+        path = os.path.join(temp_dir, file_name)
 
         self.doc.save(path)
         return path
