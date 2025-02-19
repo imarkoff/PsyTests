@@ -10,7 +10,7 @@ import usePatients from "@/app/dashboard/doctor/tests/AssignTestDialog/usePatien
 import {useState} from "react";
 import PatientCard from "@/components/PatientCard";
 import DialogCloseButton from "@/components/DialogCloseButton";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import User from "@/schemas/User";
 
 interface AssignTestDialogProps {
     testId: string;
@@ -27,15 +27,15 @@ interface AssignTestDialogProps {
  */
 export default function AssignTestDialog({testId, open, setOpenAction}: AssignTestDialogProps) {
     const { patients, onAssign, assignError, setAssignError } = usePatients();
-    const [selectedPatient, setSelectedPatient] = useState<DoctorPatient>();
+    const [selectedPatient, setSelectedPatient] = useState<User>();
 
     const handleAssign = async () => {
         if (!selectedPatient) return;
-        await onAssign(selectedPatient.patient.id, testId);
+        await onAssign(selectedPatient.id, testId);
         setOpenAction(false);
     };
 
-    const onChoose = (patient: DoctorPatient) => {
+    const onChoose = (patient: User) => {
         setSelectedPatient(patient);
         setAssignError(undefined);
     };
@@ -71,10 +71,10 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
             }} dividers>
                 {patients && patients.map((patient) => (
                     <PatientCard
-                        patient={patient}
-                        key={patient.id}
+                        patient={patient.patient}
+                        key={patient.patient.id}
                         onClick={onChoose}
-                        selected={patient.id === selectedPatient?.id}
+                        selected={patient.patient.id === selectedPatient?.id}
                     />
                 ))}
             </DialogContent>
@@ -90,7 +90,7 @@ export default function AssignTestDialog({testId, open, setOpenAction}: AssignTe
                     </Typography>
                 )}
                 <Button autoFocus onClick={handleAssign} disabled={!selectedPatient}>
-                    Назначити {selectedPatient && `для ${selectedPatient.patient.name}`}
+                    Назначити {selectedPatient && `для ${selectedPatient.name}`}
                 </Button>
             </DialogActions>
         </Dialog>

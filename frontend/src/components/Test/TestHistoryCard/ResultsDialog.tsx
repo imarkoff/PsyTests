@@ -1,12 +1,13 @@
 "use client";
 
 import TestResult from "@/schemas/TestResult";
-import {Button, Dialog, DialogContent, DialogTitle, Typography} from "@mui/material";
+import {Box, Button, Dialog, DialogContent, DialogTitle, Typography} from "@mui/material";
 import {useState} from "react";
 import TestValues from "@/components/Test/TestValues";
 import {dateMed} from "@/utils/formatDate";
 import DialogCloseButton from "@/components/DialogCloseButton";
 import ResultsTable from "@/components/Test/TestHistoryCard/ResultsTable";
+import ExportButton from "@/components/Test/TestHistoryCard/ExportButton";
 
 /**
  * Dialog for displaying test results
@@ -38,7 +39,12 @@ export default function ResultsDialog({test}: {test: TestResult}) {
 
                 <DialogContent sx={{display: "grid", gap: 2}}>
                     <ResultsTable results={test.results} />
-                    <TestValues title={"Дата проходження"}>{dateMed(test.passed_at)}</TestValues>
+                    <Box sx={{display: "flex", gap: 1, justifyContent: "flex-start", flexWrap: "wrap"}}>
+                        <TestValues title={"Дата проходження"}>{dateMed(test.passed_at)}</TestValues>
+                        <Box sx={{display: "flex", gap: 1, justifyContent: "end", flexGrow: 1}}>
+                            <ExportButton test={test} />
+                        </Box>
+                    </Box>
                 </DialogContent>
             </Dialog>
         </>

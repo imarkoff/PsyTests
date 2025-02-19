@@ -1,5 +1,5 @@
 import User from "@/schemas/User";
-import {Card, CardActionArea, CardActions, CardHeader, Chip, Theme} from "@mui/material";
+import {Card, CardActionArea, CardHeader, Chip, Theme} from "@mui/material";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import formatPhone from "@/utils/formatPhone";
 import {ReactNode} from "react";
