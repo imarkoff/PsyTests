@@ -68,11 +68,12 @@ async def get_patient_tests_by_doctor(db: Session, doctor_id: UUID, patient_id: 
         NotFoundError: If patient not found
     """
 
-    tests = db.query(PatientTest).filter(
-        PatientTest.patient_id == patient_id,
-        DoctorPatient.doctor_id == doctor_id,
-        PatientTest.unassigned_at == None
-    ).all()
+    tests = (db.query(PatientTest)
+             .join(DoctorPatient, DoctorPatient.patient_id == PatientTest.patient_id)
+             .filter(PatientTest.patient_id == patient_id,
+                     DoctorPatient.doctor_id == doctor_id,
+                     PatientTest.unassigned_at == None)
+             .all())
 
     if not tests:
         user = db.query(DoctorPatient).filter(

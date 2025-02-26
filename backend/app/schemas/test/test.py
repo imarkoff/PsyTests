@@ -3,6 +3,7 @@ from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict, UUID4
 
 from app.schemas.test.question import Question
+from app.schemas.test.test_marks import Marks
 from app.schemas.test.test_module import TestModule
 
 
@@ -12,7 +13,7 @@ class Test(BaseModel):
     modules: Optional[list[TestModule]] = Field(None, title="Modules")
     description: Optional[str] = Field(None, title="Description")
     questions: Optional[list[Question]] = Field(..., title="Questions")
-    marks: Optional[dict[str, str]] = Field(None, title="Marks")
+    marks: Optional[Marks] = Field(None, title="Marks")
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,

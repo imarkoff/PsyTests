@@ -25,6 +25,7 @@ class TestHistory(Base):
     patient: Mapped[User] = relationship(back_populates="tests_history", foreign_keys=[patient_id])
     passed_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
     results: Mapped[dict[str, list[dict[str, int | None]]]] = mapped_column(JSON, nullable=False)
+    verdict: Mapped[str | None] = mapped_column(nullable=True)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -1,7 +1,7 @@
 from app.schemas.test.test import Test
 
 
-def calculate_points(test: Test, answers: dict[str, list[int]]) -> tuple[int, int]:
+async def calculate_points(test: Test, answers: dict[str, list[int]]) -> tuple[int, int]:
     """
     Calculate points for test
     """

@@ -3,6 +3,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
+from app.schemas.test.test_marks import Marks
+
 
 class TestShortDto(BaseModel):
     """
@@ -12,7 +14,7 @@ class TestShortDto(BaseModel):
     id: UUID
     name: str
     description: Optional[str]
-    marks: Optional[dict[str, str]]
+    marks: Optional[Marks]
     questions_count: int
 
     model_config = ConfigDict(

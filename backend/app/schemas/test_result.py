@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
@@ -16,6 +17,7 @@ class TestResultDto(BaseModel):
     test: TestShortDto
     patient_id: UUID
     results: Results
+    verdict: Optional[str] = None
     passed_at: datetime
 
     model_config = ConfigDict(

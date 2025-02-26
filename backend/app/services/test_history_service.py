@@ -2,7 +2,6 @@ from typing import cast
 from uuid import UUID
 
 from sqlalchemy.orm import Session
-from sqlalchemy.testing.config import db_url
 
 from app.db.models.patient_test import PatientTest
 from app.db.models.test_history import TestHistory
@@ -12,13 +11,16 @@ from app.schemas.test.test import Test
 from app.schemas.test.test_history_results import Results
 from app.schemas.test_result import TestResultDto, TestResultShortDto
 from app.schemas.test_short import TestShortDto
+from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 from app.services.tests_service import get_test
+from app.utils.calculate_points import calculate_points
 from app.utils.convert_results import convert_results
 from app.utils.convert_test_to_short import convert_test_to_short
+from app.utils.get_result_mark import get_result_mark
 
 
-async def pass_test(db: Session, patient_id: UUID, pass_dto: PassTestDto) -> TestResultShortDto:
+async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> TestResultShortDto:
     """
     Pass test
 
@@ -34,16 +36,19 @@ async def pass_test(db: Session, patient_id: UUID, pass_dto: PassTestDto) -> Tes
 
     test = await get_test(doctor_test.test_id, True)
 
+    collected_points = await calculate_points(test, pass_dto.answers)
+
     new_history = TestHistory(
         test_id=test.id,
-        patient_id=patient_id,
-        results=convert_results(test, pass_dto.answers).model_dump()
+        patient_id=patient.id,
+        results=convert_results(test, pass_dto.answers).model_dump(),
+        verdict=await get_result_mark(test.marks, collected_points[1], patient)
     )
 
     db.add(new_history)
     db.commit()
 
-    await patients_service.change_attention(db, patient_id, True)
+    await patients_service.change_attention(db, patient.id, True)
 
     return TestResultShortDto(
         id=new_history.id,
@@ -114,5 +119,6 @@ def test_result_to_dto(test_result: TestHistory, test: Test) -> TestResultDto:
         test=TestShortDto(**shortened_test.model_dump()),  # throws validation error if passed var directly
         patient_id=test_result.patient_id,
         results=Results.model_validate(test_result.results),
+        verdict=test_result.verdict,
         passed_at=test_result.passed_at
     )
