@@ -1,19 +1,23 @@
-from app.schemas.test.test_marks import MarksRow, Marks
+from app.schemas.test.test import Test
+from app.schemas.test.test_marks import MarksRow
 from app.schemas.user_auth import UserDto
+from app.utils import test_includes
 
 
-async def get_result_mark(marks: Marks | None, points: int, patient: UserDto) -> str | None:
+async def get_result_mark(test: Test, points: int, patient: UserDto) -> str | None:
     """
     Get the mark of the test result for the patient.
 
     Args:
-        marks (Marks | None): The marks of the test result.
+        test (Test): The test.
         points (int): The points of the test result.
         patient (UserDto): The patient.
 
     Returns:
         str | None: The mark of the test result for the patient.
     """
+
+    marks = await test_includes.get_test_marks(test)
 
     (age, _) = patient.get_age()
 
@@ -51,13 +55,6 @@ def is_points_in_range(range_str: str, points: int) -> bool:
 async def get_age_mark(marks_row: MarksRow, age: float) -> str | None:
     """
     Get the mark of the test result for the age.
-
-    Args:
-        marks_row: The mark of the test result.
-        age: The age.
-
-    Returns:
-        str | None: The mark of the test result for the age.
     """
 
     sorted_marks = sorted((float(k), v) for k, v in marks_row.items() if k != "_")

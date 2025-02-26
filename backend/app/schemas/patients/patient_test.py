@@ -6,6 +6,7 @@ from pydantic import ConfigDict, BaseModel
 
 from app.db.models.patient_test import PatientTest
 from app.schemas.test.test import Test
+from app.schemas.test_base import TestBase
 from app.services import tests_service
 
 
@@ -13,7 +14,7 @@ class PatientTestDto(BaseModel):
     id: UUID
     patient_id: UUID
     assigned_by_id: UUID
-    test: Test
+    test: TestBase
     assigned_at: datetime
 
     model_config = ConfigDict(
@@ -30,11 +31,11 @@ class PatientTestDto(BaseModel):
     )
 
     @classmethod
-    async def create(cls, patient_test: PatientTest | Type[PatientTest], show_correct_answers: bool = False):
+    async def create(cls, patient_test: PatientTest | Type[PatientTest]):
         if isinstance(patient_test, type):
             patient_test = cast(PatientTest, patient_test)
 
-        test = await tests_service.get_test(patient_test.test_id, show_correct_answers)
+        test = await tests_service.get_test(patient_test.test_id, TestBase)
         return cls(
             id=patient_test.id,
             patient_id=patient_test.patient_id,

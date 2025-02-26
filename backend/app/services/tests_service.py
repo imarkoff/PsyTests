@@ -1,32 +1,33 @@
 import os
 import json
+from typing import Type
 from uuid import UUID
 
 from app.db import tests
 from app.schemas.test.test import Test
-from app.utils.test_from_json import test_from_json
+from app.schemas.test_base import TestBase
 
 
-async def get_tests() -> list[Test]:
+async def get_tests() -> list[TestBase]:
     tests_dir = os.path.dirname(tests.__file__)
     test_list = []
+
     for test_folder in os.listdir(tests_dir):
-        folder_path = os.path.join(tests_dir, test_folder)
+        folder_path = os.path.join(tests_dir, test_folder
+                                   )
         if os.path.isdir(folder_path):
             test_file = os.path.join(folder_path, 'test.json')
+
             if os.path.isfile(test_file):
                 with open(test_file, 'r') as file:
                     test_data = json.load(file)
-                    test_data['id'] = test_folder
-
-                    test = test_from_json(UUID(test_folder), test_data)
-
+                    test = TestBase.from_json(test_data)
                     test_list.append(test)
 
     return test_list
 
 
-async def get_test(test_id: UUID, show_correct_answers=False) -> Test:
+async def get_test[T](test_id: UUID, test_class: Type[Test] | Type[TestBase]) -> T:
     """
     Get test by id
 
@@ -37,12 +38,7 @@ async def get_test(test_id: UUID, show_correct_answers=False) -> Test:
     test_file = os.path.join(os.path.dirname(tests.__file__), test_id.__str__(), 'test.json')
     with open(test_file, 'r') as file:
         test_data = json.load(file)
-
-        test = test_from_json(test_id, test_data)
-
-        if not show_correct_answers:
-            test.hide_correct_answers()
-
+        test = test_class.from_json(test_data)
         return test
 
 

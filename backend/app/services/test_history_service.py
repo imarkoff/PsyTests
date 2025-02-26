@@ -8,15 +8,13 @@ from app.db.models.test_history import TestHistory
 from app.exceptions import NotFoundError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.test.test import Test
-from app.schemas.test.test_history_results import Results
 from app.schemas.test_result import TestResultDto, TestResultShortDto
-from app.schemas.test_short import TestShortDto
+from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 from app.services.tests_service import get_test
 from app.utils.calculate_points import calculate_points
 from app.utils.convert_results import convert_results
-from app.utils.convert_test_to_short import convert_test_to_short
 from app.utils.get_result_mark import get_result_mark
 
 
@@ -34,7 +32,7 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
     if not doctor_test:
         raise NotFoundError
 
-    test = await get_test(doctor_test.test_id, True)
+    test: Test = await get_test(doctor_test.test_id, Test)
 
     collected_points = await calculate_points(test, pass_dto.answers)
 
@@ -72,10 +70,10 @@ async def get_tests_history(db: Session, patient_id: UUID, short: bool = False) 
 
     for db_test in tests:
         db_test = cast(TestHistory, db_test)
-        test = await get_test(db_test.test_id)
+        test = await get_test(db_test.test_id, TestBase)
 
         tests_results.append(
-            test_result_to_dto(db_test, test)
+            TestResultDto.from_test_result(db_test, test)
             if not short else
             TestResultShortDto(
                 id=db_test.id,
@@ -102,23 +100,6 @@ async def get_test_history(db: Session, patient_id: UUID, test_id: UUID) -> Test
         raise NotFoundError
 
     test_history = cast(TestHistory, db_test_history)
-    test = await get_test(test_history.test_id)
+    test = await get_test(test_history.test_id, TestBase)
 
-    return test_result_to_dto(test_history, test)
-
-
-def test_result_to_dto(test_result: TestHistory, test: Test) -> TestResultDto:
-    """
-    Convert test result to DTO
-    """
-
-    shortened_test = convert_test_to_short(test)
-
-    return TestResultDto(
-        id=test_result.id,
-        test=TestShortDto(**shortened_test.model_dump()),  # throws validation error if passed var directly
-        patient_id=test_result.patient_id,
-        results=Results.model_validate(test_result.results),
-        verdict=test_result.verdict,
-        passed_at=test_result.passed_at
-    )
+    return TestResultDto.from_test_result(test_history, test)
