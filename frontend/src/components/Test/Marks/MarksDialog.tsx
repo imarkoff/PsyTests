@@ -44,7 +44,14 @@ export default function MarksDialog({test}: {test: TestBase}) {
                 maxWidth={"lg"}
                 fullWidth
                 scroll={"paper"}
-                slotProps={{ paper: { sx: { width: "100%", m: 1 } } }}
+                slotProps={{ paper: {
+                    sx: (theme) => ({
+                        width: "100%",
+                        m: 1,
+                        border: "2px solid",
+                        borderColor: theme.palette.divider,
+                    })
+                } }}
             >
                 <TableContainer sx={{maxHeight: "100%"}}>
                     <Table stickyHeader>
@@ -53,6 +60,7 @@ export default function MarksDialog({test}: {test: TestBase}) {
                                 <TableCell colSpan={marksLength+2}>
                                     <Typography variant={"h6"}>
                                         Система оцінювання
+                                        {test.marks_unit && ` (${test.marks_unit})`}
                                     </Typography>
                                     <Typography variant={"body2"} color={"textSecondary"}>
                                         {test.name}
