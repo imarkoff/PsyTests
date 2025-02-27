@@ -78,7 +78,16 @@ class ResultsToDocx:
         age.paragraph_format.space_after = Pt(0.5)
 
         pass_date = self.test_result.passed_at.strftime("%d.%m.%Y %H:%M")
-        self.doc.add_paragraph(f"Дата проходження: {pass_date}")
+        pass_paragraph = self.doc.add_paragraph(f"Дата проходження: {pass_date}")
+        pass_paragraph.paragraph_format.space_after = Pt(0.5)
+
+        self._create_verdict()
+
+    def _create_verdict(self):
+        verdict = self.test_result.verdict
+        marks_unit = self.test_result.test.marks_unit
+        if verdict:
+            self.doc.add_paragraph(f"Висновок: {verdict} {marks_unit if marks_unit else ""}")
 
     def _create_table(self):
         table = self.doc.add_table(rows=0, cols=self.max_answers + 2)

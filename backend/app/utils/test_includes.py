@@ -1,6 +1,5 @@
 import json
 import os
-from typing import Union
 from uuid import UUID
 
 import numpy as np
