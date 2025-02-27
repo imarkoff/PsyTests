@@ -22,7 +22,7 @@ export default function TestDrawer({children, isOpen, closeAction}: TestDrawerPr
 
     const onClose = () => {
         setOpen(false);
-        setTimeout(closeAction, 500);
+        setTimeout(closeAction, 300);
     }
 
     useEffect(() => {
@@ -35,7 +35,6 @@ export default function TestDrawer({children, isOpen, closeAction}: TestDrawerPr
             anchor={"bottom"}
             onOpen={() => setOpen(true)}
             onClose={onClose}
-            sx={{display: {lg: "none"}}}
             PaperProps={{
                 elevation: 2,
                 sx: {

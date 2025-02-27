@@ -1,67 +1,42 @@
-import Test from "@/schemas/Test";
-import {Box, Typography} from "@mui/material";
-import MarksDialog from "@/components/Test/Marks/MarksDialog";
-import QuestionCard from "@/components/QuestionCard/QuesitonCard";
-import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
-import countTestQuestions from "@/utils/countTestQuestions";
-import TestBase from "@/schemas/TestBase";
+"use client";
 
-export default function TestContent({test}: {test?: Test | TestBase}) {
-    const isBase = (test as Test) === undefined;
-    console.log(test);
+import {ReactNode} from "react";
+import {Paper} from "@mui/material";
+import TestDrawer from "@/app/dashboard/doctor/tests/components/TestDrawer";
+import {useTestsContext} from "@/app/dashboard/doctor/tests/context/TestsContext";
+import useWindowSize from "@/hooks/useWindowSize";
+import {useParams} from "next/navigation";
 
-    const {totalQuestions, totalPoints} = !isBase ? countTestQuestions(test as Test) : {totalQuestions: 0, totalPoints: 0};
+export default function TestContent({children}: { children: ReactNode }) {
+    const {selectedTest, setSelectedTest} = useTestsContext();
+    const {testId} = useParams<{ testId?: string }>();
 
-    return (test
-        ? (<>
-            <Box sx={{px: 2, pt: 1, display: "grid", gap: .5}}>
-                <Typography variant={"h5"}>{test.name}</Typography>
-                <Typography>{test.description}</Typography>
-                <Typography>
-                    <strong>Кількість питань:</strong> {totalQuestions}
-                </Typography>
-                <Typography>
-                    <strong>Максимальна кількість балів:</strong> {totalPoints}
-                </Typography>
-                <Box sx={{display: "flex", alignItems: "center", gap: 1, py: 1}}>
-                    <AssignTestButton testId={test.id} />
-                    {test.marks_path && <MarksDialog test={test} />}
-                </Box>
-            </Box>
+    const isOpen = !!selectedTest || !!testId;
 
-            {(test as Test).questions?.map((question, index) => (
-                <QuestionCard
-                    question={question}
-                    correctAnswer={question.answers.findIndex(answer => answer.is_correct)}
-                    key={`${test.id}/question/${index}`} // prevent showing checked answers from other tests
-                    testId={test.id}
-                    index={index}
-                    disabled
-                />
-            ))}
-            {(test as Test).modules?.map((module, index) => (
-                module.questions.map((question, j) => (
-                    <QuestionCard
-                        question={question}
-                        correctAnswer={question.answers.findIndex(answer => answer.is_correct)}
-                        key={`${test.id}/module/${index}/question/${j}`}
-                        module={{name: module.name, path: module.path}}
-                        testId={test.id}
-                        index={j}
-                        disabled
-                    />
-                ))
-            ))}
-        </>)
-        : (
-            <Typography color={"textSecondary"} sx={{
-                height: "100%",
-                textAlign: "center",
-                display: "grid",
-                placeItems: "center"
+    const onClose = () => setSelectedTest(null);
+
+    const {width} = useWindowSize();
+    const isMobile = width < 1200;
+
+    return (
+        isMobile ? (
+            <TestDrawer closeAction={onClose} isOpen={isOpen}>
+                {children}
+            </TestDrawer>
+        ) : (
+            <Paper sx={{
+                overflowY: "scroll",
+                borderRadius: 5,
+                width: {xs: "100%", md: 600},
+                maxHeight: "100%",
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                p: 1,
+                gap: 1
             }}>
-                Оберіть тест зліва для перегляду
-            </Typography>
+                {children}
+            </Paper>
         )
     );
 }

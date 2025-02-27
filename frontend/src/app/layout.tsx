@@ -19,7 +19,7 @@ export default function RootLayout({children}: Readonly<{children: ReactNode}>) 
     return (
         <html lang="en" className={"h-full"}>
             <AppTheme>
-                <CssBaseline />
+                <CssBaseline enableColorScheme />
                 <body className={`h-full`}>
                     {children}
                 </body>

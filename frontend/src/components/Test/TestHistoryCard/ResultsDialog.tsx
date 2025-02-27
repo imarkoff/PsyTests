@@ -8,6 +8,7 @@ import {dateMed} from "@/utils/formatDate";
 import DialogCloseButton from "@/components/DialogCloseButton";
 import ResultsTable from "@/components/Test/TestHistoryCard/ResultsTable";
 import ExportButton from "@/components/Test/TestHistoryCard/ExportButton";
+import Link from "next/link";
 
 /**
  * Dialog for displaying test results
@@ -31,8 +32,15 @@ export default function ResultsDialog({test}: {test: TestResult}) {
                 slotProps={{ paper: { elevation: 3 } }}
             >
                 <DialogTitle sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography component={"span"} variant={"h6"}>
-                        {test.test.name}
+                    <Typography component={"span"} variant={"h6"} sx={{
+                        "&:hover": {
+                            textDecoration: "underline",
+                            cursor: "pointer"
+                        }
+                    }}>
+                        <Link href={`/dashboard/doctor/tests/${test.test.id}`} target={"_blank"}>
+                            {test.test.name}
+                        </Link>
                     </Typography>
                     <DialogCloseButton onClose={onClose} />
                 </DialogTitle>

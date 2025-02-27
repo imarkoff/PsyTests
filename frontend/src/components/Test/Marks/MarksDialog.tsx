@@ -16,6 +16,7 @@ import React, {useState} from "react";
 import useTestMarks from "@/components/Test/Marks/useTestMarks";
 import TestBase from "@/schemas/TestBase";
 import DialogCloseButton from "@/components/DialogCloseButton";
+import MarksRow from "./MarksRow";
 
 /**
  * Display test marks system.
@@ -67,7 +68,7 @@ export default function MarksDialog({test}: {test: TestBase}) {
                                     Вік пацієнта
                                 </TableCell>
                             </TableRow>
-                            <TableRow sx={{position: "sticky", top: 85, zIndex: 1}}>
+                            <TableRow sx={{position: "sticky", top: 80, zIndex: 1}}>
                                 {marks?.[0].map((header, index) => (
                                     <TableCell key={index}>
                                         {header}
@@ -79,17 +80,13 @@ export default function MarksDialog({test}: {test: TestBase}) {
 
                         <TableBody>
                             {marks?.slice(1).map((row, index) => (
-                                <TableRow key={index} hover>
+                                <MarksRow key={index}>
                                     {row.map((cell, index) => (
-                                        <TableCell
-                                            key={index}
-                                            variant={index === 0 ? "head" : undefined}
-                                            sx={{zIndex: 0}}
-                                        >
+                                        <TableCell key={index}>
                                             {cell}
                                         </TableCell>
                                     ))}
-                                </TableRow>
+                                </MarksRow>
                             ))}
                         </TableBody>
                     </Table>
