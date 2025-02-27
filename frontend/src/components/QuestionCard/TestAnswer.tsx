@@ -1,9 +1,9 @@
 import {FormControlLabel, Radio, Typography} from "@mui/material";
 import {testImage} from "@/services/testsService";
 import React from "react";
-import {Answer} from "@/schemas/Test";
 import LazyImage from "@/components/LazyImage";
 import {QuestionBaseProps} from "@/components/QuestionCard/QuesitonCard";
+import {Answer} from "@/schemas/Question";
 
 type TestAnswerProps = {
     answer: Answer,

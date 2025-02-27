@@ -1,4 +1,3 @@
-import {Question} from "@/schemas/Test";
 import {
     Card,
     CardContent,
@@ -12,6 +11,7 @@ import TestAnswer from "@/components/QuestionCard/TestAnswer";
 import {useFormContext} from "react-hook-form";
 import LazyImage from "@/components/LazyImage";
 import LazyComponent from "@/components/LazyComponent";
+import Question from "@/schemas/Question";
 
 export type QuestionBaseProps = {
     /** Index of the question in the test */

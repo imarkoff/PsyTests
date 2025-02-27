@@ -1,6 +1,6 @@
 import Test from "@/schemas/Test";
 import {Box, Typography} from "@mui/material";
-import Marks from "@/components/Test/Marks";
+import MarksDialog from "@/components/Test/Marks/MarksDialog";
 import QuestionCard from "@/components/QuestionCard/QuesitonCard";
 import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
 import countTestQuestions from "@/utils/countTestQuestions";
@@ -25,7 +25,7 @@ export default function TestContent({test}: {test?: Test | TestBase}) {
                 </Typography>
                 <Box sx={{display: "flex", alignItems: "center", gap: 1, py: 1}}>
                     <AssignTestButton testId={test.id} />
-                    {test.marks_path && <Marks test={test} />}
+                    {test.marks_path && <MarksDialog test={test} />}
                 </Box>
             </Box>
 

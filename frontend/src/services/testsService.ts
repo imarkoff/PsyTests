@@ -3,9 +3,10 @@
  */
 
 import apiPrivate from "@/api/apiPrivate";
-import Test, {TestMark} from "@/schemas/Test";
+import Test from "@/schemas/Test";
 import api from "@/api/api";
 import TestBase from "@/schemas/TestBase";
+import CsvData from "@/schemas/CsvData";
 
 export const endpoint = "/tests";
 
@@ -20,4 +21,4 @@ export const testImage =
     `${api.defaults.baseURL}${endpoint}/${testId}/image?image_path=${imagePath}${modulePath ? `&module_path=${modulePath}` : ""}`;
 
 export const getTestMarks = async (testId: string) =>
-    await apiPrivate.get<TestMark[]>(`${endpoint}/${testId}/marks`).then(res => res.data);
+    await apiPrivate.get<CsvData>(`${endpoint}/${testId}/marks`).then(res => res.data);

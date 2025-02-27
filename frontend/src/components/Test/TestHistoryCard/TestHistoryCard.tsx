@@ -22,7 +22,7 @@ export default function TestHistoryCard({test}: {test: TestResult}) {
                 <TestValues title={"Дата проходження"}>{dateMed(test.passed_at)}</TestValues>
                 <TestValues title={"Кількість набраних балів"}>{correctPoints} з {totalPoints}</TestValues>
                 {test.verdict && (
-                    <TestValues title={"Висновок"}>{test.verdict}</TestValues>
+                    <TestValues title={"Висновок"}>{test.verdict} {test.test.marks_unit}</TestValues>
                 )}
             </CardContent>
 
