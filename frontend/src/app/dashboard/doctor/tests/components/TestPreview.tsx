@@ -1,8 +1,8 @@
 import {Card, CardActionArea, CardHeader} from "@mui/material";
-import Test from "@/schemas/Test";
+import TestBase from "@/schemas/TestBase";
 
 interface TestPreviewProps {
-    test: Test;
+    test: TestBase;
     onClick: () => void;
     selected: boolean;
 }

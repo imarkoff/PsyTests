@@ -1,10 +1,8 @@
-export default interface Test {
-    id: string;
-    name: string;
-    description?: string;
-    questions?: Question[];
-    modules: TestModule[];
-    marks: TestMarks;
+import TestBase from "@/schemas/TestBase";
+
+export default interface Test extends TestBase {
+    questions: Question[] | null;
+    modules: TestModule[] | null;
 }
 
 export interface TestModule {
@@ -35,17 +33,16 @@ export interface Answer {
 /**
  * TestMarks schema for the test.
  * @description
- * Each mark means range of points percentage.
- * Example: 25-75 (75 is inclusive): Intermediate intelligence
  * @example
  * {
- *     "5": "Low intelligence",
- *     "25": "Below average intelligence",
- *     "75": "Intermediate intelligence",
- *     "95": "Upper intermediate intelligence",
- *     "100": "High intelligence"
+ *    "6": "Норма",
+ *    "7": "Норма",
+ *    "8": "Норма",
+ *    "9": "Норма",
+ *    "_": "30-35"
  * }
  */
-export interface TestMarks {
+export interface TestMark {
+    _: string;
     [key: string]: string;
 }

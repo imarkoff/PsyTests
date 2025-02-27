@@ -1,12 +1,11 @@
-import {TestMarks} from "@/schemas/Test";
-
 /**
  * Short version of a test
  * @see Test
  */
-export default interface TestShort {
+export default interface TestBase {
     id: string;
     name: string;
     description?: string;
-    marks: TestMarks;
+    marks_path?: string;
+    marks_unit?: string;
 }

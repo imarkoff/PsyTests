@@ -5,13 +5,13 @@ import useSWR from "swr";
 import {getTests} from "@/services/testsService";
 import TestPreview from "@/app/dashboard/doctor/tests/components/TestPreview";
 import {useState} from "react";
-import Test from "@/schemas/Test";
 import TestBox from "@/app/dashboard/doctor/tests/layout/TestBox";
+import TestBase from "@/schemas/TestBase";
 
 export default function TestsPage() {
     const {data: tests} = useSWR("getTests", getTests);
 
-    const [selectedTest, setSelectedTest] = useState<Test>();
+    const [selectedTest, setSelectedTest] = useState<TestBase>();
 
     return (
         <Box sx={{
@@ -36,7 +36,7 @@ export default function TestsPage() {
                 ))}
             </Box>
             <TestBox
-                test={selectedTest}
+                testPreview={selectedTest}
                 onClose={() => setSelectedTest(undefined)}
             />
         </Box>

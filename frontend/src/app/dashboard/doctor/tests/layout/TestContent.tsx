@@ -4,9 +4,13 @@ import Marks from "@/components/Test/Marks";
 import QuestionCard from "@/components/QuestionCard/QuesitonCard";
 import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
 import countTestQuestions from "@/utils/countTestQuestions";
+import TestBase from "@/schemas/TestBase";
 
-export default function TestContent({test}: {test?: Test}) {
-    const {totalQuestions, totalPoints} = countTestQuestions(test);
+export default function TestContent({test}: {test?: Test | TestBase}) {
+    const isBase = (test as Test) === undefined;
+    console.log(test);
+
+    const {totalQuestions, totalPoints} = !isBase ? countTestQuestions(test as Test) : {totalQuestions: 0, totalPoints: 0};
 
     return (test
         ? (<>
@@ -21,11 +25,11 @@ export default function TestContent({test}: {test?: Test}) {
                 </Typography>
                 <Box sx={{display: "flex", alignItems: "center", gap: 1, py: 1}}>
                     <AssignTestButton testId={test.id} />
-                    {test.marks && <Marks marks={test.marks} />}
+                    {test.marks_path && <Marks test={test} />}
                 </Box>
             </Box>
 
-            {test.questions && test.questions.map((question, index) => (
+            {(test as Test).questions?.map((question, index) => (
                 <QuestionCard
                     question={question}
                     correctAnswer={question.answers.findIndex(answer => answer.is_correct)}
@@ -35,7 +39,7 @@ export default function TestContent({test}: {test?: Test}) {
                     disabled
                 />
             ))}
-            {test.modules.map((module, index) => (
+            {(test as Test).modules?.map((module, index) => (
                 module.questions.map((question, j) => (
                     <QuestionCard
                         question={question}

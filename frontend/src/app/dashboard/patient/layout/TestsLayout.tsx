@@ -12,8 +12,8 @@ export default function TestsLayout() {
         data: tests
     } = useSWR("getAssignedTests", getAssignedTests);
 
-    const onStartTest = (testId: string) => {
-        redirect(`/dashboard/patient/tests/${testId}`);
+    const onStartTest = (testId: string, assignedTestId: string) => {
+        redirect(`/dashboard/patient/tests/${testId}/${assignedTestId}`);
     }
 
     return (
@@ -23,7 +23,7 @@ export default function TestsLayout() {
                     <AssignedTestCard
                         key={test.id}
                         test={test}
-                        onStart={() => onStartTest(test.id)}
+                        onStart={() => onStartTest(test.test.id, test.id)}
                     />)}
             </Box>
         </TestsLayoutBox>

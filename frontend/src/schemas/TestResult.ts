@@ -1,14 +1,15 @@
-import TestShort from "@/schemas/TestShort";
+import TestBase from "@/schemas/TestBase";
 
 /**
  * Result of a test
- * @see TestShort
+ * @see TestBase
  */
 export default interface TestResult {
     id: string;
-    test: TestShort;
+    test: TestBase;
     patient_id: string;
     results: Results;
+    verdict?: string;
     passed_at: string; // ISO date
 }
 

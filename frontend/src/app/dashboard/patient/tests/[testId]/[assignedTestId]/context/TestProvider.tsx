@@ -2,24 +2,32 @@
 
 import {ReactNode, useState} from "react";
 import TestContext from "./TestContext";
-import {getTest, passTest} from "@/services/patientTestsService";
+import {passTest} from "@/services/patientTestsService";
 import useSWR from "swr";
 import PassTest from "@/schemas/PassTest";
-import PassTestData from "@/app/dashboard/patient/tests/[assignedTestId]/schemas/PassTestData";
+import PassTestData from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
+import {getTest} from "@/services/testsService";
+
+interface TestProviderProps {
+    testId: string;
+    assignedTestId: string;
+    children: ReactNode;
+}
 
 /**
  * Provides test-related data and actions to its children via context.
  *
  * @param props
+ * @param props.testId - The id of the test to pass
  * @param props.assignedTestId - The ID of the assigned test.
  * @param props.children - The child components that will consume the context.
  */
-export default function TestProvider({assignedTestId, children}: { assignedTestId: string, children: ReactNode }) {
+export default function TestProvider({testId, assignedTestId, children}: TestProviderProps) {
     const {
         data: test
     } = useSWR(
-        `getTest/${assignedTestId}`,
-        () => getTest(assignedTestId)
+        `getTest/${testId}`,
+        () => getTest(testId)
     );
 
     const [passed, setPassed] = useState(false);
@@ -35,7 +43,7 @@ export default function TestProvider({assignedTestId, children}: { assignedTestI
 
         try {
             const testData: PassTest = {
-                assigned_test_id: test.id,
+                assigned_test_id: assignedTestId,
                 // Convert empty strings to null
                 answers: Object.keys(data).reduce((acc, pathName) => {
                     acc[pathName] = data[pathName].map(answerId => answerId === "" ? null : answerId);
@@ -57,5 +65,5 @@ export default function TestProvider({assignedTestId, children}: { assignedTestI
         }}>
             {children}
         </TestContext.Provider>
-    )
+    );
 }

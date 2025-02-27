@@ -1,15 +1,15 @@
 "use client";
 
-import {TestMarks} from "@/schemas/Test";
 import {Box, Button, Popover, Typography} from "@mui/material";
 import React, {useState} from "react";
+import TestBase from "@/schemas/TestBase";
 
 /**
  * Display test marks system. Shows a button which opens a popover with marks system.
  * @param marks
  * @constructor
  */
-export default function Marks({marks}: {marks: TestMarks}) {
+export default function Marks({test}: {test: TestBase}) {
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,11 +40,6 @@ export default function Marks({marks}: {marks: TestMarks}) {
                     padding: ".5rem",
                     display: "flex", flexDirection: "column", gap: ".5rem"
                 }}>
-                    {Object.entries(marks).map(([mark, description]) => (
-                        <Typography key={mark}>
-                            <strong>{mark}%</strong>: {description}
-                        </Typography>
-                    ))}
                 </Box>
             </Popover>
         </Box>

@@ -39,8 +39,13 @@ export default function ResultsDialog({test}: {test: TestResult}) {
 
                 <DialogContent sx={{display: "grid", gap: 2}}>
                     <ResultsTable results={test.results} />
-                    <Box sx={{display: "flex", gap: 1, justifyContent: "flex-start", flexWrap: "wrap"}}>
-                        <TestValues title={"Дата проходження"}>{dateMed(test.passed_at)}</TestValues>
+                    <Box sx={{display: "flex", gap: 1, alignItems: "end", flexWrap: "wrap"}}>
+                        <Box>
+                            {test.verdict && (
+                                <TestValues title={"Висновок"}>{test.verdict}</TestValues>
+                            )}
+                            <TestValues title={"Дата проходження"}>{dateMed(test.passed_at)}</TestValues>
+                        </Box>
                         <Box sx={{display: "flex", gap: 1, justifyContent: "end", flexGrow: 1}}>
                             <ExportButton test={test} />
                         </Box>

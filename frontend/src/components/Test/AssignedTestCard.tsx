@@ -1,10 +1,8 @@
 import PatientTest from "@/schemas/PatientTest";
 import {Button, Card, CardActions, CardContent, CardHeader, Typography} from "@mui/material";
-import Marks from "@/components/Test/Marks";
 import AssignedBy from "@/app/dashboard/patient/components/AssignedBy";
 import {dateMed} from "@/utils/formatDate";
 import TestValues from "@/components/Test/TestValues";
-import countTestQuestions from "@/utils/countTestQuestions";
 
 interface AvailableTestCardProps {
     test: PatientTest;
@@ -20,21 +18,17 @@ interface AvailableTestCardProps {
  * @constructor
  */
 export default function AssignedTestCard({test, onStart, onDelete}: AvailableTestCardProps) {
-    const {totalQuestions} = countTestQuestions(test.test);
-
     return (
         <Card variant={"outlined"}>
             <CardHeader title={test.test.name} />
 
             <CardContent sx={{paddingTop: 0, paddingBottom: 0}}>
                 <Typography>{test.test.description}</Typography>
-                <TestValues title={"Кількість запитань"}>{totalQuestions}</TestValues>
                 <AssignedBy assignedBy={test.assigned_by_id} />
                 <TestValues title={"Дата назначення"}>{dateMed(test.assigned_at)}</TestValues>
             </CardContent>
 
             <CardActions sx={{justifyContent: "space-between"}}>
-                {test.test.marks && <Marks marks={test.test.marks} />}
                 {onDelete && (
                     <Button variant="outlined" color="error" onClick={() => onDelete(test.id)}>
                         Забрати доступ

@@ -7,7 +7,7 @@ import Test from "@/schemas/Test";
 export default function countTestQuestions(test?: Test) {
     const total = [
         ...(test?.questions ?? []),
-        ...(test?.modules.flatMap(module => module.questions) ?? [])
+        ...(test?.modules?.flatMap(module => module.questions) ?? [])
     ];
 
     const totalQuestions = total.length;

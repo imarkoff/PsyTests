@@ -1,8 +1,8 @@
 import {Box, Button} from "@mui/material";
 import DoneIcon from '@mui/icons-material/Done';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import onLeaveClick from "@/app/dashboard/patient/tests/[assignedTestId]/components/onLeaveClick";
-import {useTestContext} from "@/app/dashboard/patient/tests/[assignedTestId]/context/TestContext";
+import onLeaveClick from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/components/onLeaveClick";
+import {useTestContext} from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/context/TestContext";
 
 export default function PassTestButton() {
     const { passed, loading } = useTestContext();
