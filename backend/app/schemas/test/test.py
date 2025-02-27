@@ -36,10 +36,10 @@ class Test(TestBase):
             id=test_id,
             name=test_data.get("name"),
             modules=[get_test_module(test_id, module) for module in test_data.get('modules', [])],
-            description=test_data.get("description"),
+            description=test_data.get("description", None),
             questions=[Question.from_json(question_data) for question_data in test_data.get("questions", [])],
-            marks_path=test_data.get("marks_path"),
-            marks_unit=test_data.get("marks_unit")
+            marks_path=test_data.get("marks", None),
+            marks_unit=test_data.get("marks_unit", None)
         )
 
     def get_module(self, module_name: str) -> TestModule | None:

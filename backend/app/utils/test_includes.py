@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Union
 from uuid import UUID
 
 import numpy as np
@@ -11,6 +12,10 @@ from app.schemas.test.test_module import TestModule
 from app.schemas.test_base import TestBase
 
 
+def get_marks_path(test: TestBase) -> str:
+    return os.path.join(os.path.dirname(tests.__file__), test.id.__str__(), test.marks_path)
+
+
 async def get_test_marks(test: TestBase) -> Marks | None:
     """
     Get test marks for a single test.
@@ -19,7 +24,7 @@ async def get_test_marks(test: TestBase) -> Marks | None:
     if not test.marks_path:
         return None
 
-    marks_file = os.path.join(os.path.dirname(tests.__file__), test.id.__str__(), test.marks_path)
+    marks_file = get_marks_path(test)
 
     if os.path.isfile(marks_file):
         df = pd.read_csv(marks_file)

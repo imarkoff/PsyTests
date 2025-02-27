@@ -40,7 +40,7 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
         test_id=test.id,
         patient_id=patient.id,
         results=convert_results(test, pass_dto.answers).model_dump(),
-        verdict=await get_result_mark(test.marks, collected_points[1], patient)
+        verdict=await get_result_mark(test, collected_points[1], patient)
     )
 
     db.add(new_history)

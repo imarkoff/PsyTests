@@ -33,6 +33,6 @@ class TestBase(BaseModel):
             id=test_data.get("id"),
             name=test_data.get("name"),
             description=test_data.get("description", None),
-            marks_path=test_data.get("marks_path", None),
+            marks_path=test_data.get("marks", None),
             marks_unit=test_data.get("marks_unit", None)
         )

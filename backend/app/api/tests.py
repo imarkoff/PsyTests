@@ -11,10 +11,10 @@ from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
 from app.schemas.role import Role
 from app.schemas.test.test import Test
-from app.schemas.test.test_marks import Marks, TestMarks
 from app.schemas.test_base import TestBase
 from app.services import tests_service
 from app.utils import test_includes
+from app.utils.read_csv_as_matrix import read_csv_as_matrix
 
 router = APIRouter(prefix="/tests", tags=["tests"])
 
@@ -63,9 +63,10 @@ async def get_test_image(test_id: UUID, image_path: str, module_path: Optional[s
         return Response(status_code=404)
 
 
-@router.get("/{test_id}/marks", summary="Get test marks", response_model=TestMarks | None, responses={
+@router.get("/{test_id}/marks", summary="Get test marks",
+            responses={
     404: {"description": "Test not found"},
-
+    200: {"model": list[list[int | str | float | None]]}
 })
 async def get_test_marks(
         test_id: UUID,
@@ -75,7 +76,7 @@ async def get_test_marks(
     JWTBearer.auth(credentials, db, role=Role.DOCTOR)
     try:
         test = await tests_service.get_test(test_id, TestBase)
-        marks = await test_includes.get_test_marks(test)
-        return TestMarks.from_marks(marks) if marks else None
+        marks_path = test_includes.get_marks_path(test)
+        return read_csv_as_matrix(marks_path)
     except FileNotFoundError:
         return Response(status_code=404)
