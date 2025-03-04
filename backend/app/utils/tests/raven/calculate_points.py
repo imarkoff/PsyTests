@@ -1,7 +1,7 @@
-from app.schemas.test.test import Test
+from app.utils.tests.raven.raven_test import RavenTest
 
 
-async def calculate_points(test: Test, answers: dict[str, list[int]]) -> tuple[int, int]:
+async def calculate_points(test: RavenTest, answers: dict[str, list[int]]) -> tuple[int, int]:
     """
     Calculate points for test
     """

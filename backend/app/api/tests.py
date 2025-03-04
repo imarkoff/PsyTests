@@ -10,11 +10,12 @@ from starlette.responses import Response
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
 from app.schemas.role import Role
-from app.schemas.test.test import Test
+from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test_base import TestBase
 from app.services import tests_service
-from app.utils import test_includes
+from app.utils.tests.raven import test_includes
 from app.utils.read_csv_as_matrix import read_csv_as_matrix
+from app.utils.tests.mmpi.mmpi_test import MMPITest
 
 router = APIRouter(prefix="/tests", tags=["tests"])
 
@@ -32,7 +33,7 @@ async def get_tests(
 
 
 @router.get("/{test_id}", summary="Get test info. If doctor, show correct answers",
-            response_model=Test, responses={
+            response_model=RavenTest | MMPITest, responses={
         404: {"description": "Test not found"},
     })
 async def get_test(
@@ -42,9 +43,9 @@ async def get_test(
 ):
     try:
         JWTBearer.auth(credentials, db, role=Role.DOCTOR)
-        return await tests_service.get_test(test_id, Test)
+        return await tests_service.get_test(test_id)
     except HTTPException:
-        test = await tests_service.get_test(test_id, Test)
+        test = await tests_service.get_test(test_id)
         test.hide_correct_answers()
         return test
     except FileNotFoundError:

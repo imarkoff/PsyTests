@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
-from app.schemas.test.question import Question
+from app.utils.tests.raven.question import Question
 
 
 class TestModule(BaseModel):

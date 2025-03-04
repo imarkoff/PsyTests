@@ -1,9 +1,9 @@
-from app.schemas.test.question import Question
-from app.schemas.test.test import Test
+from app.utils.tests.raven.question import Question
+from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test.test_history_results import Results, Answer
 
 
-def convert_results(test: Test, result: dict[str, list[int]]) -> Results:
+def convert_results(test: RavenTest, result: dict[str, list[int]]) -> Results:
     """
     Convert test results to DTO
     """

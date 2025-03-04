@@ -4,8 +4,9 @@ from typing import Type
 from uuid import UUID
 
 from app.db import tests
-from app.schemas.test.test import Test
+from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test_base import TestBase
+from app.utils.tests.mmpi.mmpi_test import MMPITest
 
 
 async def get_tests() -> list[TestBase]:
@@ -27,7 +28,7 @@ async def get_tests() -> list[TestBase]:
     return test_list
 
 
-async def get_test[T](test_id: UUID, test_class: Type[Test] | Type[TestBase]) -> T:
+async def get_test[T](test_id: UUID, test_class: Type[RavenTest] | Type[TestBase] = None) -> T:
     """
     Get test by id
 
@@ -38,6 +39,12 @@ async def get_test[T](test_id: UUID, test_class: Type[Test] | Type[TestBase]) ->
     test_file = os.path.join(os.path.dirname(tests.__file__), test_id.__str__(), 'test.json')
     with open(test_file, 'r') as file:
         test_data = json.load(file)
+
+        test_class = test_class or {
+            "mmpi": MMPITest,
+            "raven": RavenTest
+        }.get(test_data.get("type"), TestBase)
+
         test = test_class.from_json(test_data)
         return test
 

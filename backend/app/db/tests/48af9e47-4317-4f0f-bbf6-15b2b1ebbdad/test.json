@@ -3,5 +3,6 @@
   "name": "Чорно-білі прогресивні матриці",
   "modules": ["./A", "./B", "./C", "./D", "./E"],
   "marks": "marks.csv",
-  "marks_unit": "IQ"
+  "marks_unit": "IQ",
+  "type": "raven"
 }

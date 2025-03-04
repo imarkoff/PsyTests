@@ -7,15 +7,15 @@ from app.db.models.patient_test import PatientTest
 from app.db.models.test_history import TestHistory
 from app.exceptions import NotFoundError
 from app.schemas.pass_test import PassTestDto
-from app.schemas.test.test import Test
+from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test_result import TestResultDto, TestResultShortDto
 from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 from app.services.tests_service import get_test
-from app.utils.calculate_points import calculate_points
-from app.utils.convert_results import convert_results
-from app.utils.get_result_mark import get_result_mark
+from app.utils.tests.raven.calculate_points import calculate_points
+from app.utils.tests.raven.convert_results import convert_results
+from app.utils.tests.raven.get_result_mark import get_result_mark
 
 
 async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> TestResultShortDto:
@@ -32,7 +32,7 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
     if not doctor_test:
         raise NotFoundError
 
-    test: Test = await get_test(doctor_test.test_id, Test)
+    test: RavenTest = await get_test(doctor_test.test_id, RavenTest)
 
     collected_points = await calculate_points(test, pass_dto.answers)
 

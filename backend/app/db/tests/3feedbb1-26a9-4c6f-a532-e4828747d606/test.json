@@ -2,5 +2,6 @@
     "id": "3feedbb1-26a9-4c6f-a532-e4828747d606",
     "name": "Кольорові прогресивні матриці",
     "modules": ["./A", "./AB", "./B" ],
-    "marks": "marks.csv"
+    "marks": "marks.csv",
+    "type": "raven"
 }

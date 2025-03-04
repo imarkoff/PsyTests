@@ -2,13 +2,13 @@ from typing import Optional
 
 from pydantic import Field, ConfigDict
 
-from app.schemas.test.question import Question
+from app.utils.tests.raven.question import Question
 from app.schemas.test.test_module import TestModule
 from app.schemas.test_base import TestBase
-from app.utils.test_includes import get_test_module
+from app.utils.tests.raven.test_includes import get_test_module
 
 
-class Test(TestBase):
+class RavenTest(TestBase):
     modules: Optional[list[TestModule]] = Field(None, title="Modules")
     questions: Optional[list[Question]] = Field(..., title="Questions")
 
@@ -29,12 +29,13 @@ class Test(TestBase):
     )
 
     @classmethod
-    def from_json(cls, test_data: dict) -> 'Test':
+    def from_json(cls, test_data: dict) -> 'RavenTest':
         test_id = test_data.get("id")
 
         return cls(
             id=test_id,
             name=test_data.get("name"),
+            type=test_data.get("type"),
             modules=[get_test_module(test_id, module) for module in test_data.get('modules', [])],
             description=test_data.get("description", None),
             questions=[Question.from_json(question_data) for question_data in test_data.get("questions", [])],

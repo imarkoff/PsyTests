@@ -1,15 +1,15 @@
-from app.schemas.test.test import Test
+from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test.test_marks import MarksRow
 from app.schemas.user_auth import UserDto
-from app.utils import test_includes
+from app.utils.tests.raven import test_includes
 
 
-async def get_result_mark(test: Test, points: int, patient: UserDto) -> str | None:
+async def get_result_mark(test: RavenTest, points: int, patient: UserDto) -> str | None:
     """
     Get the mark of the test result for the patient.
 
     Args:
-        test (Test): The test.
+        test (RavenTest): The test.
         points (int): The points of the test result.
         patient (UserDto): The patient.
 
