@@ -1,50 +1,10 @@
-from pydantic import BaseModel, ConfigDict, UUID4
+from functools import lru_cache
+
+from pydantic import ConfigDict, UUID4
 
 from app.schemas.test_base import TestBase
-
-
-class MMPIAnswer(BaseModel):
-    scales: list[str]
-    answer: bool
-
-
-class MMPIQuestion(BaseModel):
-    id: str
-    question: str
-    answers: list[MMPIAnswer]
-
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-        json_schema_extra={
-            "example": {
-                "id": "1",
-                "question": "I like to go to parties",
-                "answers": [
-                    {
-                        "scales": ["0"],
-                        "answer": True
-                    }
-                ]
-            }
-        }
-    )
-
-
-class MMPIScale(BaseModel):
-    label: str
-    abbrev: str | None = None
-    name: str
-
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-        json_schema_extra={
-            "example": {
-                "label": "0",
-                "abbrev": "Si",
-                "name": "Social introversion"
-            }
-        }
-    )
+from app.utils.tests.mmpi.mmpi_question import MMPIQuestion
+from app.utils.tests.mmpi.mmpi_scale import MMPIScale
 
 
 class MMPITest(TestBase):
@@ -81,3 +41,45 @@ class MMPITest(TestBase):
     def hide_correct_answers(self):
         for question in self.questions:
             question.answers = []
+
+    def calculate_results(self, answers: dict[str, list[int | None]]) -> dict[str, int]:
+        results = {scale.label: 0 for scale in self.scales}
+
+        for i, question in enumerate(self.questions):
+            patient_answer = None
+            if answers["_"][i] == 0:
+                patient_answer = True
+            elif answers["_"][i] == 1:
+                patient_answer = False
+
+            for answer in question.answers:
+                for label in answer.scales:
+                    results[label] += 1 if answer.answer == patient_answer else 0
+
+        return results
+
+    def convert_results(self, results: dict[str, int]) -> dict[str, float]:
+        converted: dict[str, float] = {}
+        scales_count = self.count_scale_questions()
+
+        for scale in self.scales:
+            result = results[scale.label]
+
+            if scale.multiply:
+                result *= scale.multiply.multiplier
+
+            result_percent = result / scales_count[scale.label]
+            converted[scale.label] = scale.min + (scale.max - scale.min) * result_percent
+
+        return converted
+
+    # TODO: cache the result
+    def count_scale_questions(self):
+        scales = {scale.label: 0 for scale in self.scales}
+
+        for question in self.questions:
+            for answer in question.answers:
+                for label in answer.scales:
+                    scales[label] += 1
+
+        return scales

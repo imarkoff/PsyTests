@@ -7,7 +7,6 @@ from app.db.models.patient_test import PatientTest
 from app.db.models.test_history import TestHistory
 from app.exceptions import NotFoundError
 from app.schemas.pass_test import PassTestDto
-from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test_result import TestResultDto, TestResultShortDto
 from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
@@ -32,7 +31,7 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
     if not doctor_test:
         raise NotFoundError
 
-    test: RavenTest = await get_test(doctor_test.test_id, RavenTest)
+    test = await get_test(doctor_test.test_id)
 
     collected_points = await calculate_points(test, pass_dto.answers)
 
