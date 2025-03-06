@@ -1,7 +1,12 @@
-from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test.test_marks import MarksRow
 from app.schemas.user_auth import UserDto
 from app.utils.tests.raven import test_includes
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.utils.tests.raven.raven_test import RavenTest
+else:
+    RavenTest = "RavenTest"
 
 
 async def get_result_mark(test: RavenTest, points: int, patient: UserDto) -> str | None:

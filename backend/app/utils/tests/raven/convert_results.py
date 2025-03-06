@@ -1,7 +1,11 @@
 from app.utils.tests.raven.question import Question
-from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test.test_history_results import Results, Answer
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from app.utils.tests.raven.raven_test import RavenTest
+else:
+    RavenTest = "RavenTest"
 
 def convert_results(test: RavenTest, result: dict[str, list[int]]) -> Results:
     """

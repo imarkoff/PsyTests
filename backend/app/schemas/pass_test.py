@@ -1,11 +1,13 @@
+from typing import Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
+type PassTestAnswers = Dict[str, List[Optional[int]]]
 
 class PassTestDto(BaseModel):
     assigned_test_id: UUID
-    answers: dict[str, list[int | None]]
+    answers: PassTestAnswers
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,

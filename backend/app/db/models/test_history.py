@@ -24,15 +24,6 @@ class TestHistory(Base):
     patient_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True, nullable=False)
     patient: Mapped[User] = relationship(back_populates="tests_history", foreign_keys=[patient_id])
     passed_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
-    results: Mapped[dict[str, list[dict[str, int | None]]]] = mapped_column(JSON, nullable=False)
-    verdict: Mapped[str | None] = mapped_column(nullable=True)
+    results: Mapped[dict[str, any]] = mapped_column(JSON, nullable=False)
+    verdict: Mapped[dict[str, any] | None] = mapped_column(JSON, nullable=True)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.validate_results()
-
-    def validate_results(self):
-        try:
-            Results.model_validate(self.results)
-        except ValidationError as e:
-            raise ValueError(f"Invalid results structure: {e}")

@@ -2,6 +2,12 @@ from typing import Optional
 
 from pydantic import Field, ConfigDict
 
+from app.db.models.test_history import TestHistory
+from app.schemas.pass_test import PassTestAnswers
+from app.schemas.user_auth import UserDto
+from app.utils.tests.raven.calculate_points import calculate_points
+from app.utils.tests.raven.convert_results import convert_results
+from app.utils.tests.raven.get_result_mark import get_result_mark
 from app.utils.tests.raven.question import Question
 from app.schemas.test.test_module import TestModule
 from app.schemas.test_base import TestBase
@@ -67,3 +73,15 @@ class RavenTest(TestBase):
             for question in module.questions:
                 for answer in question.answers:
                     answer.is_correct = False
+
+    async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
+        collected_points = await calculate_points(self, answers)
+
+        return TestHistory(
+            test_id=self.id,
+            patient_id=patient.id,
+            results=convert_results(self, answers).model_dump(),
+            verdict={
+                "_": await get_result_mark(self, collected_points[1], patient)
+            }
+        )

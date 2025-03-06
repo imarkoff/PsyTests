@@ -1,8 +1,9 @@
-from functools import lru_cache
-
 from pydantic import ConfigDict, UUID4
 
+from app.db.models.test_history import TestHistory
+from app.schemas.pass_test import PassTestAnswers
 from app.schemas.test_base import TestBase
+from app.schemas.user_auth import UserDto
 from app.utils.tests.mmpi.mmpi_question import MMPIQuestion
 from app.utils.tests.mmpi.mmpi_scale import MMPIScale
 
@@ -42,7 +43,22 @@ class MMPITest(TestBase):
         for question in self.questions:
             question.answers = []
 
+    async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
+        return TestHistory(
+            test_id=self.id,
+            patient_id=patient.id,
+            results=answers,
+            verdict={
+                "raw": self.calculate_results(answers),
+                "converted": self.convert_results(self.calculate_results(answers))
+            }
+        )
+
     def calculate_results(self, answers: dict[str, list[int | None]]) -> dict[str, int]:
+        """
+        Calculate results for each scale
+        """
+
         results = {scale.label: 0 for scale in self.scales}
 
         for i, question in enumerate(self.questions):
@@ -59,6 +75,10 @@ class MMPITest(TestBase):
         return results
 
     def convert_results(self, results: dict[str, int]) -> dict[str, float]:
+        """
+        Convert calculated results to scale values
+        """
+
         converted: dict[str, float] = {}
         scales_count = self.count_scale_questions()
 

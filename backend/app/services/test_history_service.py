@@ -12,9 +12,8 @@ from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 from app.services.tests_service import get_test
-from app.utils.tests.raven.calculate_points import calculate_points
-from app.utils.tests.raven.convert_results import convert_results
-from app.utils.tests.raven.get_result_mark import get_result_mark
+from app.utils.tests.mmpi.mmpi_test import MMPITest
+from app.utils.tests.raven.raven_test import RavenTest
 
 
 async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> TestResultShortDto:
@@ -31,16 +30,9 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
     if not doctor_test:
         raise NotFoundError
 
-    test = await get_test(doctor_test.test_id)
+    test: RavenTest | MMPITest = await get_test(doctor_test.test_id)
 
-    collected_points = await calculate_points(test, pass_dto.answers)
-
-    new_history = TestHistory(
-        test_id=test.id,
-        patient_id=patient.id,
-        results=convert_results(test, pass_dto.answers).model_dump(),
-        verdict=await get_result_mark(test, collected_points[1], patient)
-    )
+    new_history = await test.pass_test(pass_dto.answers, patient)
 
     db.add(new_history)
     db.commit()
