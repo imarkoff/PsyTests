@@ -2,10 +2,10 @@ import {FormControlLabel, Radio, Typography} from "@mui/material";
 import {testImage} from "@/services/testsService";
 import React from "react";
 import LazyImage from "@/components/LazyImage";
-import {QuestionBaseProps} from "@/components/QuestionCard/QuesitonCard";
 import {Answer} from "@/schemas/Question";
+import { QuestionBaseProps } from "./QuesitonBase";
 
-type TestAnswerProps = {
+export type TestAnswerProps = {
     answer: Answer,
     onChange: (moduleName: string | undefined, index: number) => void,
     chosenAnswer?: number,
@@ -45,20 +45,23 @@ const AnswerLabel = (
     {testId, answer, index, modulePath}: { testId: string, answer: Answer, index: number, modulePath?: string }
 ) => (
     <>
-        <Typography
-            variant={"h6"}
-            sx={answer.image ? {position: "absolute", left: 15} : {marginRight: 1}}
-        >
-            {index + 1}
+        <Typography variant={"h6"}>
+            <Typography
+                component={"span"}
+                variant={"h6"}
+                sx={answer.image ? {position: "absolute", left: 15} : {marginRight: 1}}
+            >
+                {index + 1}
+                {!answer.image && "."}
+            </Typography>
+            {answer.answer}
         </Typography>
-
-        <Typography variant={"h6"}>{answer.answer}</Typography>
 
         {answer.image && (
             <LazyImage
                 src={testImage(testId, modulePath, answer.image)}
                 alt={answer.answer || `${index + 1}`}
-                width={150}
+                width={130}
                 height={100}
                 style={{pointerEvents: "none", height: "auto"}}
             />

@@ -2,7 +2,7 @@ import {useTestContext} from "@/app/dashboard/patient/tests/[testId]/[assignedTe
 import {FormProvider, useForm} from "react-hook-form";
 import {Box, Typography} from "@mui/material";
 import LeaveTestButton from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/components/LeaveTestButton";
-import QuestionCard from "@/components/QuestionCard/QuesitonCard";
+import QuestionCard from "@/components/QuestionCard/QuestionCard";
 import PassTestButton from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/components/PassTestButton";
 import PassTestData from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
 import countTestQuestions from "@/utils/countTestQuestions";
@@ -36,6 +36,7 @@ export default function PageContent() {
                             question={question}
                             key={index}
                             index={index}
+                            testType={test!.type}
                             testId={test!.id}
                             disabled={passed}
                         />
@@ -46,6 +47,7 @@ export default function PageContent() {
                                 question={question}
                                 key={index}
                                 index={index}
+                                testType={test!.type}
                                 testId={test!.id}
                                 module={{name: module.name, path: module.path}}
                                 disabled={passed}

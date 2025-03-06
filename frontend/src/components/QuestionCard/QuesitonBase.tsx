@@ -11,7 +11,7 @@ import TestAnswer from "@/components/QuestionCard/TestAnswer";
 import {useFormContext} from "react-hook-form";
 import LazyImage from "@/components/LazyImage";
 import LazyComponent from "@/components/LazyComponent";
-import Question from "@/schemas/Question";
+import {Answer} from "@/schemas/Question";
 
 export type QuestionBaseProps = {
     /** Index of the question in the test */
@@ -28,20 +28,23 @@ export type QuestionBaseProps = {
 
 type QuestionCardProps = {
     /** The question to render */
-    question: Question;
+    question: {
+        question?: string;
+        image?: string;
+    };
+    answers: Answer[];
 } & QuestionBaseProps;
 
 /**
  * Renders a single question with its answers.
  */
-export default function QuestionCard(
-    {question, index, testId, disabled, module, correctAnswer}: QuestionCardProps
+export default function QuestionBase(
+    {question, index, testId, disabled, module, correctAnswer, answers}: QuestionCardProps
 ) {
     const {register, formState: {errors}, setValue} = useFormContext() || {formState: {errors: []}};
     const isError = Boolean(errors[index]);
 
     const fieldName = `${module ? module.name : "_"}.${index}`;
-    const defaultAnswer = question.answers.findIndex(answer => answer.is_correct);
 
     // used for showing answers from hidden input.
     // using hidden input because of LazyComponent cannot register all inputs at once
@@ -87,15 +90,16 @@ export default function QuestionCard(
                 <CardContent>
                     <RadioGroup
                         sx={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+                            display: "flex",
+                            flexDirection: "row",
+                            flexWrap: "wrap",
                             gap: "1rem",
-                            justifyItems: "center",
+                            justifyContent: "space-evenly",
                         }}
-                        defaultValue={defaultAnswer}
+                        defaultValue={correctAnswer}
                         name={`question-${index}`}
                     >
-                        {question.answers.map((answer, j) => (
+                        {answers.map((answer, j) => (
                             <TestAnswer
                                 key={j}
                                 index={j}

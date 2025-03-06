@@ -7,7 +7,7 @@ import countTestQuestions from "@/utils/countTestQuestions";
 import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
 import MarksDialog from "@/components/Test/Marks/MarksDialog";
 import {useTestsContext} from "@/app/dashboard/doctor/tests/context/TestsContext";
-import QuestionCard from "@/components/QuestionCard/QuesitonCard";
+import QuestionCard from "@/components/QuestionCard/QuestionCard";
 
 export default function TestPage() {
     const { testId } = useParams<{ testId: string }>();
@@ -42,6 +42,7 @@ export default function TestPage() {
                     question={question}
                     correctAnswer={question.answers.findIndex(answer => answer.is_correct)}
                     key={`${test.id}/question/${index}`}
+                    testType={test.type}
                     testId={test.id}
                     index={index}
                     disabled
@@ -56,6 +57,7 @@ export default function TestPage() {
                         key={`${test.id}/module/${index}/question/${j}`}
                         module={{name: module.name, path: module.path}}
                         testId={test.id}
+                        testType={test.type}
                         index={j}
                         disabled
                     />
