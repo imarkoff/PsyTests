@@ -6,9 +6,9 @@ import {useState} from "react";
 import TestValues from "@/components/Test/TestValues";
 import {dateMed} from "@/utils/formatDate";
 import DialogCloseButton from "@/components/DialogCloseButton";
-import ResultsTable from "@/components/Test/TestHistoryCard/ResultsTable";
 import ExportButton from "@/components/Test/TestHistoryCard/ExportButton";
 import Link from "next/link";
+import testsConfig from "@/tests/config";
 
 /**
  * Dialog for displaying test results
@@ -21,6 +21,8 @@ export default function ResultsDialog({test}: {test: TestResult}) {
     const onOpen = () => setOpen(true);
     const onClose = () => setOpen(false);
 
+    const { content: Content, footer: Footer } = testsConfig[test.test.type].results;
+
     return (
         <>
             <Button onClick={onOpen}>Показати результати</Button>
@@ -29,7 +31,8 @@ export default function ResultsDialog({test}: {test: TestResult}) {
                 onClose={onClose}
                 maxWidth={"md"}
                 fullWidth
-                slotProps={{ paper: { elevation: 3 } }}
+                slotProps={{ paper: { elevation: 3, sx: { m: 1, width: "100%" } } }}
+                scroll={"paper"}
             >
                 <DialogTitle sx={{ display: "flex", alignItems: "center" }}>
                     <Typography component={"span"} variant={"h6"} sx={{
@@ -46,12 +49,10 @@ export default function ResultsDialog({test}: {test: TestResult}) {
                 </DialogTitle>
 
                 <DialogContent sx={{display: "grid", gap: 2}}>
-                    <ResultsTable results={test.results} />
+                    {Content && <Content test={test} />}
                     <Box sx={{display: "flex", gap: 1, alignItems: "end", flexWrap: "wrap"}}>
                         <Box>
-                            {test.verdict?.["_"] && (
-                                <TestValues title={"Висновок"}>{test.verdict["_"]} {test.test.marks_unit}</TestValues>
-                            )}
+                            {Footer && <Footer test={test} />}
                             <TestValues title={"Дата проходження"}>{dateMed(test.passed_at)}</TestValues>
                         </Box>
                         <Box sx={{display: "flex", gap: 1, justifyContent: "end", flexGrow: 1}}>

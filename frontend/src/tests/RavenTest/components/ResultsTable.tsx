@@ -1,6 +1,6 @@
-import {Results, ResultsAnswer} from "@/schemas/TestResult";
 import styled from "@emotion/styled";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme} from "@mui/material";
+import {Results, ResultsAnswer} from "@/tests/RavenTest/schemas/RavenResult";
 
 interface Sum { correct: number; total: number; }
 

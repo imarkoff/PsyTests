@@ -47,7 +47,14 @@ export default function TestDrawer({children, isOpen, closeAction}: TestDrawerPr
             }}
         >
             <Puller />
-            <Box sx={{height: "100%", overflow: "auto", p: 1}}>
+            <Box sx={{
+                height: "100%",
+                overflow: "auto",
+                p: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1
+            }}>
                 {children}
             </Box>
         </SwipeableDrawer>

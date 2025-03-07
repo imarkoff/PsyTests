@@ -1,6 +1,6 @@
-import TestResult from "@/schemas/TestResult";
+import RavenResult from "@/tests/RavenTest/schemas/RavenResult";
 
-export default function countCorrectAnswers(test: TestResult): CorrectAnswers {
+export default function countCorrectAnswers(test: RavenResult): CorrectAnswers {
     let totalPoints = 0;
     let correctPoints = 0;
 
