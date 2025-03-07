@@ -17,6 +17,7 @@ export default function TestsLayout() {
         <Box sx={{
             overflowY: "scroll",
             display: "flex",
+            maxWidth: 550,
             px: {lg: 1},
             flexDirection: "column",
             gap: 1,

@@ -9,7 +9,7 @@ export default interface TestResult {
     test: TestBase;
     patient_id: string;
     results: Results;
-    verdict?: string;
+    verdict?: any;
     passed_at: string; // ISO date
 }
 

@@ -49,8 +49,8 @@ export default function ResultsDialog({test}: {test: TestResult}) {
                     <ResultsTable results={test.results} />
                     <Box sx={{display: "flex", gap: 1, alignItems: "end", flexWrap: "wrap"}}>
                         <Box>
-                            {test.verdict && (
-                                <TestValues title={"Висновок"}>{test.verdict} {test.test.marks_unit}</TestValues>
+                            {test.verdict?.["_"] && (
+                                <TestValues title={"Висновок"}>{test.verdict["_"]} {test.test.marks_unit}</TestValues>
                             )}
                             <TestValues title={"Дата проходження"}>{dateMed(test.passed_at)}</TestValues>
                         </Box>

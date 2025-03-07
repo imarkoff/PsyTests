@@ -3,7 +3,6 @@
  */
 
 import apiPrivate from "@/api/apiPrivate";
-import Test from "@/schemas/Test";
 import api from "@/api/api";
 import TestBase from "@/schemas/TestBase";
 import CsvData from "@/schemas/CsvData";
@@ -13,8 +12,8 @@ export const endpoint = "/tests";
 export const getTests = async () =>
     await apiPrivate.get<TestBase[]>(endpoint).then(res => res.data);
 
-export const getTest = async (testId: string) =>
-    await apiPrivate.get<Test>(`${endpoint}/${testId}`).then(res => res.data);
+export const getTest = async <T extends TestBase>(testId: string) =>
+    await apiPrivate.get<T>(`${endpoint}/${testId}`).then(res => res.data);
 
 export const testImage =
     (testId: string, modulePath: string | undefined | null, imagePath: string) =>

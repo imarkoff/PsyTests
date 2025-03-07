@@ -1,17 +1,17 @@
 import {
-    Card,
+    Card, CardActions,
     CardContent,
     CardHeader,
     CardMedia,
     RadioGroup,
 } from "@mui/material";
 import {testImage} from "@/services/testsService";
-import React, {useState} from "react";
+import React, {ReactNode, useState} from "react";
 import TestAnswer from "@/components/QuestionCard/TestAnswer";
 import {useFormContext} from "react-hook-form";
 import LazyImage from "@/components/LazyImage";
 import LazyComponent from "@/components/LazyComponent";
-import {Answer} from "@/schemas/Question";
+import {Answer} from "@/tests/RavenTest/schemas/Question";
 
 export type QuestionBaseProps = {
     /** Index of the question in the test */
@@ -33,13 +33,14 @@ type QuestionCardProps = {
         image?: string;
     };
     answers: Answer[];
+    footer?: ReactNode;
 } & QuestionBaseProps;
 
 /**
  * Renders a single question with its answers.
  */
 export default function QuestionBase(
-    {question, index, testId, disabled, module, correctAnswer, answers}: QuestionCardProps
+    {question, index, testId, disabled, module, correctAnswer, answers, footer}: QuestionCardProps
 ) {
     const {register, formState: {errors}, setValue} = useFormContext() || {formState: {errors: []}};
     const isError = Boolean(errors[index]);
@@ -114,6 +115,11 @@ export default function QuestionBase(
                         ))}
                     </RadioGroup>
                 </CardContent>
+                {footer && (
+                    <CardActions>
+                        {footer}
+                    </CardActions>
+                )}
             </Card>
         </LazyComponent>
     );

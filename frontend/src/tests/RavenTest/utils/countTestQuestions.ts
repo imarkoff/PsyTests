@@ -1,10 +1,10 @@
-import Test from "@/schemas/Test";
+import RavenTest from "@/tests/RavenTest/schemas/RavenTest";
 
 /**
  * Count total questions and points in test
  * @param [test]
  */
-export default function countTestQuestions(test?: Test) {
+export default function countTestQuestions(test?: RavenTest) {
     const total = [
         ...(test?.questions ?? []),
         ...(test?.modules?.flatMap(module => module.questions) ?? [])

@@ -1,7 +1,7 @@
 import TestBase from "@/schemas/TestBase";
-import Question from "@/schemas/Question";
+import Question from "@/tests/RavenTest/schemas/Question";
 
-export default interface Test extends TestBase {
+export default interface RavenTest extends TestBase {
     questions: Question[] | null;
     modules: TestModule[] | null;
 }
