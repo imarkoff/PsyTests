@@ -84,11 +84,12 @@ class MMPITest(TestBase):
 
         for scale in self.scales:
             result = results[scale.label]
+            multiplier = 0
 
             if scale.multiply:
-                result *= scale.multiply.multiplier
+                multiplier = results[scale.multiply.scale] * scale.multiply.multiplier
 
-            result_percent = result / scales_count[scale.label]
+            result_percent = (result + multiplier) / (scales_count[scale.label] + multiplier)
             converted[scale.label] = scale.min + (scale.max - scale.min) * result_percent
 
         return converted
