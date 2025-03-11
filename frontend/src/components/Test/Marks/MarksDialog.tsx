@@ -2,21 +2,17 @@
 
 import {
     Box,
-    Button, CircularProgress,
+    Button,
     Dialog,
     Table,
-    TableBody,
     TableCell,
-    TableContainer,
     TableHead,
     TableRow,
     Typography
 } from "@mui/material";
-import React, {useState} from "react";
-import useTestMarks from "@/components/Test/Marks/useTestMarks";
+import React, {ReactNode, useState} from "react";
 import TestBase from "@/schemas/TestBase";
 import DialogCloseButton from "@/components/DialogCloseButton";
-import MarksRow from "./MarksRow";
 
 /**
  * Display test marks system.
@@ -24,14 +20,11 @@ import MarksRow from "./MarksRow";
  * @param marks
  * @constructor
  */
-export default function MarksDialog({test}: {test: TestBase}) {
+export default function MarksDialog({test, children}: {test: TestBase, children: ReactNode}) {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    const { marks, isLoading } = useTestMarks(test.id);
-    const marksLength = marks?.[0].length ?? 0;
 
     return (
         <Box>
@@ -53,54 +46,25 @@ export default function MarksDialog({test}: {test: TestBase}) {
                     })
                 } }}
             >
-                <TableContainer sx={{maxHeight: "100%"}}>
-                    <Table stickyHeader>
-                        <TableHead>
-                            <TableRow sx={{position: "sticky", top: 0, zIndex: 1}}>
-                                <TableCell colSpan={marksLength+2}>
-                                    <Typography variant={"h6"}>
-                                        Система оцінювання
-                                        {test.marks_unit && ` (${test.marks_unit})`}
-                                    </Typography>
-                                    <Typography variant={"body2"} color={"textSecondary"}>
-                                        {test.name}
-                                    </Typography>
-                                </TableCell>
-                                <TableCloseButton onClose={handleClose}></TableCloseButton>
-                            </TableRow>
-                            <TableRow sx={{position: "relative", zIndex: 0}}>
-                                <TableCell sx={{p: 1}}>
-                                    Бали
-                                </TableCell>
-                                <TableCell colSpan={marksLength - 1} align={"center"} sx={{p: 1}}>
-                                    Вік пацієнта
-                                </TableCell>
-                            </TableRow>
-                            <TableRow sx={{position: "sticky", top: 80, zIndex: 1}}>
-                                {marks?.[0].map((header, index) => (
-                                    <TableCell key={index}>
-                                        {header}
-                                        {marksLength-1 === index && "+"}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                            {marks?.slice(1).map((row, index) => (
-                                <MarksRow key={index}>
-                                    {row.map((cell, index) => (
-                                        <TableCell key={index}>
-                                            {cell}
-                                        </TableCell>
-                                    ))}
-                                </MarksRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                {isLoading && <LoadingBox />}
+                <Table sx={{position: "sticky", top: 0}}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell colSpan={2}>
+                                <Typography variant={"h6"}>
+                                    Система оцінювання
+                                    {test.marks_unit && ` (${test.marks_unit})`}
+                                </Typography>
+                                <Typography variant={"body2"} color={"textSecondary"}>
+                                    {test.name}
+                                </Typography>
+                            </TableCell>
+                            <TableCloseButton onClose={handleClose}></TableCloseButton>
+                        </TableRow>
+                    </TableHead>
+                </Table>
+                <Box sx={{position: "relative", overflowY: "auto"}}>
+                    {children}
+                </Box>
             </Dialog>
         </Box>
     );
@@ -118,10 +82,4 @@ const TableCloseButton = ({onClose}: {onClose: () => void}) => (
     }}>
         <DialogCloseButton onClose={onClose} />
     </TableCell>
-);
-
-const LoadingBox = () => (
-    <Box sx={{height: "250px", display: "grid", placeItems: "center"}}>
-        <CircularProgress />
-    </Box>
 );

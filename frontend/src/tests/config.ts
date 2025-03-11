@@ -15,6 +15,7 @@ export interface TestConfigType<
     test: {
         header: ComponentType<TestInfoType<TTest>>;
         content: ComponentType<TestInfoType<TTest>>;
+        marks?: ComponentType<TestInfoType<TTest>>;
     },
     results: {
         content: ComponentType<{ test: TTestResult }>;

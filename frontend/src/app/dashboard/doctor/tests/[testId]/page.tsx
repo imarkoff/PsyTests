@@ -19,6 +19,7 @@ export default function TestPage() {
     const testLayout = test ? testsConfig[test.type] : null;
     const Header = testLayout?.test.header;
     const Content = testLayout?.test.content;
+    const Marks = testLayout?.test.marks;
 
     return (
         <>
@@ -30,14 +31,17 @@ export default function TestPage() {
 
                 <Box sx={{display: "flex", alignItems: "center", gap: 1, py: 1}}>
                     <AssignTestButton testId={testId} />
-                    {test?.marks_path && <MarksDialog test={test} />}
+                    {test && Marks && (
+                        <MarksDialog test={test}>
+                            <Marks test={test} role={Roles.doctor} />
+                        </MarksDialog>
+                    )}
                 </Box>
             </Box>
 
             {Content && <Content test={test} role={Roles.doctor} disabled />}
 
             {isLoading && <LoadingLayout />}
-
         </>
     );
 }

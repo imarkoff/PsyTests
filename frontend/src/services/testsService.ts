@@ -19,5 +19,6 @@ export const testImage =
     (testId: string, modulePath: string | undefined | null, imagePath: string) =>
     `${api.defaults.baseURL}${endpoint}/${testId}/image?image_path=${imagePath}${modulePath ? `&module_path=${modulePath}` : ""}`;
 
+// you may need additional request or not. that's depends on your test type
 export const getTestMarks = async (testId: string) =>
     await apiPrivate.get<CsvData>(`${endpoint}/${testId}/marks`).then(res => res.data);
