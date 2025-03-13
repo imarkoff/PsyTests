@@ -6,6 +6,8 @@ from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
 from app.utils.tests.mmpi.mmpi_question import MMPIQuestion
 from app.utils.tests.mmpi.mmpi_scale import MMPIScale
+from app.utils.tests.mmpi.utils import calculate_util
+from app.utils.tests.mmpi.utils.get_verdicts import get_verdicts
 
 
 class MMPITest(TestBase):
@@ -44,55 +46,30 @@ class MMPITest(TestBase):
             question.answers = []
 
     async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
+        raw_results = calculate_util.calculate_results(self, answers)
+        converted_results = calculate_util.convert_results(self, raw_results)
+
         return TestHistory(
             test_id=self.id,
             patient_id=patient.id,
             results=answers,
             verdict={
-                "raw": self.calculate_results(answers),
-                "converted": self.convert_results(self.calculate_results(answers))
+                "raw": raw_results,
+                "converted": converted_results,
+                "scale_verdicts": await get_verdicts(converted_results)
             }
         )
 
-    def calculate_results(self, answers: dict[str, list[int | None]]) -> dict[str, int]:
-        """
-        Calculate results for each scale
-        """
+    async def revalidate_test(self, test_history: TestHistory):
+        raw_results = calculate_util.calculate_results(self, test_history.results)
+        converted_results = calculate_util.convert_results(self, raw_results)
 
-        results = {scale.label: 0 for scale in self.scales}
-
-        for i, question in enumerate(self.questions):
-            patient_answer = None
-            if answers["_"][i] == 0:
-                patient_answer = True
-            elif answers["_"][i] == 1:
-                patient_answer = False
-
-            for answer in question.answers:
-                for label in answer.scales:
-                    results[label] += 1 if answer.answer == patient_answer else 0
-
-        return results
-
-    def convert_results(self, results: dict[str, int]) -> dict[str, float]:
-        """
-        Convert calculated results to scale values
-        """
-
-        converted: dict[str, float] = {}
-        scales_count = self.count_scale_questions()
-
-        for scale in self.scales:
-            result = results[scale.label]
-            multiplier = 0
-
-            if scale.multiply:
-                multiplier = results[scale.multiply.scale] * scale.multiply.multiplier
-
-            result_percent = (result + multiplier) / (scales_count[scale.label] + multiplier)
-            converted[scale.label] = scale.min + (scale.max - scale.min) * result_percent
-
-        return converted
+        test_history.results = test_history.results
+        test_history.verdict = {
+            "raw": raw_results,
+            "converted": converted_results,
+            "scale_verdicts": await get_verdicts(converted_results)
+        }
 
     # TODO: cache the result
     def count_scale_questions(self):

@@ -80,6 +80,19 @@ async def export_patient_test_history(
     )
 
 
+@router.patch("/history/{test_id}/revalidate", summary="Revalidate test", response_model=TestResultDto)
+async def revalidate_test(
+        patient_id: UUID, test_id: UUID,
+        db: Session = Depends(get_postgresql_db),
+        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+):
+    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    try:
+        return await test_history_service.revalidate_test(db, patient_id=patient_id, test_id=test_id)
+    except NotFoundError:
+        return Response(status_code=404, media_type="text/plain")
+
+
 @router.post("/{test_id}", summary="Assign test to patient", status_code=201,
              response_model=PatientTestDto,
              responses={

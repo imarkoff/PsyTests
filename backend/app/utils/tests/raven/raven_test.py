@@ -4,6 +4,7 @@ from pydantic import Field, ConfigDict
 
 from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
+from app.schemas.test.test_history_results import Results
 from app.schemas.user_auth import UserDto
 from app.utils.tests.raven.calculate_points import calculate_points
 from app.utils.tests.raven.convert_results import convert_results
@@ -85,3 +86,22 @@ class RavenTest(TestBase):
                 "_": await get_result_mark(self, collected_points[1], patient)
             }
         )
+
+    async def revalidate_test(self, test_history: TestHistory):
+        results: Results = Results.model_validate(test_history.results)
+        collected_points = self._count_collected_points(results)
+
+        test_history.verdict = {
+            "_": await get_result_mark(self, collected_points, UserDto.create(test_history.patient))
+        }
+
+    @staticmethod
+    def _count_collected_points(results: Results) -> int:
+        collected_points = 0
+
+        for module, answers in results.root.items():
+            for i, answer in enumerate(answers):
+                if answer.user_answer == answer.correct_answer:
+                    collected_points += answer.points
+
+        return collected_points

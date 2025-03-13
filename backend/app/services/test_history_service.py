@@ -94,3 +94,29 @@ async def get_test_history(db: Session, patient_id: UUID, test_id: UUID) -> Test
     test = await get_test(test_history.test_id, TestBase)
 
     return TestResultDto.from_test_result(test_history, test)
+
+
+async def revalidate_test(db: Session, patient_id: UUID, test_id: UUID):
+    """
+    Revalidate test
+
+    Raises:
+        NotFoundError: If test not found
+    """
+
+    db_test_history = (db.query(TestHistory).filter(
+        TestHistory.patient_id == patient_id,
+        TestHistory.id == test_id
+    ).first())
+
+    if not db_test_history:
+        raise NotFoundError
+
+    test_history = cast(TestHistory, db_test_history)
+    test = await get_test(test_history.test_id)
+
+    await test.revalidate_test(test_history)
+
+    db.commit()
+
+    return TestResultDto.from_test_result(test_history, test)
