@@ -1,12 +1,6 @@
 from app.utils.tests.mmpi.utils.calculate_util import ConvertedResults
-from app.utils.tests.mmpi.verdicts import scale_verdicts
-from yaml import load
 
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
-
+import app.utils.tests.mmpi.verdicts as verdicts_yaml
 
 async def get_verdicts(results: ConvertedResults):
     """
@@ -14,7 +8,7 @@ async def get_verdicts(results: ConvertedResults):
     """
 
     verdicts = {}
-    verdicts_file: dict[str, dict[str, str]] = load(open(scale_verdicts), Loader=Loader)
+    verdicts_file: dict[str, dict[str, str]] = verdicts_yaml.get_scale_verdicts()
 
     for scale, value in results.items():
         verdict = verdicts_file.get(scale)
