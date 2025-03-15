@@ -20,6 +20,15 @@ def get_scale_verdicts() -> dict[str, dict[str, str]]:
     return load(open(f"{__path}/scale_verdicts.yaml"), Loader=Loader)
 
 
+def get_profile_inclinations() -> dict[str, dict[str, str]]:
+    """
+    profile-name:
+        name: Profile name
+        description: Profile description
+    """
+    return load(open(f"{__path}/profile_inclination.yaml"), Loader=Loader)
+
+
 def get_profile_types() -> dict[str, dict[str, str]]:
     """
     profile-name:

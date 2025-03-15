@@ -1,5 +1,7 @@
 from app.utils.tests.mmpi.utils.calculate_util import ConvertedResults
-import app.utils.tests.mmpi.verdicts as verdicts
+from app.utils.tests.mmpi.utils.profile_detector import ProfileDetector
+
+detector = ProfileDetector()
 
 
 async def get_profile_types(results: ConvertedResults) -> list[str]:
@@ -7,30 +9,14 @@ async def get_profile_types(results: ConvertedResults) -> list[str]:
     Get profile types for MMPI
     """
 
-    profile_types = verdicts.get_profile_types()
-
-    detected_types = []
-
-    checks = {
-        "linear": lambda: is_linear(results),
-        "drowned": lambda: is_drowned(results),
-        "boundary": lambda: is_boundary(results),
-        "peak_like": lambda: is_peak_like(results),
-        "widely_scattered": lambda: is_widely_scattered(results),
-        "highly_located": lambda: is_highly_located(results),
-        "floating": lambda: is_floating(results),
-        "convex": lambda: is_convex(results),
-        "toothed_saw": lambda: is_toothed_saw(results)
-    }
-
-    for profile_type, check in profile_types.items():
-        fun_to_check = checks.get(profile_type)
-        if fun_to_check and fun_to_check():
-            detected_types.append(profile_type)
-
-    return detected_types
+    return await detector.get_profile_types(results)
 
 
+def get_scales(results: ConvertedResults, scales: list[str]) -> list[float]:
+    return [results.get(scale) for scale in scales if results.get(scale) is not None]
+
+
+@detector.register_type("linear")
 def is_linear(results: ConvertedResults) -> bool:
     total_scales = len(results)
     linear_scales = sum(1 for result in results.values() if 45 <= result <= 55)
@@ -39,14 +25,16 @@ def is_linear(results: ConvertedResults) -> bool:
     return percent_linear >= 0.9
 
 
+@detector.register_type("drowned")
 def is_drowned(results: ConvertedResults) -> bool:
     total_scales = len(results)
-    drowned_scales = sum(1 for result in results.values() if 45 <= result)
+    drowned_scales = sum(1 for result in results.values() if result <= 45)
     percent_drowned = drowned_scales / total_scales
 
     return percent_drowned >= 0.9
 
 
+@detector.register_type("boundary")
 def is_boundary(results: ConvertedResults) -> bool:
     total_scales = len(results)
     boundary_scales = sum(1 for result in results.values() if 55 <= result <= 75)
@@ -55,6 +43,7 @@ def is_boundary(results: ConvertedResults) -> bool:
     return percent_boundary >= 0.9
 
 
+@detector.register_type("peak-like")
 def is_peak_like(results: ConvertedResults) -> bool:
     average_result = sum(results.values()) / len(results)
     peak_scales = [result for result in results.values() if result-15 > average_result]
@@ -62,10 +51,11 @@ def is_peak_like(results: ConvertedResults) -> bool:
     return 1 <= len(peak_scales) <= 3
 
 
+@detector.register_type("widely-scattered")
 def is_widely_scattered(results: ConvertedResults) -> bool:
-    start = [results.get(scale) for scale in ["1", "2", "3"] if results.get(scale) is not None]
-    middle = [results.get(scale) for scale in ["4", "5", "6", "7"] if results.get(scale) is not None]
-    end = [results.get(scale) for scale in ["8", "9", "0"] if results.get(scale) is not None]
+    start = get_scales(results, ["1", "2", "3"])
+    middle = get_scales(results, ["4", "5", "6", "7"])
+    end = get_scales(results, ["8", "9", "0"])
 
     start_max = max(start)
     middle_max = max(middle)
@@ -74,6 +64,7 @@ def is_widely_scattered(results: ConvertedResults) -> bool:
     return start_max-15 > middle_max and end_max-15 > middle_max
 
 
+@detector.register_type("highly-located")
 def is_highly_located(results: ConvertedResults) -> bool:
     for scale, result in results.items():
         if result > 80:
@@ -82,14 +73,15 @@ def is_highly_located(results: ConvertedResults) -> bool:
     return False
 
 
+@detector.register_type("floating")
 def is_floating(results: ConvertedResults) -> bool:
     f_scale = results.get("F")
 
     if f_scale is None or f_scale < 65 or f_scale > 90:
         return False
 
-    check_scales = [results.get(scale) for scale in ["1", "2", "3", "7", "8"] if results.get(scale) is not None]
-    other_scales = [results.get(scale) for scale in ["4", "5", "6", "9", "0"] if results.get(scale) is not None]
+    check_scales = get_scales(results, ["1", "2", "3", "7", "8"])
+    other_scales = get_scales(results, ["4", "5", "6", "9", "0"])
 
     if len(check_scales) == 0 or len(other_scales) == 0:
         return False
@@ -105,18 +97,20 @@ def is_floating(results: ConvertedResults) -> bool:
     return True
 
 
+@detector.register_type("convex")
 def is_convex(results: ConvertedResults) -> bool:
-    start = [results.get(scale) for scale in ["1", "2", "3"] if results.get(scale) is not None]
-    middle = [results.get(scale) for scale in ["4", "5", "6", "7"] if results.get(scale) is not None]
-    end = [results.get(scale) for scale in ["8", "9", "0"] if results.get(scale) is not None]
+    start = get_scales(results, ["1", "2", "3"])
+    middle = get_scales(results, ["4", "5", "6", "7"])
+    end = get_scales(results, ["8", "9", "0"])
 
     start_max = sum(start) / len(start)
     middle_max = sum(middle) / len(middle)
     end_max = sum (end) / len(end)
 
-    return start_max < middle_max and end_max < middle_max
+    return start_max+5 < middle_max and end_max < middle_max+5
 
 
+@detector.register_type("toothed-saw")
 def is_toothed_saw(results: ConvertedResults) -> bool:
     scales = [(scale, result) for scale, result in results.items() if result is not None]
 
@@ -126,11 +120,9 @@ def is_toothed_saw(results: ConvertedResults) -> bool:
         if i % 2 == 0:
             continue
 
-
         if 7 <= abs(result - scales[i-1][1]) <= 10:
             rates.append(1)
         else:
             rates.append(0)
 
     return sum(rates) >= 3
-

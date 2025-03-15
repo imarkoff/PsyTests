@@ -7,6 +7,8 @@ from app.schemas.user_auth import UserDto
 from app.utils.tests.mmpi.mmpi_question import MMPIQuestion
 from app.utils.tests.mmpi.mmpi_scale import MMPIScale
 from app.utils.tests.mmpi.utils import calculate_util
+from app.utils.tests.mmpi.utils.get_profile_inclinations import get_profile_inclinations
+from app.utils.tests.mmpi.utils.get_profile_types import get_profile_types
 from app.utils.tests.mmpi.utils.get_verdicts import get_verdicts
 
 
@@ -53,11 +55,7 @@ class MMPITest(TestBase):
             test_id=self.id,
             patient_id=patient.id,
             results=answers,
-            verdict={
-                "raw": raw_results,
-                "converted": converted_results,
-                "scale_verdicts": await get_verdicts(converted_results)
-            }
+            verdict=await self._calculate_verdicts(raw_results, converted_results)
         )
 
     async def revalidate_test(self, test_history: TestHistory):
@@ -65,11 +63,7 @@ class MMPITest(TestBase):
         converted_results = calculate_util.convert_results(self, raw_results)
 
         test_history.results = test_history.results
-        test_history.verdict = {
-            "raw": raw_results,
-            "converted": converted_results,
-            "scale_verdicts": await get_verdicts(converted_results)
-        }
+        test_history.verdict = await self._calculate_verdicts(raw_results, converted_results)
 
     # TODO: cache the result
     def count_scale_questions(self):
@@ -81,3 +75,13 @@ class MMPITest(TestBase):
                     scales[label] += 1
 
         return scales
+
+    @staticmethod
+    async def _calculate_verdicts(results: dict, converted_results: dict) -> dict:
+        return {
+            "raw": results,
+            "converted": converted_results,
+            "scale_verdicts": await get_verdicts(converted_results),
+            "profile_types": await get_profile_types(converted_results),
+            "profile_inclinations": await get_profile_inclinations(converted_results)
+        }
