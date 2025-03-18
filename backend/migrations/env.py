@@ -6,7 +6,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from app.db.session import Base
+from app.db.base import Base
 from app.db.models.user import User
 from app.db.models.patient_test import PatientTest
 from app.db.models.doctor_patient import DoctorPatient

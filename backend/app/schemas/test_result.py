@@ -1,10 +1,12 @@
 from datetime import datetime
-from typing import Optional, Any
+from typing import Optional, Any, Type
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
 from app.db.models.test_history import TestHistory
+from app.settings import settings
+from app.utils.results_to_docx import ResultsToDocx
 from app.schemas.test_base import TestBase
 
 
@@ -50,6 +52,10 @@ class TestResultDto(BaseModel):
             verdict=test_result.verdict,
             passed_at=test_result.passed_at
         )
+
+    def get_document_generator(self) -> Type[ResultsToDocx]:
+        test = settings.TEST_TYPES.get(self.test.type, TestBase)
+        return test.get_document_generator()
 
 
 class TestResultShortDto(BaseModel):

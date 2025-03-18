@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import UUID, uuid4
 from typing import List, Optional, TYPE_CHECKING
 
+from app.db.base import Base
 from app.db.models.test_history import TestHistory
 
 if TYPE_CHECKING:
@@ -14,7 +15,6 @@ else:
 from sqlalchemy import String, Enum
 from sqlalchemy.orm import relationship, Mapped, mapped_column, validates
 
-from app.db.session import Base
 from app.schemas.role import Role
 
 

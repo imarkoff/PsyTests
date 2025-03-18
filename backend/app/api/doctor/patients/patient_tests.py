@@ -14,7 +14,6 @@ from app.schemas.test_result import TestResultDto
 from app.services import test_history_service
 from app.services.patients import patient_tests_service, patients_service
 from app.utils import media_types
-from app.utils.results_to_docx import ResultsToDocx
 
 router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"], responses={
     401: {"description": "Unauthorized"},
@@ -71,13 +70,20 @@ async def export_patient_test_history(
     doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
     test_result = await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
     patient = await patients_service.get_patient(db, doctor_id=doctor.id, patient_id=patient_id)
-    document_path = ResultsToDocx(test_result, patient.patient).path
 
-    return FileResponse(
+    # Keep a reference to the ResultsToDocx object to prevent premature garbage collection
+    results_to_docx = test_result.get_document_generator()(test_result, patient.patient)
+    document_path = results_to_docx.path
+
+    response = FileResponse(
         path=document_path,
         media_type=media_types.docx,
         filename=document_path.split('/')[-1]
     )
+
+    # Store reference to prevent garbage collection
+    response.results_to_docx = results_to_docx
+    return response
 
 
 @router.patch("/history/{test_id}/revalidate", summary="Revalidate test", response_model=TestResultDto)

@@ -4,8 +4,8 @@ from datetime import datetime, UTC
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
+from app.db.base import Base
 from app.db.models.user import User
-from app.db.session import Base
 
 
 class PatientTest(Base):

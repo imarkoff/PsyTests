@@ -102,6 +102,11 @@ class RavenTest(TestBase):
         return read_csv_as_matrix(marks_path)
 
     @staticmethod
+    def get_document_generator():
+        from app.utils.tests.raven.raven_to_docx import RavenToDocx
+        return RavenToDocx
+
+    @staticmethod
     def _count_collected_points(results: Results) -> int:
         collected_points = 0
 

@@ -1,4 +1,8 @@
 import os
+from typing import Type
+
+from app.schemas.test_base import TestBase
+
 
 class Settings:
     APP_NAME: str = "PsyTests API"
@@ -9,8 +13,16 @@ class Settings:
     REFRESH_TOKEN_EXPIRE: int = 14  # days
     TOKEN_ALGORITHM: str = "HS256"
     CORS_ORIGINS: list = os.getenv("CORS_ORIGINS", "").split(",")
+    TEST_TYPES: dict[str, Type[TestBase]] = {}
 
-    class Config:
-        env_file = ".env"
 
 settings = Settings()
+
+# Import and register test types after settings object is created
+from app.utils.tests.mmpi.mmpi_test import MMPITest
+from app.utils.tests.raven.raven_test import RavenTest
+
+settings.TEST_TYPES = {
+    "raven": RavenTest,
+    "mmpi": MMPITest
+}
