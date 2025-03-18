@@ -6,6 +6,8 @@ from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.schemas.test.test_history_results import Results
 from app.schemas.user_auth import UserDto
+from app.utils.read_csv_as_matrix import read_csv_as_matrix
+from app.utils.tests.raven import test_includes
 from app.utils.tests.raven.calculate_points import calculate_points
 from app.utils.tests.raven.convert_results import convert_results
 from app.utils.tests.raven.get_result_mark import get_result_mark
@@ -94,6 +96,10 @@ class RavenTest(TestBase):
         test_history.verdict = {
             "_": await get_result_mark(self, collected_points, UserDto.create(test_history.patient))
         }
+
+    async def get_marks_system(self) -> list[list[int | str | float | None]]:
+        marks_path = test_includes.get_marks_path(self)
+        return read_csv_as_matrix(marks_path)
 
     @staticmethod
     def _count_collected_points(results: Results) -> int:

@@ -4,6 +4,7 @@ from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
+from app.utils.tests.mmpi import verdicts
 from app.utils.tests.mmpi.mmpi_question import MMPIQuestion
 from app.utils.tests.mmpi.mmpi_scale import MMPIScale
 from app.utils.tests.mmpi.utils import calculate_util
@@ -64,6 +65,13 @@ class MMPITest(TestBase):
 
         test_history.results = test_history.results
         test_history.verdict = await self._calculate_verdicts(raw_results, converted_results)
+
+    async def get_marks_system(self):
+        return {
+            "profile_types": verdicts.get_profile_types(),
+            "profile_inclinations": verdicts.get_profile_inclinations(),
+            "scale_verdicts": verdicts.get_scale_verdicts()
+        }
 
     # TODO: cache the result
     def count_scale_questions(self):

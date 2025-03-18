@@ -13,8 +13,6 @@ from app.schemas.role import Role
 from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test_base import TestBase
 from app.services import tests_service
-from app.utils.tests.raven import test_includes
-from app.utils.read_csv_as_matrix import read_csv_as_matrix
 from app.utils.tests.mmpi.mmpi_test import MMPITest
 
 router = APIRouter(prefix="/tests", tags=["tests"])
@@ -67,7 +65,7 @@ async def get_test_image(test_id: UUID, image_path: str, module_path: Optional[s
 @router.get("/{test_id}/marks", summary="Get test marks",
             responses={
     404: {"description": "Test not found"},
-    200: {"model": list[list[int | str | float | None]]}
+    200: {"model": any}
 })
 async def get_test_marks(
         test_id: UUID,
@@ -76,8 +74,7 @@ async def get_test_marks(
 ):
     JWTBearer.auth(credentials, db, role=Role.DOCTOR)
     try:
-        test = await tests_service.get_test(test_id, TestBase)
-        marks_path = test_includes.get_marks_path(test)
-        return read_csv_as_matrix(marks_path)
+        test: TestBase = await tests_service.get_test(test_id)
+        return await test.get_marks_system()
     except FileNotFoundError:
         return Response(status_code=404)

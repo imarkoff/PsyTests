@@ -39,3 +39,6 @@ class TestBase(BaseModel):
             marks_path=test_data.get("marks", None),
             marks_unit=test_data.get("marks_unit", None)
         )
+
+    async def get_marks_system(self) -> None:
+        return None
