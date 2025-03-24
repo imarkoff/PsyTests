@@ -42,11 +42,11 @@ class RavenToDocx(ResultsToDocx):
             index_cell.text = str(i + 1)
             index_cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
             index_cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
-            self._set_font_size(index_cell, 11)
+            self._set_cell_font_size(index_cell, 11)
 
         total_cell = hdr_cells[-1]
         total_cell.text = "Бали"
-        self._set_font_size(total_cell, 11)
+        self._set_cell_font_size(total_cell, 11)
 
         return table
 
@@ -66,12 +66,6 @@ class RavenToDocx(ResultsToDocx):
             correct_points += module_correct_points
 
         self._add_total_row(correct_points, total_points)
-
-    def _fill_cell(self, cell, text, align=WD_ALIGN_PARAGRAPH.LEFT):
-        cell.text = str(text)
-        self._set_font_size(cell, 11)
-        cell.paragraphs[0].alignment = align
-        cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
 
     def _fill_answers(self, row_cells, answers: list[Answer]):
         module_correct_points = 0

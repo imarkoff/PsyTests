@@ -73,6 +73,11 @@ class MMPITest(TestBase):
             "scale_verdicts": verdicts.get_scale_verdicts()
         }
 
+    @staticmethod
+    def get_document_generator():
+        from app.utils.tests.mmpi.mmpi_to_docx import MMPIToDocx
+        return MMPIToDocx
+
     # TODO: cache the result
     def count_scale_questions(self):
         scales = {scale.label: 0 for scale in self.scales}

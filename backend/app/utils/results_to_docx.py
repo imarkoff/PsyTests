@@ -3,6 +3,7 @@ import tempfile
 from typing import TYPE_CHECKING
 
 from docx import Document
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 
@@ -65,31 +66,70 @@ class ResultsToDocx:
         self.doc.save(path)
         return path
 
-    @staticmethod
-    def _set_font_size(cell, size):
+    def _set_cell_font_size(self, cell, size):
         """
         Set font size for all runs in cell
         """
         for paragraph in cell.paragraphs:
-            for run in paragraph.runs:
-                run.font.size = Pt(size)
+            self._set_font_size(paragraph, size)
+
+    @staticmethod
+    def _set_font_size(paragraph, size):
+        """
+        Set font size for all runs in paragraph
+        """
+        for run in paragraph.runs:
+            run.font.size = Pt(size)
+
+
+    def _fill_cell(self, cell, text, align=WD_ALIGN_PARAGRAPH.LEFT):
+        """
+        Fill cell with text and set alignment
+        """
+        cell.text = str(text)
+        self._set_cell_font_size(cell, 11)
+        cell.paragraphs[0].alignment = align
+        cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+
+    def _style_paragraph(self, paragraph):
+        """
+        Style paragraph with common settings (font size, spacing)
+        """
+        paragraph.paragraph_format.space_after = 0
+        paragraph.paragraph_format.line_spacing = 1.5
+        self._set_font_size(paragraph, 12)
+
+    def _add_space_after_table(self):
+        """
+        Add empty paragraph after table
+        """
+        paragraph = self.doc.add_paragraph(" ")
+        paragraph.paragraph_format.space_after = 0
+        paragraph.paragraph_format.space_before = 0
+        paragraph.paragraph_format.line_spacing = 0
+        self._set_font_size(paragraph, 5)
+        return paragraph
 
     def _create_header(self):
+        """
+        Create header with information about user and test
+        """
         user = self.user_info
         (age, age_ending) = user.get_age()
 
         header = self.doc.add_paragraph()
         header.alignment = WD_ALIGN_PARAGRAPH.CENTER
         header.add_run(f"Бланк {self.test_result.test.name}").bold = True
+        self._set_font_size(header, 14)
 
         credentials = self.doc.add_paragraph(f"П.І.Б: {user.surname} "
                                              f"{user.name if user.name else ''} "
                                              f"{user.patronymic if user.patronymic else ''}")
-        credentials.paragraph_format.space_after = Pt(0.5)
+        self._style_paragraph(credentials)
 
         age = self.doc.add_paragraph(f"Вік пацієнта: {age} {age_ending}")
-        age.paragraph_format.space_after = Pt(0.5)
+        self._style_paragraph(age)
 
         pass_date = self.test_result.passed_at.strftime("%d.%m.%Y %H:%M")
         pass_paragraph = self.doc.add_paragraph(f"Дата проходження: {pass_date}")
-        pass_paragraph.paragraph_format.space_after = Pt(0.5)
+        self._style_paragraph(pass_paragraph)
