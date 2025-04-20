@@ -1,13 +1,11 @@
-from app.utils.tests.mmpi.utils.calculate_util import ConvertedResults
 from app.utils.tests.mmpi.utils.profile_detector import ProfileDetector
+from app.utils.tests.mmpi.utils.results_converter import ConvertedResults
 
 detector = ProfileDetector()
 
 
 async def get_profile_types(results: ConvertedResults) -> list[str]:
-    """
-    Get profile types for MMPI
-    """
+    """Get profile types for MMPI"""
 
     return await detector.get_profile_types(results)
 

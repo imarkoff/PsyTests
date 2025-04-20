@@ -1,6 +1,6 @@
 from typing import Callable, Dict
-from app.utils.tests.mmpi.utils.calculate_util import ConvertedResults
 
+from app.utils.tests.mmpi.utils.results_converter import ConvertedResults
 
 CheckFunction = Callable[[ConvertedResults], bool]
 ProfileChecks = Dict[str, CheckFunction]

@@ -1,5 +1,5 @@
-from app.utils.tests.mmpi.utils.calculate_util import ConvertedResults
 from app.utils.tests.mmpi.utils.profile_detector import ProfileDetector
+from app.utils.tests.mmpi.utils.results_converter import ConvertedResults
 
 detector = ProfileDetector()
 

@@ -1,3 +1,5 @@
+from typing import ClassVar, Optional, Type
+
 from pydantic import ConfigDict, UUID4
 
 from app.db.models.test_history import TestHistory
@@ -7,19 +9,25 @@ from app.schemas.user_auth import UserDto
 from app.utils.tests.mmpi import verdicts
 from app.utils.tests.mmpi.mmpi_question import MMPIQuestion
 from app.utils.tests.mmpi.mmpi_scale import MMPIScale
-from app.utils.tests.mmpi.utils import calculate_util
-from app.utils.tests.mmpi.utils.get_profile_inclinations import get_profile_inclinations
-from app.utils.tests.mmpi.utils.get_profile_types import get_profile_types
-from app.utils.tests.mmpi.utils.get_verdicts import get_verdicts
+from app.utils.tests.mmpi.utils.results_converter import ConvertedResults
+from app.utils.tests.mmpi.utils.results_counter import RawResults
+from app.utils.tests.mmpi.utils.results_manager import ResultsManagerFactory
+from app.utils.tests.mmpi.utils.scales_counter import ScalesCounter
+from app.utils.tests.mmpi.utils.verdict_calculator import VerdictCalculator
 
 
 class MMPITest(TestBase):
+    """MMPI Test class to represent the MMPI test structure and behavior."""
     id: UUID4
     name: str
     type: str = "mmpi"
     scales: list[MMPIScale]
     description: str | None = None
     questions: list[MMPIQuestion]
+
+    _verdict_calculator: ClassVar[VerdictCalculator] = VerdictCalculator()
+    _results_manager_factory: ClassVar[ResultsManagerFactory] = ResultsManagerFactory()
+    _scales_counter: ClassVar[Type[ScalesCounter]] = ScalesCounter
 
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
@@ -33,6 +41,19 @@ class MMPITest(TestBase):
             }
         }
     )
+
+    @classmethod
+    def configure(cls,
+                  verdict_calculator: Optional[VerdictCalculator] = None,
+                  results_manager_factory: Optional[ResultsManagerFactory] = None,
+                  scales_counter: Optional[Type[ScalesCounter]] = None):
+        """Configure the MMPI test class with custom dependencies."""
+        if verdict_calculator:
+            cls._verdict_calculator = verdict_calculator
+        if results_manager_factory:
+            cls._results_manager_factory = results_manager_factory
+        if scales_counter:
+            cls._scales_counter = scales_counter
 
     @classmethod
     def from_json(cls, test_data: dict) -> 'MMPITest':
@@ -49,9 +70,7 @@ class MMPITest(TestBase):
             question.answers = []
 
     async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
-        raw_results = calculate_util.calculate_results(self, answers)
-        converted_results = calculate_util.convert_results(self, raw_results)
-
+        (raw_results, converted_results) = self._get_test_results(answers)
         return TestHistory(
             test_id=self.id,
             patient_id=patient.id,
@@ -59,11 +78,12 @@ class MMPITest(TestBase):
             verdict=await self._calculate_verdicts(raw_results, converted_results)
         )
 
-    async def revalidate_test(self, test_history: TestHistory):
-        raw_results = calculate_util.calculate_results(self, test_history.results)
-        converted_results = calculate_util.convert_results(self, raw_results)
+    def _get_test_results(self, answers: PassTestAnswers) -> tuple[RawResults, ConvertedResults]:
+        results_manager = self._results_manager_factory.create(test=self, answers=answers)
+        return results_manager.count_and_convert()
 
-        test_history.results = test_history.results
+    async def revalidate_test(self, test_history: TestHistory):
+        (raw_results, converted_results) = self._get_test_results(test_history.results)
         test_history.verdict = await self._calculate_verdicts(raw_results, converted_results)
 
     async def get_marks_system(self):
@@ -78,23 +98,12 @@ class MMPITest(TestBase):
         from app.utils.tests.mmpi.mmpi_to_docx import MMPIToDocx
         return MMPIToDocx
 
-    # TODO: cache the result
-    def count_scale_questions(self):
-        scales = {scale.label: 0 for scale in self.scales}
+    def count_scales_by_questions(self):
+        scales_counter = self._scales_counter(scales=self.scales)
+        return scales_counter.count_from_questions(self.questions)
 
-        for question in self.questions:
-            for answer in question.answers:
-                for label in answer.scales:
-                    scales[label] += 1
-
-        return scales
-
-    @staticmethod
-    async def _calculate_verdicts(results: dict, converted_results: dict) -> dict:
-        return {
-            "raw": results,
-            "converted": converted_results,
-            "scale_verdicts": await get_verdicts(converted_results),
-            "profile_types": await get_profile_types(converted_results),
-            "profile_inclinations": await get_profile_inclinations(converted_results)
-        }
+    async def _calculate_verdicts(self, raw_results: RawResults, converted_results: ConvertedResults) -> dict:
+        return await self._verdict_calculator.calculate(
+            raw_results=raw_results,
+            converted_results=converted_results
+        )
