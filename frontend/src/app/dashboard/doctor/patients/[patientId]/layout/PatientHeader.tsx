@@ -4,11 +4,12 @@ import DoctorPatient from "@/schemas/DoctorPatient";
 import {DateTime} from "luxon";
 import formatYears from "@/utils/formatYears";
 import {ReactNode} from "react";
+import readableGender from "@/utils/getGenderFromEnum";
 
 export default function PatientHeader(
     {patient, actions}: {patient?: DoctorPatient, actions?: ReactNode}
 ) {
-    const {surname, name, patronymic, phone, birth_date} = patient?.patient || {};
+    const {surname, name, patronymic, phone, birth_date, gender} = patient?.patient || {};
 
     return (
         <Box sx={{
@@ -36,6 +37,9 @@ export default function PatientHeader(
 
                 <Typography color={"textSecondary"}>
                     Номер телефону: {phone && formatPhone(phone)}
+                </Typography>
+                <Typography color={"textSecondary"}>
+                    Стать: {gender && readableGender[gender]}
                 </Typography>
                 {birth_date && <PatientBirthDate birth_date={birth_date} />}
             </Box>

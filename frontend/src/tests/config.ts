@@ -36,6 +36,7 @@ type TestsConfigType = {
 const testsConfig: TestsConfigType = {
     raven: ravenConfig,
     mmpi: mmpiConfig,
+    mmpi_big: mmpiConfig
 };
 
 export default testsConfig;

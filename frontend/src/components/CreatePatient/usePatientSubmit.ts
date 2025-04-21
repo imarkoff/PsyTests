@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {DateTime} from "luxon";
-import PatientCreate from "@/schemas/PatientCreate";
+import PatientCreate, {PatientCreateForm} from "@/schemas/PatientCreate";
 import {AxiosError} from "axios";
 import {usePatientsContext} from "@/app/dashboard/doctor/patients/context/PatientsContext";
 
@@ -10,18 +10,21 @@ export default function usePatientSubmit(afterCreateAction?: () => void) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
 
-    const convertDate = (date: string) => {
-        const newDate = DateTime.fromFormat(date, "dd.MM.yyyy").toISODate();
+    const convertDate = (date: DateTime) => {
+        const newDate = date.toISODate();
         if (!newDate) throw new Error("Невірний формат дати.");
         return newDate;
     }
 
-    const onSubmit = async (data: PatientCreate) => {
+    const onSubmit = async (data: PatientCreateForm) => {
         setError(undefined);
         setLoading(true);
         try {
-            data.birth_date = convertDate(data.birth_date);
-            await createPatient(data);
+            const transformedData: PatientCreate = {
+                ...data,
+                birth_date: convertDate(data.birth_date),
+            }
+            await createPatient(transformedData);
             afterCreateAction?.();
         } catch (e) {
             if (e instanceof AxiosError && e.response?.status === 409) {
@@ -33,7 +36,6 @@ export default function usePatientSubmit(afterCreateAction?: () => void) {
             else {
                 setError("Невідома помилка.");
             }
-
         }
         finally {
             setLoading(false);
