@@ -7,18 +7,19 @@ from app.schemas.user_auth import UserCreate
 from app.core.password import cache_password
 
 
-def register_user(user_dto: UserCreate, db: Session) -> User:
-    (password, password_salt) = cache_password(user_dto.password)
+def register_user(user_create: UserCreate, db: Session) -> User:
+    (password, password_salt) = cache_password(user_create.password)
 
     new_user = User(
-        name=user_dto.name,
-        surname=user_dto.surname,
-        patronymic=user_dto.patronymic,
-        birth_date=user_dto.birth_date,
-        phone=user_dto.phone,
+        name=user_create.name,
+        surname=user_create.surname,
+        patronymic=user_create.patronymic,
+        gender=user_create.gender,
+        birth_date=user_create.birth_date,
+        phone=user_create.phone,
         password=password,
         password_salt=password_salt,
-        role=user_dto.role
+        role=user_create.role
     )
 
     db.add(new_user)

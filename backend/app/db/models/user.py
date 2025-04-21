@@ -25,6 +25,7 @@ class User(Base):
     name: Mapped[str] = mapped_column(index=True, nullable=False)
     surname: Mapped[Optional[str]] = mapped_column(String, index=True)
     patronymic: Mapped[Optional[str]] = mapped_column(String, index=True)
+    gender: Mapped[str] = mapped_column(String, index=True, nullable=False)
     phone: Mapped[str] = mapped_column(String, index=True)
     birth_date: Mapped[datetime] = mapped_column(nullable=False)
     password: Mapped[bytes] = mapped_column(nullable=False)
@@ -45,9 +46,3 @@ class User(Base):
     tests_history: Mapped[List[TestHistory]] = relationship(back_populates="patient",
                                                             foreign_keys=[TestHistory.patient_id],
                                                             cascade="all, delete-orphan")
-
-@validates("phone")
-def validate_phone(self, key, phone):
-    if not phone.isdigit():
-        raise ValueError("Phone number must contain only digits")
-    return phone

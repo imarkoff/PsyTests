@@ -1,7 +1,10 @@
-from typing import TypeAlias, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
+from app.schemas.user_gender import UserGender
 from app.utils.tests.mmpi.mmpi_scale import MMPIScale
-from app.utils.tests.mmpi.utils.results_counter import RawResults
+from app.utils.tests.mmpi.utils.results_manager.abstract_results_converter import AbstractResultsConverter, \
+    ConvertedResults
+from app.utils.tests.mmpi.utils.results_manager.results_counter import RawResults
 
 if TYPE_CHECKING:
     from app.utils.tests.mmpi.mmpi_test import MMPITest
@@ -9,18 +12,14 @@ else:
     MMPITest = "MMPITest"
 
 
-ConvertedResults: TypeAlias = dict[str, float]
-
-
-class ResultsConverter:
+class ResultsConverter(AbstractResultsConverter):
     """Convert MMPI test results to scale values"""
-    def __init__(self, test: MMPITest, results: RawResults):
+    def __init__(self, test: MMPITest, results: RawResults, gender: UserGender = None):
         """
         :param test: MMPI test
         :param results: Raw results from the test
         """
-        self.test = test
-        self.results = results
+        super().__init__(test, results, gender)
         self.scales_count = self.test.count_scales_by_questions()
 
     def convert(self) -> ConvertedResults:

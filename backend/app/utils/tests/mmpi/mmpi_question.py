@@ -1,9 +1,12 @@
 from pydantic import BaseModel, ConfigDict
 
+from app.schemas.user_gender import UserGender
+
 
 class MMPIAnswer(BaseModel):
     scales: list[str]
     answer: bool
+    gender: list[UserGender] | None = None
 
 
 class MMPIQuestion(BaseModel):

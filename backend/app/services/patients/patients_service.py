@@ -115,13 +115,14 @@ async def create_patient(db: Session, doctor_id: UUID, patient: PatientCreateDto
         name=patient.name,
         surname=patient.surname,
         patronymic=patient.patronymic,
+        gender=patient.gender,
         birth_date=patient.birth_date,
         phone=patient.phone,
         role=Role.PATIENT,
         password=patient.password
     )
 
-    user = user_service.register_user(db=db, user_dto=new_user)
+    user = user_service.register_user(db=db, user_create=new_user)
 
     doctor_patient = DoctorPatient(doctor_id=doctor_id, patient_id=user.id)
 

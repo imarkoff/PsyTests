@@ -1,8 +1,8 @@
-from app.utils.tests.mmpi.utils.get_profile_inclinations import get_profile_inclinations
-from app.utils.tests.mmpi.utils.get_profile_types import get_profile_types
-from app.utils.tests.mmpi.utils.get_verdicts import get_verdicts
-from app.utils.tests.mmpi.utils.results_converter import ConvertedResults
-from app.utils.tests.mmpi.utils.results_counter import RawResults
+from app.utils.tests.mmpi.utils.profile_detector.get_profile_inclinations import get_profile_inclinations
+from app.utils.tests.mmpi.utils.profile_detector.get_profile_types import get_profile_types
+from app.utils.tests.mmpi.utils.profile_detector.get_verdicts import get_verdicts
+from app.utils.tests.mmpi.utils.results_manager.abstract_results_converter import ConvertedResults
+from app.utils.tests.mmpi.utils.results_manager.results_counter import RawResults
 
 
 class VerdictCalculator:

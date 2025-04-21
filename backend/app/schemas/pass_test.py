@@ -22,3 +22,27 @@ class PassTestDto(BaseModel):
             }
         }
     )
+
+    def is_valid(self) -> bool:
+        if not isinstance(self.answers, dict):
+            return False
+        if len(self.answers) == 0:
+            return False
+        if not self._check_per_modules(self.answers):
+            return False
+        return True
+
+    def _check_per_modules(self, modules: dict) -> bool:
+        for module, answers in modules:
+            if not isinstance(answers, list):
+                return False
+            if not self._is_answers_valid(answers):
+                return False
+        return True
+
+    @staticmethod
+    def _is_answers_valid(answers: list[int]) -> bool:
+        for answer in answers:
+            if answer is not None and not isinstance(answer, int):
+                return False
+        return True

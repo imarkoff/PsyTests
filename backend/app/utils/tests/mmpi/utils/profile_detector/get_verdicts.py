@@ -1,5 +1,5 @@
 import app.utils.tests.mmpi.verdicts as verdicts_yaml
-from app.utils.tests.mmpi.utils.results_converter import ConvertedResults
+from app.utils.tests.mmpi.utils.results_manager.abstract_results_converter import ConvertedResults
 
 
 async def get_verdicts(results: ConvertedResults):

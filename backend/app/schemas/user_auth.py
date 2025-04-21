@@ -6,12 +6,15 @@ from pydantic import BaseModel
 
 from app.db.models.user import User
 from app.schemas.role import Role
+from app.schemas.user_gender import UserGender
 
 
 class UserCreate(BaseModel):
+    """DTO for creating a new user."""
     name: str
     surname: Optional[str] = None
     patronymic: Optional[str] = None
+    gender: UserGender
     birth_date: datetime
     phone: str
     password: str
@@ -23,6 +26,8 @@ class UserCreate(BaseModel):
             "example": {
                 "name": "John",
                 "surname": "Doe",
+                "patronymic": "Smith",
+                "gender": "male",
                 "phone": "380999999999",
                 "password": "password1234",
                 "role": "patient"
@@ -48,6 +53,7 @@ class UserDto(BaseModel):
     name: str
     surname: Optional[str] = None
     patronymic: Optional[str] = None
+    gender: UserGender
     birth_date: datetime
     phone: str
     role: Role
@@ -60,21 +66,26 @@ class UserDto(BaseModel):
                 "id": "8b3dbc3b-58fb-4023-aff9-b332ec8aa701",
                 "name": "John",
                 "surname": "Doe",
+                "patronymic": "Smith",
+                "gender": UserGender.MALE,
                 "phone": "380999999999",
                 "role": "patient"
             }
         }
 
     @classmethod
-    def create(cls, user: User | Type[User]):
+    def create(cls, user: User | Type[User]) -> 'UserDto':
         if isinstance(user, type):
             user = cast(User, user)
+
+        gender_value = UserGender(user.gender) if isinstance(user.gender, str) else user.gender
 
         return cls(
             id=user.id,
             name=user.name,
             surname=user.surname,
             patronymic=user.patronymic,
+            gender=gender_value,
             birth_date=user.birth_date,
             phone=user.phone,
             role=user.role

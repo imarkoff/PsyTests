@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, TypeAlias
 
 from app.schemas.pass_test import PassTestAnswers
+from app.schemas.user_gender import UserGender
 from app.utils.tests.mmpi.mmpi_question import MMPIAnswer
 
 if TYPE_CHECKING:
@@ -16,13 +17,14 @@ class ResultsCounter:
     """
     Count raw mark results for each scale
     """
-    def __init__(self, test: MMPITest, answers: PassTestAnswers):
+    def __init__(self, test: MMPITest, answers: PassTestAnswers, gender: UserGender):
         """
         :param test: MMPI test
         :param answers: Answers to the test
         """
         self.test = test
         self.answers = answers
+        self.gender = gender
 
         self._results = {}
 
@@ -63,4 +65,15 @@ class ResultsCounter:
         """Count correct answers for each scale by question answers"""
         for answer in answers:
             for label in answer.scales:
-                self._results[label] += 1 if answer.answer == patient_answer else 0
+                if self._check_if_answer_is_correct(answer, patient_answer):
+                    self._results[label] += 1
+
+    def _check_if_answer_is_correct(self, answer: MMPIAnswer, patient_answer: bool | None) -> bool:
+        """
+        :param answer: Answer to the question
+        :param patient_answer: Patient answer
+        """
+        if answer.answer == patient_answer:
+            if answer.gender is None or self.gender in answer.gender:
+                return True
+        return False

@@ -2,6 +2,7 @@ import os
 from typing import Type
 
 from app.schemas.test_base import TestBase
+from app.utils.tests.mmpi.mmpi_big.mmpi_big import MMPIBigTest
 
 
 class Settings:
@@ -24,5 +25,6 @@ from app.utils.tests.raven.raven_test import RavenTest
 
 settings.TEST_TYPES = {
     "raven": RavenTest,
-    "mmpi": MMPITest
+    "mmpi": MMPITest,
+    "mmpi_big": MMPIBigTest
 }

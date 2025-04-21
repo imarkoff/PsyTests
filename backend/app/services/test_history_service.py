@@ -5,15 +5,13 @@ from sqlalchemy.orm import Session
 
 from app.db.models.patient_test import PatientTest
 from app.db.models.test_history import TestHistory
-from app.exceptions import NotFoundError
+from app.exceptions import NotFoundError, ValidationError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.test_result import TestResultDto, TestResultShortDto
 from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 from app.services.tests_service import get_test
-from app.utils.tests.mmpi.mmpi_test import MMPITest
-from app.utils.tests.raven.raven_test import RavenTest
 
 
 async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> TestResultShortDto:
@@ -23,14 +21,18 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
     Raises:
         FileNotFoundError: If test not found
         NotFoundError: If test not found
+        ValidationError: If test data is invalid
     """
+
+    if not pass_dto.is_valid():
+        raise ValidationError("Invalid test data")
 
     doctor_test: PatientTest | None = db.query(PatientTest).filter(PatientTest.id == pass_dto.assigned_test_id).first()
 
     if not doctor_test:
         raise NotFoundError
 
-    test: RavenTest | MMPITest = await get_test(doctor_test.test_id)
+    test: TestBase = await get_test(doctor_test.test_id)
 
     new_history = await test.pass_test(pass_dto.answers, patient)
 

@@ -9,9 +9,9 @@ from app.schemas.user_auth import UserDto
 from app.utils.tests.mmpi import verdicts
 from app.utils.tests.mmpi.mmpi_question import MMPIQuestion
 from app.utils.tests.mmpi.mmpi_scale import MMPIScale
-from app.utils.tests.mmpi.utils.results_converter import ConvertedResults
-from app.utils.tests.mmpi.utils.results_counter import RawResults
-from app.utils.tests.mmpi.utils.results_manager import ResultsManagerFactory
+from app.utils.tests.mmpi.utils.results_manager.abstract_results_converter import ConvertedResults
+from app.utils.tests.mmpi.utils.results_manager.results_counter import RawResults
+from app.utils.tests.mmpi.utils.results_manager.results_manager import ResultsManagerFactory
 from app.utils.tests.mmpi.utils.scales_counter import ScalesCounter
 from app.utils.tests.mmpi.utils.verdict_calculator import VerdictCalculator
 
@@ -70,7 +70,7 @@ class MMPITest(TestBase):
             question.answers = []
 
     async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
-        (raw_results, converted_results) = self._get_test_results(answers)
+        (raw_results, converted_results) = self._get_test_results(answers, patient)
         return TestHistory(
             test_id=self.id,
             patient_id=patient.id,
@@ -78,12 +78,13 @@ class MMPITest(TestBase):
             verdict=await self._calculate_verdicts(raw_results, converted_results)
         )
 
-    def _get_test_results(self, answers: PassTestAnswers) -> tuple[RawResults, ConvertedResults]:
-        results_manager = self._results_manager_factory.create(test=self, answers=answers)
+    def _get_test_results(self, answers: PassTestAnswers, patient: UserDto) -> tuple[RawResults, ConvertedResults]:
+        results_manager = self._results_manager_factory.create(test=self, answers=answers, gender=patient.gender)
         return results_manager.count_and_convert()
 
     async def revalidate_test(self, test_history: TestHistory):
-        (raw_results, converted_results) = self._get_test_results(test_history.results)
+        user_dto = UserDto.create(test_history.patient)
+        (raw_results, converted_results) = self._get_test_results(test_history.results, user_dto)
         test_history.verdict = await self._calculate_verdicts(raw_results, converted_results)
 
     async def get_marks_system(self):

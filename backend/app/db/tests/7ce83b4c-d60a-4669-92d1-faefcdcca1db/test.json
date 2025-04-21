@@ -1,101 +1,64 @@
 {
   "id": "7ce83b4c-d60a-4669-92d1-faefcdcca1db",
   "name": "Міннесотський багатофакторний особистісний опитувальник (MMPI)",
-  "type": "mmpi",
+  "type": "mmpi_big",
   "scales": [
     {
       "label": "L",
-      "name": "Брехливість",
-      "min": 39,
-      "max": 79
+      "name": "Брехливість"
     },
     {
       "label": "F",
-      "name": "Інфіктивність",
-      "min": 35,
-      "max": 95
+      "name": "Інфіктивність"
     },
     {
       "label": "K",
-      "name": "Корекція",
-      "min": 28,
-      "max": 73
+      "name": "Корекція"
     },
     {
       "label": "1",
       "abbrev": "Hs",
-      "name": "Гіпохондрія",
-      "min": 26,
-      "max": 95,
-      "multiply": {
-        "scale": "K",
-        "multiplier": 0.5
-      }
+      "name": "Гіпохондрія"
     },
     {
       "label": "2",
       "abbrev": "D",
-      "name": "Депресія",
-      "min": 25,
-      "max": 100
+      "name": "Депресія"
     },
     {
       "label": "3",
       "abbrev": "Hy",
-      "name": "Істерія",
-      "min": 13,
-      "max": 110
+      "name": "Істерія"
     },
     {
       "label": "4",
       "abbrev": "Pd",
-      "name": "Психопатія",
-      "min": 5,
-      "max": 115,
-      "multiply": {
-        "scale": "K",
-        "multiplier": 0.4
-      }
+      "name": "Психопатія"
+    },
+    {
+      "label": "5",
+      "abbrev": "Mf",
+      "name": "Маскулінність-Фемінність"
     },
     {
       "label": "6",
       "abbrev": "Pa",
-      "name": "Параноя",
-      "min": 25,
-      "max": 107
+      "name": "Параноя"
     },
     {
       "label": "7",
       "abbrev": "Pt",
-      "name": "Психастенія",
-      "min": 4,
-      "max": 81,
-      "multiply": {
-        "scale": "K",
-        "multiplier": 1
-      }
+      "name": "Психастенія"
     },
     {
       "label": "8",
       "abbrev": "Sc",
-      "name": "Шизофренія",
-      "min": 6,
-      "max": 91,
-      "multiply": {
-        "scale": "K",
-        "multiplier": 1
-      }
+      "name": "Шизофренія"
     },
     {
       "label": "9",
       "abbrev": "Ma",
-      "name": "Гіпоманія",
-      "min": 19,
-      "max": 95,
-      "multiply": {
-        "scale": "K",
-        "multiplier": 0.2
-      }
+      "name": "Гіпоманія"
     }
   ],
   "questions": [

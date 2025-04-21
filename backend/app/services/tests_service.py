@@ -5,7 +5,6 @@ from uuid import UUID
 
 from app.db import tests
 from app.settings import settings
-from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test_base import TestBase
 
 

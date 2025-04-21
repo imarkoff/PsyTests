@@ -13,3 +13,7 @@ class ForbiddenError(Exception):
 class UnauthorizedError(Exception):
     """Raised when a user is not authenticated"""
     pass
+
+class ValidationError(Exception):
+    """Raised when input data fails validation"""
+    pass

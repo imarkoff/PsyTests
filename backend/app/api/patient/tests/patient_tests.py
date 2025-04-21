@@ -7,7 +7,7 @@ from starlette.responses import Response
 
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
-from app.exceptions import NotFoundError
+from app.exceptions import NotFoundError, ValidationError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
@@ -44,6 +44,8 @@ async def pass_test(
     #     return Response(status_code=400, content="Answers count is not equal to questions count")
     except FileNotFoundError or NotFoundError:
         return Response(status_code=404)
+    except ValidationError:
+        return Response(status_code=400, content="Invalid test data")
 
 
 @router.get("/history", summary="Get tests history", response_model=list[TestResultShortDto])
