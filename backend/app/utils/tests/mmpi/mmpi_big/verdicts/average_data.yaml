@@ -1,7 +1,7 @@
 # median - медіана, середньонормативні дані
 # sigma - сигма, середньоквадратичне відхилення
 
-L:
+'L':
   male:
     median: 4.2
     sigma: 2.9
@@ -9,7 +9,7 @@ L:
     median: 4.2
     sigma: 2.9
 
-F:
+'F':
   male:
     median: 2.76
     sigma: 4.67
@@ -17,7 +17,7 @@ F:
     median: 2.78
     sigma: 4.67
 
-K:
+'K':
   male:
     median: 12.1
     sigma: 5.4
@@ -25,7 +25,7 @@ K:
     median: 12.1
     sigma: 5.4
 
-1:
+'1':
   male:
     median: 11.1
     sigma: 3.9
@@ -33,7 +33,7 @@ K:
     median: 12.9
     sigma: 4.83
 
-2:
+'2':
   male:
     median: 16.6
     sigma: 4.11
@@ -41,7 +41,7 @@ K:
     median: 18.9
     sigma: 5.0
 
-3:
+'3':
   male:
     median: 16.46
     sigma: 5.4
@@ -49,7 +49,7 @@ K:
     median: 18.65
     sigma: 5.38
 
-4:
+'4':
   male:
     median: 18.68
     sigma: 4.11
@@ -57,7 +57,7 @@ K:
     median: 18.68
     sigma: 4.11
 
-5:
+'5':
   male:
     median: 20.46
     sigma: 5.0
@@ -65,7 +65,7 @@ K:
     median: 36.7
     sigma: 4.67
 
-6:
+'6':
   male:
     median: 7.9
     sigma: 3.4
@@ -73,7 +73,7 @@ K:
     median: 7.9
     sigma: 3.4
 
-7:
+'7':
   male:
     median: 23.06
     sigma: 5.0
@@ -81,7 +81,7 @@ K:
     median: 25.7
     sigma: 6.1
 
-8:
+'8':
   male:
     median: 21.96
     sigma: 5.0
@@ -89,7 +89,7 @@ K:
     median: 22.73
     sigma: 6.36
 
-9:
+'9':
   male:
     median: 17.0
     sigma: 4.06
@@ -97,7 +97,7 @@ K:
     median: 17.0
     sigma: 4.06
 
-#0:
+#'0':
 #  male:
 #    median: 25.0
 #    sigma: 10.0

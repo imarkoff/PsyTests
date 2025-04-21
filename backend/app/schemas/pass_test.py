@@ -33,7 +33,7 @@ class PassTestDto(BaseModel):
         return True
 
     def _check_per_modules(self, modules: dict) -> bool:
-        for module, answers in modules:
+        for module, answers in modules.items():
             if not isinstance(answers, list):
                 return False
             if not self._is_answers_valid(answers):
