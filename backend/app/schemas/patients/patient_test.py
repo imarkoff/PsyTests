@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import ConfigDict, BaseModel
 
 from app.db.models.patient_test import PatientTest
-from app.utils.tests.raven.raven_test import RavenTest
+from app.tests.raven.raven_test import RavenTest
 from app.schemas.test_base import TestBase
 from app.services import tests_service
 
@@ -35,11 +35,11 @@ class PatientTestDto(BaseModel):
         if isinstance(patient_test, type):
             patient_test = cast(PatientTest, patient_test)
 
-        test = await tests_service.get_test(patient_test.test_id, TestBase)
+        test_bundle = await tests_service.get_test(patient_test.test_id)
         return cls(
             id=patient_test.id,
             patient_id=patient_test.patient_id,
             assigned_by_id=patient_test.assigned_by_id,
-            test=test,
+            test=test_bundle.model,
             assigned_at=patient_test.assigned_at
         )

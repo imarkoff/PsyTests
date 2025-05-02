@@ -1,11 +1,12 @@
 import os
 import json
-from typing import Type
 from uuid import UUID
 
 from app.db import tests
-from app.settings import settings
+from app.services.tests.test_factory import TestBundle
+from app.services.tests.test_factory_impl import TestFactoryImpl
 from app.schemas.test_base import TestBase
+from app.tests.test_factories import TestFactories
 
 
 async def get_tests() -> list[TestBase]:
@@ -21,13 +22,13 @@ async def get_tests() -> list[TestBase]:
             if os.path.isfile(test_file):
                 with open(test_file, 'r') as file:
                     test_data = json.load(file)
-                    test = TestBase.from_json(test_data)
+                    test = TestFactoryImpl().get_model(test_data)
                     test_list.append(test)
 
     return test_list
 
 
-async def get_test(test_id: UUID, test_class: Type[TestBase] = None) -> TestBase:
+async def get_test(test_id: UUID) -> TestBundle:
     """
     Get test by id
 
@@ -39,10 +40,11 @@ async def get_test(test_id: UUID, test_class: Type[TestBase] = None) -> TestBase
     with open(test_file, 'r') as file:
         test_data = json.load(file)
 
-        test_class = test_class or settings.TEST_TYPES.get(test_data.get("type"), TestBase)
+        test_type = test_data.get('type')
+        test_factory_type = TestFactories().get_factory_or_default(test_type)
 
-        test = test_class.from_json(test_data)
-        return test
+        test_bundle = test_factory_type().get(test_data)
+        return test_bundle
 
 
 async def get_test_image(test_id: UUID, module_path: str, image_name: str) -> bytes:

@@ -7,7 +7,6 @@ from app.db.models.doctor_patient import DoctorPatient
 from app.db.models.patient_test import PatientTest
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
-from app.schemas.test_base import TestBase
 from app.services.tests_service import get_test
 
 
@@ -29,7 +28,7 @@ async def assign_test(db: Session, test_id: UUID, doctor_id: UUID, patient_id: U
     if not user:
         raise NotFoundError
 
-    await get_test(test_id, TestBase)  # Check if test exists
+    await get_test(test_id)  # Check if test exists
 
     existing_test = db.query(PatientTest).filter(
         PatientTest.patient_id == patient_id,

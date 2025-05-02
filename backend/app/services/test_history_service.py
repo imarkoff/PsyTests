@@ -8,7 +8,6 @@ from app.db.models.test_history import TestHistory
 from app.exceptions import NotFoundError, ValidationError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.test_result import TestResultDto, TestResultShortDto
-from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
 from app.services.patients import patients_service
 from app.services.tests_service import get_test
@@ -32,9 +31,11 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
     if not doctor_test:
         raise NotFoundError
 
-    test: TestBase = await get_test(doctor_test.test_id)
+    test_bundle = await get_test(doctor_test.test_id)
+    test_model = test_bundle.model
+    test_service = test_bundle.service
 
-    new_history = await test.pass_test(pass_dto.answers, patient)
+    new_history = await test_service.pass_test(pass_dto.answers, patient)
 
     db.add(new_history)
     db.commit()
@@ -43,8 +44,8 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
 
     return TestResultShortDto(
         id=new_history.id,
-        test_id=test.id,
-        test_name=test.name,
+        test_id=test_model.id,
+        test_name=test_model.name,
         passed_at=new_history.passed_at
     )
 
@@ -63,15 +64,16 @@ async def get_tests_history(db: Session, patient_id: UUID, short: bool = False) 
 
     for db_test in tests:
         db_test = cast(TestHistory, db_test)
-        test = await get_test(db_test.test_id, TestBase)
+        test_bundle = await get_test(db_test.test_id)
+        test_model = test_bundle.model
 
         tests_results.append(
-            TestResultDto.from_test_result(db_test, test)
+            TestResultDto.from_test_result(db_test, test_model)
             if not short else
             TestResultShortDto(
                 id=db_test.id,
-                test_id=test.id,
-                test_name=test.name,
+                test_id=test_model.id,
+                test_name=test_model.name,
                 passed_at=db_test.passed_at
             )
         )
@@ -93,9 +95,10 @@ async def get_test_history(db: Session, patient_id: UUID, test_id: UUID) -> Test
         raise NotFoundError
 
     test_history = cast(TestHistory, db_test_history)
-    test = await get_test(test_history.test_id, TestBase)
+    test_bundle = await get_test(test_history.test_id)
+    test_model = test_bundle.model
 
-    return TestResultDto.from_test_result(test_history, test)
+    return TestResultDto.from_test_result(test_history, test_model)
 
 
 async def revalidate_test(db: Session, patient_id: UUID, test_id: UUID):
@@ -115,10 +118,12 @@ async def revalidate_test(db: Session, patient_id: UUID, test_id: UUID):
         raise NotFoundError
 
     test_history = cast(TestHistory, db_test_history)
-    test = await get_test(test_history.test_id)
+    test_bundle = await get_test(test_history.test_id)
+    test_model = test_bundle.model
+    test_service = test_bundle.service
 
-    await test.revalidate_test(test_history)
+    await test_service.revalidate_test(test_history)
 
     db.commit()
 
-    return TestResultDto.from_test_result(test_history, test)
+    return TestResultDto.from_test_result(test_history, test_model)

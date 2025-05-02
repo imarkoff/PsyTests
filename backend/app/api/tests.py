@@ -10,10 +10,9 @@ from starlette.responses import Response
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
 from app.schemas.role import Role
-from app.utils.tests.raven.raven_test import RavenTest
 from app.schemas.test_base import TestBase
 from app.services import tests_service
-from app.utils.tests.mmpi.mmpi_test import MMPITest
+from app.tests.test_types import TestTypes
 
 router = APIRouter(prefix="/tests", tags=["tests"])
 
@@ -31,7 +30,7 @@ async def get_tests(
 
 
 @router.get("/{test_id}", summary="Get test info. If doctor, show correct answers",
-            response_model=RavenTest | MMPITest, responses={
+            response_model=TestTypes, responses={
         404: {"description": "Test not found"},
     })
 async def get_test(
@@ -41,11 +40,12 @@ async def get_test(
 ):
     try:
         JWTBearer.auth(credentials, db, role=Role.DOCTOR)
-        return await tests_service.get_test(test_id)
+        test_bundle = await tests_service.get_test(test_id)
+        return test_bundle.model.model_dump()
     except HTTPException:
-        test = await tests_service.get_test(test_id)
-        test.hide_correct_answers()
-        return test
+        test_bundle = await tests_service.get_test(test_id)
+        test_with_hidden_answers = test_bundle.service.hide_correct_answers()
+        return test_with_hidden_answers.model_dump()
     except FileNotFoundError:
         return Response(status_code=404)
 
@@ -74,7 +74,7 @@ async def get_test_marks(
 ):
     JWTBearer.auth(credentials, db, role=Role.DOCTOR)
     try:
-        test: TestBase = await tests_service.get_test(test_id)
-        return await test.get_marks_system()
+        test_bundle = await tests_service.get_test(test_id)
+        return await test_bundle.service.get_marks_system()
     except FileNotFoundError:
         return Response(status_code=404)

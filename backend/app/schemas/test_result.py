@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 from app.db.models.test_history import TestHistory
-from app.settings import settings
+from app.tests.test_factories import TestFactories
 from app.utils.results_to_docx import ResultsToDocx
 from app.schemas.test_base import TestBase
 
@@ -54,8 +54,9 @@ class TestResultDto(BaseModel):
         )
 
     def get_document_generator(self) -> Type[ResultsToDocx]:
-        test = settings.TEST_TYPES.get(self.test.type, TestBase)
-        return test.get_document_generator()
+        test_factory_type = TestFactories().get_factory_or_default(self.test.type)
+        test_service = test_factory_type().get_service(self.test)
+        return test_service.get_document_generator()
 
 
 class TestResultShortDto(BaseModel):

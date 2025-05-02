@@ -1,0 +1,38 @@
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+
+from app.schemas.test_base import TestBase
+from app.services.tests.test_parser import TestParser
+from app.services.tests.test_service import TestService
+
+
+@dataclass
+class TestBundle:
+    model: TestBase
+    service: TestService
+
+
+class TestFactory(ABC):
+    """
+    Factory to create a test model from model and its service.
+    Also, should resolve dependencies for a service.
+    """
+
+    def __init__(self, parser: TestParser):
+        self.parser = parser
+
+    def get(self, data: dict) -> TestBundle:
+        test = self.get_model(data)
+        service = self.get_service(test)
+        return TestBundle(
+            model = test,
+            service = service,
+        )
+
+    @abstractmethod
+    def get_model(self, data: dict) -> TestBase:
+        return self.parser.parse(data)
+
+    @abstractmethod
+    def get_service(self, test: TestBase) -> TestService:
+        return TestService(test)
