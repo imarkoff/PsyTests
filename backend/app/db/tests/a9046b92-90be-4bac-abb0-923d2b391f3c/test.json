@@ -9,19 +9,23 @@
     },
     {
       "criteria": "B",
-      "description": "Симптоми інтрузії"
+      "description": "Симптоми інтрузії",
+      "countable": true
     },
     {
       "criteria": "C",
-      "description": "Симптоми уникнення"
+      "description": "Симптоми уникнення",
+      "countable": true
     },
     {
       "criteria": "D",
-      "description": "Негативні думки та емоції"
+      "description": "Негативні думки та емоції",
+      "countable": true
     },
     {
       "criteria": "E",
-      "description": "Симптоми надмірної реактивності"
+      "description": "Симптоми надмірної реактивності",
+      "countable": true
     }
   ],
   "answers": [
