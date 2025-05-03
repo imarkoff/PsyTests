@@ -19,15 +19,17 @@ class PCL5TestService(TestService):
         return self.test
 
     async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
+        verdict = self._verdict_getter.get_verdict(answers)
         return TestHistory(
             test_id=self.test.id,
             patient_id=patient.id,
             results=answers,
-            verdict=self._verdict_getter.get_verdict(answers)
+            verdict=verdict.model_dump()
         )
 
     async def revalidate_test(self, test_history: TestHistory):
-        test_history.verdict = self._verdict_getter.get_verdict(test_history.results)
+        verdict = self._verdict_getter.get_verdict(test_history.results)
+        test_history.verdict = verdict.model_dump()
 
     async def get_marks_system(self):
         return {
