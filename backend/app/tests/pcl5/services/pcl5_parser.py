@@ -1,19 +1,21 @@
+from app.services.tests.test_parser import TestParser
 from app.tests.pcl5.schemas.pcl5_test import PCL5Test
 from app.tests.pcl5.schemas.pcl5_answer import PCL5Answer
 from app.tests.pcl5.schemas.pcl5_criteria import PCL5Criteria
 from app.tests.pcl5.schemas.pcl5_question import PCL5Question
 
 
-class PCL5TestParser:
-    def parse(self, json_data: dict) -> PCL5Test:
+class PCL5TestParser(TestParser):
+    @classmethod
+    def parse(cls, data: dict) -> PCL5Test:
         return PCL5Test(
-            id=json_data.get('id'),
-            name=json_data.get("name"),
-            type=json_data.get("type"),
-            description=json_data.get("description", None),
-            criterion=self._parse_criterion(json_data.get('criterion')),
-            answers=self._parse_answers(json_data.get('answers')),
-            questions=self._parse_questions(json_data.get('questions')),
+            id=data.get('id'),
+            name=data.get("name"),
+            type=data.get("type"),
+            description=data.get("description", None),
+            criterion=cls._parse_criterion(data.get('criterion')),
+            answers=cls._parse_answers(data.get('answers')),
+            questions=cls._parse_questions(data.get('questions')),
         )
 
     @staticmethod
