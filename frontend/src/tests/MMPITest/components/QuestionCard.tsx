@@ -1,5 +1,5 @@
 import MMPIQuestion from "@/tests/MMPITest/schemas/MMPIQuestion";
-import QuestionBase from "@/components/QuestionCard/QuesitonBase";
+import QuestionBaseOld from "@/components/QuestionCard/QuestionBaseOld";
 import {Alert, Typography} from "@mui/material";
 
 interface QuestionCardProps {
@@ -14,7 +14,7 @@ export default function QuestionCard(
     {question, testId, index, disabled, showScales}: QuestionCardProps
 ) {
     return (
-        <QuestionBase
+        <QuestionBaseOld
             question={{ question: question.question }}
             index={index}
             testId={testId}

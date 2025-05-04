@@ -1,19 +1,19 @@
 import {FormControlLabel, Radio, Typography} from "@mui/material";
-import {testImage} from "@/services/testsService";
 import React from "react";
 import LazyImage from "@/components/LazyImage";
-import {Answer} from "@/tests/RavenTest/schemas/Question";
-import { QuestionBaseProps } from "./QuestionBaseOld";
+import RadioAnswer from "@/components/QuestionCard/types/RadioAnswer";
 
-export type TestAnswerProps = {
-    answer: Answer,
-    onChange: (moduleName: string | undefined, index: number) => void,
-    chosenAnswer?: number,
-    correctAnswer?: number,
-} & QuestionBaseProps;
+type QuestionRadioAnswerProps = {
+    answer: RadioAnswer,
+    index: number,
+    onChange: (value: string | number) => void,
+    chosenAnswer?: number | string,
+    correctAnswer?: number | string,
+    disabled?: boolean,
+};
 
-export default function TestAnswer(
-    {answer, testId, index, module, disabled, onChange, chosenAnswer, correctAnswer}: TestAnswerProps
+export default function QuestionRadioAnswer(
+    {answer, index, disabled, onChange, chosenAnswer, correctAnswer}: QuestionRadioAnswerProps
 ) {
     const radioColor = correctAnswer !== undefined ? (correctAnswer === index ? "success" : "error") : undefined;
     const isChecked = correctAnswer === index || chosenAnswer === index;
@@ -21,7 +21,7 @@ export default function TestAnswer(
     return (
         <FormControlLabel
             value={index}
-            onChange={() => onChange(module?.name, index)}
+            onChange={() => onChange(index)}
             control={
                 <Radio
                     color={radioColor}
@@ -31,8 +31,6 @@ export default function TestAnswer(
             sx={{ position: "relative", pointerEvents: disabled ? "none" : undefined }}
             label={
                 <AnswerLabel
-                    testId={testId}
-                    modulePath={module?.path}
                     answer={answer}
                     index={index}
                 />
@@ -42,7 +40,7 @@ export default function TestAnswer(
 }
 
 const AnswerLabel = (
-    {testId, answer, index, modulePath}: { testId: string, answer: Answer, index: number, modulePath?: string }
+    {answer, index}: { answer: RadioAnswer, index: number }
 ) => (
     <>
         <Typography variant={"body1"}>
@@ -59,8 +57,8 @@ const AnswerLabel = (
 
         {answer.image && (
             <LazyImage
-                src={testImage(testId, modulePath, answer.image)}
-                alt={answer.answer || `${index + 1}`}
+                src={answer.image.src}
+                alt={answer.image.alt}
                 width={125}
                 height={100}
                 style={{pointerEvents: "none", height: "auto"}}

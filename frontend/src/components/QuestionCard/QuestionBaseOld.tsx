@@ -38,8 +38,9 @@ type QuestionCardProps = {
 
 /**
  * Renders a single question with its answers.
+ * @deprecated use the new QuestionBase module
  */
-export default function QuestionBase(
+export default function QuestionBaseOld(
     {question, index, testId, disabled, module, correctAnswer, answers, footer}: QuestionCardProps
 ) {
     const {register, formState: {errors}, setValue} = useFormContext() || {formState: {errors: []}};

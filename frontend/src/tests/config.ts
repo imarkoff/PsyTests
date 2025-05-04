@@ -4,6 +4,7 @@ import TestInfoType from "@/tests/TestInfoType";
 import ravenConfig from "@/tests/RavenTest/config";
 import mmpiConfig from "@/tests/MMPITest/config";
 import TestResult from "@/schemas/TestResult";
+import pcl5Config from "@/tests/PCL5Test/config";
 
 /**
  * Configuration of a test components.
@@ -36,7 +37,8 @@ type TestsConfigType = {
 const testsConfig: TestsConfigType = {
     raven: ravenConfig,
     mmpi: mmpiConfig,
-    mmpi_big: mmpiConfig
+    mmpi_big: mmpiConfig,
+    "pcl-5": pcl5Config
 };
 
 export default testsConfig;

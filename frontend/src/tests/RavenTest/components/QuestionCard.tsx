@@ -1,4 +1,4 @@
-import QuestionBase from "@/components/QuestionCard/QuesitonBase";
+import QuestionBaseOld from "@/components/QuestionCard/QuestionBaseOld";
 import Question from "@/tests/RavenTest/schemas/Question";
 import {TestModule} from "@/tests/RavenTest/schemas/RavenTest";
 
@@ -15,7 +15,7 @@ export default function QuestionCard(
     { question, correctAnswer, testId, module, index, disabled }: QuestionCardProps
 ) {
     return (
-        <QuestionBase
+        <QuestionBaseOld
             question={question}
             answers={question.answers}
             correctAnswer={correctAnswer}
