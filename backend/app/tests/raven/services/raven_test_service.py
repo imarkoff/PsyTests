@@ -61,7 +61,7 @@ class RavenTestService(TestService):
 
     @staticmethod
     def get_document_generator():
-        from app.tests.raven.raven_to_docx import RavenToDocx
+        from app.tests.raven.services.raven_to_docx.raven_to_docx import RavenToDocx
         return RavenToDocx
 
     @staticmethod

@@ -1,11 +1,9 @@
-from typing import Type
-
 from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
 from app.services.tests.test_service import TestService
-from app.utils.results_to_docx import ResultsToDocx
+from app.tests.base.services.results_to_docx_impl import ResultsToDocxImpl
 
 
 class TestServiceImpl(TestService):
@@ -25,5 +23,5 @@ class TestServiceImpl(TestService):
         return await super().get_marks_system()
 
     @staticmethod
-    def get_document_generator() -> Type[ResultsToDocx]:
-        return super().get_document_generator()
+    def get_document_generator():
+        return ResultsToDocxImpl

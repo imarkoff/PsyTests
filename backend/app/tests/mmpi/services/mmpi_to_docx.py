@@ -4,11 +4,11 @@ from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_ALIGN_VERTICAL
 
-from app.utils.results_to_docx import ResultsToDocx
+from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 
 class MMPIToDocx(ResultsToDocx):
-    def _fill_content(self):
+    def _create_content(self):
         chart_path = self._get_result_bars()
         self.doc.add_picture(chart_path, width=None, height=None)
         if os.path.exists(chart_path):
@@ -50,7 +50,6 @@ class MMPIToDocx(ResultsToDocx):
 
         return temp_file
 
-
     def _get_raw_table(self):
         (scales, values) = zip(*self.test_result.verdict.get("raw").items())
 
@@ -70,7 +69,6 @@ class MMPIToDocx(ResultsToDocx):
             self._fill_cell(values_row[i], value, align=WD_ALIGN_VERTICAL.CENTER)
 
         return table
-
 
     def _add_profiles_row(self, types: list[str], title: str):
         if not types or len(types) == 0:
@@ -99,4 +97,3 @@ class MMPIToDocx(ResultsToDocx):
             row[1].text = description
 
         return table
-

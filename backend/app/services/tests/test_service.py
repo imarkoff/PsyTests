@@ -5,7 +5,7 @@ from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.schemas.test_base import TestBase
 from app.schemas.user_auth import UserDto
-from app.utils.results_to_docx import ResultsToDocx
+from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 
 class TestService(ABC):

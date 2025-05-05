@@ -1,5 +1,6 @@
 import os.path
 import tempfile
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from docx import Document
@@ -8,31 +9,32 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 
 from app.schemas.user_auth import UserDto
+from app.utils.results_to_docx.document_formatter import DocumentFormatter
+from app.utils.results_to_docx.header_component import HeaderComponent
 
 if TYPE_CHECKING:
     from app.schemas.test_result import TestResultDto
 
 temp_dir = tempfile.gettempdir()
 
-class ResultsToDocx:
+class ResultsToDocx(ABC):
     """
     Base class for creating docx file with test results
-    Logic for filling the document should be implemented in _fill_content method
+    Logic for filling the document should be implemented in child classes
     """
 
     path: str = None
 
-    def __init__(self, test_result: 'TestResultDto', user_info: UserDto):
+    def __init__(self, test_result: 'TestResultDto', patient: UserDto):
         self.test_result = test_result
-        self.user_info = user_info
+        self.patient = patient
 
         self.doc = Document()
+        self.formatter = DocumentFormatter()
 
-        self.doc.sections[0].left_margin = Pt(42)
-        self.doc.sections[0].right_margin = Pt(32)
-
+        self._initialize_margins()
         self._create_header()
-        self._fill_content()
+        self._create_content()
 
         self.path = self._save()
 
@@ -40,31 +42,44 @@ class ResultsToDocx:
         if self.path and os.path.exists(self.path):
             os.remove(self.path)
 
-    def _fill_content(self):
-        """
-        Method for filling the document with content.
-        Should be implemented in child classes
-        """
+    def _initialize_margins(self):
+        """Set up document formatting"""
+        self.doc.sections[0].left_margin = Pt(42)
+        self.doc.sections[0].right_margin = Pt(32)
+
+    def _create_header(self):
+        header = HeaderComponent(
+            document=self.doc,
+            formatter=self.formatter,
+            patient=self.patient,
+            test_result=self.test_result
+        )
+        header.render()
+
+    @abstractmethod
+    def _create_content(self):
+        """Method for filling the document with content"""
         pass
 
-    def _save(self):
-        """
-        Save document to file and return path
-        """
-        surname = self.user_info.surname
-        name = self.user_info.name
-        patronymic = self.user_info.patronymic
+    def _save(self) -> str:
+        """Save document to file and return path"""
+        file_name = self._generate_file_name()
+        path = os.path.join(temp_dir, file_name)
+        self.doc.save(path)
+        return path
+
+    def _generate_file_name(self) -> str:
+        """Generate a filename based on patient information and test name"""
+        surname = self.patient.surname
+        name = self.patient.name
+        patronymic = self.patient.patronymic
         credentials = "_".join([
             surname,
             name[0] if name else '',
             patronymic[0] if patronymic else '']
         )
         test_name = "_".join(self.test_result.test.name.split())
-        file_name = f"{credentials}_{test_name}.docx"
-        path = os.path.join(temp_dir, file_name)
-
-        self.doc.save(path)
-        return path
+        return f"{credentials}_{test_name}.docx"
 
     def _set_cell_font_size(self, cell, size):
         """
@@ -109,27 +124,3 @@ class ResultsToDocx:
         paragraph.paragraph_format.line_spacing = 0
         self._set_font_size(paragraph, 5)
         return paragraph
-
-    def _create_header(self):
-        """
-        Create header with information about user and test
-        """
-        user = self.user_info
-        (age, age_ending) = user.get_age()
-
-        header = self.doc.add_paragraph()
-        header.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        header.add_run(f"Бланк {self.test_result.test.name}").bold = True
-        self._set_font_size(header, 14)
-
-        credentials = self.doc.add_paragraph(f"П.І.Б: {user.surname} "
-                                             f"{user.name if user.name else ''} "
-                                             f"{user.patronymic if user.patronymic else ''}")
-        self._style_paragraph(credentials)
-
-        age = self.doc.add_paragraph(f"Вік пацієнта: {age} {age_ending}")
-        self._style_paragraph(age)
-
-        pass_date = self.test_result.passed_at.strftime("%d.%m.%Y %H:%M")
-        pass_paragraph = self.doc.add_paragraph(f"Дата проходження: {pass_date}")
-        self._style_paragraph(pass_paragraph)

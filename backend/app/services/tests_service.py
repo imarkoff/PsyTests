@@ -4,7 +4,7 @@ from uuid import UUID
 
 from app.db import tests
 from app.services.tests.test_factory import TestBundle
-from app.services.tests.test_factory_impl import TestFactoryImpl
+from app.tests.base.services.test_factory_impl import TestFactoryImpl
 from app.schemas.test_base import TestBase
 from app.tests.test_factories import TestFactories
 
