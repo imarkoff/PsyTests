@@ -1,13 +1,11 @@
-from typing import Type
-
 from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.schemas.user_auth import UserDto
 from app.services.tests.test_service import TestService
 from app.tests.pcl5.schemas.pcl5_test import PCL5Test
+from app.tests.pcl5.services.pcl5_to_docx.pcl5_to_docx import PCL5ToDocx
 from app.tests.pcl5.utils.verdict_getter.verdict_getter import VerdictGetter
 from app.tests.pcl5.verdicts import get_count_verdicts
-from app.utils.results_to_docx import ResultsToDocx
 
 
 class PCL5TestService(TestService):
@@ -37,5 +35,5 @@ class PCL5TestService(TestService):
         }
 
     @staticmethod
-    def get_document_generator() -> Type[ResultsToDocx]:
-        return super().get_document_generator()
+    def get_document_generator():
+        return PCL5ToDocx
