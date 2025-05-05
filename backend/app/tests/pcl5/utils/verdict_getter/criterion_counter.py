@@ -11,12 +11,12 @@ class CriterionCounter:
     def count(self, answers: PassTestAnswers) -> dict[str, int]:
         total_count = self._define_counts_for_countable_criterion()
 
-        for i, answer in enumerate(answers):
+        for i, answer in enumerate(answers["_"]):
             test_question = self.test.questions[i]
             test_criteria = test_question.criteria
             criteria_count = total_count.get(test_criteria, None)
 
-            if criteria_count is not None:
+            if criteria_count is not None and answer is not None:
                 total_count[test_criteria] += answer
 
         return total_count

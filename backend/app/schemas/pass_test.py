@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-PassTestAnswers: TypeAlias = Dict[str, List[Optional[int]]]
+PassTestAnswers: TypeAlias = Dict[str, List[Optional[str | int]]]
 
 class PassTestDto(BaseModel):
     assigned_test_id: UUID
@@ -15,7 +15,7 @@ class PassTestDto(BaseModel):
             "example": {
                 "assigned_test_id": "123e4567-e89b-12d3-a456-426614174000",
                 "answers": {
-                    "_": [1, 2, 3, 4, None],
+                    "_": ["Some horrible event", 2, 3, 4, None],
                     "A": [1, None, None, 4, 5]
                 },
                 "_": "Question number is the index in the list and the value is the answer number"
@@ -28,21 +28,19 @@ class PassTestDto(BaseModel):
             return False
         if len(self.answers) == 0:
             return False
-        if not self._check_per_modules(self.answers):
+        if not self._validate_answer_groups(self.answers):
             return False
         return True
 
-    def _check_per_modules(self, modules: dict) -> bool:
-        for module, answers in modules.items():
-            if not isinstance(answers, list):
-                return False
-            if not self._is_answers_valid(answers):
+    def _validate_answer_groups(self, modules: dict) -> bool:
+        for group, answers in modules.items():
+            if not isinstance(answers, list) or not self._are_answers_valid(answers):
                 return False
         return True
 
     @staticmethod
-    def _is_answers_valid(answers: list[int]) -> bool:
-        for answer in answers:
-            if answer is not None and not isinstance(answer, int):
-                return False
-        return True
+    def _are_answers_valid(answers: list[Optional[str | int]]) -> bool:
+        """
+        Validate individual answers in a list.
+        """
+        return all(answer is None or isinstance(answer, (int, str)) for answer in answers)
