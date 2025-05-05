@@ -4,6 +4,8 @@ from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 
 class PCL5ToDocx(ResultsToDocx):
+    """Generate a document for passed PCL5 test"""
+
     def _create_content(self):
         verdict = PCL5Verdict(**self.test_result.verdict)
 
@@ -25,4 +27,4 @@ class PCL5ToDocx(ResultsToDocx):
         result_paragraph = self.doc.add_paragraph()
         result_paragraph.add_run("Висновок: ").bold = True
         result_paragraph.add_run(verdict_text)
-        self._style_paragraph(result_paragraph)
+        self.formatter.style_paragraph(result_paragraph)

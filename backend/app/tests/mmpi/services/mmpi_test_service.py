@@ -65,7 +65,7 @@ class MMPITestService(TestService):
 
     @staticmethod
     def get_document_generator():
-        from app.tests.mmpi.services.mmpi_to_docx import MMPIToDocx
+        from app.tests.mmpi.services.mmpi_to_docx.mmpi_to_docx import MMPIToDocx
         return MMPIToDocx
 
     def count_scales_by_questions(self):

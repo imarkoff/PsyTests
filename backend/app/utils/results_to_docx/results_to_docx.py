@@ -4,8 +4,6 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from docx import Document
-from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
-from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 
 from app.schemas.user_auth import UserDto
@@ -43,7 +41,6 @@ class ResultsToDocx(ABC):
             os.remove(self.path)
 
     def _initialize_margins(self):
-        """Set up document formatting"""
         self.doc.sections[0].left_margin = Pt(42)
         self.doc.sections[0].right_margin = Pt(32)
 
@@ -80,47 +77,3 @@ class ResultsToDocx(ABC):
         )
         test_name = "_".join(self.test_result.test.name.split())
         return f"{credentials}_{test_name}.docx"
-
-    def _set_cell_font_size(self, cell, size):
-        """
-        Set font size for all runs in cell
-        """
-        for paragraph in cell.paragraphs:
-            self._set_font_size(paragraph, size)
-
-    @staticmethod
-    def _set_font_size(paragraph, size):
-        """
-        Set font size for all runs in paragraph
-        """
-        for run in paragraph.runs:
-            run.font.size = Pt(size)
-
-
-    def _fill_cell(self, cell, text, align=WD_ALIGN_PARAGRAPH.LEFT):
-        """
-        Fill cell with text and set alignment
-        """
-        cell.text = str(text)
-        self._set_cell_font_size(cell, 11)
-        cell.paragraphs[0].alignment = align
-        cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
-
-    def _style_paragraph(self, paragraph):
-        """
-        Style paragraph with common settings (font size, spacing)
-        """
-        paragraph.paragraph_format.space_after = 0
-        paragraph.paragraph_format.line_spacing = 1.5
-        self._set_font_size(paragraph, 12)
-
-    def _add_space_after_table(self):
-        """
-        Add empty paragraph after table
-        """
-        paragraph = self.doc.add_paragraph(" ")
-        paragraph.paragraph_format.space_after = 0
-        paragraph.paragraph_format.space_before = 0
-        paragraph.paragraph_format.line_spacing = 0
-        self._set_font_size(paragraph, 5)
-        return paragraph
