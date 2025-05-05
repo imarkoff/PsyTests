@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 from app.db.models.test_history import TestHistory
-from app.schemas.test_base import TestBase
+from app.domains.tests.base.test_base import TestBase
 
 
 class TestResultDto(BaseModel):
@@ -52,7 +52,7 @@ class TestResultDto(BaseModel):
         )
 
     def get_document_generator(self):
-        from app.tests.test_factories import TestFactories
+        from app.domains.tests.test_factories import TestFactories
         test_factory_type = TestFactories().get_factory_or_default(self.test.type)
         test_service = test_factory_type().get_service(self.test)
         return test_service.get_document_generator()

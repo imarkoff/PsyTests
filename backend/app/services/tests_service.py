@@ -3,10 +3,10 @@ import json
 from uuid import UUID
 
 from app.db import tests
-from app.services.tests.test_factory import TestBundle
-from app.tests.base.services.test_factory_impl import TestFactoryImpl
-from app.schemas.test_base import TestBase
-from app.tests.test_factories import TestFactories
+from app.domains.tests.base.test_factory import TestBundle
+from app.domains.tests.base.services.test_factory_impl import TestFactoryImpl
+from app.domains.tests.base.test_base import TestBase
+from app.domains.tests.test_factories import TestFactories
 
 
 async def get_tests() -> list[TestBase]:

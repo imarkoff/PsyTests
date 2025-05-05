@@ -5,8 +5,7 @@ from uuid import UUID
 from pydantic import ConfigDict, BaseModel
 
 from app.db.models.patient_test import PatientTest
-from app.tests.raven.raven_test import RavenTest
-from app.schemas.test_base import TestBase
+from app.domains.tests.base.test_base import TestBase
 from app.services import tests_service
 
 
@@ -24,7 +23,7 @@ class PatientTestDto(BaseModel):
                 "id": "f3847ce2-553a-422b-a2ac-57910619cb6d",
                 "patient_id": "f3847ce2-553a-422b-a2ac-57910619cb6d",
                 "assigned_by_id": "f3847ce2-553a-422b-a2ac-57910619cb6d",
-                "test": RavenTest.model_json_schema().get("example", {}),
+                "test": TestBase.model_json_schema().get("example", {}),
                 "assigned_at": "2025-01-22T19:05:29.123456"
             }
         }

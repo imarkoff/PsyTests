@@ -13,7 +13,7 @@ else:
     PatientTest = "PatientTest"
 
 from sqlalchemy import String, Enum
-from sqlalchemy.orm import relationship, Mapped, mapped_column, validates
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.schemas.role import Role
 

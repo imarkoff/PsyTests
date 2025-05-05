@@ -10,9 +10,9 @@ from starlette.responses import Response
 from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
 from app.schemas.role import Role
-from app.schemas.test_base import TestBase
+from app.domains.tests.base.test_base import TestBase
 from app.services import tests_service
-from app.tests.test_types import TestTypes
+from app.domains.tests.test_types import TestTypes
 
 router = APIRouter(prefix="/tests", tags=["tests"])
 
