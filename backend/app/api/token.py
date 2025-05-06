@@ -1,12 +1,10 @@
 from fastapi import HTTPException, APIRouter, Depends
-from sqlalchemy.orm import Session
 from starlette.requests import Request
 from starlette.responses import Response
 
 from app.core.bearer import JWTBearer
-from app.db.session import get_postgresql_db
-from app.services.user_service import user_by_id
-
+from app.dependenies import get_user_service
+from app.services.user_service import UserService
 
 router = APIRouter(prefix="/token", tags=["token"])
 
@@ -19,7 +17,7 @@ router = APIRouter(prefix="/token", tags=["token"])
 )
 async def refresh_token(
     request: Request,
-    db: Session = Depends(get_postgresql_db)
+    user_service: UserService = Depends(get_user_service),
 ):
     token = request.cookies.get("refresh_token")
 
@@ -27,7 +25,7 @@ async def refresh_token(
         raise HTTPException(status_code=401)
 
     payload = JWTBearer.decode(token)
-    user = user_by_id(payload["user_id"], db)
+    user = user_service.get_user_by_id(payload["user_id"])
 
     if not user:
         raise HTTPException(status_code=401)

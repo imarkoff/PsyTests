@@ -1,18 +1,18 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 from starlette.responses import Response, FileResponse
 
-from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
+from app.dependenies import get_authenticator
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
 from app.schemas.test_result import TestResultDto
 from app.services import test_history_service
 from app.services.patients import patient_tests_service, patients_service
+from app.services.user_authenticator import Authenticator
 from app.utils import media_types
 
 router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"], responses={
@@ -27,10 +27,9 @@ router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"],
 async def get_patient_tests(
         patient_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+        authenticator: Authenticator = Depends(get_authenticator),
 ):
-    doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
-
+    doctor = authenticator.auth(role=Role.DOCTOR)
     try:
         return await patient_tests_service.get_patient_tests_by_doctor(db, doctor_id=doctor.id, patient_id=patient_id)
     except NotFoundError:
@@ -41,9 +40,9 @@ async def get_patient_tests(
 async def get_patient_history(
         patient_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+        authenticator: Authenticator = Depends(get_authenticator),
 ):
-    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    authenticator.auth(role=Role.DOCTOR)
     return await test_history_service.get_tests_history(db, patient_id=patient_id)
 
 
@@ -51,9 +50,9 @@ async def get_patient_history(
 async def get_patient_test_history(
         patient_id: UUID, test_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+        authenticator: Authenticator = Depends(get_authenticator)
 ):
-    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    authenticator.auth(role=Role.DOCTOR)
     return await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
 
 
@@ -65,9 +64,9 @@ async def get_patient_test_history(
 async def export_patient_test_history(
         patient_id: UUID, test_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+        authenticator: Authenticator = Depends(get_authenticator)
 ):
-    doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    doctor = authenticator.auth(role=Role.DOCTOR)
     test_result = await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
     patient = await patients_service.get_patient(db, doctor_id=doctor.id, patient_id=patient_id)
 
@@ -90,9 +89,9 @@ async def export_patient_test_history(
 async def revalidate_test(
         patient_id: UUID, test_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+        authenticator: Authenticator = Depends(get_authenticator)
 ):
-    JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    authenticator.auth(role=Role.DOCTOR)
     try:
         return await test_history_service.revalidate_test(db, patient_id=patient_id, test_id=test_id)
     except NotFoundError:
@@ -108,9 +107,9 @@ async def revalidate_test(
 async def assign_test(
         test_id: UUID, patient_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+        authenticator: Authenticator = Depends(get_authenticator)
 ):
-    doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    doctor = authenticator.auth(role=Role.DOCTOR)
 
     try:
         test = await patient_tests_service.assign_test(db, test_id, doctor_id=doctor.id, patient_id=patient_id)
@@ -131,9 +130,9 @@ async def assign_test(
 async def unassign_test(
         assigned_test_id: UUID, patient_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False))
+        authenticator: Authenticator = Depends(get_authenticator)
 ):
-    doctor = JWTBearer.auth(credentials, db, role=Role.DOCTOR)
+    doctor = authenticator.auth(role=Role.DOCTOR)
 
     try:
         await patient_tests_service.unassign_test(db, assigned_test_id, doctor_id=doctor.id, patient_id=patient_id)

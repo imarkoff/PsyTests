@@ -31,6 +31,7 @@ class User(Base):
     password: Mapped[bytes] = mapped_column(nullable=False)
     password_salt: Mapped[bytes] = mapped_column(nullable=False)
     role: Mapped[Role] = mapped_column(Enum(Role), default=Role.PATIENT)
+
     patient_tests: Mapped[List["PatientTest"]] = relationship("PatientTest", back_populates="patient",
                                                               foreign_keys="[PatientTest.patient_id]",
                                                               cascade="all, delete-orphan")
