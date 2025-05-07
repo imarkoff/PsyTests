@@ -9,7 +9,7 @@ from app.exceptions import NotFoundError, ValidationError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.test_result import TestResultDto, TestResultShortDto
 from app.schemas.user_auth import UserDto
-from app.services.patients import patients_service
+from app.services.patients.doctor_patient_service import doctor_patient_service
 from app.services.tests_service import get_test
 
 
@@ -40,7 +40,7 @@ async def pass_test(db: Session, patient: UserDto, pass_dto: PassTestDto) -> Tes
     db.add(new_history)
     db.commit()
 
-    await patients_service.change_attention(db, patient.id, True)
+    await doctor_patient_service.change_attention(db, patient.id, True)
 
     return TestResultShortDto(
         id=new_history.id,

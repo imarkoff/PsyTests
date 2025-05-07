@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime, UTC
 from typing import Optional
+from warnings import deprecated
 
 import jwt
 from fastapi import HTTPException
@@ -15,6 +16,7 @@ from app.services.user_service import user_by_id
 
 class JWTBearer:
     @staticmethod
+    @deprecated("Use Authenticator class instead")
     def auth(header: Optional[HTTPAuthorizationCredentials], db: Session, role: str = None) -> UserDto:
         if not header or not header.credentials:
             raise HTTPException(status_code=401)

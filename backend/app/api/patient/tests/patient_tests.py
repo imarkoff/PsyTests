@@ -1,29 +1,29 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 from starlette.responses import Response
 
-from app.core.bearer import JWTBearer
 from app.db.session import get_postgresql_db
+from app.dependenies.services import get_authenticator, get_patient_test_service
 from app.exceptions import NotFoundError, ValidationError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
 from app.schemas.test_result import TestResultShortDto
 from app.services import test_history_service
-from app.services.patients import patient_tests_service
+from app.services.patients.patient_test_service import PatientTestService
+from app.services.user_authenticator import Authenticator
 
 router = APIRouter(prefix="/tests", tags=["patient_tests"])
 
 @router.get("/", summary="Get patient tests", response_model=list[PatientTestDto])
 async def get_tests(
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
-        db: Session = Depends(get_postgresql_db)
+        authenticator: Authenticator = Depends(get_authenticator),
+        patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
-    patient = JWTBearer.auth(credentials, db, role=Role.PATIENT)
-    return await patient_tests_service.get_patient_tests(db, patient_id=patient.id)
+    patient = await authenticator.auth(role=Role.PATIENT)
+    return await patient_test_service.get_patient_tests(patient.id)
 
 
 @router.post("/", summary="Pass test", response_model=TestResultShortDto, status_code=201, responses={
@@ -32,16 +32,14 @@ async def get_tests(
 })
 async def pass_test(
         test: PassTestDto,
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
+        authenticator: Authenticator = Depends(get_authenticator),
         db: Session = Depends(get_postgresql_db)
 ):
-    patient = JWTBearer.auth(credentials, db, role=Role.PATIENT)
+    patient = await authenticator.auth(role=Role.PATIENT)
 
     try:
         result = await test_history_service.pass_test(db, patient=patient, pass_dto=test)
         return Response(status_code=201, content=result.model_dump_json(), media_type="application/json")
-    # except ValueError:
-    #     return Response(status_code=400, content="Answers count is not equal to questions count")
     except FileNotFoundError or NotFoundError:
         return Response(status_code=404)
     except ValidationError:
@@ -50,18 +48,18 @@ async def pass_test(
 
 @router.get("/history", summary="Get tests history", response_model=list[TestResultShortDto])
 async def get_tests_history(
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
+        authenticator: Authenticator = Depends(get_authenticator),
         db: Session = Depends(get_postgresql_db)
 ):
-    patient = JWTBearer.auth(credentials, db, role=Role.PATIENT)
+    patient = await authenticator.auth(role=Role.PATIENT)
     return await test_history_service.get_tests_history(db, patient_id=patient.id, short=True)
 
 
 @router.get("/{assigned_test_id}", summary="Get test", response_model=PatientTestDto)
 async def get_test(
         assigned_test_id: UUID,
-        credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
-        db: Session = Depends(get_postgresql_db)
+        authenticator: Authenticator = Depends(get_authenticator),
+        patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
-    patient = JWTBearer.auth(credentials, db, role=Role.PATIENT)
-    return await patient_tests_service.get_patient_test(db, patient_id=patient.id, test_id=assigned_test_id)
+    patient = await authenticator.auth(role=Role.PATIENT)
+    return await patient_test_service.get_patient_test(patient_id=patient.id, test_id=assigned_test_id)

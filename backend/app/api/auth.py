@@ -1,15 +1,13 @@
 from datetime import timedelta, datetime, UTC
-from typing import cast
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
 from starlette.responses import Response
 
+from app.dependenies.services import get_user_service
 from app.settings import settings
 from app.db.models.user import User
-from app.db.session import get_postgresql_db
 from app.schemas.user_auth import UserCreate, UserLogin
-from app.services.user_service import register_user, get_user_by_phone
+from app.services.user_service import UserService
 from app.core.create_tokens import create_tokens
 from app.core.password import verify_password
 
@@ -23,11 +21,14 @@ router = APIRouter(prefix="/auth", tags=["auth"])
         201: {"content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}}, "description": "Access token"},
     }
 )
-async def sign_up(data: UserCreate, db: Session = Depends(get_postgresql_db)):
-    if db.query(User).filter(User.phone == data.phone).first():
+async def sign_up(
+        data: UserCreate,
+        user_service: UserService = Depends(get_user_service)
+):
+    if await user_service.get_user_by_phone(data.phone):
         return Response(status_code=409)
 
-    new_user: User = register_user(data, db)
+    new_user: User = await user_service.register_user(data)
 
     (access_token, refresh_token) = create_tokens(new_user)
 
@@ -44,8 +45,11 @@ async def sign_up(data: UserCreate, db: Session = Depends(get_postgresql_db)):
         200: {"content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}}, "description": "Access token"}
     }
 )
-async def login_user(data: UserLogin, db: Session = Depends(get_postgresql_db)):
-    user = cast(User, get_user_by_phone(data.phone, db))
+async def login_user(
+        data: UserLogin,
+        user_service = Depends(get_user_service)
+):
+    user = await user_service.get_user_by_phone(data.phone)
 
     if not user or not verify_password(data.password, user.password, user.password_salt):
         return Response(status_code=404)

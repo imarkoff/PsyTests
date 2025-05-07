@@ -3,7 +3,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from app.core.bearer import JWTBearer
-from app.dependenies import get_user_service
+from app.dependenies.services import get_user_service
 from app.services.user_service import UserService
 
 router = APIRouter(prefix="/token", tags=["token"])
@@ -25,7 +25,7 @@ async def refresh_token(
         raise HTTPException(status_code=401)
 
     payload = JWTBearer.decode(token)
-    user = user_service.get_user_by_id(payload["user_id"])
+    user = await user_service.get_user_by_id(payload["user_id"])
 
     if not user:
         raise HTTPException(status_code=401)

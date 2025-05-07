@@ -5,13 +5,14 @@ from sqlalchemy.orm import Session
 from starlette.responses import Response, FileResponse
 
 from app.db.session import get_postgresql_db
-from app.dependenies import get_authenticator
+from app.dependenies.services import get_authenticator, get_patient_test_service, get_doctor_patient_service
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
 from app.schemas.test_result import TestResultDto
 from app.services import test_history_service
-from app.services.patients import patient_tests_service, patients_service
+from app.services.patients.doctor_patient_service import DoctorPatientService
+from app.services.patients.patient_test_service import PatientTestService
 from app.services.user_authenticator import Authenticator
 from app.utils import media_types
 
@@ -21,19 +22,14 @@ router = APIRouter(prefix="/{patient_id}/tests", tags=["doctor_patients_tests"],
 })
 
 
-@router.get("/", summary="Get tests assigned to patient", response_model=list[PatientTestDto], responses={
-    404: {"description": "Patient not found"},
-})
+@router.get("/", summary="Get tests assigned to patient", response_model=list[PatientTestDto])
 async def get_patient_tests(
         patient_id: UUID,
-        db: Session = Depends(get_postgresql_db),
         authenticator: Authenticator = Depends(get_authenticator),
+        patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
-    doctor = authenticator.auth(role=Role.DOCTOR)
-    try:
-        return await patient_tests_service.get_patient_tests_by_doctor(db, doctor_id=doctor.id, patient_id=patient_id)
-    except NotFoundError:
-        return Response("Patient not found", status_code=404, media_type="text/plain")
+    doctor = await authenticator.auth(role=Role.DOCTOR)
+    return await patient_test_service.get_patient_tests_by_doctor(doctor_id=doctor.id, patient_id=patient_id)
 
 
 @router.get("/history", summary="Get passed tests history of patient", response_model=list[TestResultDto])
@@ -42,7 +38,7 @@ async def get_patient_history(
         db: Session = Depends(get_postgresql_db),
         authenticator: Authenticator = Depends(get_authenticator),
 ):
-    authenticator.auth(role=Role.DOCTOR)
+    await authenticator.auth(role=Role.DOCTOR)
     return await test_history_service.get_tests_history(db, patient_id=patient_id)
 
 
@@ -52,7 +48,7 @@ async def get_patient_test_history(
         db: Session = Depends(get_postgresql_db),
         authenticator: Authenticator = Depends(get_authenticator)
 ):
-    authenticator.auth(role=Role.DOCTOR)
+    await authenticator.auth(role=Role.DOCTOR)
     return await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
 
 
@@ -64,11 +60,12 @@ async def get_patient_test_history(
 async def export_patient_test_history(
         patient_id: UUID, test_id: UUID,
         db: Session = Depends(get_postgresql_db),
-        authenticator: Authenticator = Depends(get_authenticator)
+        authenticator: Authenticator = Depends(get_authenticator),
+        doctor_patient_service: DoctorPatientService = Depends(get_doctor_patient_service)
 ):
-    doctor = authenticator.auth(role=Role.DOCTOR)
+    doctor = await authenticator.auth(role=Role.DOCTOR)
     test_result = await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
-    patient = await patients_service.get_patient(db, doctor_id=doctor.id, patient_id=patient_id)
+    patient = await doctor_patient_service.get_patient(doctor_id=doctor.id, patient_id=patient_id)
 
     # Keep a reference to the ResultsToDocx object to prevent premature garbage collection
     results_to_docx = test_result.get_document_generator()(test_result, patient.patient)
@@ -91,7 +88,7 @@ async def revalidate_test(
         db: Session = Depends(get_postgresql_db),
         authenticator: Authenticator = Depends(get_authenticator)
 ):
-    authenticator.auth(role=Role.DOCTOR)
+    await authenticator.auth(role=Role.DOCTOR)
     try:
         return await test_history_service.revalidate_test(db, patient_id=patient_id, test_id=test_id)
     except NotFoundError:
@@ -106,13 +103,13 @@ async def revalidate_test(
              })
 async def assign_test(
         test_id: UUID, patient_id: UUID,
-        db: Session = Depends(get_postgresql_db),
-        authenticator: Authenticator = Depends(get_authenticator)
+        authenticator: Authenticator = Depends(get_authenticator),
+        patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
-    doctor = authenticator.auth(role=Role.DOCTOR)
+    doctor = await authenticator.auth(role=Role.DOCTOR)
 
     try:
-        test = await patient_tests_service.assign_test(db, test_id, doctor_id=doctor.id, patient_id=patient_id)
+        test = await patient_test_service.assign_test(test_id=test_id, doctor_id=doctor.id, patient_id=patient_id)
         return Response(status_code=201, media_type="application/json", content=test.model_dump_json())
     except NotFoundError:
         return Response("Patient not found", status_code=404, media_type="text/plain")
@@ -129,13 +126,13 @@ async def assign_test(
                 })
 async def unassign_test(
         assigned_test_id: UUID, patient_id: UUID,
-        db: Session = Depends(get_postgresql_db),
-        authenticator: Authenticator = Depends(get_authenticator)
+        authenticator: Authenticator = Depends(get_authenticator),
+        patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
-    doctor = authenticator.auth(role=Role.DOCTOR)
+    doctor = await authenticator.auth(role=Role.DOCTOR)
 
     try:
-        await patient_tests_service.unassign_test(db, assigned_test_id, doctor_id=doctor.id, patient_id=patient_id)
+        await patient_test_service.unassign_test(test_id=assigned_test_id, doctor_id=doctor.id, patient_id=patient_id)
         return Response(status_code=204)
     except NotFoundError:
         return Response(status_code=404, media_type="text/plain")

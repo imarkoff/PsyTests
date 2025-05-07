@@ -2,7 +2,7 @@ from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from app.core.bearer import JWTBearer
-from app.dependenies import get_user_service
+from app.dependenies.services import get_user_service
 from app.services.user_authenticator import Authenticator
 from app.services.user_service import UserService
 

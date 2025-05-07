@@ -1,0 +1,6 @@
+from .doctor_patient_service import DoctorPatientService
+from .doctor_patient_changer import DoctorPatientChanger
+from .doctor_patient_creator import DoctorPatientCreator
+from .doctor_patient_deleter import DoctorPatientDeleter
+from .doctor_patient_finder import DoctorPatientFinder
+from .doctor_patient_getter import DoctorPatientGetter
