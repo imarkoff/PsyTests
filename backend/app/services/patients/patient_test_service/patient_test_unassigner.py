@@ -21,7 +21,7 @@ class PatientTestUnassigner:
         if not test:
             raise NotFoundError
 
-        await self.unassign_test(test_id, doctor_id, patient_id)
+        await self.repository.unassign_test(test)
 
     async def unassign_doctor_tests(self, doctor_id: UUID, patient_id: UUID) -> None:
         """

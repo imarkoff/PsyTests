@@ -1,18 +1,17 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
 from starlette.responses import Response, FileResponse
 
-from app.db.session import get_postgresql_db
 from app.dependenies.services import get_authenticator, get_patient_test_service, get_doctor_patient_service
+from app.dependenies.services.test_history_service_di import get_test_history_service
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
 from app.schemas.role import Role
 from app.schemas.test_result import TestResultDto
-from app.services import test_history_service
 from app.services.patients.doctor_patient_service import DoctorPatientService
 from app.services.patients.patient_test_service import PatientTestService
+from app.services.test_history_service.test_history_service import TestHistoryService
 from app.services.user_authenticator import Authenticator
 from app.utils import media_types
 
@@ -35,21 +34,21 @@ async def get_patient_tests(
 @router.get("/history", summary="Get passed tests history of patient", response_model=list[TestResultDto])
 async def get_patient_history(
         patient_id: UUID,
-        db: Session = Depends(get_postgresql_db),
         authenticator: Authenticator = Depends(get_authenticator),
+        test_history_service: TestHistoryService = Depends(get_test_history_service),
 ):
     await authenticator.auth(role=Role.DOCTOR)
-    return await test_history_service.get_tests_history(db, patient_id=patient_id)
+    return await test_history_service.get_detailed_test_results(patient_id=patient_id)
 
 
 @router.get("/history/{test_id}", summary="Get passed test history of patient", response_model=TestResultDto)
 async def get_patient_test_history(
         patient_id: UUID, test_id: UUID,
-        db: Session = Depends(get_postgresql_db),
-        authenticator: Authenticator = Depends(get_authenticator)
+        authenticator: Authenticator = Depends(get_authenticator),
+        test_history_service: TestHistoryService = Depends(get_test_history_service)
 ):
     await authenticator.auth(role=Role.DOCTOR)
-    return await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
+    return await test_history_service.get_test_result_by_id(patient_id=patient_id, test_id=test_id)
 
 
 @router.get("/history/{test_id}/export",
@@ -59,12 +58,12 @@ async def get_patient_test_history(
             )
 async def export_patient_test_history(
         patient_id: UUID, test_id: UUID,
-        db: Session = Depends(get_postgresql_db),
         authenticator: Authenticator = Depends(get_authenticator),
-        doctor_patient_service: DoctorPatientService = Depends(get_doctor_patient_service)
+        doctor_patient_service: DoctorPatientService = Depends(get_doctor_patient_service),
+        test_history_service: TestHistoryService = Depends(get_test_history_service)
 ):
     doctor = await authenticator.auth(role=Role.DOCTOR)
-    test_result = await test_history_service.get_test_history(db, patient_id=patient_id, test_id=test_id)
+    test_result = await test_history_service.get_test_result_by_id(patient_id=patient_id, test_id=test_id)
     patient = await doctor_patient_service.get_patient(doctor_id=doctor.id, patient_id=patient_id)
 
     # Keep a reference to the ResultsToDocx object to prevent premature garbage collection
@@ -85,12 +84,12 @@ async def export_patient_test_history(
 @router.patch("/history/{test_id}/revalidate", summary="Revalidate test", response_model=TestResultDto)
 async def revalidate_test(
         patient_id: UUID, test_id: UUID,
-        db: Session = Depends(get_postgresql_db),
-        authenticator: Authenticator = Depends(get_authenticator)
+        authenticator: Authenticator = Depends(get_authenticator),
+        test_history_service: TestHistoryService = Depends(get_test_history_service)
 ):
     await authenticator.auth(role=Role.DOCTOR)
     try:
-        return await test_history_service.revalidate_test(db, patient_id=patient_id, test_id=test_id)
+        return await test_history_service.revalidate_test(patient_id=patient_id, test_id=test_id)
     except NotFoundError:
         return Response(status_code=404, media_type="text/plain")
 

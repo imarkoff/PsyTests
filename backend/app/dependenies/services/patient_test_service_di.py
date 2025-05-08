@@ -1,8 +1,9 @@
 from fastapi import Depends
 
 from app.dependenies.repositories import get_patient_test_repository
-from app.dependenies.services.shared_doctor_patient_deps import get_doctor_patient_getter
-from app.dependenies.services.shared_patient_test_deps import get_patient_test_unassigner
+from app.dependenies.services.shared_deps.shared_doctor_patient_deps import get_doctor_patient_getter
+from app.dependenies.services.shared_deps.shared_patient_test_deps import get_patient_test_unassigner, \
+    get_patient_test_getter
 from app.services.patients.patient_test_service import *
 
 
@@ -14,11 +15,10 @@ def get_patient_test_assigner(
 
 
 def get_patient_test_service(
+        getter=Depends(get_patient_test_getter),
         assigner=Depends(get_patient_test_assigner),
-        unassigner=Depends(get_patient_test_unassigner),
-        repository=Depends(get_patient_test_repository)
+        unassigner=Depends(get_patient_test_unassigner)
 ) -> PatientTestService:
-    getter = PatientTestGetter(repository)
     return PatientTestService(
         patient_test_assigner=assigner,
         patient_test_getter=getter,

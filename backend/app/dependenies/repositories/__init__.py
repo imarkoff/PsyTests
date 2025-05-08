@@ -1,2 +1,2 @@
-from .get_doctor_patient_repository import get_doctor_patient_repository
-from .get_patient_test_repository import get_patient_test_repository
+from .doctor_patient_repository_di import get_doctor_patient_repository
+from .patient_test_repository_di import get_patient_test_repository
