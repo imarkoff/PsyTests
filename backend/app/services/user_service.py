@@ -40,8 +40,3 @@ class UserService:
 
     async def get_patients_by_data(self, data: str) -> list[User]:
         return await self.user_repository.get_patients_by_data(data)
-
-
-@deprecated("Use UserService instead")
-def user_by_id(user_id: UUID, db: Session) -> User | None:
-    return db.query(User).filter(User.id == user_id).first()
