@@ -16,5 +16,9 @@ class TestFactories:
         "pcl-5": PCL5TestFactory
     }
 
-    def get_factory_or_default(self, test_type: str):
+    def get_factory_or_default(self, test_type: str) -> Type[TestFactory]:
         return self.factories.get(test_type, TestFactoryImpl)
+
+    @staticmethod
+    def get_default_factory() -> Type[TestFactory]:
+        return TestFactoryImpl

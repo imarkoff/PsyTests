@@ -4,11 +4,11 @@ from pydantic import UUID4
 from sqlalchemy import or_
 
 from app.db.models.user import User
-from app.repositories.base_respository import BaseRepository
+from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
 from app.schemas.role import Role
 
 
-class UserRepository(BaseRepository):
+class UserRepository(SQLAlchemyRepository):
     async def get_user_by_id(self, user_id: UUID4) -> User | None:
         return self.db.query(User).filter(User.id == user_id).first()
 

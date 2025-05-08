@@ -20,8 +20,7 @@ class TestHistoryService:
         Creates new test history record and updates patient attention status.
 
         Raises:
-            FileNotFoundError: If test not found
-            NotFoundError: If assigned test not found
+            NotFoundError: If assigned test or test not found
             ValidationError: If test data is invalid
         """
         return await self.passer.pass_test(patient, pass_dto)

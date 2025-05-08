@@ -3,12 +3,13 @@ from uuid import UUID
 from app.exceptions import NotFoundError
 from app.repositories.test_history_repository import TestHistoryRepository
 from app.schemas.test_result import TestResultDto, TestResultShortDto
-from app.services.tests_service import get_test
+from app.services.test_service import TestService
 
 
 class TestHistoryGetter:
-    def __init__(self, test_history_repository: TestHistoryRepository):
+    def __init__(self, test_history_repository: TestHistoryRepository, test_service: TestService):
         self.repository = test_history_repository
+        self.test_service = test_service
 
     async def get_detailed_test_results(self, patient_id: UUID) -> list[TestResultDto]:
         """Get detailed test result DTOs for a patient"""
@@ -37,8 +38,8 @@ class TestHistoryGetter:
         result = []
 
         for test in tests:
-            test_bundle = await get_test(test.test_id)
-            result.append((test, test_bundle.model))
+            test_model = await self.test_service.get_base_test(test.test_id)
+            result.append((test, test_model))
 
         return result
 
@@ -50,9 +51,8 @@ class TestHistoryGetter:
         test_history = await self.repository.get_by_id_and_patient_id(test_id, patient_id)
 
         if not test_history:
-            raise NotFoundError
+            raise NotFoundError(f"Test history with ID {test_id} not found for patient {patient_id}")
 
-        test_bundle = await get_test(test_history.test_id)
-        test_model = test_bundle.model
+        test_model = await self.test_service.get_base_test(test_history.test_id)
 
         return TestResultDto.from_test_result(test_history, test_model)

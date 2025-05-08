@@ -2,7 +2,7 @@ from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.base.test_factory import TestFactory
 from app.domains.tests.raven.schemas.raven_test import RavenTest
 from app.domains.tests.raven.services.raven_test_parser import RavenTestParser
-from app.domains.tests.raven.services.raven_test_service import RavenTestService
+from app.domains.tests.raven.services.raven_test_service import RavenTestProcessor
 
 
 class RavenTestFactory(TestFactory):
@@ -12,5 +12,5 @@ class RavenTestFactory(TestFactory):
     def get_model(self, data: dict) -> RavenTest:
         return self.parser.parse(data)
 
-    def get_service(self, test: TestBase) -> RavenTestService:
-        return RavenTestService(test)
+    def get_service(self, test: TestBase) -> RavenTestProcessor:
+        return RavenTestProcessor(test)

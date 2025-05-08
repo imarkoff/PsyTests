@@ -8,7 +8,7 @@ from app.schemas.user_auth import UserDto
 from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 
-class TestService(ABC):
+class TestProcessor(ABC):
     """Service for managing test"""
     def __init__(self, test: TestBase) -> None:
         self.test = test

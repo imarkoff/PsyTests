@@ -39,8 +39,8 @@ async def pass_test(
     try:
         result = await test_history_service.pass_test(patient=patient, pass_dto=test)
         return Response(status_code=201, content=result.model_dump_json(), media_type="application/json")
-    except FileNotFoundError or NotFoundError:
-        return Response(status_code=404)
+    except NotFoundError as e:
+        return Response(e.message, status_code=404, media_type="plain/text")
     except ValidationError:
         return Response(status_code=400, content="Invalid test data")
 

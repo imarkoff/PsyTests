@@ -4,7 +4,7 @@ from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.raven.schemas.test_history_results import Results
 from app.schemas.user_auth import UserDto
-from app.domains.tests.base.test_service import TestService
+from app.domains.tests.base.test_processor import TestProcessor
 from app.utils.read_csv_as_matrix import read_csv_as_matrix
 from app.domains.tests.raven.utils import test_includes
 from app.domains.tests.raven.utils.calculate_points import calculate_points
@@ -13,7 +13,7 @@ from app.domains.tests.raven.utils.get_result_mark import get_result_mark
 from app.domains.tests.raven.schemas.raven_test import RavenTest
 
 
-class RavenTestService(TestService):
+class RavenTestProcessor(TestProcessor):
     def __init__(self, test: RavenTest):
         super().__init__(test)
 

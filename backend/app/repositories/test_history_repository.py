@@ -2,10 +2,10 @@ from typing import cast
 from uuid import UUID
 
 from app.db.models.test_history import TestHistory
-from app.repositories.base_respository import BaseRepository
+from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
 
 
-class TestHistoryRepository(BaseRepository):
+class TestHistoryRepository(SQLAlchemyRepository):
     async def get_by_patient_id_desc(self, patient_id: UUID) -> list[TestHistory]:
         result = (self.db.query(TestHistory)
             .order_by(TestHistory.passed_at.desc())

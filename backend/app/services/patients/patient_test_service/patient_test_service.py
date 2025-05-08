@@ -22,8 +22,7 @@ class PatientTestService:
         Assign test to patient
 
         Raises:
-            FileNotFoundError: If test not found
-            NotFoundError: If patient not found
+            NotFoundError: If patient or test not found
             AlreadyExistsError: If test already assigned to client
         """
         return await self.assigner.assign_test(test_id, doctor_id, patient_id)

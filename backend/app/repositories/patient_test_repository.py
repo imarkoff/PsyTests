@@ -4,10 +4,10 @@ from uuid import UUID
 
 from app.db.models.doctor_patient import DoctorPatient
 from app.db.models.patient_test import PatientTest
-from app.repositories.base_respository import BaseRepository
+from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
 
 
-class PatientTestRepository(BaseRepository):
+class PatientTestRepository(SQLAlchemyRepository):
     async def get_by_id(self, test_id: UUID) -> PatientTest | None:
         return self.db.query(PatientTest).filter(PatientTest.id == test_id).first()
 

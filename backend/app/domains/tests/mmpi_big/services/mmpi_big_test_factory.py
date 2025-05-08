@@ -1,7 +1,7 @@
 from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.base.test_factory import TestFactory
-from app.domains.tests.base.test_service import TestService
-from app.domains.tests.mmpi.services.mmpi_test_service import MMPITestService
+from app.domains.tests.base.test_processor import TestProcessor
+from app.domains.tests.mmpi.services.mmpi_test_service import MMPITestProcessor
 from app.domains.tests.mmpi.utils.scales_counter import ScalesCounter
 from app.domains.tests.mmpi.utils.verdict_calculator import VerdictCalculator
 from app.domains.tests.mmpi_big.schemas.mmpi_big import MMPIBigTest
@@ -16,8 +16,8 @@ class MMPIBigTestFactory(TestFactory):
     def get_model(self, data: dict) -> MMPIBigTest:
         return self.parser.parse(data)
 
-    def get_service(self, test: TestBase) -> TestService:
-        return MMPITestService(
+    def get_service(self, test: TestBase) -> TestProcessor:
+        return MMPITestProcessor(
             test=test,
             results_manager_factory=MMPIBigResultsManagerFactory(),
             verdict_calculator=VerdictCalculator(),

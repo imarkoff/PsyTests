@@ -1,4 +1,5 @@
 from .user_service_di import get_user_service
+from .authenticator_di import get_authenticator
+from .test_service_di import get_test_service
 from .patient_test_service_di import get_patient_test_service
 from .doctor_patient_service_di import get_doctor_patient_service
-from .authenticator_di import get_authenticator

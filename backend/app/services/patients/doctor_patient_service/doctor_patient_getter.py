@@ -22,6 +22,6 @@ class DoctorPatientGetter:
         doctor_patient = await self.doctor_patient_repository.get_by_doctor_id_and_patient_id(doctor_id, patient_id)
 
         if not doctor_patient:
-            raise NotFoundError
+            raise NotFoundError(f"DoctorPatient with doctor_id {doctor_id} and patient_id {patient_id} not found")
 
         return DoctorPatientDto.create(doctor_patient)

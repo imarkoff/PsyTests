@@ -2,11 +2,11 @@ from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.base.test_base import TestBase
 from app.schemas.user_auth import UserDto
-from app.domains.tests.base.test_service import TestService
+from app.domains.tests.base.test_processor import TestProcessor
 from app.domains.tests.base.services.results_to_docx_impl import ResultsToDocxImpl
 
 
-class TestServiceImpl(TestService):
+class TestProcessorImpl(TestProcessor):
     def __init__(self, test: TestBase) -> None:
         super().__init__(test)
 

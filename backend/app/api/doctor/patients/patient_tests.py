@@ -110,10 +110,8 @@ async def assign_test(
     try:
         test = await patient_test_service.assign_test(test_id=test_id, doctor_id=doctor.id, patient_id=patient_id)
         return Response(status_code=201, media_type="application/json", content=test.model_dump_json())
-    except NotFoundError:
-        return Response("Patient not found", status_code=404, media_type="text/plain")
-    except FileNotFoundError:
-        return Response("Test not found", status_code=404, media_type="text/plain")
+    except NotFoundError as e:
+        return Response(e.message, status_code=404, media_type="text/plain")
     except AlreadyExistsError:
         return Response(status_code=409)
 

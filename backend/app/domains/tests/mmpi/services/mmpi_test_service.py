@@ -4,7 +4,7 @@ from typing import Type
 from app.db.models.test_history import TestHistory
 from app.schemas.pass_test import PassTestAnswers
 from app.schemas.user_auth import UserDto
-from app.domains.tests.base.test_service import TestService
+from app.domains.tests.base.test_processor import TestProcessor
 from app.domains.tests.mmpi import verdicts
 from app.domains.tests.mmpi.schemas.mmpi_test import MMPITest
 from app.domains.tests.mmpi.utils.results_manager.abstract_results_converter import ConvertedResults
@@ -14,7 +14,7 @@ from app.domains.tests.mmpi.utils.scales_counter import ScalesCounter
 from app.domains.tests.mmpi.utils.verdict_calculator import VerdictCalculator
 
 
-class MMPITestService(TestService):
+class MMPITestProcessor(TestProcessor):
     def __init__(self,
                  test: MMPITest,
                  verdict_calculator: VerdictCalculator,

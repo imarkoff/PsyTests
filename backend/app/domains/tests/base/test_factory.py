@@ -3,13 +3,13 @@ from dataclasses import dataclass
 
 from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.base.test_parser import TestParser
-from app.domains.tests.base.test_service import TestService
+from app.domains.tests.base.test_processor import TestProcessor
 
 
 @dataclass
 class TestBundle:
     model: TestBase
-    service: TestService
+    service: TestProcessor
 
 
 class TestFactory(ABC):
@@ -18,7 +18,9 @@ class TestFactory(ABC):
     Also, should resolve dependencies for a service.
     """
 
-    def __init__(self, parser: TestParser):
+    def __init__(self, parser: TestParser = None):
+        if parser is None:
+            raise ValueError("Parser must be provided")
         self.parser = parser
 
     def get(self, data: dict) -> TestBundle:
@@ -34,5 +36,5 @@ class TestFactory(ABC):
         return self.parser.parse(data)
 
     @abstractmethod
-    def get_service(self, test: TestBase) -> TestService:
-        return TestService(test)
+    def get_service(self, test: TestBase) -> TestProcessor:
+        return TestProcessor(test)

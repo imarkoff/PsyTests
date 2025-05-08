@@ -1,7 +1,7 @@
 from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.base.test_factory import TestFactory
 from app.domains.tests.base.services.test_parser_impl import TestParserImpl
-from app.domains.tests.base.services.test_service_impl import TestServiceImpl
+from app.domains.tests.base.services.test_service_impl import TestProcessorImpl
 
 
 class TestFactoryImpl(TestFactory):
@@ -12,4 +12,4 @@ class TestFactoryImpl(TestFactory):
         return super().get_model(data)
 
     def get_service(self, test: TestBase):
-        return TestServiceImpl(test)
+        return TestProcessorImpl(test)
