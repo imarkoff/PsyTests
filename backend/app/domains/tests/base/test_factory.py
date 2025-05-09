@@ -31,10 +31,13 @@ class TestFactory(ABC):
             service = service,
         )
 
-    @abstractmethod
     def get_model(self, data: dict) -> TestBase:
-        return self.parser.parse(data)
+        return self.parser.parse(data=data)
 
     @abstractmethod
     def get_service(self, test: TestBase) -> TestProcessor:
-        return TestProcessor(test)
+        """
+        Create and return a TestProcessor instance for the given test.
+        Must be implemented by subclasses.
+        """
+        pass

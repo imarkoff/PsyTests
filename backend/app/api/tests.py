@@ -42,8 +42,8 @@ async def get_test(
         test_bundle = await test_service.get_test(test_id)
         return test_bundle.model.model_dump()
     except HTTPException:
-        test_bundle = await test_service.get_test_with_hidden_answers(test_id)
-        return test_bundle.model.model_dump()
+        test = await test_service.get_test_with_hidden_answers(test_id)
+        return test.model_dump()
     except NotFoundError as e:
         return Response(e.message, status_code=404, media_type="plain/text")
 

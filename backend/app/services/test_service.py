@@ -34,15 +34,15 @@ class TestService:
 
         return test_bundle
 
-    async def get_test_with_hidden_answers(self, test_id: UUID) -> TestBundle:
+    async def get_test_with_hidden_answers(self, test_id: UUID) -> TestBase:
         """
         Get test by id with hidden answers
         :returns test bundle with its model and service
         :raises NotFoundError: If test not found
         """
         test_bundle = await self.get_test(test_id)
-        test_bundle.service.hide_correct_answers()
-        return test_bundle
+        test_with_hidden_answers = test_bundle.service.hide_correct_answers()
+        return test_with_hidden_answers
 
     async def get_base_test(self, test_id: UUID) -> TestBase:
         """

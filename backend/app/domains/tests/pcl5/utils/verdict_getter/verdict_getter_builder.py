@@ -3,6 +3,7 @@ from app.domains.tests.pcl5.utils.verdict_getter.count_interpreter import CountI
 from app.domains.tests.pcl5.utils.verdict_getter.criterion_counter import CriterionCounter
 from app.domains.tests.pcl5.utils.verdict_getter.verdict_getter import VerdictGetter
 from app.domains.tests.pcl5.verdicts import get_count_verdicts
+from app.utils.range_validator import RangeValidator
 
 
 class VerdictGetterBuilder:
@@ -34,5 +35,6 @@ class VerdictGetterBuilder:
     def _resolve_interpreter(self):
         if self.interpreter is None:
             self.interpreter = CountInterpreter(
-                count_interpretations=get_count_verdicts()
+                count_interpretations=get_count_verdicts(),
+                range_validator=RangeValidator()
             )
