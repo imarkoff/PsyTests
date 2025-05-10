@@ -1,7 +1,9 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import ConfigDict
+
+from app.domains.tests.base.test_verdict import TestVerdict
 
 
-class PCL5Verdict(BaseModel):
+class PCL5Verdict(TestVerdict):
     counts: dict[str, int]
     verdict: str | None
 

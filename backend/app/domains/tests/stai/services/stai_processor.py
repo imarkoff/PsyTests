@@ -1,9 +1,9 @@
 from copy import deepcopy
 from typing import Type
 
-from app.db.models.test_history import TestHistory
 from app.domains.tests.base.test_processor import TestProcessor
 from app.domains.tests.stai.schemas.stai_test import STAITest
+from app.domains.tests.stai.schemas.stai_verdict import STAIVerdict
 from app.domains.tests.stai.utils.verdict_getter import STAIVerdictGetter
 from app.domains.tests.stai.verdicts import get_stai_verdicts
 from app.schemas.pass_test import PassTestAnswers
@@ -28,20 +28,8 @@ class STAITestProcessor(TestProcessor):
 
         return test_with_hidden_answers
 
-    async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
-        return TestHistory(
-            test_id=self.test.id,
-            patient_id=patient.id,
-            results=answers,
-            verdict=await self._get_verdict(answers),
-        )
-
-    async def _get_verdict(self, answers: PassTestAnswers) -> dict:
-        verdict = self.verdict_getter.get_verdict(answers)
-        return verdict.model_dump()
-
-    async def revalidate_test(self, test_history: TestHistory):
-        test_history.verdict = await self._get_verdict(test_history.results)
+    async def get_verdict(self, answers: PassTestAnswers, patient: UserDto) -> STAIVerdict:
+        return self.verdict_getter.get_verdict(answers)
 
     async def get_marks_system(self):
         return {

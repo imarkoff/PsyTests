@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Type
 
-from app.db.models.test_history import TestHistory
+from app.domains.tests.mmpi.schemas.mmpi_verdict import MMPIVerdict
 from app.schemas.pass_test import PassTestAnswers
 from app.schemas.user_auth import UserDto
 from app.domains.tests.base.test_processor import TestProcessor
@@ -34,13 +34,11 @@ class MMPITestProcessor(TestProcessor):
 
         return hidden_test
 
-    async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
+    async def get_verdict(self, answers: PassTestAnswers, patient: UserDto) -> MMPIVerdict:
         (raw_results, converted_results) = self._get_test_results(answers, patient)
-        return TestHistory(
-            test_id=self.test.id,
-            patient_id=patient.id,
-            results=answers,
-            verdict=await self._calculate_verdicts(raw_results, converted_results)
+        return await self._verdict_calculator.calculate(
+            raw_results=raw_results,
+            converted_results=converted_results
         )
 
     def _get_test_results(self, answers: PassTestAnswers, patient: UserDto) -> tuple[RawResults, ConvertedResults]:
@@ -50,11 +48,6 @@ class MMPITestProcessor(TestProcessor):
             answers=answers, gender=patient.gender
         )
         return results_manager.count_and_convert()
-
-    async def revalidate_test(self, test_history: TestHistory):
-        user_dto = UserDto.create(test_history.patient)
-        (raw_results, converted_results) = self._get_test_results(test_history.results, user_dto)
-        test_history.verdict = await self._calculate_verdicts(raw_results, converted_results)
 
     async def get_marks_system(self):
         return {
@@ -71,9 +64,3 @@ class MMPITestProcessor(TestProcessor):
     def count_scales_by_questions(self):
         scales_counter = self._scales_counter(scales=self.test.scales)
         return scales_counter.count_from_questions(self.test.questions)
-
-    async def _calculate_verdicts(self, raw_results: RawResults, converted_results: ConvertedResults) -> dict:
-        return await self._verdict_calculator.calculate(
-            raw_results=raw_results,
-            converted_results=converted_results
-        )

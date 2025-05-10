@@ -1,15 +1,16 @@
 from pydantic import BaseModel, ConfigDict, RootModel
 
 
-class Answer(BaseModel):
+class RavenResultAnswer(BaseModel):
     user_answer: int | None
     correct_answer: int
     points: int
 
 
-class Results(RootModel[dict[str, list[Answer]]]):
+class RavenTestResults(RootModel[dict[str, list[RavenResultAnswer]]]):
     """
-    Test results for a single test.
+    Test results for a Raven test, organized by module.
+    Contains user answers, correct answers, and points for each question.
     """
 
     model_config = ConfigDict(

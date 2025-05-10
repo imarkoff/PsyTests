@@ -2,7 +2,7 @@ from docx.document import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.table import Table
 
-from app.domains.tests.pcl5.utils.verdict_getter.pcl5_verdict import PCL5Verdict
+from app.domains.tests.pcl5.schemas.pcl5_verdict import PCL5Verdict
 from app.utils.results_to_docx.document_component import TableComponent
 from app.utils.results_to_docx.document_formatter import DocumentFormatter
 

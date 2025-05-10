@@ -1,7 +1,7 @@
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.table import Table
 
-from app.domains.tests.raven.schemas.test_history_results import Results, Answer
+from app.domains.tests.raven.schemas.test_history_results import RavenTestResults, RavenResultAnswer
 from app.domains.tests.raven.to_docx.results_analyzer import ResultsAnalyzer
 from app.utils.results_to_docx.document_formatter import DocumentFormatter
 
@@ -9,7 +9,7 @@ from app.utils.results_to_docx.document_formatter import DocumentFormatter
 class ModulesRenderer:
     """Renders all module rows with answers"""
 
-    def __init__(self, table: Table, formatter: DocumentFormatter, results: Results):
+    def __init__(self, table: Table, formatter: DocumentFormatter, results: RavenTestResults):
         self.table = table
         self.formatter = formatter
         self.results = results
@@ -36,7 +36,7 @@ class ModulesRenderer:
 
         return correct_points, total_points
 
-    def _render_module_answers(self, row_cells, answers: list[Answer]):
+    def _render_module_answers(self, row_cells, answers: list[RavenResultAnswer]):
         module_correct, module_total = self.analyzer.calculate_module_points(answers)
 
         for i, answer in enumerate(answers):
@@ -50,7 +50,7 @@ class ModulesRenderer:
         return module_correct, module_total
 
     @staticmethod
-    def _format_answer_text(answer: Answer) -> str:
+    def _format_answer_text(answer: RavenResultAnswer) -> str:
         user_answer = answer["user_answer"]
         correct_answer = answer["correct_answer"]
 

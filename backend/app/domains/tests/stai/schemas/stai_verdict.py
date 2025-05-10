@@ -1,7 +1,9 @@
 from pydantic import BaseModel, ConfigDict
 
+from app.domains.tests.base.test_verdict import TestVerdict
 
-class STAIVerdict(BaseModel):
+
+class STAIVerdict(TestVerdict):
     score: list['STAIScaleScore']
     verdicts: list['STAIScaleVerdict']
 

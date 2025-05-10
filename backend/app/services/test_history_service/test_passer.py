@@ -1,11 +1,9 @@
-from uuid import UUID
-
 from app.db.models.test_history import TestHistory
-from app.domains.tests.base.test_base import TestBase
-from app.domains.tests.base.test_processor import TestProcessor
+from app.domains.tests.base.test_factory import TestBundle
+from app.domains.tests.base.test_verdict import TestVerdict
 from app.exceptions import ValidationError
 from app.repositories.test_history_repository import TestHistoryRepository
-from app.schemas.pass_test import PassTestDto
+from app.schemas.pass_test import PassTestDto, PassTestAnswers
 from app.schemas.test_result import TestResultShortDto
 from app.schemas.user_auth import UserDto
 from app.services.patients.doctor_patient_service import DoctorPatientChanger
@@ -37,25 +35,28 @@ class TestPasser:
             raise ValidationError("Invalid test data")
 
         doctor_test = await self.patient_test_getter.get(pass_dto.assigned_test_id)
+        test_bundle = await self.test_service.get_test(doctor_test.test.id)
 
-        (test_model, test_service) = await self._get_test(doctor_test.test.id)
-
-        new_history = await test_service.pass_test(pass_dto.answers, patient)
+        new_history = await self._get_test_history_with_verdict(
+            test_bundle=test_bundle,
+            answers=pass_dto.answers,
+            patient=patient
+        )
 
         await self.repository.create(new_history)
         await self.doctor_patient_changer.change_attention(patient_id=patient.id, needs_attention=True)
 
-        return self._create_result_dto(new_history, test_model)
-
-    async def _get_test(self, test_id: UUID) -> tuple[TestBase, TestProcessor]:
-        test_bundle = await self.test_service.get_test(test_id)
-        return test_bundle.model, test_bundle.service
+        return TestResultShortDto.from_test_result(new_history, test_bundle.model)
 
     @staticmethod
-    def _create_result_dto(history: TestHistory, test: TestBase) -> TestResultShortDto:
-        return TestResultShortDto(
-            id=history.id,
-            test_id=test.id,
-            test_name=test.name,
-            passed_at=history.passed_at
+    async def _get_test_history_with_verdict(test_bundle: TestBundle, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
+        """
+        Pass test and return test history
+        """
+        verdict = await test_bundle.service.get_verdict(answers, patient)
+        return TestHistory(
+            test_id=test_bundle.model.id,
+            patient_id=patient.id,
+            results=answers,
+            verdict=verdict.model_dump() if isinstance(verdict, TestVerdict) else verdict
         )

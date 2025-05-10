@@ -1,5 +1,5 @@
 from app.domains.tests.pcl5.to_docx.results_table_component import ResultsTableComponent
-from app.domains.tests.pcl5.utils.verdict_getter.pcl5_verdict import PCL5Verdict
+from app.domains.tests.pcl5.schemas.pcl5_verdict import PCL5Verdict
 from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 

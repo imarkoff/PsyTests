@@ -1,7 +1,9 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import ConfigDict
+
+from app.domains.tests.base.test_verdict import TestVerdict
 
 
-class BDIVerdict(BaseModel):
+class BDIVerdict(TestVerdict):
     total_score: int
     verdict: str | None
 
@@ -13,3 +15,4 @@ class BDIVerdict(BaseModel):
             }
         }
     )
+

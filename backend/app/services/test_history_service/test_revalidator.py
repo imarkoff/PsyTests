@@ -1,10 +1,13 @@
 from uuid import UUID
 
+from app.db.models.test_history import TestHistory
 from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.base.test_processor import TestProcessor
+from app.domains.tests.base.test_verdict import TestVerdict
 from app.exceptions import NotFoundError
 from app.repositories.test_history_repository import TestHistoryRepository
 from app.schemas.test_result import TestResultDto
+from app.schemas.user_auth import UserDto
 from app.services.test_service import TestService
 
 
@@ -25,10 +28,19 @@ class TestRevalidator:
 
         (test_model, test_service) = await self._get_test_bundle(test_history.test_id)
 
-        await test_service.revalidate_test(test_history)
+        await self._revalidate_test_by_processor(test_service, test_history)
         await self.repository.update(test_history)
 
         return TestResultDto.from_test_result(test_history, test_model)
+
+    @staticmethod
+    async def _revalidate_test_by_processor(test_processor: TestProcessor, test_history: TestHistory):
+        """
+        Revalidate test history using the test processor
+        """
+        patient_dto = UserDto.create(test_history.patient)
+        verdict = await test_processor.get_verdict(test_history.results, patient_dto)
+        test_history.verdict = verdict.model_dump() if isinstance(verdict, TestVerdict) else verdict
 
     async def _get_test_bundle(self, test_id: UUID) -> tuple[TestBase, TestProcessor]:
         test_bundle = await self.test_service.get_test(test_id)

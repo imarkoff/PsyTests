@@ -1,9 +1,4 @@
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from app.domains.tests.raven.schemas.raven_test import RavenTest
-else:
-    RavenTest = "RavenTest"
+from app.domains.tests.raven.schemas.raven_test import RavenTest
 
 
 async def calculate_points(test: RavenTest, answers: dict[str, list[int]]) -> tuple[int, int]:

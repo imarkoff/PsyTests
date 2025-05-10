@@ -1,13 +1,9 @@
 from app.domains.tests.raven.schemas.question import Question
-from app.domains.tests.raven.schemas.test_history_results import Results, Answer
-from typing import TYPE_CHECKING
+from app.domains.tests.raven.schemas.raven_test import RavenTest
+from app.domains.tests.raven.schemas.test_history_results import RavenTestResults, RavenResultAnswer
 
-if TYPE_CHECKING:
-    from app.domains.tests.raven.schemas.raven_test import RavenTest
-else:
-    RavenTest = "RavenTest"
 
-def convert_results(test: RavenTest, result: dict[str, list[int]]) -> Results:
+def convert_results(test: RavenTest, result: dict[str, list[int]]) -> RavenTestResults:
     """
     Convert test results to DTO
     """
@@ -24,7 +20,7 @@ def convert_results(test: RavenTest, result: dict[str, list[int]]) -> Results:
             points: int | None = questions[i].points
 
             answers_list.append(
-                Answer(
+                RavenResultAnswer(
                     user_answer=answer,
                     correct_answer=correct_answer if correct_answer is not None else -1,
                     points=points if points is not None else 0
@@ -33,7 +29,7 @@ def convert_results(test: RavenTest, result: dict[str, list[int]]) -> Results:
 
         modules[module] = answers_list
 
-    return Results.model_validate(modules)
+    return RavenTestResults.model_validate(modules)
 
 
 def find_correct_answer_index(question: Question) -> int | None:

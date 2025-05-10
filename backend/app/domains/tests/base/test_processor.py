@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Type
 
-from app.db.models.test_history import TestHistory
+from app.domains.tests.base.test_verdict import TestVerdict
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.base.test_base import TestBase
 from app.schemas.user_auth import UserDto
@@ -22,24 +22,14 @@ class TestProcessor(ABC):
         pass
 
     @abstractmethod
-    async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
+    async def get_verdict(self, answers: PassTestAnswers, patient: UserDto) -> TestVerdict | None:
         """
-        Function to convert answers to test history
+        Get test verdict based on test results
+        :param answers: answers to the test filled by patient
+        :param patient: information about a patient what may be needed for verdict
+        :returns: a verdict for the passed test or None if verdict is not needed
         """
-        return TestHistory(
-            test_id=self.test.id,
-            patient_id=patient.id,
-            results=answers,  # can be converted for test needs or left as is
-            verdict=None  # is just a dict where you can put any data based on the test needs
-        )
-
-    @abstractmethod
-    async def revalidate_test(self, test_history: TestHistory):
-        """
-        Revalidate test results.
-        Can be used to recalculate results after changes in the test.
-        """
-        test_history.results = test_history.results
+        pass
 
     @abstractmethod
     async def get_marks_system(self) -> None:
@@ -47,7 +37,7 @@ class TestProcessor(ABC):
         Get marks system. Normally returns json data.
         You may need this or not, depending on the test type.
         """
-        return None
+        pass
 
     @staticmethod
     @abstractmethod
@@ -55,4 +45,4 @@ class TestProcessor(ABC):
         """
         Get document generator class
         """
-        return ResultsToDocx
+        pass

@@ -2,12 +2,15 @@ import app.domains.tests.mmpi.verdicts as verdicts_yaml
 from app.domains.tests.mmpi.utils.results_manager.abstract_results_converter import ConvertedResults
 
 
-async def get_verdicts(results: ConvertedResults):
+ScaleVerdicts = dict[str, list[str]]
+
+
+async def get_verdicts(results: ConvertedResults) -> ScaleVerdicts:
     """
     Get verdicts for each scale
     """
 
-    verdicts = {}
+    verdicts: ScaleVerdicts = {}
     verdicts_file: dict[str, dict[str, str]] = verdicts_yaml.get_scale_verdicts()
 
     for scale, value in results.items():

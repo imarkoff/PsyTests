@@ -1,7 +1,7 @@
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.pcl5.utils.verdict_getter.count_interpreter import CountInterpreter
 from app.domains.tests.pcl5.utils.verdict_getter.criterion_counter import CriterionCounter
-from app.domains.tests.pcl5.utils.verdict_getter.pcl5_verdict import PCL5Verdict
+from app.domains.tests.pcl5.schemas.pcl5_verdict import PCL5Verdict
 
 
 class VerdictGetter:

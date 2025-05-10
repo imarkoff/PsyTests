@@ -1,11 +1,12 @@
 from datetime import datetime
-from typing import Optional, Any
+from typing import Any
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
 from app.db.models.test_history import TestHistory
 from app.domains.tests.base.test_base import TestBase
+from app.domains.tests.test_verdict_types import TestVerdictTypes
 
 
 class TestResultDto(BaseModel):
@@ -17,7 +18,7 @@ class TestResultDto(BaseModel):
     test: TestBase
     patient_id: UUID
     results: dict[str, Any]
-    verdict: Optional[dict[str, Any]] = None
+    verdict: TestVerdictTypes | None
     passed_at: datetime
 
     model_config = ConfigDict(
@@ -30,11 +31,7 @@ class TestResultDto(BaseModel):
                 "results": {
                     "_": [1, 2, 3, 4, None],
                 },
-                "verdict": {
-                    "_": 97,
-                    "raw": {"L": 0, "F": 1, "K": 0, "1": 3, "2": 3, "3": 3, "4": 2, "6": 1, "7": 3, "8": 3, "9": 1},
-                    "converted": {"L": 39.0, "F": 39.28, "K": 28.0, "1": 35.0, "2": 37.45, "3": 24.19, "4": 9.67, "6": 30.47, "7": 26.28, "8": 25.58, "9": 20.47}
-                },
+                "verdict": { },
                 "passed_at": "2022-01-01T00:00:00"
             }
         }
@@ -79,3 +76,12 @@ class TestResultShortDto(BaseModel):
             }
         }
     )
+
+    @classmethod
+    def from_test_result(cls, test_result: TestHistory, test: TestBase) -> 'TestResultShortDto':
+        return cls(
+            id=test_result.id,
+            test_id=test.id,
+            test_name=test.name,
+            passed_at=test_result.passed_at
+        )

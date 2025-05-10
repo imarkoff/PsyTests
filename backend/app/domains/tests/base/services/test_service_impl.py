@@ -1,4 +1,4 @@
-from app.db.models.test_history import TestHistory
+from app.domains.tests.base.test_verdict import TestVerdict
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.base.test_base import TestBase
 from app.schemas.user_auth import UserDto
@@ -13,14 +13,11 @@ class TestProcessorImpl(TestProcessor):
     def hide_correct_answers(self) -> TestBase:
         return self.test
 
-    async def pass_test(self, answers: PassTestAnswers, patient: UserDto) -> TestHistory:
-        return await super().pass_test(answers, patient)
-
-    async def revalidate_test(self, test_history: TestHistory):
-        return await super().revalidate_test(test_history)
+    async def get_verdict(self, answers: PassTestAnswers, patient: UserDto) -> TestVerdict | None:
+        return None
 
     async def get_marks_system(self) -> None:
-        return await super().get_marks_system()
+        return None
 
     @staticmethod
     def get_document_generator():

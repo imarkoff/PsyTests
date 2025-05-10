@@ -1,10 +1,10 @@
-from app.domains.tests.raven.schemas.test_history_results import Results, Answer
+from app.domains.tests.raven.schemas.test_history_results import RavenTestResults, RavenResultAnswer
 
 
 class ResultsAnalyzer:
     """Analyzes test results data"""
 
-    def __init__(self, results: Results):
+    def __init__(self, results: RavenTestResults):
         self.results = results
 
     def get_max_answers(self) -> int:
@@ -15,7 +15,7 @@ class ResultsAnalyzer:
         return max_answers
 
     @staticmethod
-    def calculate_module_points(answers: list[Answer]):
+    def calculate_module_points(answers: list[RavenResultAnswer]):
         module_correct_points = 0
         module_total_points = 0
 
