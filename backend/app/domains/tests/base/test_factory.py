@@ -32,7 +32,7 @@ class TestFactory(ABC):
         )
 
     def get_model(self, data: dict) -> TestBase:
-        return self.parser.parse(data=data)
+        return self.parser.parse(data)
 
     @abstractmethod
     def get_service(self, test: TestBase) -> TestProcessor:
