@@ -3,6 +3,7 @@ import ravenConfig from "@/tests/RavenTest/config";
 import mmpiConfig from "@/tests/MMPITest/config";
 import pcl5Config from "@/tests/PCL5Test/config";
 import TestConfigType from "@/tests/TestConfig";
+import bdiConfig from "@/tests/BDITest/config";
 
 type TestsConfigType = {
     // eslint-disable-next-line -- Each test may have its own type
@@ -17,7 +18,8 @@ const testsConfig: TestsConfigType = {
     raven: ravenConfig,
     mmpi: mmpiConfig,
     mmpi_big: mmpiConfig,
-    "pcl-5": pcl5Config
+    "pcl-5": pcl5Config,
+    bdi: bdiConfig
 };
 
 export default testsConfig;

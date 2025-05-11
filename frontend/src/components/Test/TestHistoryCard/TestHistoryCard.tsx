@@ -15,7 +15,7 @@ export default function TestHistoryCard({test}: { test: TestResult }) {
     const Content = testResultComponents?.card;
 
     return (
-        <Card variant={"outlined"}>
+        <Card variant={"outlined"} sx={{justifyContent: "space-between", display: "flex", flexDirection: "column"}}>
             <CardHeader title={test.test.name}/>
 
             <CardContent sx={{paddingTop: 0, paddingBottom: 0}}>

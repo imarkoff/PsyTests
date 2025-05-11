@@ -9,11 +9,12 @@ import RadioAnswer from "@/components/QuestionCard/types/RadioAnswer";
 interface QuestionCardRadioGroupProps {
     answers: RadioAnswer[],
     correctAnswer?: number | string,
-    disabled?: boolean
+    disabled?: boolean,
+    align: "left" | "space-evenly" | "right",
 }
 
 export default function QuestionCardRadioGroup(
-    {answers, correctAnswer, disabled}: QuestionCardRadioGroupProps
+    {answers, correctAnswer, disabled, align="space-evenly"}: QuestionCardRadioGroupProps
 ) {
     const { index, chosenAnswer, handleAnswerChange } = useQuestionCardContext();
     
@@ -24,7 +25,7 @@ export default function QuestionCardRadioGroup(
                 flexDirection: "row",
                 flexWrap: "wrap",
                 gap: "1rem",
-                justifyContent: "space-evenly",
+                justifyContent: align,
             }}
             defaultValue={correctAnswer}
             name={`question-${index}`}
