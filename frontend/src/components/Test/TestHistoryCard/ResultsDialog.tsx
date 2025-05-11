@@ -1,5 +1,3 @@
-"use client";
-
 import TestResult from "@/schemas/TestResult";
 import {Box, Button, Dialog, DialogContent, DialogTitle, Typography} from "@mui/material";
 import {useState} from "react";
@@ -21,7 +19,9 @@ export default function ResultsDialog({test}: {test: TestResult}) {
     const onOpen = () => setOpen(true);
     const onClose = () => setOpen(false);
 
-    const { content: Content, footer: Footer } = testsConfig[test.test.type].results;
+    const testResultComponents = testsConfig[test.test.type]?.results;
+    const Content = testResultComponents?.content;
+    const Footer = testResultComponents?.footer;
 
     return (
         <>

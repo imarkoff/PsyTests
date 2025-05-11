@@ -8,8 +8,8 @@ interface ResultsProps { test: RavenResult; }
 export default function ResultsContent({test}: ResultsProps) {
     return (
         <>
-            {test.results && (
-                <ResultsTable results={test.results} />
+            {test.verdict && (
+                <ResultsTable results={test.verdict.results} />
             )}
         </>
     );
@@ -18,8 +18,8 @@ export default function ResultsContent({test}: ResultsProps) {
 export const ResultsFooter = ({test}: ResultsProps) => {
     return (
         <>
-            {test.verdict?.["_"] && (
-                <TestValues title={"Висновок"}>{test.verdict["_"]} {test.test.marks_unit}</TestValues>
+            {test.verdict?.verdict && (
+                <TestValues title={"Висновок"}>{test.verdict.verdict} {test.test.marks_unit}</TestValues>
             )}
         </>
     );
@@ -27,13 +27,17 @@ export const ResultsFooter = ({test}: ResultsProps) => {
 
 
 export const ResultsCard = ({test}: ResultsProps) => {
-    const {correctPoints, totalPoints} = countCorrectAnswers(test);
+    const verdict = test.verdict;
+
+    const {correctPoints, totalPoints} = verdict
+        ? countCorrectAnswers(verdict.results)
+        : {correctPoints: 0, totalPoints: 0};
 
     return (
         <>
             <TestValues title={"Кількість набраних балів"}>{correctPoints} з {totalPoints}</TestValues>
-            {test.verdict?.["_"] && (
-                <TestValues title={"Висновок"}>{test.verdict["_"]} {test.test.marks_unit}</TestValues>
+            {verdict && (
+                <TestValues title={"Висновок"}>{verdict.verdict} {test.test.marks_unit}</TestValues>
             )}
         </>
     );

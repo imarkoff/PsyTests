@@ -1,28 +1,22 @@
 import styled from "@emotion/styled";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme} from "@mui/material";
-import {Results, ResultsAnswer} from "@/tests/RavenTest/schemas/RavenResult";
-
-interface Sum { correct: number; total: number; }
+import {RavenResults, ResultsAnswer} from "@/tests/RavenTest/schemas/RavenResult";
+import {
+    calculatePointsByModule,
+    calculateTotalScore,
+    getLongestModule
+} from "@/tests/RavenTest/utils/RavenResultsCalculator";
+import { useMemo } from "react";
 
 /**
  * Table with test results
  * @param results
  * @constructor
  */
-export default function ResultsTable({results}: {results: Results}) {
-    const longestModule = Math.max(...Object.values(results).map(answers => answers.length));
-
-    const pointsByModule: Sum[] = Object.values(results).map(answers => answers.reduce(
-        (acc, q) => ({
-            correct: acc.correct + (q.user_answer === q.correct_answer ? q.points : 0),
-            total: acc.total + q.points
-        })
-    , {correct: 0, total: 0}));
-
-    const sum: Sum = pointsByModule.reduce((acc, {correct, total}) => ({
-        correct: acc.correct + correct,
-        total: acc.total + total
-    }), {correct: 0, total: 0});
+export default function ResultsTable({results}: {results: RavenResults}) {
+    const longestModule = useMemo(() => getLongestModule(results), [results]);
+    const pointsByModule = useMemo(() => calculatePointsByModule(results), [results]);
+    const totalScore = useMemo(() => calculateTotalScore(pointsByModule), [pointsByModule]);
 
     return (
         <TableContainer component={Paper} sx={{
@@ -59,7 +53,7 @@ export default function ResultsTable({results}: {results: Results}) {
                     <TableRow sx={{ '&:last-child td, &:last-child th': { borderBottom: 0 } }}>
                         <TableCell sx={{borderRight: "0 !important"}} />
                         <TableCell colSpan={longestModule + 1} align={"right"} sx={{fontWeight: 600}}>
-                            Сума: {sum.correct} ({sum.total})
+                            Сума: {totalScore.correct} ({totalScore.total})
                         </TableCell>
                     </TableRow>
                 </TableBody>

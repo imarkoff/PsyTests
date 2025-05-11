@@ -1,11 +1,11 @@
-import RavenResult from "@/tests/RavenTest/schemas/RavenResult";
+import {RavenResults} from "@/tests/RavenTest/schemas/RavenResult";
 
-export default function countCorrectAnswers(test: RavenResult): CorrectAnswers {
+export default function countCorrectAnswers(results: RavenResults): CorrectAnswers {
     let totalPoints = 0;
     let correctPoints = 0;
 
-    for (const testModule in test.results) {
-        for (const question of test.results[testModule]) {
+    for (const testModule in results) {
+        for (const question of results[testModule]) {
             totalPoints += question.points;
             if (question.user_answer === question.correct_answer) {
                 correctPoints += question.points;

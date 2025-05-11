@@ -1,6 +1,6 @@
 import TestResult from "@/schemas/TestResult";
 
-type MMPIResult = TestResult<object, MMPIVerdict>;
+type MMPIResult = TestResult<MMPIVerdict>;
 export default MMPIResult;
 
 export interface MMPIVerdict {

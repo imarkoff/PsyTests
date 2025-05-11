@@ -11,7 +11,8 @@ import testsConfig from "@/tests/config";
  * @constructor
  */
 export default function TestHistoryCard({test}: { test: TestResult }) {
-    const {card: Content} = testsConfig[test.test.type].results;
+    const testResultComponents = testsConfig[test.test.type]?.results;
+    const Content = testResultComponents?.card;
 
     return (
         <Card variant={"outlined"}>

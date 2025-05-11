@@ -1,4 +1,4 @@
-import {TestConfigType} from "@/tests/config";
+import TestConfigType from "@/tests/TestConfig";
 import TestContent, {TestHeader} from "@/tests/MMPITest/layout/TestContent";
 import MMPITest from "@/tests/MMPITest/schemas/MMPITest";
 import ResultsContent from "@/tests/MMPITest/layout/ResultsContent";

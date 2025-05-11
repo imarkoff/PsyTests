@@ -1,29 +1,8 @@
-import TestBase, { TestType } from "@/schemas/TestBase";
-import {ComponentType} from "react";
-import TestInfoType from "@/tests/TestInfoType";
+import { TestType } from "@/schemas/TestBase";
 import ravenConfig from "@/tests/RavenTest/config";
 import mmpiConfig from "@/tests/MMPITest/config";
-import TestResult from "@/schemas/TestResult";
 import pcl5Config from "@/tests/PCL5Test/config";
-
-/**
- * Configuration of a test components.
- */
-export interface TestConfigType<
-    TTest extends TestBase,
-    TTestResult extends TestResult<object, object>
-> {
-    test: {
-        header: ComponentType<TestInfoType<TTest>>;
-        content: ComponentType<TestInfoType<TTest>>;
-        marks?: ComponentType<TestInfoType<TTest>>;
-    },
-    results: {
-        content: ComponentType<{ test: TTestResult }>;
-        footer?: ComponentType<{ test: TTestResult }>;
-        card?: ComponentType<{ test: TTestResult }>;
-    }
-}
+import TestConfigType from "@/tests/TestConfig";
 
 type TestsConfigType = {
     // eslint-disable-next-line -- Each test may have its own type

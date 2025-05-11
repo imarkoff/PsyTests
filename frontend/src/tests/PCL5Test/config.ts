@@ -1,4 +1,4 @@
-import {TestConfigType} from "@/tests/config";
+import TestConfigType from "@/tests/TestConfig";
 import {PCL5Test} from "@/tests/PCL5Test/types/PCL5Test";
 import PCL5Result from "@/tests/PCL5Test/types/PCL5Result";
 import PCL5Content, {PCL5ContentHeader} from "@/tests/PCL5Test/layout/PCL5Content";

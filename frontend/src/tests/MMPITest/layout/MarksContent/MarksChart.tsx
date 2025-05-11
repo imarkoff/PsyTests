@@ -19,7 +19,6 @@ export default function MarksChart({scales}: { scales: MMPIScale[] }) {
                 scaleType: 'band',
                 dataKey: "label",
                 label: "Шкала",
-                categoryGapRatio: 0.5,
                 valueFormatter: (value, context) =>
                     context.location === "tick"
                         ? value
