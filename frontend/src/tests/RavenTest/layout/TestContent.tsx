@@ -1,10 +1,10 @@
 import RavenTest from "@/tests/RavenTest/schemas/RavenTest";
 import {Roles} from "@/schemas/Role";
-import Question from "@/tests/RavenTest/schemas/Question";
+import RavenQuestion from "@/tests/RavenTest/schemas/RavenQuestion";
 import countTestQuestions from "@/tests/RavenTest/utils/countTestQuestions";
 import {Typography} from "@mui/material";
 import TestInfoType from "@/tests/TestInfoType";
-import QuestionCard from "@/tests/RavenTest/components/QuestionCard";
+import RavenQuestionCard from "@/tests/RavenTest/components/RavenQuestionCard";
 
 export const TestHeader = ({test, role}: TestInfoType<RavenTest>) => {
     const {totalQuestions, totalPoints} = countTestQuestions(test);
@@ -24,7 +24,7 @@ export const TestHeader = ({test, role}: TestInfoType<RavenTest>) => {
 };
 
 export default function TestContent({test, role, disabled}: TestInfoType<RavenTest>) {
-    const getCorrectAnswer = (question: Question) => {
+    const getCorrectAnswer = (question: RavenQuestion) => {
         if (role === Roles.patient) return undefined;
         return question.answers.findIndex(answer => answer.is_correct);
     }
@@ -32,7 +32,7 @@ export default function TestContent({test, role, disabled}: TestInfoType<RavenTe
     return (
         <>
             {test?.questions?.map((question, index) => (
-                <QuestionCard
+                <RavenQuestionCard
                     question={question}
                     correctAnswer={getCorrectAnswer(question)}
                     key={`${test.id}/question/${index}`}
@@ -44,7 +44,7 @@ export default function TestContent({test, role, disabled}: TestInfoType<RavenTe
 
             {test?.modules?.map((module, index) => (
                 module.questions.map((question, j) => (
-                    <QuestionCard
+                    <RavenQuestionCard
                         question={question}
                         correctAnswer={getCorrectAnswer(question)}
                         key={`${test.id}/module/${index}/question/${j}`}

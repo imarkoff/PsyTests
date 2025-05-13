@@ -10,7 +10,7 @@ interface QuestionCardRadioGroupProps {
     answers: RadioAnswer[],
     correctAnswer?: number | string,
     disabled?: boolean,
-    align: "left" | "space-evenly" | "right",
+    align?: "left" | "space-evenly" | "right",
 }
 
 export default function QuestionCardRadioGroup(

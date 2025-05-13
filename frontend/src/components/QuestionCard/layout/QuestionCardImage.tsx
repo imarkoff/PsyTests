@@ -1,6 +1,7 @@
-import LazyImage from "@/components/LazyImage";
+import Image from "next/image";
 import { CardMedia } from "@mui/material";
 import React from "react";
+import nextImageLoader from "@/utils/nextImageLoader";
 
 interface QuestionCardImageProps {
     src: string;
@@ -21,7 +22,8 @@ export default function QuestionCardImage(
 ) {
     return (
         <CardMedia>
-            <LazyImage
+            <Image
+                loader={nextImageLoader}
                 src={src}
                 alt={alt}
                 width={width}

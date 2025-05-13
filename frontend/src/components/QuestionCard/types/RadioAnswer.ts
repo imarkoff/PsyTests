@@ -1,5 +1,5 @@
 export default interface RadioAnswer {
-    answer: string;
+    answer?: string;
     value?: string | number;
     image?: RadioAnswerImage;
 }

@@ -1,7 +1,7 @@
 import TestInfoType from "@/tests/TestInfoType";
 import MMPITest from "@/tests/MMPITest/schemas/MMPITest";
 import {Alert, Typography} from "@mui/material";
-import QuestionCard from "@/tests/MMPITest/components/QuestionCard";
+import MMPIQuestionCard from "@/tests/MMPITest/components/MMPIQuestionCard";
 import {Roles} from "@/schemas/Role";
 
 export const TestHeader = ({test}: TestInfoType<MMPITest>) => {
@@ -36,10 +36,9 @@ export default function TestContent({test, role, disabled}: TestInfoType<MMPITes
                 </Alert>
             )}
             {test.questions.map((question, index) => (
-                <QuestionCard
+                <MMPIQuestionCard
                     question={question}
                     key={`${test.id}/question/${index}`}
-                    testId={test.id}
                     index={index}
                     disabled={disabled}
                     showScales={role !== Roles.patient}

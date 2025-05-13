@@ -1,15 +1,15 @@
 /**
  * Question schema for the test
  */
-export default interface Question {
+export default interface RavenQuestion {
     id: string;
     question?: string;
     image?: string;
-    answers: Answer[];
+    answers: RavenAnswer[];
     points?: number; // default 1
 }
 
-export interface Answer {
+export interface RavenAnswer {
     id: string;
     answer?: string;
     image?: string;

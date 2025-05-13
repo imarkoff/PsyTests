@@ -1,7 +1,8 @@
 import {FormControlLabel, Radio, Typography} from "@mui/material";
 import React from "react";
-import LazyImage from "@/components/LazyImage";
+import Image from "next/image";
 import RadioAnswer from "@/components/QuestionCard/types/RadioAnswer";
+import nextImageLoader from "@/utils/nextImageLoader";
 
 type QuestionRadioAnswerProps = {
     answer: RadioAnswer,
@@ -56,12 +57,13 @@ const AnswerLabel = (
         </Typography>
 
         {answer.image && (
-            <LazyImage
+            <Image
+                loader={nextImageLoader}
                 src={answer.image.src}
                 alt={answer.image.alt}
-                width={125}
+                width={120}
                 height={100}
-                style={{pointerEvents: "none", height: "auto"}}
+                style={{pointerEvents: "none", height: "auto", width: "auto", maxWidth: 125}}
             />
         )}
     </>
