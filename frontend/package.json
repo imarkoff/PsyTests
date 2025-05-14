@@ -17,6 +17,7 @@
     "@mui/x-charts": "^7.27.1",
     "@mui/x-date-pickers": "^7.27.0",
     "axios": "^1.7.9",
+    "cookie": "^1.0.2",
     "dayjs": "^1.11.13",
     "i18next": "^24.0.5",
     "luxon": "^3.5.0",
