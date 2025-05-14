@@ -4,16 +4,25 @@ import {serializeAccessToken} from "@/lib/auth/tokenManager";
 import fillCookies from "@/lib/utils/fillCookies";
 import {defaultApi} from "@/lib/api-client/createApiInstance";
 import AuthService from "@/lib/services/AuthService";
+import { AxiosError } from "axios";
 
 /** Logs in a user and updates cookies */
 export async function POST(req: NextRequest) {
     const data: UserLogin = await req.json();
     const authService = new AuthService(defaultApi);
 
-    const { token, setCookieHeader } = await authService.login(data);
-    const serializedToken = serializeAccessToken(token);
+    try {
+        const { token, setCookieHeader } = await authService.login(data);
+        const serializedToken = serializeAccessToken(token);
 
-    const response = NextResponse.json({ success: true });
-    fillCookies(response.headers, serializedToken, setCookieHeader);
-    return response;
+        const response = NextResponse.json({ success: true });
+        fillCookies(response.headers, serializedToken, setCookieHeader);
+        return response;
+    }
+    catch (error) {
+        if (error instanceof AxiosError) {
+            return NextResponse.json({ error: error.message }, { status: error.status });
+        }
+        throw error;
+    }
 }
