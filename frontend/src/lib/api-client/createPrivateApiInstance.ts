@@ -8,7 +8,7 @@ import TokenService from "@/lib/services/TokenService";
  * Creates an Axios instance for making API requests with authentication.
  */
 export default async function createPrivateApiInstance() {
-    const accessToken = await getAccessToken();
+    let accessToken = await getAccessToken();
     const headers = new Headers();
 
     const instance = createApiInstance({ withCredentials: true });
@@ -35,6 +35,7 @@ export default async function createPrivateApiInstance() {
                     const {newToken, newCookies} = await handleRefreshToken();
                     fillCookies(headers, serializeAccessToken(newToken), newCookies);
                     originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                    accessToken = newToken;
                     return instance(originalRequest);
                 }
                 catch (error) {

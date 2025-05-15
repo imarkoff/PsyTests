@@ -37,6 +37,21 @@ type Handler<T, TParams> = (api: AxiosInstance, req: NextRequest, context: Handl
  *    return await someService.getData(id);
  * })
  * ```
+ *
+ * @example Using searchParams and return a NextResponse if something goes wrong
+ * ```ts
+ * import withApiAuth from "@/app/lib/auth/withApiAuth";
+ * import {NextResponse} from "next/server";
+ *
+ * export const GET = withApiAuth(async (api, request) => {
+ *    const searchParams = request.nextUrl.searchParams;
+ *    const search = searchParams.get("search");
+ *
+ *    if (!search) {
+ *       return NextResponse.json({ error: "Search param is required" }, { status: 400 });
+ *    }
+ * }
+ * ```
  */
 export default function withApiAuth<T, TParams>(handler: Handler<T, TParams>) {
     return async (req: NextRequest, context: HandlerParams<TParams>) => {
@@ -44,11 +59,14 @@ export default function withApiAuth<T, TParams>(handler: Handler<T, TParams>) {
 
         try {
             const data = await handler(api, req, context);
+
+            if (data instanceof NextResponse) return data;
+
             return NextResponse.json(data, {headers: headers});
         } catch (err) {
             if (err instanceof AxiosError) {
                 return NextResponse.json({
-                    error: err.message,
+                    error: err.response?.data || err.message,
                 }, {
                     status: err.status || 500,
                 });
