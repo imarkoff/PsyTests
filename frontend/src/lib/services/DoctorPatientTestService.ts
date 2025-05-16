@@ -34,7 +34,7 @@ export default class DoctorPatientTestService {
             }));
 
     revalidateTestResult = async (patientId: string, testId: string) =>
-        await this.api.get<TestResult>(`${this.getEndpoint(patientId)}/history/${testId}/revalidate`)
+        await this.api.patch<TestResult>(`${this.getEndpoint(patientId)}/history/${testId}/revalidate`)
             .then(res => res.data);
 
     assignTest = async (patientId: string, testId: string) =>

@@ -1,8 +1,8 @@
-import withApiAuth from "@/lib/auth/withApiAuth";
 import UserService from "@/lib/services/UserService";
+import createApiRoute from "@/lib/utils/createApiRoute";
 
 /** Gets info about logged user */
-export const GET = withApiAuth(async (api) => {
-    const service = new UserService(api);
-    return await service.getMe();
-})
+export const GET = createApiRoute(
+    UserService,
+    service => service.getMe()
+)

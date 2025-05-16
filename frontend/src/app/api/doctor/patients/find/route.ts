@@ -4,7 +4,7 @@ import createApiRoute from "@/lib/utils/createApiRoute";
 
 export const GET = createApiRoute(
     DoctorPatientService,
-    async (service, _, request) => {
+    async (service, request) => {
         const searchParams = request.nextUrl.searchParams;
         const search = searchParams.get("search");
 

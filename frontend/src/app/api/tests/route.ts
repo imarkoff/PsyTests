@@ -1,7 +1,7 @@
-import withApiAuth from "@/lib/auth/withApiAuth";
 import TestService from "@/lib/services/TestService";
+import createApiRoute from "@/lib/utils/createApiRoute";
 
-export const GET = withApiAuth(async (api) => {
-    const testService = new TestService(api);
-    return await testService.getTests();
-})
+export const GET = createApiRoute(
+    TestService,
+    service => service.getTests()
+)

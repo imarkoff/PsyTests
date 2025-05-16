@@ -6,11 +6,11 @@ type ServiceConstructor<TService> = new (api: AxiosInstance) => TService;
 
 type RouteParams = Promise<Record<string, string>>;
 
-type ServiceMethod<S, R> = (
-    service: S,
+type ServiceMethod<TService, TResult> = (
+    service: TService,
     request: NextRequest,
     params: RouteParams
-) => Promise<R>;
+) => Promise<TResult>;
 
 /**
  * Creates an API route handler for Next.js that uses a service class.
@@ -41,6 +41,11 @@ type ServiceMethod<S, R> = (
  *       const { id } = await params;
  *       const searchParams = request.nextUrl.searchParams;
  *       const filter = searchParams.get("filter");
+ *
+ *       if (!id) {
+ *          return NextResponse.json({ error: "ID param is required" }, { status: 400 });
+ *       }
+ *
  *       return await service.getData(id, filter);
  *    }
  * )
@@ -61,9 +66,9 @@ type ServiceMethod<S, R> = (
  * )
  * ```
  */
-export default function createApiRoute<TService, R>(
+export default function createApiRoute<TService, TResult>(
     ServiceClass: ServiceConstructor<TService>,
-    serviceMethod: ServiceMethod<TService, R>
+    serviceMethod: ServiceMethod<TService, TResult>
 ) {
     return withApiAuth(async (
         api,

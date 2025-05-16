@@ -6,21 +6,12 @@ type HandlerParams<TParams = object> = { params: Promise<TParams> }
 type Handler<T, TParams> = (api: AxiosInstance, req: NextRequest, context: HandlerParams<TParams>) => Promise<T>;
 
 /**
- * withApiAuth is a higher-order function that allows to call authenticated API calls.
- * Authomatically handles errors and token refresh
+ * withApiAuth is a HOF that allows to call authenticated API calls.
+ * Authomatically handles errors and token refresh.
  *
- * @param handler - A function that takes an AxiosInstance and a NextRequest and returns a Promise of type T
- *
- * @example Getting data without params
- * ```ts
- * import withApiAuth from "@/app/lib/auth/withApiAuth";
- * import SomeService from "@/app/lib/services/SomeService";
- *
- * export const GET = withApiAuth(async (api) => {
- *     const someService = new SomeService(api);
- *     return await someService.getData();
- * })
- * ```
+ * @description
+ * Please use it only if you handle multiple API services in the same route.
+ * If you use only one service, please use createApiRoute instead.
  *
  * @example Getting data with params
  * ```ts
