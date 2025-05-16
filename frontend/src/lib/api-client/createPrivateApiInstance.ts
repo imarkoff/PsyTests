@@ -1,15 +1,14 @@
-import {getAccessToken, serializeAccessToken} from "@/lib/auth/tokenManager";
-import fillCookies from "@/lib/utils/fillCookies";
-import {headers} from "next/headers";
-import createApiInstance, { defaultApi } from "@/lib/api-client/createApiInstance";
-import TokenService from "@/lib/services/TokenService";
+"use server";
+
+import {getAccessToken} from "@/lib/auth/tokenManager";
+import createApiInstance from "@/lib/api-client/createApiInstance";
+import refreshServerActionsSession from "@/lib/auth/refreshServerActionsSession";
 
 /**
  * Creates an Axios instance for making API requests with authentication.
  */
 export default async function createPrivateApiInstance() {
     let accessToken = await getAccessToken();
-    const headers = new Headers();
 
     const instance = createApiInstance({ withCredentials: true });
 
@@ -32,8 +31,7 @@ export default async function createPrivateApiInstance() {
                 originalRequest._retry = true;
 
                 try {
-                    const {newToken, newCookies} = await handleRefreshToken();
-                    fillCookies(headers, serializeAccessToken(newToken), newCookies);
+                    const newToken = await refreshServerActionsSession();
                     originalRequest.headers.Authorization = `Bearer ${newToken}`;
                     accessToken = newToken;
                     return instance(originalRequest);
@@ -47,11 +45,5 @@ export default async function createPrivateApiInstance() {
         }
     );
 
-    return {api: instance, headers};
-}
-
-async function handleRefreshToken() {
-    const cookieHeader = (await headers()).get("cookie") ?? "";
-    const tokenService = new TokenService(defaultApi);
-    return await tokenService.refreshToken(cookieHeader);
+    return instance;
 }

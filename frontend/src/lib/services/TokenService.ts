@@ -6,10 +6,10 @@ export default class TokenService {
     endpoint = "/token";
 
     async refreshToken(cookies: string) {
-        const { data, headers } = await this.api.post<string>(`${this.endpoint}/refresh`, {}, {
+        const { data } = await this.api.post<string>(`${this.endpoint}/refresh`, {}, {
             headers: { Cookie: cookies },
             withCredentials: true
         });
-        return { newToken: data, newCookies: headers["set-cookie"] };
+        return data;
     }
 }
