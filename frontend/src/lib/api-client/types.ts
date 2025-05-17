@@ -5,7 +5,7 @@ import {ISafeError} from "@/lib/api-client/SafeError";
  * for a Server Actions request.
  */
 export interface ApiResponse<T> {
-    data: T | null;
+    data: T | undefined;
     error?: {
         status: number;
         statusText: string;

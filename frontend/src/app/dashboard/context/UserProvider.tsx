@@ -6,13 +6,7 @@ import {redirect, useRouter} from "next/navigation";
 import {Roles} from "@/schemas/Role";
 import UserContext from "@/app/dashboard/context/UserContext";
 import { getMe } from "@/lib/controllers/userController";
-import SafeError from "@/lib/api-client/SafeError";
-
-const fetchMe = async () => {
-    const {data, error} = await getMe();
-    if (error) throw SafeError.fromJSON(error.originalError);
-    return data;
-};
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function UserProvider({children}: { children: ReactNode }) {
     const {
@@ -20,7 +14,7 @@ export default function UserProvider({children}: { children: ReactNode }) {
         error,
         isLoading,
         mutate
-    } = useSWR("getMe", fetchMe, { revalidateOnFocus: false });
+    } = useSWR("getMe", withSafeErrorHandling(getMe), { revalidateOnFocus: false });
 
     const router = useRouter();
 

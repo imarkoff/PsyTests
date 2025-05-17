@@ -1,3 +1,5 @@
+"use server";
+
 import {AxiosInstance} from "axios";
 import createApiInstance from "@/lib/api-client/createApiInstance";
 import createPrivateApiInstance from "@/lib/api-client/createPrivateApiInstance";
@@ -54,7 +56,7 @@ export async function fetchProtected<TService, TResponse>(
  * );
  * ```
  */
-export function fetchPublic<TService, TResponse>(
+export async function fetchPublic<TService, TResponse>(
     Service: ServiceConstructor<TService>,
     serviceMethod: (service: TService) => Promise<TResponse>
 ): Promise<ApiResponse<TResponse>> {

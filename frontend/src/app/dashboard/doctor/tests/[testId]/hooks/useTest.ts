@@ -1,12 +1,15 @@
 import useSWR from "swr";
-import {getTest} from "@/services/testsService";
+import {getTestById} from "@/lib/controllers/testController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function useTest(testId: string) {
     const {
         data: test,
         isLoading,
         error
-    } = useSWR(`getTest/${testId}`, () => getTest(testId),
+    } = useSWR(
+        `getTestById/${testId}`,
+        withSafeErrorHandling(() => getTestById(testId)),
         {revalidateOnFocus: false}
     );
 

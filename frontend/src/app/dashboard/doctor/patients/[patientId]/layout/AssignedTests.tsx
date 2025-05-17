@@ -6,21 +6,15 @@ import AssignedTestCard from "@/components/Test/AssignedTestCard";
 import useSWR from "swr";
 import {Typography} from "@mui/material";
 import { getMe } from "@/lib/controllers/userController";
-import SafeError from "@/lib/api-client/SafeError";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 interface AssignedTestsProps {
     tests?: PatientTest[];
     unassignAction: (testId: string) => void;
 }
 
-const fetchMe = async () => {
-    const { data, error } = await getMe();
-    if (error) throw SafeError.fromJSON(error.originalError);
-    return data;
-}
-
 export default function AssignedTests({tests, unassignAction}: AssignedTestsProps) {
-    const { data: me } = useSWR("getMe", fetchMe);
+    const { data: me } = useSWR("getMe", withSafeErrorHandling(getMe));
 
     return (
         <PatientSection title={"Назначені тести"}>
