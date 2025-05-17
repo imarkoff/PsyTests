@@ -3,10 +3,10 @@ import User from "@/schemas/User";
 import {KeyedMutator} from "swr";
 
 const UserContext = createContext<{
-    me?: User,
+    me?: User | null,
     isLoading: boolean,
     error?: unknown,
-    mutate: KeyedMutator<User>,
+    mutate: KeyedMutator<User | null>,
     checkPath: () => void
 }>({
     isLoading: true,

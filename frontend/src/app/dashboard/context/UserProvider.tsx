@@ -2,10 +2,17 @@
 
 import {ReactNode, useCallback, useEffect} from "react";
 import useSWR from "swr";
-import {getMe} from "@/services/usersService";
 import {redirect, useRouter} from "next/navigation";
 import {Roles} from "@/schemas/Role";
 import UserContext from "@/app/dashboard/context/UserContext";
+import { getMe } from "@/lib/controllers/userController";
+import SafeError from "@/lib/api-client/SafeError";
+
+const fetchMe = async () => {
+    const {data, error} = await getMe();
+    if (error) throw SafeError.fromJSON(error.originalError);
+    return data;
+};
 
 export default function UserProvider({children}: { children: ReactNode }) {
     const {
@@ -13,7 +20,7 @@ export default function UserProvider({children}: { children: ReactNode }) {
         error,
         isLoading,
         mutate
-    } = useSWR("getMe", getMe, { revalidateOnFocus: false });
+    } = useSWR("getMe", fetchMe, { revalidateOnFocus: false });
 
     const router = useRouter();
 
