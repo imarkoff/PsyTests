@@ -2,10 +2,11 @@
 
 import {ReactNode, useCallback, useEffect} from "react";
 import useSWR from "swr";
-import {getMe} from "@/services/usersService";
 import {redirect, useRouter} from "next/navigation";
 import {Roles} from "@/schemas/Role";
 import UserContext from "@/app/dashboard/context/UserContext";
+import { getMe } from "@/lib/controllers/userController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function UserProvider({children}: { children: ReactNode }) {
     const {
@@ -13,7 +14,7 @@ export default function UserProvider({children}: { children: ReactNode }) {
         error,
         isLoading,
         mutate
-    } = useSWR("getMe", getMe, { revalidateOnFocus: false });
+    } = useSWR("getMe", withSafeErrorHandling(getMe), { revalidateOnFocus: false });
 
     const router = useRouter();
 

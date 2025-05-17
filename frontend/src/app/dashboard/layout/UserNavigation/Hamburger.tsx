@@ -9,7 +9,7 @@ import {Logout} from "@mui/icons-material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 interface NavigationMenuProps {
-    user?: User;
+    user?: User | null;
     navMenu: NavProps[];
     onLeaveAction: () => Promise<void>;
 }

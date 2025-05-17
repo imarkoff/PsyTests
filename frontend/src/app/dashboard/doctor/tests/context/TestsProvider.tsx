@@ -3,17 +3,9 @@
 import TestBase from "@/schemas/TestBase";
 import TestsContext from "@/app/dashboard/doctor/tests/context/TestsContext";
 import {ReactNode, useState} from "react";
-import useSWR from "swr";
-import {getTests} from "@/services/testsService";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function TestsProvider({ children }: { children: ReactNode }) {
-    const {
-        data: tests,
-        isLoading,
-        error
-    } = useSWR("getTests", getTests, { revalidateOnFocus: false });
-
+export default function TestsProvider({ tests, children }: { tests: TestBase[], children: ReactNode }) {
     const [selectedTest, setSelectedTest] = useState<TestBase | null>(null);
 
     const router = useRouter();
@@ -24,7 +16,7 @@ export default function TestsProvider({ children }: { children: ReactNode }) {
 
     return (
       <TestsContext.Provider value={{
-          tests, isLoading, error,
+          tests,
           selectedTest, setSelectedTest: handleSelectTest
       }}>
           {children}

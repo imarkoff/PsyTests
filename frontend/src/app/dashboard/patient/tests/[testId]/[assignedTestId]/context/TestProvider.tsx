@@ -6,7 +6,8 @@ import {passTest} from "@/services/patientTestsService";
 import useSWR from "swr";
 import PassTest from "@/schemas/PassTest";
 import PassTestData from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
-import {getTest} from "@/services/testsService";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
+import {getTestById} from "@/lib/controllers/testController";
 
 interface TestProviderProps {
     testId: string;
@@ -26,8 +27,8 @@ export default function TestProvider({testId, assignedTestId, children}: TestPro
     const {
         data: test
     } = useSWR(
-        `getTest/${testId}`,
-        () => getTest(testId)
+        `getTestById/${testId}`,
+        withSafeErrorHandling(() => getTestById(testId)),
     );
 
     const [passed, setPassed] = useState(false);

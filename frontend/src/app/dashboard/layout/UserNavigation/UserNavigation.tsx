@@ -5,17 +5,20 @@ import {Role, Roles} from "@/schemas/Role";
 import Hamburger from "@/app/dashboard/layout/UserNavigation/Hamburger";
 import doctorNav from "@/app/dashboard/doctor/doctorNav";
 import NavItem from "@/app/dashboard/layout/UserNavigation/NavItem";
-import {logout} from "@/services/authService";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useUser} from "@/app/dashboard/context/UserContext";
+import {logOut} from "@/lib/controllers/authController";
+import { useRouter } from "next/navigation";
 
 export default function UserNavigation() {
     const {me, mutate} = useUser();
+    const router = useRouter();
 
     const onLeave = async () => {
-        await logout();
+        const { data,  } = await logOut();
         await mutate(undefined);
+        if (data) router.push(data.redirectTo);
     }
 
     const getNavMenu = (role?: Role) => {

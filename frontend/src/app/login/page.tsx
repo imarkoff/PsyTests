@@ -14,13 +14,11 @@ import PasswordInput from "@/app/login/components/PasswordInput";
 import SignInContainer from "@/app/login/components/SignInContainer";
 import {FormProvider, useForm} from "react-hook-form";
 import UserLogin from "@/schemas/UserLogin";
-import useIsLoggedIn from "@/app/login/hooks/useIsLoggedIn";
 import useOnLogIn from "@/app/login/hooks/useOnLogIn";
 
 export default function Page() {
     const methods = useForm<UserLogin>();
-    const { mutate } = useIsLoggedIn();
-    const { onSubmit, error, loading } = useOnLogIn(mutate);
+    const { onSubmit, error, loading } = useOnLogIn();
 
     return (
         <SignInContainer>

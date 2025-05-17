@@ -4,8 +4,9 @@ import PatientTest from "@/schemas/PatientTest";
 import PatientSection from "@/app/dashboard/doctor/patients/[patientId]/components/PatientSection";
 import AssignedTestCard from "@/components/Test/AssignedTestCard";
 import useSWR from "swr";
-import {getMe} from "@/services/usersService";
 import {Typography} from "@mui/material";
+import { getMe } from "@/lib/controllers/userController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 interface AssignedTestsProps {
     tests?: PatientTest[];
@@ -13,7 +14,7 @@ interface AssignedTestsProps {
 }
 
 export default function AssignedTests({tests, unassignAction}: AssignedTestsProps) {
-    const { data: me } = useSWR("getMe", getMe);
+    const { data: me } = useSWR("getMe", withSafeErrorHandling(getMe));
 
     return (
         <PatientSection title={"Назначені тести"}>
