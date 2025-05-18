@@ -3,7 +3,8 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
-import {removePatient} from "@/services/doctorPatientsService";
+import { removePatient } from "@/lib/controllers/doctorPatientController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function DeletePatientButton({ patientId }: { patientId: string }) {
     const [open, setOpen] = useState(false);
@@ -14,7 +15,7 @@ export default function DeletePatientButton({ patientId }: { patientId: string }
 
     const onDelete = async () => {
         if (!patientId) return;
-        await removePatient(patientId);
+        await withSafeErrorHandling(removePatient)(patientId);
         router.push("/dashboard/doctor/patients");
     }
 

@@ -3,10 +3,11 @@ import {ReactNode} from "react";
 import TestsProvider from "@/app/dashboard/doctor/tests/context/TestsProvider";
 import TestsLayout from "@/app/dashboard/doctor/tests/layout/TestsLayout";
 import TestContent from "@/app/dashboard/doctor/tests/layout/TestContent";
+import {getAllTests} from "@/lib/controllers/testController";
 
-export default function TestsPage({children}: { children: ReactNode }) {
+export default async function TestsPage({children}: { children: ReactNode }) {
     return (
-        <TestsProvider>
+        <TestsProvider tests={(await getAllTests()).data ?? []}>
             <Box sx={{
                 display: "flex",
                 justifyContent: "space-evenly",

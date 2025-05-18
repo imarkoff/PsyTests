@@ -1,17 +1,12 @@
 "use client";
 
 import {Box} from "@mui/material";
-import useSWR from "swr";
-import {getAssignedTests} from "@/services/patientTestsService";
 import AssignedTestCard from "@/components/Test/AssignedTestCard";
 import TestsLayoutBox from "@/app/dashboard/patient/components/TestsLayoutBox";
 import {redirect} from "next/navigation";
+import PatientTest from "@/schemas/PatientTest";
 
-export default function TestsLayout() {
-    const {
-        data: tests
-    } = useSWR("getAssignedTests", getAssignedTests);
-
+export default function TestsLayout({tests}: { tests: PatientTest[] | undefined }) {
     const onStartTest = (testId: string, assignedTestId: string) => {
         redirect(`/dashboard/patient/tests/${testId}/${assignedTestId}`);
     }

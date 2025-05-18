@@ -26,7 +26,7 @@ export default class DoctorPatientTestService {
      * @returns An object containing the data and headers - content-disposition and content-type.
      */
     exportTestResult = async (patientId: string, testId: string) =>
-        await this.api.get<Blob>(`${this.getEndpoint(patientId)}/history/${testId}/export`, {responseType: 'blob'})
+        await this.api.get<ArrayBuffer>(`${this.getEndpoint(patientId)}/history/${testId}/export`, {responseType: 'arraybuffer'})
             .then(res => ({
                 data: res.data,
                 contentDisposition: res.headers['content-disposition'],

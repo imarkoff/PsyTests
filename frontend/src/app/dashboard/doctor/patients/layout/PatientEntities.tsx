@@ -1,17 +1,17 @@
 "use client";
 
 import useSWR from "swr";
-import {getPatients} from "@/services/doctorPatientsService";
 import DoctorPatientCard from "@/app/dashboard/doctor/patients/components/DoctorPatientCard";
+import { getAllPatients } from "@/lib/controllers/doctorPatientController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function PatientEntities() {
     const {
         data: patients
-    } = useSWR("getPatients", getPatients);
+    } = useSWR("getAllPatients", withSafeErrorHandling(getAllPatients));
     
     const needsAttention = patients?.filter(patient => patient.needs_attention);
     const normal = patients?.filter(patient => !patient.needs_attention);
-
 
     return (
         <>

@@ -2,12 +2,12 @@
 
 import {ReactNode, useState} from "react";
 import TestContext from "./TestContext";
-import {passTest} from "@/services/patientTestsService";
 import useSWR from "swr";
 import PassTest from "@/schemas/PassTest";
 import PassTestData from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
 import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 import {getTestById} from "@/lib/controllers/testController";
+import { passTest } from "@/lib/controllers/patientTestController";
 
 interface TestProviderProps {
     testId: string;

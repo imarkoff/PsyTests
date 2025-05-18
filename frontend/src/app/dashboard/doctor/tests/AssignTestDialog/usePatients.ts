@@ -1,25 +1,25 @@
 import useSWR from "swr";
-import {getPatients} from "@/services/doctorPatientsService";
-import {useState} from "react";
-import {assignTest} from "@/services/doctorPatientsTestsService";
-import {AxiosError} from "axios";
+import { useState } from "react";
+import { getAllPatients } from "@/lib/controllers/doctorPatientController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
+import { assignTest } from "@/lib/controllers/doctorPatientTestController";
 
 /**
  * Hook for getting patients and assigning tests to them
  */
 export default function usePatients() {
-    const { data: patients } = useSWR("getPatients", getPatients);
+    const { data: patients } = useSWR("getAllPatients", withSafeErrorHandling(getAllPatients));
     const [assignError, setAssignError] = useState<string>();
 
     const onAssign = async (patientId: string, testId: string) => {
-        try {
-            await assignTest(patientId, testId);
-        }
-        catch (e) {
-            if (e instanceof AxiosError && e.status === 409) {
+        const { error } = await assignTest(patientId, testId);
+
+        if (error) {
+            if (error.status === 409) {
                 setAssignError("Вибраний вами тест вже назначено пацієнту");
+            } else {
+                setAssignError(error.statusText);
             }
-            throw e;
         }
     };
 

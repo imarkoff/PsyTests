@@ -36,7 +36,7 @@ export default class DoctorPatientService {
         await this.api.patch<void>(`${this.endpoint}/${patientId}/read`)
             .then(res => res.data);
 
-    changePatientStatus = async (patientId: string, isActive: boolean | string) =>
+    changePatientStatus = async (patientId: string, isActive: boolean) =>
         await this.api.patch<void>(`${this.endpoint}/${patientId}/status`, null, { params: { status: isActive } })
             .then(res => res.data);
 }

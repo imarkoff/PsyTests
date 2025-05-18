@@ -1,5 +1,6 @@
 import useSWR from "swr";
-import {getPatientTests, unassignTest} from "@/services/doctorPatientsTestsService";
+import {getAllPatientTests, unassignTest} from "@/lib/controllers/doctorPatientTestController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function usePatientTests(patientId: string) {
     const {
@@ -7,13 +8,13 @@ export default function usePatientTests(patientId: string) {
         isLoading, error,
         mutate: testsMutate
     } = useSWR(
-        `getPatientTests/${patientId}`,
-        () => getPatientTests(patientId),
+        ["getAllPatientTests", patientId],
+        ([, id]) => withSafeErrorHandling(getAllPatientTests)(id),
         { revalidateOnFocus: false }
     );
 
     const onUnassign = async (testId: string) => {
-        await unassignTest(patientId, testId);
+        await withSafeErrorHandling(unassignTest)(patientId, testId);
         await testsMutate(prev =>
                 prev?.filter(test => test.id !== testId),
             false
