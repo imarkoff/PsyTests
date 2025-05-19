@@ -1,9 +1,9 @@
 import QuestionCard from "@/components/QuestionCard";
 import RavenQuestion, {RavenAnswer} from "@/tests/RavenTest/schemas/RavenQuestion";
-import {testImage} from "@/services/testsService";
 import RadioAnswer from "@/components/QuestionCard/types/RadioAnswer";
 import { useMemo } from "react";
 import {TestModule} from "@/tests/RavenTest/schemas/RavenTest";
+import getRavenTestImageUrl from "@/tests/RavenTest/utils/getRavenTestImageUrl";
 
 interface QuestionCardProps {
     question: RavenQuestion;
@@ -29,7 +29,7 @@ export default function RavenQuestionCard(
             header={<QuestionCard.Header />}
             image={question.image ? (
                 <QuestionCard.Image
-                    src={testImage(testId, module?.path ?? null, question.image)}
+                    src={getRavenTestImageUrl(testId, module?.path, question.image)}
                     alt={question.question ?? index.toString()}
                 />
             ) : undefined}
@@ -48,7 +48,7 @@ const interpretRavenAnswers = (
 ): RadioAnswer[] => (
     answers.map(answer => ({
         image: answer.image ? {
-            src: testImage(testId, modulePath, answer.image),
+            src: getRavenTestImageUrl(testId, modulePath, answer.image),
             alt: answer.answer ?? answer.id ?? "",
         } : undefined
     } as RadioAnswer))

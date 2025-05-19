@@ -1,39 +1,25 @@
 "use client";
 
-import {ReactNode, useCallback, useEffect} from "react";
-import useSWR from "swr";
-import {getMe} from "@/services/usersService";
-import {redirect, useRouter} from "next/navigation";
-import {Roles} from "@/schemas/Role";
+import {ReactNode} from "react";
 import UserContext from "@/app/dashboard/context/UserContext";
+import User from "@/schemas/User";
+import { logOut } from "@/lib/controllers/authController";
+import { useRouter } from "next/navigation";
+import {ApiResponse} from "@/lib/api-client/types";
 
-export default function UserProvider({children}: { children: ReactNode }) {
-    const {
-        data: me,
-        error,
-        isLoading,
-        mutate
-    } = useSWR("getMe", getMe, { revalidateOnFocus: false });
+export default function UserProvider(
+    {response, children}: { response: ApiResponse<User>, children: ReactNode }
+) {
+    const { data: me } = response;
 
     const router = useRouter();
-
-    const notLoggedIn = !me && !isLoading && error.status === 401;
-
-    const checkPath = useCallback(() => {
-        if (notLoggedIn) redirect("/login");
-        const location = window.location.pathname;
-        if (me && location === "/dashboard") {
-            if (me.role === Roles.patient) router.push("/dashboard/patient");
-            if (me.role === Roles.doctor) router.push("/dashboard/doctor");
-        }
-    }, [me, notLoggedIn, router]);
-
-    useEffect(() => {
-        checkPath();
-    }, [checkPath]);
+    const onLogOut = async () => {
+        const {data} = await logOut();
+        if (data) router.push(data.redirectTo);
+    }
 
     return (
-        <UserContext.Provider value={{me, isLoading, error, mutate, checkPath}}>
+        <UserContext.Provider value={{me, onLogOut}}>
             {children}
         </UserContext.Provider>
     );

@@ -1,7 +1,8 @@
 "use client";
 
 import useSWR from "swr";
-import {getTestMarks} from "@/services/testsService";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
+import {getTestMarks} from "@/lib/controllers/testController";
 
 export default function useTestMarks(testId: string) {
     const {
@@ -9,8 +10,8 @@ export default function useTestMarks(testId: string) {
         isLoading,
         error
     } = useSWR(
-        `/tests/${testId}/marks`,
-        () => getTestMarks(testId),
+        ["tests", testId, "marks"],
+        ([, id]) => withSafeErrorHandling(getTestMarks)(id),
         { revalidateOnFocus: false }
     );
 

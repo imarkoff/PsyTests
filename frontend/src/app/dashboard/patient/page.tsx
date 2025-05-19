@@ -1,11 +1,12 @@
 import TestsLayout from "@/app/dashboard/patient/layout/TestsLayout";
 import TestsHistoryLayout from "@/app/dashboard/patient/layout/TestsHistoryLayout";
+import {getAssignedTests, getTestsHistory} from "@/lib/controllers/patientTestController";
 
-export default function ClientPage() {
+export default async function ClientPage() {
     return (
         <>
-            <TestsLayout />
-            <TestsHistoryLayout />
+            <TestsLayout tests={(await getAssignedTests()).data ?? []} />
+            <TestsHistoryLayout testsHistory={(await getTestsHistory()).data} />
         </>
     );
 }

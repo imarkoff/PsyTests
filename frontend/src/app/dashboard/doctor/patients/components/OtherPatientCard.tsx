@@ -6,7 +6,8 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import {IconButton, Tooltip} from "@mui/material";
 import {useState} from "react";
-import {addPatient} from "@/services/doctorPatientsService";
+import {addPatient} from "@/lib/controllers/doctorPatientController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function OtherPatientCard({patient}: {patient: User}) {
     const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function OtherPatientCard({patient}: {patient: User}) {
         if (loading || success) return;
         setLoading(true);
         try {
-            await addPatient(patient.id);
+            await withSafeErrorHandling(addPatient)(patient.id);
             setSuccess(true);
         }
         finally {

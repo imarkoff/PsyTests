@@ -5,18 +5,12 @@ import {Role, Roles} from "@/schemas/Role";
 import Hamburger from "@/app/dashboard/layout/UserNavigation/Hamburger";
 import doctorNav from "@/app/dashboard/doctor/doctorNav";
 import NavItem from "@/app/dashboard/layout/UserNavigation/NavItem";
-import {logout} from "@/services/authService";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useUser} from "@/app/dashboard/context/UserContext";
 
 export default function UserNavigation() {
-    const {me, mutate} = useUser();
-
-    const onLeave = async () => {
-        await logout();
-        await mutate(undefined);
-    }
+    const { me, onLogOut } = useUser();
 
     const getNavMenu = (role?: Role) => {
         switch (role) {
@@ -53,12 +47,12 @@ export default function UserNavigation() {
                         </Typography>
                     </Box>
 
-                    <Button aria-label={"Вийти"} onClick={onLeave} color={"error"} endIcon={<LogoutIcon />}>
+                    <Button aria-label={"Вийти"} onClick={onLogOut} color={"error"} endIcon={<LogoutIcon />}>
                         Вийти
                     </Button>
                 </Box>
                 
-                <Hamburger user={me} navMenu={navMenu} onLeaveAction={onLeave} />
+                <Hamburger user={me} navMenu={navMenu} onLeaveAction={onLogOut} />
             </Box>
         </>
     );

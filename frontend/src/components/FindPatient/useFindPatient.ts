@@ -1,6 +1,9 @@
+"use client";
+
 import {useCallback, useEffect, useState} from "react";
-import {findPatient} from "@/services/doctorPatientsService";
 import PatientSearch from "@/schemas/PatientSearch";
+import {findPatient} from "@/lib/controllers/doctorPatientController";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
 export default function useFindPatient() {
     const [loading, setLoading] = useState(false);
@@ -15,7 +18,7 @@ export default function useFindPatient() {
         setLoading(true);
 
         try {
-            const data = await findPatient(query);
+            const data = await withSafeErrorHandling(findPatient)(query);
             setResults(data);
         }
         finally {
