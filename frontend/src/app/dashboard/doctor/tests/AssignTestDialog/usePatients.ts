@@ -12,6 +12,7 @@ export default function usePatients() {
     const [assignError, setAssignError] = useState<string>();
 
     const onAssign = async (patientId: string, testId: string) => {
+        setAssignError(undefined); // Clear any previous error
         const { error } = await assignTest(patientId, testId);
 
         if (error) {
