@@ -48,7 +48,10 @@ async def get_patient_test_history(
         test_history_service: TestHistoryService = Depends(get_test_history_service)
 ):
     await authenticator.auth(role=Role.DOCTOR)
-    return await test_history_service.get_test_result_by_id(patient_id=patient_id, test_id=test_id)
+    try:
+        return await test_history_service.get_test_result_by_id(patient_id=patient_id, test_id=test_id)
+    except NotFoundError as e:
+        return Response(e.message, status_code=404, media_type="text/plain")
 
 
 @router.get("/history/{test_id}/export",

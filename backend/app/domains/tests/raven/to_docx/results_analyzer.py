@@ -9,7 +9,7 @@ class ResultsAnalyzer:
 
     def get_max_answers(self) -> int:
         max_answers = 0
-        for module, answers in self.results.items():
+        for module, answers in self.results.root.items():
             if len(answers) > max_answers:
                 max_answers = len(answers)
         return max_answers
@@ -20,9 +20,9 @@ class ResultsAnalyzer:
         module_total_points = 0
 
         for answer in answers:
-            user_answer = answer["user_answer"]
-            correct_answer = answer["correct_answer"]
-            points = answer["points"]
+            user_answer = answer.user_answer
+            correct_answer = answer.correct_answer
+            points = answer.points
 
             module_total_points += points
             if user_answer == correct_answer:

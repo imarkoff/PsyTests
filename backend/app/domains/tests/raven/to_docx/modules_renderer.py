@@ -19,7 +19,7 @@ class ModulesRenderer:
         correct_points = 0
         total_points = 0
 
-        for module, answers in self.results.items():
+        for module, answers in self.results.root.items():
             row_cells = self.table.add_row().cells
             self.formatter.format_cell(row_cells[0], module)
 
@@ -51,8 +51,8 @@ class ModulesRenderer:
 
     @staticmethod
     def _format_answer_text(answer: RavenResultAnswer) -> str:
-        user_answer = answer["user_answer"]
-        correct_answer = answer["correct_answer"]
+        user_answer = answer.user_answer
+        correct_answer = answer.correct_answer
 
         str_user_answer = "" if user_answer is None else f"{user_answer + 1}"
         str_correct_answer = f" ({correct_answer + 1})" if user_answer is not None and user_answer != correct_answer else ""

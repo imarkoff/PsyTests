@@ -61,4 +61,8 @@ async def get_test(
         patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
     patient = await authenticator.auth(role=Role.PATIENT)
-    return await patient_test_service.get_patient_test(patient_id=patient.id, test_id=assigned_test_id)
+
+    try:
+        return await patient_test_service.get_patient_test(patient_id=patient.id, test_id=assigned_test_id)
+    except NotFoundError as e:
+        return Response(e.message, status_code=404, media_type="plain/text")

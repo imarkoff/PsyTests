@@ -17,7 +17,7 @@ class ResultsTableComponent(TableComponent):
                  document: Document, formatter: DocumentFormatter,
                  test_result: TestResultDto):
         self.test_result = test_result
-        self.results_analyzer = ResultsAnalyzer(results=self.test_result.results)
+        self.results_analyzer = ResultsAnalyzer(results=self.test_result.verdict.results)
         self.max_answers = self.results_analyzer.get_max_answers()
         super().__init__(document, formatter)
 
@@ -43,7 +43,7 @@ class ResultsTableComponent(TableComponent):
         modules = ModulesRenderer(
             table=self.table,
             formatter=self.formatter,
-            results=self.test_result.results
+            results=self.test_result.verdict.results
         )
         return modules.render()
 
