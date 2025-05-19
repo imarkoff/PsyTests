@@ -1,6 +1,7 @@
 from datetime import timedelta, datetime, UTC
 
 import jwt
+from jwt import InvalidSignatureError
 
 from app.settings import settings
 from app.db.models.user import User
@@ -9,10 +10,11 @@ from app.db.models.user import User
 class JWTBearer:
     @staticmethod
     def verify(token: str) -> bool:
-        payload = JWTBearer.decode(token)
-
-        is_token_valid = True if payload else False
-        return is_token_valid
+        try:
+            payload = JWTBearer.decode(token)
+            return True if payload else False
+        except InvalidSignatureError:
+            return False
 
     @staticmethod
     def sign(user: User, refresh_token: bool = False) -> str:
@@ -32,6 +34,9 @@ class JWTBearer:
 
     @staticmethod
     def decode(token: str) -> dict:
+        """
+        :raises InvalidSignatureError: Signature verification failed
+        """
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.TOKEN_ALGORITHM])
         expires = datetime.fromisoformat(payload["expires"])
         return payload if expires > datetime.now(UTC) else {}

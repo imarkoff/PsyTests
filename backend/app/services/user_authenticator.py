@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
+from jwt import InvalidSignatureError
 from pydantic import UUID4
 
 from app.core.bearer import JWTBearer
@@ -30,7 +31,7 @@ class Authenticator:
         """
         self._verify_credentials()
 
-        access_token = self.jwt_bearer.decode(self.credentials.credentials)
+        access_token = self._decode_jwt()
 
         self._verify_token_by_user_id(access_token)
         self._verify_token_by_role(access_token, role)
@@ -40,6 +41,12 @@ class Authenticator:
 
     def _verify_credentials(self):
         if not self.credentials or not self.credentials.credentials:
+            raise HTTPException(status_code=401)
+
+    def _decode_jwt(self) -> dict:
+        try:
+            return self.jwt_bearer.decode(self.credentials.credentials)
+        except InvalidSignatureError:
             raise HTTPException(status_code=401)
 
     @staticmethod

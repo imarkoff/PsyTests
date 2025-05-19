@@ -36,6 +36,7 @@ services:
       - POSTGRESQL_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
       - CORS_ORIGINS=${CORS_ORIGINS}
       - DOMAIN=${DOMAIN}
+      - SECRET_KEY=${SECRET_KEY}
 
   postgres:
     image: "postgres:17.2"
