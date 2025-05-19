@@ -27,8 +27,8 @@ export default function TestProvider({testId, assignedTestId, children}: TestPro
     const {
         data: test
     } = useSWR(
-        `getTestById/${testId}`,
-        withSafeErrorHandling(() => getTestById(testId)),
+        ["getTestById", testId],
+        ([, id]) => withSafeErrorHandling(getTestById)(id),
     );
 
     const [passed, setPassed] = useState(false);

@@ -10,8 +10,8 @@ export default function useTestMarks(testId: string) {
         isLoading,
         error
     } = useSWR(
-        `/tests/${testId}/marks`,
-        withSafeErrorHandling(() => getTestMarks(testId)),
+        ["tests", testId, "marks"],
+        ([, id]) => withSafeErrorHandling(getTestMarks)(id),
         { revalidateOnFocus: false }
     );
 

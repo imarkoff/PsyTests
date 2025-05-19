@@ -8,8 +8,8 @@ export default function useTest(testId: string) {
         isLoading,
         error
     } = useSWR(
-        `getTestById/${testId}`,
-        withSafeErrorHandling(() => getTestById(testId)),
+        ["getTestById", testId],
+        ([, id]) => withSafeErrorHandling(getTestById)(id),
         {revalidateOnFocus: false}
     );
 
