@@ -1,8 +1,14 @@
 import {cookies} from "next/headers";
 import {ReadonlyRequestCookies} from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import {NextRequest} from "next/server";
 
 export async function getAccessToken() {
     const cookieStore = await cookies();
+    return cookieStore.get("accessToken")?.value;
+}
+
+export function getAccessTokenFromRequest(request: NextRequest) {
+    const cookieStore = request.cookies;
     return cookieStore.get("accessToken")?.value;
 }
 

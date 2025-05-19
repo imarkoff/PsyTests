@@ -1,4 +1,4 @@
-import getTestImageUrl from "@/lib/utils/getTestImageUrl";
+import getTestImageUrl from "@/lib/urls/getTestImageUrl";
 
 const getRavenTestImageUrl = (
     testId: string, imageModule: string | undefined, imagePath: string

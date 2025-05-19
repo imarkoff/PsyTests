@@ -2,7 +2,8 @@
 
 import {getAccessToken} from "@/lib/auth/tokenManager";
 import createApiInstance from "@/lib/api-client/createApiInstance";
-import refreshServerActionsSession from "@/lib/auth/refreshServerActionsSession";
+import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
+import {refreshToken} from "@/lib/controllers/tokenController";
 
 /**
  * Creates an Axios instance for making API requests with authentication.
@@ -31,7 +32,7 @@ export default async function createPrivateApiInstance() {
                 originalRequest._retry = true;
 
                 try {
-                    const newToken = await refreshServerActionsSession();
+                    const newToken = await withSafeErrorHandling(refreshToken)();
                     originalRequest.headers.Authorization = `Bearer ${newToken}`;
                     accessToken = newToken;
                     return instance(originalRequest);

@@ -1,3 +1,5 @@
+"use client";
+
 import {useCallback, useEffect, useState} from "react";
 import PatientSearch from "@/schemas/PatientSearch";
 import {findPatient} from "@/lib/controllers/doctorPatientController";

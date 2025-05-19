@@ -4,7 +4,7 @@ import TestResult from "@/schemas/TestResult";
 import {Button, Snackbar} from "@mui/material";
 import React, {useState} from "react";
 import CheckIcon from '@mui/icons-material/Check';
-import getExportTestResultUrl from "@/lib/utils/getExportTestResultUrl";
+import getExportTestResultUrl from "@/lib/urls/getExportTestResultUrl";
 
 export default function ExportButton({test}: {test: TestResult}) {
     const [submitted, setSubmitted] = useState(false);
