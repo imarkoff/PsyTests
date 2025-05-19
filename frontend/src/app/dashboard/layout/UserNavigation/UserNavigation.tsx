@@ -8,18 +8,9 @@ import NavItem from "@/app/dashboard/layout/UserNavigation/NavItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useUser} from "@/app/dashboard/context/UserContext";
-import {logOut} from "@/lib/controllers/authController";
-import { useRouter } from "next/navigation";
 
 export default function UserNavigation() {
-    const {me, mutate} = useUser();
-    const router = useRouter();
-
-    const onLeave = async () => {
-        const { data,  } = await logOut();
-        await mutate(undefined);
-        if (data) router.push(data.redirectTo);
-    }
+    const { me, onLogOut } = useUser();
 
     const getNavMenu = (role?: Role) => {
         switch (role) {
@@ -56,12 +47,12 @@ export default function UserNavigation() {
                         </Typography>
                     </Box>
 
-                    <Button aria-label={"Вийти"} onClick={onLeave} color={"error"} endIcon={<LogoutIcon />}>
+                    <Button aria-label={"Вийти"} onClick={onLogOut} color={"error"} endIcon={<LogoutIcon />}>
                         Вийти
                     </Button>
                 </Box>
                 
-                <Hamburger user={me} navMenu={navMenu} onLeaveAction={onLeave} />
+                <Hamburger user={me} navMenu={navMenu} onLeaveAction={onLogOut} />
             </Box>
         </>
     );

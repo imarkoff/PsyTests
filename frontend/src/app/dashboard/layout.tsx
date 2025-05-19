@@ -2,10 +2,11 @@ import {AppBar, Box, Toolbar, Typography} from "@mui/material";
 import UserNavigation from "@/app/dashboard/layout/UserNavigation/UserNavigation";
 import {ReactNode} from "react";
 import UserProvider from "@/app/dashboard/context/UserProvider";
+import { getMe } from "@/lib/controllers/userController";
 
-export default function DashboardLayout({children}: { children: ReactNode }) {
+export default async function DashboardLayout({children}: { children: ReactNode }) {
     return (
-        <UserProvider>
+        <UserProvider response={await getMe()}>
             <Box sx={{height: "100%", display: "flex", flexDirection: "column", overflow: "hidden"}}>
                 <NavigationBar />
 

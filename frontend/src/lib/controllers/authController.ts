@@ -1,5 +1,6 @@
 "use server";
 
+import "server-only";
 import UserLogin from "@/schemas/UserLogin";
 import {fetchPublic} from "@/lib/fetchers";
 import AuthService from "@/lib/services/AuthService";
