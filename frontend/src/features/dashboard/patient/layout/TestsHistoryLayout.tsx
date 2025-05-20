@@ -1,5 +1,5 @@
 import {Box} from "@mui/material";
-import TestsLayoutBox from "@/app/dashboard/patient/components/TestsLayoutBox";
+import TestsLayoutBox from "@/features/dashboard/patient/components/TestsLayoutBox";
 import TestHistoryShortCard from "@/components/Test/TestHistoryCard/TestHistoryShortCard";
 import TestResultShort from "@/schemas/TestResultShort";
 

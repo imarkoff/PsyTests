@@ -2,7 +2,7 @@
 
 import {Box} from "@mui/material";
 import AssignedTestCard from "@/components/Test/AssignedTestCard";
-import TestsLayoutBox from "@/app/dashboard/patient/components/TestsLayoutBox";
+import TestsLayoutBox from "@/features/dashboard/patient/components/TestsLayoutBox";
 import {redirect} from "next/navigation";
 import PatientTest from "@/schemas/PatientTest";
 

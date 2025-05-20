@@ -1,28 +1,15 @@
 "use client";
 
 import {Box, Button, Typography} from "@mui/material";
-import {Role, Roles} from "@/schemas/Role";
-import Hamburger from "@/app/dashboard/layout/UserNavigation/Hamburger";
-import doctorNav from "@/app/dashboard/doctor/doctorNav";
-import NavItem from "@/app/dashboard/layout/UserNavigation/NavItem";
+import Hamburger from "@/features/dashboard/components/UserNavigation/components/Hamburger";
+import NavItem from "@/features/dashboard/components/UserNavigation/components/NavItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import {useUser} from "@/app/dashboard/context/UserContext";
+import {useUser} from "@/features/dashboard/contexts/UserContext";
+import getNavMenu from "@/features/dashboard/components/UserNavigation/utils/getNavMenu";
 
 export default function UserNavigation() {
     const { me, onLogOut } = useUser();
-
-    const getNavMenu = (role?: Role) => {
-        switch (role) {
-            case Roles.doctor:
-                return doctorNav;
-            // case Roles.patient:
-            //     return patientNav;
-            default:
-                return [];
-        }
-    };
-
     const navMenu = getNavMenu(me?.role);
 
     return (

@@ -8,7 +8,10 @@ import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 export default function AssignedBy({assignedBy}: {assignedBy: string}) {
     const {
         data: user
-    } = useSWR("getUser/" + assignedBy, withSafeErrorHandling(() => getUser(assignedBy)));
+    } = useSWR(
+        ["getUser", assignedBy],
+        ([, id]) => withSafeErrorHandling(getUser)(id)
+    );
 
     return user && (
         <TestValues title={"Назначив (-ла)"}>

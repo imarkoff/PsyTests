@@ -1,4 +1,4 @@
-import {NavProps} from "@/app/dashboard/layout/UserNavigation/NavItem";
+import {NavProps} from "@/features/dashboard/components/UserNavigation/components/NavItem";
 
 const endpoint = "/dashboard/doctor";
 

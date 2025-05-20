@@ -4,7 +4,7 @@ import User from "@/schemas/User";
 import {Divider, IconButton, ListItemIcon, Menu, MenuItem} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React, { useState } from "react";
-import {MenuNav, NavProps} from "@/app/dashboard/layout/UserNavigation/NavItem";
+import {MenuNav, NavProps} from "@/features/dashboard/components/UserNavigation/components/NavItem";
 import {Logout} from "@mui/icons-material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 

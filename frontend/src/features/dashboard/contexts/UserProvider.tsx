@@ -1,7 +1,7 @@
 "use client";
 
 import {ReactNode} from "react";
-import UserContext from "@/app/dashboard/context/UserContext";
+import UserContext from "@/features/dashboard/contexts/UserContext";
 import User from "@/schemas/User";
 import { logOut } from "@/lib/controllers/authController";
 import { useRouter } from "next/navigation";

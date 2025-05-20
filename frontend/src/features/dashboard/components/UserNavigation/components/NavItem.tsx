@@ -1,5 +1,5 @@
 import {Button, MenuItem} from "@mui/material";
-import useNav from "@/app/dashboard/layout/UserNavigation/hooks/useNav";
+import useNav from "@/features/dashboard/components/UserNavigation/hooks/useNav";
 
 export interface NavProps {
     label: string;

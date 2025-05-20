@@ -1,8 +1,8 @@
 import {Box, Button} from "@mui/material";
 import DoneIcon from '@mui/icons-material/Done';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import onLeaveClick from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/components/onLeaveClick";
-import {useTestContext} from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/context/TestContext";
+import {goToPatientPage} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/utils";
+import {useTestContext} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/hooks/useTestContext";
 
 export default function PassTestButton() {
     const { passed, loading } = useTestContext();
@@ -20,7 +20,7 @@ export default function PassTestButton() {
                 <Button
                     variant={"contained"}
                     sx={{py: 1.5, borderRadius: "999px", textTransform: "uppercase"}}
-                    onClick={passed ? onLeaveClick : undefined}
+                    onClick={passed ? goToPatientPage : undefined}
                     type={passed ? "button" : "submit"}
                     color={"primary"}
                     loading={loading}

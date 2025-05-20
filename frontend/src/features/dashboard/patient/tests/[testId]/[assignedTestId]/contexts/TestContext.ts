@@ -1,5 +1,7 @@
-import {createContext, useContext} from "react";
-import PassTestData from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
+"use client";
+
+import {createContext} from "react";
+import PassTestData from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
 import TestBase from "@/schemas/TestBase";
 
 /**
@@ -20,8 +22,5 @@ const TestContext = createContext<{
     passed: false,
     loading: false,
 });
-
-/** Custom hook to use the TestContext. */
-export const useTestContext = () => useContext(TestContext);
 
 export default TestContext;
