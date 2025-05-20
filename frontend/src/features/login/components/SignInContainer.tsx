@@ -7,6 +7,11 @@ export default function SignInContainer({children}: {children: ReactNode}) {
     const theme = useTheme();
 
     const boxStyles: SxProps = {
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         '&::before': {
             content: '""',
             display: 'block',
@@ -24,7 +29,7 @@ export default function SignInContainer({children}: {children: ReactNode}) {
     }
 
     return (
-        <Box component={"main"} className={"size-full flex items-center justify-center"} sx={boxStyles}>
+        <Box component={"main"} sx={boxStyles}>
             {children}
         </Box>
     );

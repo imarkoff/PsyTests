@@ -24,15 +24,16 @@ export default function LoginForm() {
         <SignInContainer>
             <Card
                 variant={"outlined"}
-                className={"max-w-[400px] w-full box-border m-3 flex flex-col"}
-                sx={{ padding: 3, gap: 3 }}
+                sx={formCardStyles}
             >
-                <h2>PsyTest</h2>
-                <Typography component={"h1"} className={"text-4xl font-semibold"}>Вхід</Typography>
+                <Typography variant={"subtitle2"} align={"center"} sx={{textWrap: "pretty"}}>
+                    Волинська обласна психіатрична лікарня м. Луцька
+                </Typography>
+                <Typography component={"h1"} variant={"h4"} sx={{fontWeight: 600}} align={"center"}>Вхід</Typography>
                 <FormProvider {...methods}>
                     <Box
                         component={"form"}
-                        className={"flex flex-col gap-5 w-full"}
+                        sx={{display: "flex", flexDirection: "column", gap: 2, width: "100%"}}
                         onSubmit={methods.handleSubmit(onSubmit)}
                         noValidate
                     >
@@ -51,7 +52,7 @@ export default function LoginForm() {
                         <Button
                             variant={"contained"}
                             fullWidth
-                            className={"mt-2"}
+                            sx={{marginTop: 1}}
                             type={"submit"}
                             loading={loading}
                             loadingPosition={"end"}
@@ -65,4 +66,14 @@ export default function LoginForm() {
             </Card>
         </SignInContainer>
     );
+}
+
+const formCardStyles = {
+    padding: 3,
+    gap: 2.5,
+    maxWidth: 400,
+    width: "100%",
+    margin: 1,
+    display: "flex",
+    flexDirection: "column"
 }

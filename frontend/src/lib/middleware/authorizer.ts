@@ -35,11 +35,6 @@ export async function authorizerMiddleware(request: NextRequest) {
     return NextResponse.next();
 }
 
-export const authorizerMatchers = [
-    "/login",
-    "/dashboard/:path*"
-];
-
 const areTokensValid = async (request: NextRequest) => {
     const accessToken = getAccessTokenFromRequest(request);
     const refreshToken = request.cookies.get('refresh_token')?.value;

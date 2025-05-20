@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {authorizerMatchers, authorizerMiddleware} from "@/lib/middleware/authorizer";
+import {authorizerMiddleware} from "@/lib/middleware/authorizer";
 import { authenticatorMiddleware } from "./lib/middleware/authenticator";
 import {checkIsProtectedRoute, checkIsPublicRoute} from "@/lib/middleware/routes";
 
@@ -25,5 +25,8 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: [...authorizerMatchers]
+    matcher: [
+        "/login",
+        "/dashboard/:path*"
+    ]
 }

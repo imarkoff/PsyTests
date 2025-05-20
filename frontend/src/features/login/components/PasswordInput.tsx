@@ -21,10 +21,7 @@ export default function PasswordInput() {
                 size={"small"}
                 {...register("password", { required: true })}
                 endAdornment={
-                    <IconButton
-                        onClick={() => setPassVisibility(!passVisibility)}
-                        className={"items-center"}
-                    >
+                    <IconButton onClick={() => setPassVisibility(!passVisibility)}>
                         {passVisibility ? <VisibilityOff/> : <Visibility/>}
                     </IconButton>
                 }
