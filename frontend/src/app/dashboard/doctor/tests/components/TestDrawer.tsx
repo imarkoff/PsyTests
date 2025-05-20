@@ -1,5 +1,3 @@
-"use client";
-
 import {ReactNode, useEffect, useState} from "react";
 import {Box, SwipeableDrawer} from "@mui/material";
 import Puller from "@/app/dashboard/doctor/tests/components/Puller";

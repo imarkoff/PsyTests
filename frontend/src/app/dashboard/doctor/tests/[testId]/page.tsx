@@ -6,13 +6,13 @@ import useTest from "@/app/dashboard/doctor/tests/[testId]/hooks/useTest";
 import AssignTestButton from "@/app/dashboard/doctor/tests/AssignTestDialog/AssignTestButton";
 import MarksDialog from "@/components/Test/Marks/MarksDialog";
 import {useTestsContext} from "@/app/dashboard/doctor/tests/context/TestsContext";
-import testsConfig from "@/tests/config";
+import testsConfig from "@/features/tests/config";
 import { Roles } from "@/schemas/Role";
 
 export default function TestPage() {
     const { testId } = useParams<{ testId: string }>();
 
-    const { selectedTest } = useTestsContext() || {};
+    const { selectedTest } = useTestsContext();
     const { test, isLoading } = useTest(testId);
     const testBase = selectedTest || test;
 

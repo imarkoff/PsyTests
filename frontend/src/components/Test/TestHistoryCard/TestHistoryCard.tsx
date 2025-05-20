@@ -3,7 +3,7 @@ import {Card, CardActions, CardContent, CardHeader} from "@mui/material";
 import TestValues from "@/components/Test/TestValues";
 import {dateMed} from "@/utils/formatDate";
 import ResultsDialog from "@/components/Test/TestHistoryCard/ResultsDialog";
-import testsConfig from "@/tests/config";
+import testsConfig from "@/features/tests/config";
 
 /**
  * Displays a card with information about the test result.

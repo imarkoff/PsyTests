@@ -15,7 +15,7 @@ export default function TestContent({children}: { children: ReactNode }) {
 
     const onClose = () => setSelectedTest(null);
 
-    const {width} = useWindowSize();
+    const {width} = useWindowSize() ?? {width: 1200};
     const isMobile = width < 1200;
 
     return (

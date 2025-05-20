@@ -4,7 +4,7 @@ import {Box, Typography} from "@mui/material";
 import LeaveTestButton from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/components/LeaveTestButton";
 import PassTestButton from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/components/PassTestButton";
 import PassTestData from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
-import testsConfig from "@/tests/config";
+import testsConfig from "@/features/tests/config";
 import {Roles} from "@/schemas/Role";
 
 /**
