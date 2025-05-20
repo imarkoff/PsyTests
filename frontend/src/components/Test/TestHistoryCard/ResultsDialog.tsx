@@ -41,7 +41,11 @@ export default function ResultsDialog({test}: {test: TestResult}) {
                             cursor: "pointer"
                         }
                     }}>
-                        <Link href={`/dashboard/doctor/tests/${test.test.id}`} target={"_blank"}>
+                        <Link
+                            href={`/dashboard/doctor/tests/${test.test.id}`}
+                            target={"_blank"}
+                            style={{textDecoration: "inherit", color: "inherit"}}
+                        >
                             {test.test.name}
                         </Link>
                     </Typography>

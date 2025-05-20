@@ -5,6 +5,7 @@ import { useState } from "react";
 import { getAllPatients } from "@/lib/controllers/doctorPatientController";
 import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 import { assignTest } from "@/lib/controllers/doctorPatientTestController";
+import SafeError from "@/lib/api-client/SafeError";
 
 /**
  * Hook for getting patients and assigning tests to them
@@ -23,6 +24,7 @@ export default function usePatients() {
             } else {
                 setAssignError(error.statusText);
             }
+            throw SafeError.fromJSON(error.originalError);
         }
     };
 

@@ -11,7 +11,7 @@ export default function VerdictChart(
 
     return (
         <BarChart
-            margin={{ top: 20, right: 40, bottom: 40, left: 40 }}
+            margin={{ top: 20, right: 40, bottom: 0, left: 0 }}
             series={[{ data: values, type: 'bar' }]}
             yAxis={[{
                 max: 120,

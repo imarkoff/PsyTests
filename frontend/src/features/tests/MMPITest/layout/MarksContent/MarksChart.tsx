@@ -11,7 +11,7 @@ import {BarChart} from "@mui/x-charts";
 export default function MarksChart({scales}: { scales: MMPIScale[] }) {
     return (
         <BarChart
-            margin={{ top: 20, right: 40, bottom: 50, left: 40 }}
+            margin={{ top: 20, right: 40, bottom: 0, left: 0 }}
             dataset={scales.map(s => ({ label: s.label, min: s.min, max: s.max }))}
             series={[
                 { dataKey: "min", type: 'bar', stack: "range", color: "#ffffff00", label: "Мінімальний бал" },
@@ -20,14 +20,14 @@ export default function MarksChart({scales}: { scales: MMPIScale[] }) {
             xAxis={[{
                 scaleType: 'band',
                 dataKey: "label",
-                label: "Шкала",
+                label: "Шкала мінімальних та максимальних балів",
                 valueFormatter: (value, context) =>
                     context.location === "tick"
                         ? value
                         : `${scales.find(s => s.label === value)?.name} (${value})`
             }]}
             grid={{ horizontal: true }}
-            slotProps={{legend: { hidden: true } }}
+            hideLegend
             height={250}
             barLabel={item => (item.value && item.value > 40) ? item.value.toString() : null}
         />
