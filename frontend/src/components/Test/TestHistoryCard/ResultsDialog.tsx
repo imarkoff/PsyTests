@@ -6,7 +6,7 @@ import {dateMed} from "@/utils/formatDate";
 import DialogCloseButton from "@/components/DialogCloseButton";
 import ExportButton from "@/components/Test/TestHistoryCard/ExportButton";
 import Link from "next/link";
-import testsConfig from "@/tests/config";
+import testsConfig from "@/features/tests/config";
 
 /**
  * Dialog for displaying test results
@@ -41,7 +41,11 @@ export default function ResultsDialog({test}: {test: TestResult}) {
                             cursor: "pointer"
                         }
                     }}>
-                        <Link href={`/dashboard/doctor/tests/${test.test.id}`} target={"_blank"}>
+                        <Link
+                            href={`/dashboard/doctor/tests/${test.test.id}`}
+                            target={"_blank"}
+                            style={{textDecoration: "inherit", color: "inherit"}}
+                        >
                             {test.test.name}
                         </Link>
                     </Typography>

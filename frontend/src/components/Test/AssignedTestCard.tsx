@@ -1,6 +1,6 @@
 import PatientTest from "@/schemas/PatientTest";
 import {Button, Card, CardActions, CardContent, CardHeader, Typography} from "@mui/material";
-import AssignedBy from "@/app/dashboard/patient/components/AssignedBy";
+import AssignedBy from "@/features/dashboard/patient/components/AssignedBy";
 import {dateMed} from "@/utils/formatDate";
 import TestValues from "@/components/Test/TestValues";
 

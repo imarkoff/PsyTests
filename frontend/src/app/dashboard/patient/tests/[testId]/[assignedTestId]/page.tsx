@@ -1,15 +1,14 @@
-"use client";
+import PassTestPage from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/PassTestPage";
 
-import TestProvider from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/context/TestProvider";
-import PageContent from "@/app/dashboard/patient/tests/[testId]/[assignedTestId]/PageContent";
-import {useParams} from "next/navigation";
-
-export default function Page() {
-    const { testId, assignedTestId } = useParams<{ testId: string; assignedTestId: string }>();
+export default async function Page({ params }: {
+    params: Promise<{ testId: string; assignedTestId: string }>
+}) {
+    const { testId, assignedTestId } = await params;
 
     return (
-        <TestProvider testId={testId} assignedTestId={assignedTestId}>
-            <PageContent />
-        </TestProvider>
+        <PassTestPage
+            testId={testId}
+            assignedTestId={assignedTestId}
+        />
     );
 }

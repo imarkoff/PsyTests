@@ -28,7 +28,7 @@ export default function useFindPatient() {
 
     useEffect(() => {
         const handler = setTimeout(() => {
-            if (query) {
+            if (query.length > 0) {
                 handleSearch(query).then();
             }
         }, 200);
