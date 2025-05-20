@@ -1,3 +1,5 @@
+"use client";
+
 import {PCL5VerdictCounts} from "@/features/tests/PCL5Test/types/PCL5Result";
 import {BarChart} from "@mui/x-charts";
 

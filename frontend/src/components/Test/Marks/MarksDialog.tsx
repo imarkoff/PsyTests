@@ -10,7 +10,7 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import React, {ReactNode, useState} from "react";
+import {ReactNode, useState} from "react";
 import TestBase from "@/schemas/TestBase";
 import DialogCloseButton from "@/components/DialogCloseButton";
 

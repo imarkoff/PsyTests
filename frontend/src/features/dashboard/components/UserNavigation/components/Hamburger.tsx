@@ -4,13 +4,13 @@ import User from "@/schemas/User";
 import {Divider, IconButton, ListItemIcon, Menu, MenuItem} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React, { useState } from "react";
-import {MenuNav, NavProps} from "@/features/dashboard/components/UserNavigation/components/NavItem";
+import {MenuNavigation, NavigationProps} from "@/features/dashboard/components/UserNavigation/components/NavigationItem";
 import {Logout} from "@mui/icons-material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 interface NavigationMenuProps {
     user?: User | null;
-    navMenu: NavProps[];
+    navMenu: NavigationProps[];
     onLeaveAction: () => Promise<void>;
 }
 
@@ -50,7 +50,7 @@ export default function Hamburger({user, navMenu, onLeaveAction}: NavigationMenu
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
                 {navMenu.map((link, index) => (
-                    <MenuNav key={index} {...link} />
+                    <MenuNavigation key={index} {...link} />
                 ))}
 
                 <Divider />

@@ -1,6 +1,6 @@
 import {Typography} from "@mui/material";
 
-export default function ChooseTestPlaceholder() {
+export default function TestsPage() {
     return (
         <Typography color={"textSecondary"} sx={{
             height: "100%",

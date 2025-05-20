@@ -1,5 +1,5 @@
 import {Typography} from "@mui/material";
-import DoctorPatientCard from "@/app/dashboard/doctor/patients/components/DoctorPatientCard";
+import DoctorPatientCard from "@/features/dashboard/doctor/patients/components/PatientCard/DoctorPatientCard";
 import DoctorPatient from "@/schemas/DoctorPatient";
 
 export default function DoctorPatientsResults({patients}: {patients: DoctorPatient[]}) {

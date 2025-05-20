@@ -3,7 +3,7 @@ import {CircularProgress, InputAdornment, OutlinedInput} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface FindInputProps {
-    searchRef: RefObject<HTMLInputElement>;
+    searchRef: RefObject<HTMLInputElement | null>;
     loading: boolean;
     setQuery: (query: string) => void;
 }
@@ -25,7 +25,7 @@ export default function FindInput({searchRef, setQuery, loading}: FindInputProps
             }
             endAdornment={
                 <InputAdornment position={"end"}>
-                    <CircularProgress size={24} hidden={!loading} />
+                    <CircularProgress size={24} sx={{ visibility: loading ? "visible" : "collapse" }} />
                 </InputAdornment>
             }
             sx={{

@@ -2,7 +2,7 @@ import {useState} from "react";
 import {DateTime} from "luxon";
 import PatientCreate, {PatientCreateForm} from "@/schemas/PatientCreate";
 import {AxiosError} from "axios";
-import {usePatientsContext} from "@/app/dashboard/doctor/patients/context/PatientsContext";
+import {usePatientsContext} from "@/features/dashboard/doctor/patients/contexts/PatientsContext";
 
 export default function usePatientSubmit(afterCreateAction?: () => void) {
     const { createPatient } = usePatientsContext();

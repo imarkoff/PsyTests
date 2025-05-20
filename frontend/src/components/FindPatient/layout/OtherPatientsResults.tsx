@@ -1,6 +1,6 @@
 import User from "@/schemas/User";
 import {Typography} from "@mui/material";
-import OtherPatientCard from "@/app/dashboard/doctor/patients/components/OtherPatientCard";
+import OtherPatientCard from "@/features/dashboard/doctor/patients/components/PatientCard/OtherPatientCard";
 
 export default function OtherPatientsResults({patients}: {patients: User[]}) {
     return (

@@ -2,7 +2,7 @@
 
 import {Box, Button, Typography} from "@mui/material";
 import Hamburger from "@/features/dashboard/components/UserNavigation/components/Hamburger";
-import NavItem from "@/features/dashboard/components/UserNavigation/components/NavItem";
+import NavigationItem from "@/features/dashboard/components/UserNavigation/components/NavigationItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {useUser} from "@/features/dashboard/contexts/UserContext";
@@ -22,7 +22,7 @@ export default function UserNavigation() {
             }}>
                 <Box sx={{display: {xs: "none", md: "flex"}, flexGrow: 1}}>
                     {navMenu.map((link, index) => (
-                        <NavItem {...link} key={index} />
+                        <NavigationItem {...link} key={index} />
                     ))}
                 </Box>
 

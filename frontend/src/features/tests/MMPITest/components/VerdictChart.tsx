@@ -1,3 +1,5 @@
+"use client";
+
 import {BarChart} from "@mui/x-charts";
 import {MMPIVerdict} from "@/features/tests/MMPITest/schemas/MMPIResult";
 

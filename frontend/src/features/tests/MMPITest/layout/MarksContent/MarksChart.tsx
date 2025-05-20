@@ -1,3 +1,5 @@
+"use client";
+
 import MMPIScale from "@/features/tests/MMPITest/schemas/MMPIScale";
 import {BarChart} from "@mui/x-charts";
 

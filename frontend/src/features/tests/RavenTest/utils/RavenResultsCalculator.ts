@@ -1,11 +1,10 @@
 import {RavenResults} from "@/features/tests/RavenTest/schemas/RavenResult";
 
 
-interface RavenPointsSum {
+export interface RavenPointsSum {
     correct: number;
     total: number;
 }
-
 
 export const getLongestModule = (results: RavenResults) =>
     Math.max(...Object.values(results).map(answers => answers.length));
