@@ -11,4 +11,4 @@ export default interface TestBase {
     marks_unit?: string;
 }
 
-export type TestType = "raven" | "mmpi" | "mmpi_big" | "pcl-5" | "bdi";
+export type TestType = "raven" | "mmpi" | "mmpi_big" | "pcl-5" | "bdi" | "stai";
