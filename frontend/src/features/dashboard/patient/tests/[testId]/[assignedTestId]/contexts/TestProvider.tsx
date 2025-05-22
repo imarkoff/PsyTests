@@ -24,11 +24,18 @@ interface TestProviderProps {
 export default function TestProvider({testId, assignedTestId, children}: TestProviderProps) {
     const {
         data: test,
-        isLoading: isTestLoading
+        isLoading: isTestLoading,
+        error: swrError
     } = useSWR(
         ["getTestById", testId],
         ([, id]) => withSafeErrorHandling(getTestById)(id),
     );
+
+    const error: string | undefined = swrError ? (
+        swrError instanceof Error
+            ? swrError.message
+            : swrError.toString()
+    ) : undefined;
 
     const { onPass, passed, loading } = useOnPassTest(test, assignedTestId);
 
@@ -36,6 +43,7 @@ export default function TestProvider({testId, assignedTestId, children}: TestPro
         <TestContext.Provider value={{
             test,
             isTestLoading,
+            error,
             passTest: onPass,
             passed,
             loading

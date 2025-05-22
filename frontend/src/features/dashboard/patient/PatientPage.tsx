@@ -1,5 +1,5 @@
 import TestsLayout from "@/features/dashboard/patient/layout/TestsLayout";
-import TestsHistoryLayout from "@/features/dashboard/patient/layout/TestsHistoryLayout";
+import TestsResultsLayout from "@/features/dashboard/patient/layout/TestsResultsLayout";
 import {ApiResponse} from "@/lib/api-client/types";
 import PatientTest from "@/schemas/PatientTest";
 import TestResultShort from "@/schemas/TestResultShort";
@@ -14,8 +14,8 @@ export default function PatientPage(
 ) {
     return (
         <>
-            <TestsLayout tests={assignedTestsResponse.data ?? []} />
-            <TestsHistoryLayout testsHistory={testResultsResponse.data} />
+            <TestsLayout assignedTestsResponse={assignedTestsResponse} />
+            <TestsResultsLayout testResultsResponse={testResultsResponse} />
         </>
     );
 }

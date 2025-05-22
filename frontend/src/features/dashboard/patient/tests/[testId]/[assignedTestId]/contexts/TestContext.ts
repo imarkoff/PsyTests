@@ -10,6 +10,7 @@ import TestBase from "@/schemas/TestBase";
 const TestContext = createContext<{
     /** The current patient test data. Contains full test info */
     test?: TestBase;
+    error?: string;
     isTestLoading: boolean;
     /**
      * Function to handle passing the test.

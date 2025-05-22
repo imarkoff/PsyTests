@@ -3,14 +3,14 @@
 import {FormProvider, useForm} from "react-hook-form";
 import PassTestData from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
 import testsConfig from "@/features/tests/config";
-import {Box} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import {Roles} from "@/schemas/Role";
 import PassTestButton from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/components/PassTestButton";
 import {useTestContext} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/hooks/useTestContext";
 import QuestionCardSkeleton from "@/components/QuestionCard/QuestionCardSkeleton";
 
 export default function PassTestForm() {
-    const {test, isTestLoading, passTest, passed} = useTestContext();
+    const {test, isTestLoading, error, passTest, passed} = useTestContext();
     const methods = useForm<PassTestData>();
 
     const testLayout = test ? testsConfig[test.type] : null;
@@ -19,13 +19,28 @@ export default function PassTestForm() {
     return (
         <Box component={"form"} onSubmit={methods.handleSubmit(passTest)} sx={{display: "grid", gap: 2}}>
             <FormProvider {...methods}>
-                {isTestLoading ? (
-                    Array.from({length: 5}).map((_, index) => (
-                        <QuestionCardSkeleton key={index} />
+                {!isTestLoading && Content && (<Content test={test} role={Roles.patient} disabled={passed} />)}
+
+                {!test && (
+                    Array.from({length: 3}).map((_, index) => (
+                        <QuestionCardSkeleton key={index} isLoading={isTestLoading} />
                     ))
-                ) : (
-                    Content && <Content test={test} role={Roles.patient} disabled={passed} />
                 )}
+
+                {error && (
+                    <Typography sx={{
+                        position: "absolute",
+                        top: "50%", left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        textAlign: "center",
+                    }} variant={"h6"} color={"error"}>
+                        Виникла помилка при отриманні тесту. <br />
+                        Спробуйте ще раз або зверніться до лікаря.
+                        <br />
+                        {error}
+                    </Typography>
+                )}
+
                 <PassTestButton />
             </FormProvider>
         </Box>

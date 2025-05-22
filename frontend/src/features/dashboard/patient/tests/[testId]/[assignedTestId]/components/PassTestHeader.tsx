@@ -7,25 +7,27 @@ import testsConfig from "@/features/tests/config";
 import {useTestContext} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/hooks/useTestContext";
 
 export default function PassTestHeader() {
-    const {test, passed, isTestLoading} = useTestContext();
+    const {test, passed, error} = useTestContext();
 
     const testLayout = test ? testsConfig[test.type] : null;
     const Header = testLayout?.test.header;
+
+    const animation = error ? false : undefined;
 
     return (
         <Box sx={{paddingX: 2, display: "flex", flexDirection: "column", gap: 1, alignItems: "start"}}>
             <LeaveTestButton />
 
-            {isTestLoading ? (
-                <Skeleton variant={"text"} sx={{ fontSize: "2rem" }} width={"100%"} />
-            ) : (
+            {test ? (
                 <Typography variant={"h5"}>{test?.name}</Typography>
+            ) : (
+                <Skeleton variant={"text"} sx={{ fontSize: "2rem" }} width={"100%"} animation={animation} />
             )}
 
-            {isTestLoading ? (
-                <Skeleton variant={"text"} sx={{ fontSize: "1.25rem" }} width={250} />
-            ) : (
+            {test ? (
                 Header && <Header test={test} role={Roles.patient} disabled={passed} />
+            ) : (
+                <Skeleton variant={"text"} sx={{ fontSize: "1.25rem" }} width={250} animation={animation} />
             )}
         </Box>
     );

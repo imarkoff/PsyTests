@@ -2,11 +2,16 @@
 
 import {Box} from "@mui/material";
 import AssignedTestCard from "@/components/AssignedTestCard/AssignedTestCard";
-import TestsLayoutBox from "@/features/dashboard/patient/components/TestsLayoutBox";
+import TestsLayoutBox, { TestsLayoutError } from "@/features/dashboard/patient/components/TestsLayoutBox";
 import {useRouter} from "next/navigation";
 import PatientTest from "@/schemas/PatientTest";
+import {ApiResponse} from "@/lib/api-client/types";
 
-export default function TestsLayout({tests}: { tests: PatientTest[] | undefined }) {
+export default function TestsLayout(
+    {assignedTestsResponse}: { assignedTestsResponse: ApiResponse<PatientTest[]> }
+) {
+    const { data: tests, error } = assignedTestsResponse;
+
     const router = useRouter();
 
     const onStartTest = (testId: string, assignedTestId: string) => {
@@ -22,6 +27,12 @@ export default function TestsLayout({tests}: { tests: PatientTest[] | undefined 
                         test={test}
                         onStart={() => onStartTest(test.test.id, test.id)}
                     />)}
+                {error && (
+                    <TestsLayoutError error={error} friendlyMessage={`
+                        Сталася помилка при завантаженні тестів.
+                        Спробуйте ще раз або зверніться до лікаря.
+                    `} />
+                )}
             </Box>
         </TestsLayoutBox>
     );

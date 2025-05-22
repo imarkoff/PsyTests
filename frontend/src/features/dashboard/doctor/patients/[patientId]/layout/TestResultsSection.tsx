@@ -18,7 +18,7 @@ interface TestResultsSectionProps {
 export default function TestResultsSection(
     {patientId, doctorPatient, readPatientAction}: TestResultsSectionProps,
 ) {
-    const { testResults: results, isLoading } = useTestResults(patientId);
+    const { testResults: results, isLoading, error } = useTestResults(patientId);
     useReadPatient(doctorPatient, results, readPatientAction);
 
     const hasResults = results ? results.length > 0 : false;
@@ -34,7 +34,10 @@ export default function TestResultsSection(
             ))}
 
             {!isLoading && !hasResults && (
-                <PatientSectionNoEntities title={"Історія проходження тестів відсутня"} />
+                <PatientSectionNoEntities title={error
+                    ? "Помилка завантаження історії проходження тестів"
+                    : "Історія проходження тестів відсутня"
+                } />
             )}
         </PatientSection>
     );

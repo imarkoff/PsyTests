@@ -6,10 +6,11 @@ import testsConfig from "@/features/tests/config";
 import {Roles} from "@/schemas/Role";
 import TestContentHeader from "@/features/dashboard/doctor/tests/[testId]/components/TestContentHeader";
 import QuestionCardSkeleton from "@/components/QuestionCard/QuestionCardSkeleton";
+import { Typography } from "@mui/material";
 
 export default function TestContent({testId}: { testId: string }) {
     const { selectedTest } = useTestsContext();
-    const { test, isLoading } = useTest(testId);
+    const { test, isLoading, error } = useTest(testId);
     const testBase = selectedTest || test;
 
     const testLayout = test ? testsConfig[test.type] : null;
@@ -32,6 +33,19 @@ export default function TestContent({testId}: { testId: string }) {
                 Array.from({ length: 3 }).map((_, index) => (
                     <QuestionCardSkeleton key={index} />
                 ))
+            )}
+
+            {error && (
+                <Typography variant="h6" color={"error"} sx={{
+                    position: "absolute",
+                    top: "50%", left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center"
+                }}>
+                    Виникла помилка при завантаженні тесту. Спробуйте ще раз.
+                    <br />
+                    {error.message}
+                </Typography>
             )}
         </>
     );

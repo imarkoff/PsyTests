@@ -1,5 +1,6 @@
 import {ReactNode} from "react";
 import {Box, Typography} from "@mui/material";
+import { ApiResponse } from "@/lib/api-client/types";
 
 export default function TestsLayoutBox({title, children}: {title: string, children: ReactNode}) {
     return (
@@ -9,3 +10,13 @@ export default function TestsLayoutBox({title, children}: {title: string, childr
         </Box>
     )
 }
+
+export const TestsLayoutError = (
+    {friendlyMessage, error}: {friendlyMessage: string, error: ApiResponse<unknown>["error"]}
+) => (
+    <Typography color={"error"} variant="h6" sx={{mx: 2}}>
+        {friendlyMessage}
+        <br />
+        {error?.statusText}
+    </Typography>
+)

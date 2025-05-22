@@ -11,7 +11,7 @@ import usePatientTests from "@/features/dashboard/doctor/patients/[patientId]/ho
 import AssignedTestCardSkeleton from "@/components/AssignedTestCard/AssignedTestCardSkeleton";
 
 export default function AssignedTestsSection({patientId}: {patientId: string}) {
-    const { tests, isLoading, onUnassign } = usePatientTests(patientId);
+    const { tests, isLoading, onUnassign, error } = usePatientTests(patientId);
     const { data: me } = useSWR("getMe", withSafeErrorHandling(getMe));
 
     const hasTests = tests ? tests.length > 0 : false;
@@ -31,7 +31,10 @@ export default function AssignedTestsSection({patientId}: {patientId: string}) {
             ))}
 
             {!isLoading && !hasTests && (
-                <PatientSectionNoEntities title={"Немає назначених тестів"} />
+                <PatientSectionNoEntities title={error
+                    ? "Виникла помилка при завантаженні тестів"
+                    : "Немає назначених тестів"
+                } />
             )}
         </PatientSection>
     );
