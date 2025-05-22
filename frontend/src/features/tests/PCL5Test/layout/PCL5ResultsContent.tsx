@@ -1,5 +1,5 @@
 import PCL5Result from "@/features/tests/PCL5Test/types/PCL5Result";
-import TestValues from "@/components/Test/TestValues";
+import TestValues from "@/components/TestValues";
 import PCL5ResultsChart from "@/features/tests/PCL5Test/components/PCL5ResultsChart";
 import getEventDescription from "@/features/tests/PCL5Test/utils/getEventDescription";
 import countTotalMark from "@/features/tests/PCL5Test/utils/countTotalMark";

@@ -1,6 +1,6 @@
 import {Box} from "@mui/material";
 import TestsLayoutBox from "@/features/dashboard/patient/components/TestsLayoutBox";
-import TestHistoryShortCard from "@/components/Test/TestHistoryCard/TestHistoryShortCard";
+import TestHistoryShortCard from "@/components/TestHistoryCard/TestHistoryShortCard";
 import TestResultShort from "@/schemas/TestResultShort";
 
 export default function TestsHistoryLayout({testsHistory}: {testsHistory: TestResultShort[] | undefined}) {

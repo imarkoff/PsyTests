@@ -2,9 +2,9 @@ import useSWR from "swr";
 import {getTestResultsByPatient} from "@/lib/controllers/doctorPatientTestController";
 import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
-export default function useTestsHistory(patientId: string) {
+export default function useTestResults(patientId: string) {
     const {
-        data: tests,
+        data: testResults,
         isLoading, error,
     } = useSWR(
         ["getTestResultsByPatient", patientId],
@@ -12,6 +12,6 @@ export default function useTestsHistory(patientId: string) {
     );
 
     return {
-        tests, isLoading, error
+        testResults, isLoading, error
     };
 }

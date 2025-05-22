@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import { removePatient } from "@/lib/controllers/doctorPatientController";
 import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 
-export default function DeletePatientButton({ patientId }: { patientId: string }) {
+export default function DeletePatientButton({ patientId }: { patientId: string | undefined }) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
 

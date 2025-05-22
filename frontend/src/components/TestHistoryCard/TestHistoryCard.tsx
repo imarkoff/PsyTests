@@ -1,8 +1,8 @@
 import TestResult from "@/schemas/TestResult";
 import {Card, CardActions, CardContent, CardHeader} from "@mui/material";
-import TestValues from "@/components/Test/TestValues";
+import TestValues from "@/components/TestValues";
 import {dateMed} from "@/utils/formatDate";
-import ResultsDialog from "@/components/Test/TestHistoryCard/ResultsDialog";
+import ResultsDialog from "@/components/ResultsDialog/ResultsDialog";
 import testsConfig from "@/features/tests/config";
 
 /**

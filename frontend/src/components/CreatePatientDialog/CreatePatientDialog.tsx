@@ -1,11 +1,11 @@
 "use client";
 
-import OpenerType from "@/components/CreatePatient/OpenerType";
+import OpenerType from "@/components/CreatePatientDialog/OpenerType";
 import {useState} from "react";
-import CreatePatientForm from "@/components/CreatePatient/CreatePatientForm";
+import CreatePatientForm from "@/components/CreatePatientDialog/CreatePatientForm";
 import {Modal, Paper} from "@mui/material";
 
-export default function CreatePatientModal(
+export default function CreatePatientDialog(
     {OpenerAction, closeAction}: {OpenerAction: OpenerType, closeAction?: () => void}
 ) {
     const [open, setOpen] = useState(false);

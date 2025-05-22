@@ -1,10 +1,10 @@
 import TestResult from "@/schemas/TestResult";
 import {Box, Button, Dialog, DialogContent, DialogTitle, Typography} from "@mui/material";
 import {useState} from "react";
-import TestValues from "@/components/Test/TestValues";
+import TestValues from "@/components/TestValues";
 import {dateMed} from "@/utils/formatDate";
 import DialogCloseButton from "@/components/DialogCloseButton";
-import ExportButton from "@/components/Test/TestHistoryCard/ExportButton";
+import ExportButton from "@/components/ResultsDialog/ExportButton";
 import Link from "next/link";
 import testsConfig from "@/features/tests/config";
 

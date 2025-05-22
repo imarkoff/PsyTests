@@ -7,19 +7,19 @@ import {
     Typography
 } from "@mui/material";
 import {useEffect, useRef, useState} from "react";
-import FindInput from "@/components/FindPatient/components/FindInput";
-import useFindPatient from "@/components/FindPatient/useFindPatient";
-import FindModalOpener from "@/components/FindPatient/components/FindModalOpener";
-import DoctorPatientsResults from "@/components/FindPatient/layout/DoctorPatientsResults";
-import OtherPatientsResults from "@/components/FindPatient/layout/OtherPatientsResults";
-import CreatePatientOpener from "@/components/FindPatient/components/CreatePatientOpener";
-import CreatePatientModal from "@/components/CreatePatient/CreatePatientModal";
+import FindInput from "@/components/FindPatientDialog/components/FindInput";
+import useFindPatient from "@/components/FindPatientDialog/useFindPatient";
+import FindModalOpener from "@/components/FindPatientDialog/components/FindModalOpener";
+import DoctorPatientsResults from "@/components/FindPatientDialog/layout/DoctorPatientsResults";
+import OtherPatientsResults from "@/components/FindPatientDialog/layout/OtherPatientsResults";
+import CreatePatientOpener from "@/components/FindPatientDialog/components/CreatePatientOpener";
+import CreatePatientDialog from "@/components/CreatePatientDialog/CreatePatientDialog";
 
 /**
  * Modal for finding patients.
  * @constructor
  */
-export default function FindPatientModal() {
+export default function FindPatientDialog() {
     const [open, setOpen] = useState(false);
     const searchRef = useRef<HTMLInputElement>(null);
     const {loading, doctorPatients, otherPatients, isResultsEmpty, clearResults, setQuery} = useFindPatient();
@@ -64,7 +64,7 @@ export default function FindPatientModal() {
                             Результати пошуку
                         </Typography>
 
-                        <CreatePatientModal OpenerAction={CreatePatientOpener} closeAction={handleClose} />
+                        <CreatePatientDialog OpenerAction={CreatePatientOpener} closeAction={handleClose} />
 
                         {isResultsEmpty && doctorPatients !== undefined && (
                             <Typography variant={"body1"} color={"textSecondary"} sx={{gridColumn: "1 / -1", textAlign: "center", py: 2}}>

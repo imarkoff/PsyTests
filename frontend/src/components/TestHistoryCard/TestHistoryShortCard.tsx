@@ -1,6 +1,6 @@
 import TestResultShort from "@/schemas/TestResultShort";
 import {Card, CardContent, CardHeader} from "@mui/material";
-import TestValues from "@/components/Test/TestValues";
+import TestValues from "@/components/TestValues";
 import {dateMed} from "@/utils/formatDate";
 
 export default function TestHistoryShortCard({ test }: { test: TestResultShort }) {

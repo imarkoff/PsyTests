@@ -1,7 +1,7 @@
 "use client";
 
 import DoctorPatient from "@/schemas/DoctorPatient";
-import PatientCard from "@/components/PatientCard";
+import PatientCard from "@/components/PatientCard/PatientCard";
 import {useRouter} from "next/navigation";
 import User from "@/schemas/User";
 

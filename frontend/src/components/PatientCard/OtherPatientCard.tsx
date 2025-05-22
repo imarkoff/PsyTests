@@ -1,6 +1,6 @@
 "use client";
 
-import PatientCard from "@/components/PatientCard";
+import PatientCard from "@/components/PatientCard/PatientCard";
 import User from "@/schemas/User";
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';

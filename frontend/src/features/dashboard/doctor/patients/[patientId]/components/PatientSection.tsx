@@ -17,25 +17,39 @@ interface PatientSectionProps {
 export default function PatientSection({title, children, colSize=450}: PatientSectionProps) {
     return (
         <Box sx={{
-            minHeight: 200,
-            display: "grid",
-            gridTemplateRows: "auto 1fr",
-            gridTemplateColumns: {sm: `repeat(auto-fill, minmax(${colSize}px, 1fr))`},
-            justifyContent: {xs: "center", sm: "start"},
-            gap: 1
+            display: "flex",
+            flexDirection: "column",
+            gap: 2
         }}>
             <Typography
                 variant={"h5"}
-                sx={{
-                    mb: 1,
-                    textAlign: {xs: "center", md: "left"},
-                    gridColumn: "1 / -1"
-                }}
+                sx={{ textAlign: {xs: "center", md: "left"} }}
                 fontWeight={600}
             >
                 {title}
             </Typography>
-            {children}
+            <Box sx={{
+                minHeight: 200,
+                position: "relative",
+                display: "grid",
+                gridTemplateRows: "auto 1fr",
+                gridTemplateColumns: {sm: `repeat(auto-fill, minmax(${colSize}px, 1fr))`},
+                gap: 1,
+            }}>
+                {children}
+            </Box>
         </Box>
     );
 }
+
+export const PatientSectionNoEntities = ({title}: { title: string }) => (
+    <Typography sx={{
+        position: "absolute",
+        left: "25px",
+        alignSelf: "center",
+        width: "fit-content",
+        color: "text.secondary"
+    }}>
+        {title}
+    </Typography>
+);

@@ -1,8 +1,9 @@
 import PatientTest from "@/schemas/PatientTest";
-import {Button, Card, CardActions, CardContent, CardHeader, Typography} from "@mui/material";
+import {Card, CardContent, CardHeader, Typography} from "@mui/material";
 import AssignedBy from "@/features/dashboard/patient/components/AssignedBy";
 import {dateMed} from "@/utils/formatDate";
-import TestValues from "@/components/Test/TestValues";
+import TestValues from "@/components/TestValues";
+import AssignedTestCardActions from "@/components/AssignedTestCard/AssignedTestCardActions";
 
 interface AvailableTestCardProps {
     test: PatientTest;
@@ -19,7 +20,11 @@ interface AvailableTestCardProps {
  */
 export default function AssignedTestCard({test, onStart, onDelete}: AvailableTestCardProps) {
     return (
-        <Card variant={"outlined"}>
+        <Card variant={"outlined"} sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+        }}>
             <CardHeader title={test.test.name} />
 
             <CardContent sx={{paddingTop: 0, paddingBottom: 0}}>
@@ -28,18 +33,10 @@ export default function AssignedTestCard({test, onStart, onDelete}: AvailableTes
                 <TestValues title={"Дата назначення"}>{dateMed(test.assigned_at)}</TestValues>
             </CardContent>
 
-            <CardActions sx={{justifyContent: "space-between"}}>
-                {onDelete && (
-                    <Button variant="outlined" color="error" onClick={() => onDelete(test.id)}>
-                        Забрати доступ
-                    </Button>
-                )}
-                {onStart && (
-                    <Button variant="contained" color="primary" onClick={onStart}>
-                        Почати тест
-                    </Button>
-                )}
-            </CardActions>
+            <AssignedTestCardActions
+                onDelete={onDelete ? () => onDelete(test.id) : undefined}
+                onStart={onStart}
+            />
         </Card>
     );
 }

@@ -1,5 +1,5 @@
 import ResultsTable from "@/features/tests/RavenTest/components/ResultsTable";
-import TestValues from "@/components/Test/TestValues";
+import TestValues from "@/components/TestValues";
 import countCorrectAnswers from "@/features/tests/RavenTest/utils/countCorrectAnswers";
 import RavenResult from "@/features/tests/RavenTest/schemas/RavenResult";
 

@@ -1,26 +1,30 @@
 "use client";
 
-import useSWR from "swr";
-import DoctorPatientCard from "@/features/dashboard/doctor/patients/components/PatientCard/DoctorPatientCard";
-import { getAllPatients } from "@/lib/controllers/doctorPatientController";
-import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
+import DoctorPatientCard from "@/components/PatientCard/DoctorPatientCard";
+import useGetPatients from "@/features/dashboard/doctor/patients/hooks/useGetPatients";
+import PatientEntitiesSkeleton from "@/features/dashboard/doctor/patients/components/PatientEntitiesSkeleton";
 
+/** Draws all patients for doctor. */
 export default function PatientEntities() {
     const {
-        data: patients
-    } = useSWR("getAllPatients", withSafeErrorHandling(getAllPatients));
-    
-    const needsAttention = patients?.filter(patient => patient.needs_attention);
-    const normal = patients?.filter(patient => !patient.needs_attention);
+        allPatients, normalPatients, needsAttention,
+        isLoading, error
+    } = useGetPatients();
 
     return (
         <>
             {needsAttention?.map(patient => (
                 <DoctorPatientCard patient={patient} key={patient.id} />
             ))}
-            {normal?.map(patient => (
+            {normalPatients?.map(patient => (
                 <DoctorPatientCard patient={patient} key={patient.id} />
             ))}
+
+            <PatientEntitiesSkeleton
+                hasPatients={allPatients ? allPatients.length > 0 : false}
+                isLoading={isLoading}
+                error={error}
+            />
         </>
     );
 }

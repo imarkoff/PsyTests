@@ -10,9 +10,9 @@ import {
 import 'dayjs/locale/uk';
 import {useForm} from "react-hook-form";
 import {PatientCreateForm} from "@/schemas/PatientCreate";
-import usePatientSubmit from "@/components/CreatePatient/usePatientSubmit";
-import GenderSelect from "@/components/CreatePatient/components/GenderSelect";
-import BirthDatePicker from "@/components/CreatePatient/components/BirthDatePicker";
+import usePatientSubmit from "@/components/CreatePatientDialog/usePatientSubmit";
+import GenderSelect from "@/components/CreatePatientDialog/components/GenderSelect";
+import BirthDatePicker from "@/components/CreatePatientDialog/components/BirthDatePicker";
 
 export default function CreatePatientForm({afterCreateAction}: {afterCreateAction?: () => void}) {
     const { register, handleSubmit, control } = useForm<PatientCreateForm>();

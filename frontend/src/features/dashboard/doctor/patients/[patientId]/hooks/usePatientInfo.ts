@@ -4,7 +4,7 @@ import {changePatientStatus, getPatientById, markPatientAsRead} from "@/lib/cont
 
 export default function usePatientInfo(patientId: string) {
     const {
-        data,
+        data: doctorPatient,
         isLoading, error,
         mutate: userInfoMutate
     } = useSWR(
@@ -28,7 +28,7 @@ export default function usePatientInfo(patientId: string) {
     }
 
     return {
-        patient: data,
+        doctorPatient,
         isLoading, error,
         onChangeStatus,
         onReadPatient

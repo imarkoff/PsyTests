@@ -1,5 +1,5 @@
 import {Box, Typography} from "@mui/material";
-import FindPatientModal from "@/components/FindPatient/FindPatientModal";
+import FindPatientDialog from "@/components/FindPatientDialog/FindPatientDialog";
 
 export default function PatientsHeader() {
     return (
@@ -16,7 +16,7 @@ export default function PatientsHeader() {
             <Typography variant="h5">
                 Пацієнти на вашому обліку
             </Typography>
-            <FindPatientModal />
+            <FindPatientDialog />
         </Box>
     );
 }

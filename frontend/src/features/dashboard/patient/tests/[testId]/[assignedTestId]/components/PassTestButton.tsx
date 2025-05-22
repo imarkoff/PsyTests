@@ -5,7 +5,7 @@ import {goToPatientPage} from "@/features/dashboard/patient/tests/[testId]/[assi
 import {useTestContext} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/hooks/useTestContext";
 
 export default function PassTestButton() {
-    const { passed, loading } = useTestContext();
+    const { isTestLoading, passed, loading } = useTestContext();
 
     return (
         <Box sx={{height: 60}}>
@@ -23,7 +23,7 @@ export default function PassTestButton() {
                     onClick={passed ? goToPatientPage : undefined}
                     type={passed ? "button" : "submit"}
                     color={"primary"}
-                    loading={loading}
+                    loading={isTestLoading || loading}
                     startIcon={passed ? <ArrowBackIcon/> : <DoneIcon/>}
                     loadingPosition={"start"}
                 >

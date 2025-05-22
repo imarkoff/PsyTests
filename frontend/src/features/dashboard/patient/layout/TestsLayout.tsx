@@ -1,14 +1,16 @@
 "use client";
 
 import {Box} from "@mui/material";
-import AssignedTestCard from "@/components/Test/AssignedTestCard";
+import AssignedTestCard from "@/components/AssignedTestCard/AssignedTestCard";
 import TestsLayoutBox from "@/features/dashboard/patient/components/TestsLayoutBox";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 import PatientTest from "@/schemas/PatientTest";
 
 export default function TestsLayout({tests}: { tests: PatientTest[] | undefined }) {
+    const router = useRouter();
+
     const onStartTest = (testId: string, assignedTestId: string) => {
-        redirect(`/dashboard/patient/tests/${testId}/${assignedTestId}`);
+        router.push(`/dashboard/patient/tests/${testId}/${assignedTestId}`);
     }
 
     return (

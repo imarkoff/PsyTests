@@ -10,6 +10,7 @@ import TestBase from "@/schemas/TestBase";
 const TestContext = createContext<{
     /** The current patient test data. Contains full test info */
     test?: TestBase;
+    isTestLoading: boolean;
     /**
      * Function to handle passing the test.
      * @param data - The data to send to the server.
@@ -18,6 +19,7 @@ const TestContext = createContext<{
     passed: boolean;
     loading: boolean;
 }>({
+    isTestLoading: true,
     passTest: async () => {},
     passed: false,
     loading: false,

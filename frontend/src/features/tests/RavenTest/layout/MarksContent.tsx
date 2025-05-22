@@ -1,7 +1,7 @@
 "use client";
 
 import RavenTest from "@/features/tests/RavenTest/schemas/RavenTest";
-import useTestMarks from "@/components/Test/Marks/useTestMarks";
+import useTestMarks from "@/components/MarksDialog/useTestMarks";
 import {
     Box,
     CircularProgress,

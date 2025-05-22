@@ -1,4 +1,4 @@
-import PatientCard from "@/components/PatientCard";
+import PatientCard from "@/components/PatientCard/PatientCard";
 import DialogContent from "@mui/material/DialogContent";
 import DoctorPatient from "@/schemas/DoctorPatient";
 import User from "@/schemas/User";
