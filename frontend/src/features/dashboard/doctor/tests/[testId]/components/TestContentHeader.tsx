@@ -1,5 +1,5 @@
 import {Box, Typography} from "@mui/material";
-import AssignTestButton from "@/features/dashboard/doctor/tests/components/AssignTestDialog/AssignTestButton";
+import AssignTestButton from "@/components/AssignTestDialog/AssignTestButton";
 import MarksDialog from "@/components/Test/Marks/MarksDialog";
 import TestBase from "@/schemas/TestBase";
 import { ReactNode } from "react";

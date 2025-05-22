@@ -1,10 +1,10 @@
 "use client";
 
 import {Dialog} from "@mui/material";
-import AssignHeader from "@/features/dashboard/doctor/tests/components/AssignTestDialog/components/AssignHeader";
-import AssignContent from "@/features/dashboard/doctor/tests/components/AssignTestDialog/components/AssignContent";
-import AssignActions from "@/features/dashboard/doctor/tests/components/AssignTestDialog/components/AssignActions";
-import useTestAssignment from "@/features/dashboard/doctor/tests/components/AssignTestDialog/hooks/useTestAssignment";
+import AssignHeader from "@/components/AssignTestDialog/components/AssignHeader";
+import AssignContent from "@/components/AssignTestDialog/components/AssignContent";
+import AssignActions from "@/components/AssignTestDialog/components/AssignActions";
+import useTestAssignment from "@/components/AssignTestDialog/hooks/useTestAssignment";
 
 interface AssignTestDialogProps {
     testId: string;

@@ -15,9 +15,9 @@ export default function TestPreview({test, onClick, selected}: TestPreviewProps)
             sx={(theme) => ({
                 boxSizing: "border-box",
                 width: "100%",
+                overflow: "visible",
                 ...(selected && {
                     boxShadow: "inset 0 0 0 2px " + theme.palette.primary.main,
-                    overflow: "visible"
                 }),
             })}
         >

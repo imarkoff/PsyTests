@@ -15,28 +15,29 @@ export default function TestContent({children}: { children: ReactNode }) {
 
     const onClose = () => setSelectedTest(null);
 
-    const {width} = useWindowSize() ?? {width: 1200};
+    const {width} = useWindowSize();
     const isMobile = width < 1200;
 
     return (
-        isMobile ? (
-            <TestDrawer closeAction={onClose} isOpen={isOpen}>
-                {children}
-            </TestDrawer>
-        ) : (
+        <>
+            {isMobile && (
+                <TestDrawer closeAction={onClose} isOpen={isOpen}>
+                    {children}
+                </TestDrawer>
+            )}
             <Paper sx={{
                 overflowY: "scroll",
                 borderRadius: 5,
-                width: {xs: "100%", md: 600},
+                width: 600,
                 maxHeight: "100%",
                 position: "relative",
-                display: "flex",
+                display: {xs: "none", lg: "flex"},
                 flexDirection: "column",
                 p: 1,
                 gap: 1
             }}>
-                {children}
+                {!isMobile && children}
             </Paper>
-        )
+        </>
     );
 }

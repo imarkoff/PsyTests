@@ -2,7 +2,7 @@
 
 import {Button} from "@mui/material";
 import {useState} from "react";
-import AssignTestDialog from "@/features/dashboard/doctor/tests/components/AssignTestDialog";
+import AssignTestDialog from "@/components/AssignTestDialog/index";
 
 export default function AssignTestButton({testId}: {testId: string}) {
     const [open, setOpen] = useState(false);

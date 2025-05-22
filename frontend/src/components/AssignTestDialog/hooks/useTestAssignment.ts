@@ -1,4 +1,4 @@
-import usePatients from "@/features/dashboard/doctor/tests/components/AssignTestDialog/hooks/usePatients";
+import usePatients from "@/components/AssignTestDialog/hooks/usePatients";
 import {useState} from "react";
 import User from "@/schemas/User";
 
