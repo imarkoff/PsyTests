@@ -1,0 +1,152 @@
+import {FileTree, Steps} from "nextra/components";
+
+# Structure conventions - `/app` and `/features`
+
+There are two main directories in the project that contain the core logic of the application:
+- `/app` - responsible for routing, server-side rendering (SSR) fetching, metadata,
+- `/features` - responsible for feature-specific logic and UI components.
+
+The `/app` directory contains route handlers and pages of the application, 
+while the `/features` directory contains logic for pages and components that are specific to a page.
+
+The `/features` directory contains the business logic and UI components that are specific to each feature, 
+such as user authentication, patient management, or test management. 
+Each feature has its own directory within `/features` similar to `app`, 
+which contains components, hooks, and other logic related to that feature.
+
+The `/app` directory is used to handle the routing and SSR fetching. 
+It should not contain any logic related to specific features of the application.
+
+## Example without `/features`
+
+For example, we have all logic in the `/app` directory:
+
+<FileTree>
+    <FileTree.Folder name={"app"} defaultOpen>
+        <FileTree.Folder name={"api"}>
+            <FileTree.File name={"..."} />
+        </FileTree.Folder>
+        <FileTree.Folder name={"dashboard"} defaultOpen>
+            <FileTree.Folder name={"components"}>...</FileTree.Folder>
+            <FileTree.Folder name={"context"}>...</FileTree.Folder>
+            <FileTree.Folder name={"doctor"} defaultOpen>
+                <FileTree.Folder name={"components"}>...</FileTree.Folder>
+                <FileTree.Folder name={"hooks"}>...</FileTree.Folder>
+                <FileTree.Folder name={"patients"} defaultOpen>
+                    <FileTree.Folder name={"components"}>...</FileTree.Folder>
+                    <FileTree.Folder name={"context"}>...</FileTree.Folder>
+                    <FileTree.Folder name={"hooks"}>...</FileTree.Folder>
+                    <FileTree.Folder name={"utils"}>...</FileTree.Folder>
+                    <FileTree.File name={"page.tsx"} />
+                </FileTree.Folder>
+                <FileTree.File name={"page.tsx"} />
+            </FileTree.Folder>
+            <FileTree.Folder name={"hooks"}>...</FileTree.Folder>
+            <FileTree.File name={"layout.tsx"} />
+            <FileTree.File name={"page.tsx"} />
+        </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
+
+Can you say how many routes doctor has? Only one - `/dashboard/doctor`, and that's a problem.
+Without the `/features` directory, it is difficult to say how many routes each feature has 
+and what logic is related to each feature.
+
+## Example with `/features`
+
+Now we have all logic in the `/features` directory:
+
+<FileTree>
+    <FileTree.Folder name={"app"} defaultOpen>
+        <FileTree.Folder name={"api"}>
+            <FileTree.File name={"..."} />
+        </FileTree.Folder>
+        <FileTree.Folder name={"dashboard"} defaultOpen>
+            <FileTree.Folder name={"doctor"} defaultOpen>
+                <FileTree.Folder name={"patients"} defaultOpen>
+                    <FileTree.File name={"page.tsx"} />
+                </FileTree.Folder>
+                <FileTree.File name={"page.tsx"} />
+            </FileTree.Folder>
+            <FileTree.File name={"layout.tsx"} />
+            <FileTree.File name={"page.tsx"} />
+        </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
+
+<FileTree>
+    <FileTree.Folder name={"features"} defaultOpen>
+        <FileTree.Folder name={"dashboard"} defaultOpen>
+            <FileTree.Folder name={"components"}>...</FileTree.Folder>
+            <FileTree.Folder name={"context"}>...</FileTree.Folder>
+            <FileTree.Folder name={"doctor"} defaultOpen>
+                <FileTree.Folder name={"components"}>...</FileTree.Folder>
+                <FileTree.Folder name={"hooks"}>...</FileTree.Folder>
+                <FileTree.Folder name={"patients"} defaultOpen>
+                    <FileTree.Folder name={"components"}>...</FileTree.Folder>
+                    <FileTree.Folder name={"context"}>...</FileTree.Folder>
+                    <FileTree.Folder name={"hooks"}>...</FileTree.Folder>
+                    <FileTree.Folder name={"utils"}>...</FileTree.Folder>
+                    <FileTree.File name={"PatientPage.tsx"} />
+                </FileTree.Folder>
+                <FileTree.File name={"DoctorPage.tsx"} />
+            </FileTree.Folder>
+            <FileTree.Folder name={"hooks"}>...</FileTree.Folder>
+            <FileTree.File name={"DashboardLayout.tsx"} />
+        </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
+
+For now, it's much easier to see what routes are there and what logic is related to each feature.
+
+## Example of `/app` and `/features` together
+
+Here is an example of how the `/app` and `/features` directories work together.
+
+- `/app` directory only contains metadata, fetches SSR data, and passes it to the `/features` directory.
+- `/features` now responsible for rendering the page, managing the state, and handling the business logic.
+
+<Steps>
+### Let's start with the `/app` directory.
+
+```tsx filename="app/dashboard/doctor/page.tsx"
+import { DoctorPage } from "@/features/dashboard/doctor/DoctorPage";
+import { getDoctorData } from "@/lib/controllers/doctorController";
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+  title: 'Doctor Dashboard',
+  description: '...',
+}
+
+export default async function Page() {
+    const response = await getDoctorData();
+    return <DoctorPage doctorDataResponse={response} />;
+}
+```
+
+### Now let's look at the `/features` directory.
+
+```tsx filename="features/dashboard/doctor/DoctorPage.tsx"
+"use client";
+
+import {useSomeHook} from "@/features/dashboard/doctor/hooks/useSomeHook"
+import {DoctorContextProvider} from "@/features/dashboard/doctor/context/DoctorContext";
+import {DoctorComponent} from "@/features/dashboard/doctor/components/DoctorComponent";
+import {ApiResponse} from "@/lib/api-client/types";
+import {DoctorData} from "@/schemas/DoctorData";
+
+export function DoctorPage(
+    {doctorDataResponse}: { doctorDataResponse: ApiResponse<DoctorData> }
+) {
+    const {someData} = useSomeHook();
+
+    return (
+        <DoctorContextProvider doctorDataResponse={doctorDataResponse}>
+            <DoctorComponent data={someData} />
+        </DoctorContextProvider>
+    );
+}
+```
+</Steps>
+

@@ -1,0 +1,156 @@
+import {Steps} from "nextra/components";
+
+# Creating a new page
+
+In this guide, you will learn how to correctly create a new page in the application.
+
+> [!NOTE]
+>
+> Before you start, make sure you have read the [App and Features Structure Conventions](/app-and-features/structure-conventions) guide.
+
+> [!IMPORTANT]
+>
+> Make sure you know about [Next.js App Structure](https://nextjs.org/docs/app/getting-started/project-structure).
+
+## Creating the Page
+
+<Steps>
+
+    ### Create the Layout File in the Directory (if Needed)
+    If your page requires a specific layout,
+    create a `layout.tsx` file in the directory where your page will be located.
+    This file will define the layout structure for your page and its nested routes.
+
+    ```tsx filename="app/patient/layout.tsx"
+    import { PatientLayout } from "@/features/patient/components/PatientLayout";
+
+    export default function Layout({ children }: { children: React.ReactNode }) {
+        return <PatientLayout>{children}</PatientLayout>;
+    }
+    ```
+
+    ### Create the Page File
+    Create a new file named `page.tsx` in the directory where you want your page to be located.
+    This file will contain the main content of your page.
+
+    > [!TIP]
+    >
+    > You can use metadata to improve SEO and web shareability.
+    > For more information, see the [Next.js Metadata documentation](https://nextjs.org/docs/app/getting-started/metadata-and-og-images).
+
+    ```tsx filename="app/patient/page.tsx"
+    import { PatientPage } from "@/features/patient/components/PatientPage";
+    import { getPatientData } from "@/lib/controllers/patientController";
+    import { getPatientTests } from "@/lib/controllers/patientTestController";
+    import { Metadata } from "next";
+
+    export const metadata: Metadata = {
+        title: 'Patient Dashboard',
+        description: '...',
+    };
+
+    export default async function Page() {
+        const patientData = await getPatientData();
+        const patientTests = await getPatientTests();
+
+        return (
+            <PatientPage
+                patientDataResponse={patientData}
+                patientTestsResponse={patientTests}
+            />
+        );
+    }
+    ```
+
+</Steps>
+
+## Creating the Feature Logic
+
+After creating the page, you need to implement the feature logic that will handle the page's functionality.
+
+<Steps>
+
+    ### Create Layout Component (if Needed)
+
+    If you created a layout file in the previous step, create a corresponding layout component.
+
+    This component will define the layout structure for your page and its nested routes.
+
+    ```tsx filename="features/patient/components/PatientLayout.tsx"
+    import { Box } from "@mui/material";
+    import { PatientHeader } from "@/features/patient/components/PatientHeader";
+    import { PatientSidebar } from "@/features/patient/components/PatientSidebar";
+    import { PatientFooter } from "@/features/patient/components/PatientFooter";
+    import { ReactNode } from "react";
+
+    export function PatientLayout({ children }: { children: ReactNode }) {
+        return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <PatientHeader />
+                <Box sx={{ display: 'flex', flexGrow: 1 }}>
+                    <PatientSidebar />
+                    <Box sx={{ flexGrow: 1, padding: 2 }}>
+                        {children}
+                    </Box>
+                </Box>
+                <PatientFooter />
+            </Box>
+        );
+    }
+    ```
+
+    ### Create Page Component
+
+    Create a new component that will handle the page's functionality.
+    This component will receive the data fetched in the `page.tsx` file and render the page content.
+
+    ```tsx filename="features/patient/components/PatientPage.tsx"
+    import { Box } from "@mui/material";
+    import { PatientTestsList } from "@/features/patient/components/PatientTestsList";
+    import { PatientDataHeader } from "@/features/patient/components/PatientDataHeader";
+
+    export function PatientPage({
+        patientDataResponse,
+        patientTestsResponse,
+    }: {
+        patientDataResponse: ApiResponse<PatientData>;
+        patientTestsResponse: ApiResponse<PatientTest[]>;
+    }) {
+        return (
+            <Box sx={{ padding: 2 }}>
+                <PatientDataHeader patientData={patientDataResponse} />
+                <PatientTestsList tests={patientTestsResponse} />
+            </Box>
+        );
+    }
+    ```
+
+    ### Create Create Additional Components (if Needed)
+
+    If your page requires additional components, create them in the corresponding directory.
+    For example, if you need a header or a sidebar, create components for them in the same directory as your page.
+
+    ```tsx filename="features/patient/components/PatientHeader.tsx"
+    "use client";
+
+    import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+    import { Link } from "next/link";
+    import { useAuth } from "@/hooks/useAuth";
+
+    export function PatientHeader() {
+        const { user, logout } = useAuth();
+
+        return (
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                        Patient Dashboard
+                    </Typography>
+                    <Link href="/profile">{user?.name}</Link>
+                    <Button onClick={() => logout()}>Logout</Button>
+                </Toolbar>
+            </AppBar>
+        );
+    }
+    ```
+</Steps>

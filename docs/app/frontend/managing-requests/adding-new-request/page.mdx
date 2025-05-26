@@ -1,3 +1,5 @@
+import { Steps } from "nextra/components";
+
 # Adding a New Request
 
 This guide will help you add a new request to the application to the backend.
@@ -24,7 +26,7 @@ To add a new request, you need to define a new class in the `lib/services` direc
 > 1. All files in this directory should end with `Service` (e.g. `PatientTestService.ts`).
 > 2. Also corresponding service should be a class and receive an `AxiosInstance` in the constructor.
 
-```ts
+```ts filename="lib/services/PatientTestService.ts"
 "use server";
 
 import PatientTest from "@/schemas/PatientTest";
@@ -66,6 +68,10 @@ export default class PatientTestService {
 }
 ```
 
+> [!NOTE]
+>
+> If you need to define a type for the response, you can add it to the `schemas` directory.
+
 ## Step 2: Define the Controller
 
 The controller is responsible for handling the requests and responses for the service you just created.
@@ -80,7 +86,7 @@ which are defined in the `lib/fetchers` module.
 
 Create a new file in the `lib/controllers` directory, for example, `PatientTestController.ts`:
 
-```ts
+```ts filename="lib/controllers/patientTestController.ts"
 "use server";
 
 import {fetchProtected} from "@/lib/fetchers";
@@ -125,9 +131,9 @@ with manually response handling or with `withSafeErrorHandling` higher-order fun
 To see more information about fetching requests on client side and what is `withSafeErrorHandling`,
 please visit the [Fetching on Client Side](./fetching-on-client-side) article.
 
-```tsx
-// 1. Directly fetching request and handling ApiResponse
-
+<Steps>
+### Directly fetching request and handling `ApiResponse`
+```tsx filename="app/dashboard/patient/page.tsx"
 "use server";
 
 import {getAssignedTests} from "@/lib/controllers/PatientTestController";
@@ -142,9 +148,9 @@ export default async function Page() {
 }
 ```
 
-```ts
-// 2. Fetching request with withSafeErrorHandling HOF
+### Fetching request with `withSafeErrorHandling` HOF
 
+```ts filename="features/dashboard/patient/hooks/useAssignedTests.ts"
 "use client";
 
 import {getAssignedTests} from "@/lib/controllers/PatientTestController";
@@ -164,3 +170,4 @@ export default function useAssignedTests() {
     };
 }
 ```
+</Steps>
