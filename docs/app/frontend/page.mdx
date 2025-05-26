@@ -1,0 +1,54 @@
+import {Steps} from "nextra/components";
+
+# Getting Started
+
+Hello and welcome to the guide on how to get started with the __PsyTests__ frontend project!
+This guide will walk you through the process of initializing the project and understanding the structure.
+
+## Initial Setup
+
+<Steps>
+### Clone the Repository
+
+To get started, you need to clone the repository and go to the frontend directory.
+
+```bash
+git clone https://github.com/imarkoff/PsyTests.git
+cd PsyTests
+cd frontend
+```
+
+### Install Dependencies
+
+Right after that, you can install the dependencies using npm or yarn:
+
+```bash
+npm install
+```
+
+### Configure Environment Variables
+
+Copy the `.env.example` file to `.env` and fill in the required environment variables.
+
+### Start the Development Server
+
+Run the development server using:
+
+```bash
+npm run dev
+```
+</Steps>
+
+
+## Project Structure
+
+- `app` - contains route handlers and pages of the application.
+- `components` - contains reusable components used in the application.
+- `features` - contains logic for pages and components that are specific to a page.
+- `hooks` - contains custom hooks used in the application.
+- `lib` - contains the core logic of the application, including services, controllers, and utility functions.
+See the [Understanding the `lib` structure](./frontend/managing-requests/lib-structure) article for more details.
+- `schemas` - contains TypeScript schemas for data validation and type safety.
+- `theme` - defines Material UI theme context and styles for the application.
+- `utils` - contains utility functions used in the application.
+- `middleware.ts` - handles redirects and authentication checks.

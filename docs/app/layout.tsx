@@ -10,7 +10,7 @@ export const metadata = {
 
 const navbar = (
     <Navbar
-        logo={<b>Nextra</b>}
+        logo={<b>PsyTests Docs</b>}
         // ... Your additional navbar options
     />
 )
@@ -35,7 +35,7 @@ export default async function RootLayout({ children }) {
         <Layout
             navbar={navbar}
             pageMap={await getPageMap()}
-            docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
+            docsRepositoryBase="https://github.com/imarkoff/PsyTests/tree/main/docs"
             footer={footer}
             // ... Your additional layout options
         >
