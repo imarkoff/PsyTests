@@ -1,0 +1,63 @@
+# Using HTTPS for Local Development
+
+When developing applications locally, you might want to use HTTPS
+to ensure that your application behaves similarly to how it would in production.
+This guide will help you set up HTTPS for local development.
+
+## Generating SSL Certificates in the `certs` Directory
+
+To use HTTPS, you need to generate SSL certificates. You can use tools like OpenSSL to create self-signed certificates.
+
+Interactive generation:
+```bash copy
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout certs/fullchain.key -out certs/privkey.crt
+```
+
+Quiet generation:
+```bash copy
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout certs/fullchain.key -out certs/privkey.crt -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
+```
+
+## Using HTTPS in Docker
+
+After generating the certificates, you need to rebuild your Docker containers to apply the changes.
+
+```bash copy
+docker-compose up --build
+```
+
+## Using HTTPS on the backend
+
+If you want to use HTTPS on th backend out of the box,
+you can use the `uvicorn` command with the `--ssl-keyfile` and `--ssl-certfile` options.
+
+> [!NOTE]
+>
+> Path to the certificates must be absolute path.
+
+```bash copy
+python -m uvicorn app.main:app
+    --reload --port 8000
+    --ssl-keyfile /home/imarkoff/Projects/PsyTests/certs/privkey.pem
+    --ssl-certfile /home/imarkoff/Projects/PsyTests/certs/fullchain.pem
+```
+
+## Using HTTPS on the frontend
+
+On frontend, you can use the `next dev` command with the `--experimantal` option.
+Already enabled by default in `package.json`.
+
+```bash copy
+npm run dev
+```
+
+> [!NOTE]
+>
+> If you are getting the following error:
+>
+> ```
+> self-signed certificate; if the root CA is installed locally, try running Node.js with --use-system-ca
+> ```
+>
+> You can try to run the command with the `NODE_TLS_REJECT_UNAUTHORIZED=0` environment variable.
+> Some IDEs allow you to set environment variables for the run configuration.
