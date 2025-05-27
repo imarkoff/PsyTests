@@ -1,0 +1,110 @@
+import { FileTree } from "nextra/components";
+
+# Components Conventions
+
+In this section, we will cover the conventions for creating components in the application.
+
+> [!IMPORTANT]
+>
+> Make sure you know about [Material UI](https://mui.com/material-ui/getting-started/overview/).
+> You should avoid using raw HTML elements and use Material UI components instead.
+
+## Component Structure
+
+Components should be organized in a way that makes them easy to find and maintain.
+
+Components can be placed in two main directories:
+- `/components` - for components that are used across the application.
+    Also, here can be complex components that are used in a specific page.
+- `/features/{feature}/components` - for components that are specific to a feature.
+    If component is used multiple times in nested routes, it should be placed in `/components`.
+
+## Naming Conventions
+
+Such as any React components, custom components should be named using PascalCase, which means that the first letter of each word is capitalized.
+
+## Component Types
+
+Components can be divided into three main types:
+- **Simple Components** - components that are self-contained and do not have any subcomponents.
+- **Complex Components** - components that have multiple subcomponents or hooks.
+- **Group Components** - components that group multiple subcomponents together.
+
+### Simple Components
+
+For example, a component that displays a button should be named `MyButton`.
+
+```tsx filename="/components/MyButton.tsx"
+import { Button } from "@mui/material";
+
+export const MyButton = () => {
+    return <Button variant="contained">Click me</Button>;
+};
+```
+
+### Complex Components
+
+If your component is complex and has multiple subcomponents,
+you can create a directory for it and place the main component file inside it.
+
+Nested logic should be places to corresponding directories, such as in features.
+
+<FileTree>
+    <FileTree.Folder name={"components"} defaultOpen>
+        <FileTree.Folder name={"MyComplexComponent"} defaultOpen>
+            <FileTree.Folder name={"components"} defaultOpen>
+                <FileTree.File name={"MySubComponent.tsx"} />
+                <FileTree.File name={"MyOtherSubComponent.tsx"} />
+            </FileTree.Folder>
+            <FileTree.Folder name={"hooks"} defaultOpen>
+                <FileTree.File name={"useMyHook.ts"} />
+            </FileTree.Folder>
+            <FileTree.File name={"index.tsx"} />
+        </FileTree.Folder>
+    </FileTree.Folder>
+</FileTree>
+
+The main component file should be named `index.tsx` to make it easier to import.
+
+```tsx filename="/components/MyComplexComponent/index.tsx"
+import { MySubComponent } from "@/components/MyComplexComponent/components/MySubComponent";
+import { MyOtherSubComponent } from "@/components/MyComplexComponent/components/MyOtherSubComponent";
+import { Box } from "@mui/material";
+
+export const MyComplexComponent = () => (
+    <Box>
+        <MySubComponent />
+        <MyOtherSubComponent />
+    </Box>
+);
+```
+
+### Grouping Subcomponents
+
+Or if you want to Group all subcomponents in one file, you can do it like this:
+
+```tsx filename="/components/MyComplexComponent/index.tsx"
+
+import { MySubComponent } from "@/components/MyComplexComponent/MySubComponent";
+import { MyOtherSubComponent } from "@/components/MyComplexComponent/MyOtherSubComponent";
+
+export const MyComplexComponent = {
+    MySubComponent,
+    MyOtherSubComponent,
+};
+```
+
+Then you can use it like this:
+
+```tsx filename="/features/some-page/SomeFeature.tsx"
+
+import { MyComplexComponent } from "@/components/MyComplexComponent";
+import { Box } from "@mui/material";
+
+export const SomeFeature = () => (
+    <Box>
+        <MyComplexComponent.MySubComponent />
+        <MyComplexComponent.MyOtherSubComponent />
+    </Box>
+);
+```

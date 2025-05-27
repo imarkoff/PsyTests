@@ -1,7 +1,7 @@
 import TestBase from "@/schemas/TestBase";
 import TestResult from "@/schemas/TestResult";
 import { ComponentType } from "react";
-import TestInfoType from "@/features/tests/TestInfoType";
+import {Role} from "@/schemas/Role";
 
 /**
  * Configuration of a test components.
@@ -20,4 +20,10 @@ export default interface TestConfigType<
         footer?: ComponentType<{ test: TTestResult }>;
         card?: ComponentType<{ test: TTestResult }>;
     }
+}
+
+export interface TestInfoType<T extends TestBase> {
+    test: T;
+    role: Role;
+    disabled?: boolean;
 }

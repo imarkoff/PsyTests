@@ -1,0 +1,19 @@
+
+# Project structure
+
+Here is the structure of the project:
+
+- `backend/` - contains the backend code. Built with FastAPI.
+- `frontend/` - contains the frontend code. Built with Next.js.
+- `docs/` - contains the documentation code. Built with Nextra.
+- `nginx/` - contains the Nginx configuration files. Used for running frontend on Docker with https.
+- `certs/` - contains the SSL certificates. Used for local development with https.
+
+---
+
+Docker files and configuration:
+
+- `docker-compose.yml` - Docker Compose file for running the application.
+- `<app>/Dockerfile` - Dockerfile for building the application.
+
+- `.env` - environment variables for the application. Used by docker-compose.

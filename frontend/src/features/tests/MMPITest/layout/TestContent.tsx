@@ -1,8 +1,8 @@
-import TestInfoType from "@/features/tests/TestInfoType";
 import MMPITest from "@/features/tests/MMPITest/schemas/MMPITest";
 import {Alert, Typography} from "@mui/material";
 import MMPIQuestionCard from "@/features/tests/MMPITest/components/MMPIQuestionCard";
 import {Roles} from "@/schemas/Role";
+import {TestInfoType} from "@/features/tests/TestConfig";
 
 export const TestHeader = ({test}: TestInfoType<MMPITest>) => {
     const totalQuestions = test.questions.length;

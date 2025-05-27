@@ -3,8 +3,8 @@ import {Roles} from "@/schemas/Role";
 import RavenQuestion from "@/features/tests/RavenTest/schemas/RavenQuestion";
 import countTestQuestions from "@/features/tests/RavenTest/utils/countTestQuestions";
 import {Typography} from "@mui/material";
-import TestInfoType from "@/features/tests/TestInfoType";
 import RavenQuestionCard from "@/features/tests/RavenTest/components/RavenQuestionCard";
+import {TestInfoType} from "@/features/tests/TestConfig";
 
 export const TestHeader = ({test, role}: TestInfoType<RavenTest>) => {
     const {totalQuestions, totalPoints} = countTestQuestions(test);

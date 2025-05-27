@@ -6,7 +6,7 @@ from app.domains.tests.raven.schemas.test_history_results import RavenTestResult
 
 class RavenVerdict(TestVerdict):
     results: RavenTestResults
-    verdict: str | None
+    verdict: str | int | None
 
     model_config = ConfigDict(
         json_schema_extra={
