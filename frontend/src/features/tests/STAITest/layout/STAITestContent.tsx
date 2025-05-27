@@ -1,7 +1,7 @@
-import TestInfoType from "@/features/tests/TestInfoType";
 import STAITest from "@/features/tests/STAITest/types/STAITest";
 import {Typography} from "@mui/material";
 import STAIQuestionCard from "@/features/tests/STAITest/components/STAIQuestionCard";
+import {TestInfoType} from "@/features/tests/TestConfig";
 
 export function STAITestHeader({test}: TestInfoType<STAITest>) {
     return (
