@@ -1,0 +1,128 @@
+import { Steps } from "nextra/components";
+
+# Tests Conventions
+
+In this section you will find the conventions we follow when writing tests in our application.
+These conventions help maintain consistency and readability across the codebase.
+
+> [!NOTE]
+>
+> This article is about automated tests, not about psychological tests.
+
+Testing frontend part is going with the following tools:
+
+- [Jest](https://jestjs.io/) - a JavaScript testing framework.
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) - a library for testing React components.
+
+## Test file location
+
+Test files should be located in the same directory as the component or module they are testing.
+Also, it should have the same name as the file being tested, with a `.test.js` suffix.
+
+For example, if you have a component file named `Button.tsx`,
+the corresponding test file should be named `Button.test.tsx` and located in the same directory.
+
+## Test structure
+
+Each test file should follow a consistent structure to improve readability and maintainability.
+
+A typical test file should include the following sections:
+
+1. **Imports**: Import the necessary libraries, components, and utilities.
+    It is important to import `@testing-library/jest-dom`.
+2. **Setup**: Set up any required configurations, mocks, or initial states.
+3. **Tests**: Define the individual test cases using `describe` and `it` blocks.
+
+## Creating a new test
+
+When creating a new test, follow these steps:
+
+<Steps>
+
+### Add imports
+
+Start by importing the necessary libraries and components you will be testing.
+You need to import `@testing-library/react` for rendering components
+ and `@testing-library/jest-dom` for additional matchers.
+
+You can import a component you are testing using a relative path.
+It is acceptable because the test file is located in the same directory as the component.
+
+```tsx filename="ResultsDialog.test.tsx"
+import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import ResultsDialog from "./ResultsDialog";
+import TestResult from "@/schemas/TestResult";
+import TestBase from "@/schemas/TestBase";
+```
+
+### Mock components
+
+If the component you are testing relies on other components or data,
+you may need to mock those components or data to isolate the test.
+
+You can use `jest.mock` to create mock implementations of components or modules.
+
+> [!TIP]
+>
+> You can disable specific ESLint rules for the mocked components if necessary.
+> But don't forget you shouldn't disable rules outside of test files.
+
+```tsx filename="ResultsDialog.test.tsx"
+/* eslint-disable react/display-name */
+
+jest.mock(
+    "@/components/ResultsDialog/components/ResultsTitle",
+    () => ({test}: {test: TestBase}) => (
+        <div data-testid="results-title">{test.name}</div>
+    )
+);
+
+const mockTest: TestResult = {
+    id: "result-1",
+    patient_id: "patient-1",
+    test: { id: "test-1", name: "Test Name", type: "raven" },
+    results: { _: [] },
+    verdict: null,
+    passed_at: "2024-06-01T12:00:00Z"
+};
+```
+
+### Write tests
+
+Now you can write your test cases using `describe` and `it` blocks.
+
+> [!IMPORTANT]
+>
+> - Each test case should be focused on a specific behavior or functionality of the component.
+> - Names of the test cases should be descriptive and indicate what is being tested.
+> - And don't forget to split your test by lines according to "GIVEN-WHEN-THEN" principle.
+
+```tsx filename="ResultsDialog.test.tsx"
+describe("ResultsDialog", () => {
+    it("renders show results button", () => {
+        render(<ResultsDialog test={mockTest} />);
+
+        expect(screen.getByRole("button", { name: "Показати результати" })).toBeInTheDocument();
+    });
+
+    it("opens dialog and renders title and content on button click", () => {
+        render(<ResultsDialog test={mockTest} />);
+
+        fireEvent.click(screen.getByRole("button", { name: "Показати результати" }));
+
+        expect(screen.getByTestId("results-title")).toHaveTextContent("Test Name");
+        expect(screen.getByTestId("results-content")).toHaveTextContent("result-1");
+    });
+
+    it("handles missing test name gracefully", () => {
+        render(<ResultsDialog test={{ ...mockTest, test: { ...mockTest.test, name: "" } }} />);
+
+        fireEvent.click(screen.getByRole("button", { name: "Показати результати" }));
+
+        expect(screen.getByTestId("results-title")).toHaveTextContent("");
+    });
+})
+```
+
+</Steps>

@@ -11,6 +11,7 @@ export const metadata = {
 const navbar = (
     <Navbar
         logo={<b>PsyTests Docs</b>}
+        projectLink={"https://github.com/imarkoff/PsyTests"}
         // ... Your additional navbar options
     />
 )
