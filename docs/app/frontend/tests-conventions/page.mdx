@@ -1,6 +1,6 @@
-import { Steps } from "nextra/components";
+import { Steps, FileTree } from "nextra/components";
 
-# Tests Conventions
+# Tests Conventions (Automated Tests)
 
 In this section you will find the conventions we follow when writing tests in our application.
 These conventions help maintain consistency and readability across the codebase.
@@ -21,6 +21,15 @@ Also, it should have the same name as the file being tested, with a `.test.js` s
 
 For example, if you have a component file named `Button.tsx`,
 the corresponding test file should be named `Button.test.tsx` and located in the same directory.
+
+<FileTree>
+    <FileTree.Folder name="components" defaultOpen>
+        <FileTree.File name="Button.tsx" />
+        <FileTree.File name="Button.test.tsx" active />
+        <FileTree.File name="ResultsDialog.tsx" />
+        <FileTree.File name="ResultsDialog.test.tsx" active />
+    </FileTree.Folder>
+</FileTree>
 
 ## Test structure
 
