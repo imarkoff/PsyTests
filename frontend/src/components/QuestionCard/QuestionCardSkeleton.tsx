@@ -1,7 +1,7 @@
 import {Box, Card, CardContent, CardHeader, Skeleton} from "@mui/material";
 
 export default function QuestionCardSkeleton({isLoading}: { isLoading?: boolean }) {
-    const animation = isLoading ? "pulse" : false;
+    const animation = isLoading || isLoading === undefined ? "wave" : false;
 
     return (
         <Card sx={{ overflow: "visible" }} variant={"outlined"}>

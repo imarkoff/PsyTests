@@ -53,7 +53,7 @@ const BaseContent = (
     return (
         <LazyComponent
             height={"400px"}
-            visibleChildren={<input type="hidden" {...register?.()} />}
+            visibleChildren={<input type="hidden" data-testid={"hidden-input"} {...register?.()} />}
         >
             <Card variant={"outlined"} sx={{
                 borderColor: error ? "error.main" : undefined,

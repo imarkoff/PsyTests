@@ -17,6 +17,14 @@ jest.mock(
     }
 );
 
+jest.mock(
+    "@/utils/formatDate",
+    () => ({
+        dateMed: jest.fn()
+    })
+
+)
+
 const mockTest: TestResult = {
     id: "a2fac5ba-3344-44f3-811a-fd2b7104d1c0",
     patient_id: "a2fac5ba-3344-44f3-811a-fd2b7104d1c0",
@@ -33,18 +41,22 @@ const mockTest: TestResult = {
 describe("TestHistoryCard", () => {
     it("renders test name in card header", () => {
         render(<TestHistoryCard test={mockTest} />);
+
         expect(screen.getByText("Sample Test")).toBeInTheDocument();
     });
 
     it("renders formatted date in TestValues", () => {
         jest.spyOn(formatDate, "dateMed").mockReturnValue("01.06.2024");
+
         render(<TestHistoryCard test={mockTest} />);
+
         expect(screen.getByText(/Дата проходження:/)).toBeInTheDocument();
         expect(screen.getByText("01.06.2024")).toBeInTheDocument();
     });
 
     it("renders ResultsDialog in card actions", () => {
         render(<TestHistoryCard test={mockTest} />);
+
         expect(screen.getByTestId("results-dialog")).toBeInTheDocument();
     });
 
@@ -52,13 +64,17 @@ describe("TestHistoryCard", () => {
         const ContentMock = ({ test }: { test: TestResult }) =>
             <div data-testid="custom-content">{test.test.name}</div>;
         testsConfig["raven"] = { results: { card: ContentMock } } as TestConfigType<TestBase, TestResult>;
+
         render(<TestHistoryCard test={mockTest} />);
+
         expect(screen.getByTestId("custom-content")).toHaveTextContent("Sample Test");
     });
 
     it("does not render Content component if not present in testsConfig", () => {
         testsConfig["raven"] = { results: {} } as TestConfigType<TestBase, TestResult<object>>;
+
         render(<TestHistoryCard test={mockTest} />);
+
         expect(screen.queryByTestId("custom-content")).not.toBeInTheDocument();
     });
 })
