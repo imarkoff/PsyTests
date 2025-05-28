@@ -31,7 +31,7 @@ export default function LazyComponent(
     return (
         <div ref={ref} style={{overflow: "visible"}}>
             {visibleChildren}
-            {inView ? children : <div style={{height: height}}/>}
+            {inView ? children : <div style={{height: height}} data-testid="lazy-placeholder"/>}
         </div>
     );
 }
