@@ -8,7 +8,7 @@ import User from "@/schemas/User";
 export default function DoctorPatientCard({patient}: {patient: DoctorPatient}) {
     const router = useRouter();
     const onDetails = (patient: User) =>
-        router.push(`${window.location.pathname}/${patient.id}`);
+        router.push(`/dashboard/doctor/patients/${patient.id}`);
 
     return (
         <PatientCard

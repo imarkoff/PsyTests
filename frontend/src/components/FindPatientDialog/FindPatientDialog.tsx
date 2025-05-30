@@ -1,97 +1,22 @@
 "use client";
 
-import {
-    Box,
-    Modal,
-    Paper,
-    Typography
-} from "@mui/material";
-import {useEffect, useRef, useState} from "react";
-import FindInput from "@/components/FindPatientDialog/components/FindInput";
-import useFindPatient from "@/components/FindPatientDialog/useFindPatient";
+import {Modal} from "@mui/material";
+import {useState} from "react";
 import FindModalOpener from "@/components/FindPatientDialog/components/FindModalOpener";
-import DoctorPatientsResults from "@/components/FindPatientDialog/layout/DoctorPatientsResults";
-import OtherPatientsResults from "@/components/FindPatientDialog/layout/OtherPatientsResults";
-import CreatePatientOpener from "@/components/FindPatientDialog/components/CreatePatientOpener";
-import CreatePatientDialog from "@/components/CreatePatientDialog/CreatePatientDialog";
+import FindPatientContent from "@/components/FindPatientDialog/components/FindPatientContent";
 
-/**
- * Modal for finding patients.
- * @constructor
- */
 export default function FindPatientDialog() {
     const [open, setOpen] = useState(false);
-    const searchRef = useRef<HTMLInputElement>(null);
-    const {loading, doctorPatients, otherPatients, isResultsEmpty, clearResults, setQuery} = useFindPatient();
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-        setOpen(false);
-        setQuery("");
-        clearResults();
-    };
-
-    useEffect(() => {
-        if (open) {
-            setTimeout(() => {
-                searchRef.current?.focus();
-            }, 50);
-        }
-    }, [open]);
+    const handleClose = () => setOpen(false);
 
     return (
         <div>
             <FindModalOpener handleOpen={handleOpen} />
-            <Modal
-                open={open}
-                onClose={handleClose}
-            >
-                <Paper sx={modalPaperStyles}>
-                    <Box sx={{width: "100%", display: "flex", gap: 2, alignItems: "center", p: 1, pb: 0}}>
-                        <FindInput searchRef={searchRef} setQuery={setQuery} loading={loading} />
-                    </Box>
-                    <Box sx={{
-                        display: "grid", gap: 1,
-                        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                        maxHeight: 500,
-                        overflowY: "auto",
-                        p: 1
-                    }}>
-                        <Typography variant={"h6"} fontWeight={500} sx={{
-                            alignSelf: "center", px: 1,
-                            visibility: doctorPatients === undefined ? "hidden" : "visible"
-                        }}>
-                            Результати пошуку
-                        </Typography>
-
-                        <CreatePatientDialog OpenerAction={CreatePatientOpener} closeAction={handleClose} />
-
-                        {isResultsEmpty && doctorPatients !== undefined && (
-                            <Typography variant={"body1"} color={"textSecondary"} sx={{gridColumn: "1 / -1", textAlign: "center", py: 2}}>
-                                Нічого не знайдено
-                            </Typography>
-                        )}
-
-                        {!!doctorPatients?.length && <DoctorPatientsResults patients={doctorPatients} />}
-                        {!!otherPatients?.length && <OtherPatientsResults patients={otherPatients} />}
-                    </Box>
-                </Paper>
+            <Modal open={open} onClose={handleClose}>
+                <FindPatientContent open={open} onClose={handleClose} />
             </Modal>
         </div>
     );
-}
-
-const modalPaperStyles = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: 720,
-    width: '100%',
-    backgroundColor: 'background.paper',
-    border: '2px solid',
-    borderColor: 'divider',
-    boxShadow: 24,
-    display: "grid",
-    borderRadius: 4,
 }

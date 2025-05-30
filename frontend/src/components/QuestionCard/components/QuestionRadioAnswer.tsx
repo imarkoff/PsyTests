@@ -22,7 +22,7 @@ export default function QuestionRadioAnswer(
     return (
         <FormControlLabel
             value={index}
-            onChange={() => onChange(index)}
+            onChange={() => !disabled && onChange(index)}
             control={
                 <Radio
                     color={radioColor}

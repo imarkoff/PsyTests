@@ -11,6 +11,7 @@ const QuestionCardContext = createContext<{
     chosenAnswer: string | number | undefined;
     handleAnswerChange: (newAnswer: string | number) => void;
 }>({
+    register: undefined,
     error: undefined,
     index: 0,
     chosenAnswer: undefined,

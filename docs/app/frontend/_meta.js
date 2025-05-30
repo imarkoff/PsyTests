@@ -5,6 +5,9 @@ export default {
     },
     index: { },
     "components-conventions": { },
+    "tests-conventions": {
+        title: "Tests Conventions",
+    },
     "psychological-tests": { },
     "app-and-features": { },
     "managing-requests": { },

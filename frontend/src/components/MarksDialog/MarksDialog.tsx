@@ -1,24 +1,14 @@
 "use client";
 
-import {
-    Box,
-    Button,
-    Dialog,
-    Table,
-    TableCell,
-    TableHead,
-    TableRow,
-    Typography
-} from "@mui/material";
+import { Box, Button, Dialog } from "@mui/material";
 import {ReactNode, useState} from "react";
 import TestBase from "@/schemas/TestBase";
-import DialogCloseButton from "@/components/DialogCloseButton";
+import MarksDialogHeader from "@/components/MarksDialog/MarksDialogHeader";
 
 /**
  * Display test marks system.
- * Shows a button which opens a dialog with marks system.
- * @param marks
- * @constructor
+ * Shows a box with a button and hidden marks dialog
+ * which shows on button click.
  */
 export default function MarksDialog({test, children}: {test: TestBase, children: ReactNode}) {
     const [open, setOpen] = useState(false);
@@ -46,22 +36,7 @@ export default function MarksDialog({test, children}: {test: TestBase, children:
                     })
                 } }}
             >
-                <Table sx={{position: "sticky", top: 0}}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell colSpan={2}>
-                                <Typography variant={"h6"}>
-                                    Система оцінювання
-                                    {test.marks_unit && ` (${test.marks_unit})`}
-                                </Typography>
-                                <Typography variant={"body2"} color={"textSecondary"}>
-                                    {test.name}
-                                </Typography>
-                            </TableCell>
-                            <TableCloseButton onClose={handleClose}></TableCloseButton>
-                        </TableRow>
-                    </TableHead>
-                </Table>
+                <MarksDialogHeader test={test} onClose={handleClose} />
                 <Box sx={{position: "relative", overflowY: "auto"}}>
                     {children}
                 </Box>
@@ -69,17 +44,3 @@ export default function MarksDialog({test, children}: {test: TestBase, children:
         </Box>
     );
 }
-
-const TableCloseButton = ({onClose}: {onClose: () => void}) => (
-    <TableCell sx={{
-        position: "absolute",
-        right: 35,
-        top: "50%",
-        transform: "translateY(-50%)",
-        zIndex: 2,
-        padding: 0,
-        border: "none"
-    }}>
-        <DialogCloseButton onClose={onClose} />
-    </TableCell>
-);
