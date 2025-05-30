@@ -1,8 +1,8 @@
-import {Card, CardHeader, Skeleton, SkeletonOwnProps} from "@mui/material";
+import {Card, CardHeader, Skeleton} from "@mui/material";
 
-export default function PatientCardSkeleton(
-    {animation}: {animation?: SkeletonOwnProps["animation"]}
-) {
+export default function PatientCardSkeleton({ isLoading }: { isLoading?: boolean }) {
+    const animation = isLoading || isLoading === undefined ? "wave" : false;
+
     return (
         <Card
             variant={"outlined"}

@@ -4,7 +4,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import formatPhone from "@/utils/formatPhone";
 import {ReactNode} from "react";
 
-interface PatientCardProps {
+export interface PatientCardProps {
     patient: User;
     footer?: ReactNode;
     needsAttention?: boolean;
@@ -28,6 +28,8 @@ export default function PatientCard({patient, footer, needsAttention, onClick, s
     return (
         <Card
             variant={"outlined"}
+            data-testid="patient-card"
+            aria-selected={selected}
             sx={(theme) =>({
                 ...(selected ? cardSelectedSx(theme) : {}),
                 position: "relative",
@@ -39,7 +41,7 @@ export default function PatientCard({patient, footer, needsAttention, onClick, s
                     <CardActionArea
                         onClick={() => onClick(patient)}
                     >
-                        <PatientContent patient={patient} />
+                        <PatientContent patient={patient} footer={footer} />
                     </CardActionArea>
                 )
                 : <PatientContent patient={patient} footer={footer} />

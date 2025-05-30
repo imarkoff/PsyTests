@@ -5,25 +5,10 @@ import User from "@/schemas/User";
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import {IconButton, Tooltip} from "@mui/material";
-import {useState} from "react";
-import {addPatient} from "@/lib/controllers/doctorPatientController";
-import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
+import useAddPatient from "@/components/PatientCard/useAddPatient";
 
 export default function OtherPatientCard({patient}: {patient: User}) {
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-
-    const handlePutOnRecord = async () => {
-        if (loading || success) return;
-        setLoading(true);
-        try {
-            await withSafeErrorHandling(addPatient)(patient.id);
-            setSuccess(true);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
+    const { loading, success, handlePutOnRecord } = useAddPatient(patient.id);
 
     return (
         <PatientCard
@@ -31,8 +16,9 @@ export default function OtherPatientCard({patient}: {patient: User}) {
             footer={
                 <Tooltip title={success ? "Пацієнта додано" : "Додати пацієнта"}>
                     <IconButton
-                        onClick={handlePutOnRecord}
+                        onClick={!success ? handlePutOnRecord : undefined}
                         loading={loading}
+                        data-testid="add-patient-button"
                         color={success ? "success" : "primary"}
                         sx={{
                             position: "absolute",

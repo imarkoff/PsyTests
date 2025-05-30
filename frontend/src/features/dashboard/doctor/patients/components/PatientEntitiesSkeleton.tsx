@@ -24,7 +24,7 @@ export default function PatientEntitiesSkeleton({isLoading, hasPatients, error}:
                 opacity: isLoading ? 1 : 0.5
             }}>
                 {Array.from({length: 9}).map((_, index) => (
-                    <PatientCardSkeleton key={index} animation={isLoading ? "wave" : false} />
+                    <PatientCardSkeleton key={index} isLoading={isLoading} />
                 ))}
             </Box>
 
