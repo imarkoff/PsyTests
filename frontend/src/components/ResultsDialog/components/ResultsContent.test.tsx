@@ -72,7 +72,7 @@ describe("ResultsContent", () => {
     });
 
     it("handles missing passed_at gracefully", () => {
-        render(<ResultsContent testResult={{ ...baseTestResult, passed_at: undefined as any }} />);
+        render(<ResultsContent testResult={{ ...baseTestResult, passed_at: undefined as never }} />);
         expect(screen.getByTestId("test-values")).toHaveTextContent("formatted-undefined");
     });
 });
