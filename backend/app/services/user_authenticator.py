@@ -24,7 +24,7 @@ class Authenticator:
 
     async def auth(self, role: str = None) -> UserDto:
         """
-        Authenticate user by JWT token
+        Authenticate user by JWT token.
         Automatically raises HTTPException if token is invalid,
         role is not allowed or user does not exist
         :param role: Role of the user

@@ -56,7 +56,7 @@ class DoctorPatientCreator:
             password=patient.password
         )
 
-        user = await self.user_service.register_user(new_user)
+        user = await self.user_service.register_user(new_user, registered_by_id=doctor_id)
 
         doctor_patient = await self._create_doctor_patient(doctor_id, patient_id=user.id)
         return DoctorPatientDto.create(doctor_patient)

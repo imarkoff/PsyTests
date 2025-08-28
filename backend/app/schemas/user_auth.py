@@ -28,11 +28,29 @@ class UserCreate(BaseModel):
                 "surname": "Doe",
                 "patronymic": "Smith",
                 "gender": "male",
+                "birth_date": "2000-01-01",
                 "phone": "380999999999",
                 "password": "password1234",
                 "role": "patient"
             }
         }
+
+    def to_user(self,
+                password: bytes, password_salt: bytes,
+                registered_by_id: UUID = None
+                ) -> User:
+        return User(
+            name=self.name,
+            surname=self.surname,
+            patronymic=self.patronymic,
+            gender=self.gender,
+            birth_date=self.birth_date,
+            phone=self.phone,
+            password=password,
+            password_salt=password_salt,
+            role=self.role,
+            registered_by_id=registered_by_id
+        )
 
 
 class UserLogin(BaseModel):
@@ -57,6 +75,8 @@ class UserDto(BaseModel):
     birth_date: datetime
     phone: str
     role: Role
+    registered_at: datetime
+    registered_by: Optional[UUID] = None
 
     class Config:
         from_attributes = True
@@ -69,7 +89,9 @@ class UserDto(BaseModel):
                 "patronymic": "Smith",
                 "gender": UserGender.MALE,
                 "phone": "380999999999",
-                "role": "patient"
+                "role": Role.PATIENT,
+                "registered_at": "2025-01-22T19:05:29.123456",
+                "registered_by": "f3847ce2-553a-422b-a2ac-57910619cb6d"
             }
         }
 
@@ -88,7 +110,9 @@ class UserDto(BaseModel):
             gender=gender_value,
             birth_date=user.birth_date,
             phone=user.phone,
-            role=user.role
+            role=user.role,
+            registered_at=user.registered_at,
+            registered_by=user.registered_by_id
         )
 
 

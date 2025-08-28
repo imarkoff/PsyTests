@@ -10,19 +10,13 @@ class UserService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
-    async def register_user(self, user_create: UserCreate) -> User:
+    async def register_user(self, user_create: UserCreate, registered_by_id: UUID = None) -> User:
         (password, password_salt) = cache_password(user_create.password)
 
-        new_user = User(
-            name=user_create.name,
-            surname=user_create.surname,
-            patronymic=user_create.patronymic,
-            gender=user_create.gender,
-            birth_date=user_create.birth_date,
-            phone=user_create.phone,
+        new_user = user_create.to_user(
             password=password,
             password_salt=password_salt,
-            role=user_create.role
+            registered_by_id=registered_by_id
         )
 
         await self.user_repository.create_user(new_user)

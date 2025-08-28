@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from uuid import UUID, uuid4
 from typing import List, Optional, TYPE_CHECKING
 
@@ -12,7 +12,7 @@ else:
     DoctorPatient = "DoctorPatient"
     PatientTest = "PatientTest"
 
-from sqlalchemy import String, Enum
+from sqlalchemy import String, Enum, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.schemas.role import Role
@@ -31,6 +31,8 @@ class User(Base):
     password: Mapped[bytes] = mapped_column(nullable=False)
     password_salt: Mapped[bytes] = mapped_column(nullable=False)
     role: Mapped[Role] = mapped_column(Enum(Role), default=Role.PATIENT)
+    registered_at: Mapped[datetime] = mapped_column(nullable=False, default=lambda: datetime.now(UTC))
+    registered_by_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id"))
 
     patient_tests: Mapped[List["PatientTest"]] = relationship("PatientTest", back_populates="patient",
                                                               foreign_keys="[PatientTest.patient_id]",
@@ -47,3 +49,5 @@ class User(Base):
     tests_history: Mapped[List[TestHistory]] = relationship(back_populates="patient",
                                                             foreign_keys=[TestHistory.patient_id],
                                                             cascade="all, delete-orphan")
+
+    registered_by: Mapped[Optional["User"]] = relationship("User", remote_side=[id])
