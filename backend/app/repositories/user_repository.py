@@ -1,10 +1,9 @@
-from typing import cast
-
 from pydantic import UUID4
 from sqlalchemy import or_
 
 from app.db.models.user import User
 from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
+from app.schemas.pagination import PaginatedList, PaginationParams
 from app.schemas.role import Role
 
 
@@ -24,9 +23,32 @@ class UserRepository(SQLAlchemyRepository):
                 User.phone.ilike(f"%{data}%")
             )
         ).all()
-        return cast(list[User], result)
+        return result
 
     async def create_user(self, user: User) -> None:
         self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
+
+    async def update_user(self, user: User) -> None:
+        self.db.merge(user)
+        self.db.commit()
+        self.db.refresh(user)
+
+    async def get_users_by_role(self, role: Role, pagination_params: PaginationParams) -> PaginatedList[User]:
+        query = self.db.query(User).filter(User.role == role)
+        total_count = query.count()
+
+        paginated_result = (
+            query
+            .offset(pagination_params.offset)
+            .limit(pagination_params.limit)
+            .all()
+        )
+
+        return PaginatedList(
+            offset=pagination_params.offset,
+            limit=pagination_params.limit,
+            total=total_count,
+            data=paginated_result
+        )

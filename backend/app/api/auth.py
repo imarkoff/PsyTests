@@ -15,30 +15,6 @@ from app.core.password import verify_password
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register", summary="Register a new user", deprecated=True,
-    status_code=201, response_class=Response, responses={
-        409: {"description": "User already exists"},
-        201: {"content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}}, "description": "Access token"},
-    }
-)
-async def sign_up(
-        data: UserCreate,
-        user_service: UserService = Depends(get_user_service)
-):
-    if await user_service.get_user_by_phone(data.phone):
-        return Response(status_code=409)
-
-    new_user: User = await user_service.register_user(data)
-
-    (access_token, refresh_token) = create_tokens(new_user)
-
-    response = Response(status_code=201, content=access_token, media_type="text/plain")
-    response.set_cookie("refresh_token", refresh_token, httponly=True,
-                        expires=datetime.now(UTC) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE))
-
-    return response
-
-
 @router.post("/login", summary="Login a user",
     response_class=Response, responses={
         404: {"description": "User not found or password is incorrect"},

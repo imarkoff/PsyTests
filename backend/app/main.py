@@ -5,7 +5,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, token, users, tests
+from app.api import auth, token, users, tests, admin
 from app.api.doctor import doctor
 from app.api.patient import patient
 from app.settings import settings
@@ -61,5 +61,6 @@ api.include_router(token.router)
 api.include_router(tests.router)
 api.include_router(doctor.router)
 api.include_router(patient.router)
+api.include_router(admin.router)
 
 app.include_router(api)

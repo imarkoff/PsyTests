@@ -1,11 +1,12 @@
+from typing import AsyncGenerator
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from app.settings import settings
 
 engine = create_engine(settings.POSTGRESQL_URL, echo=True)
 session = sessionmaker(engine, autocommit=False, autoflush=False)
 
-async def get_postgresql_db():
+async def get_postgresql_db() -> AsyncGenerator[Session, None]:
     db = session()
     try:
         yield db

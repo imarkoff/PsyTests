@@ -1,6 +1,6 @@
 import bcrypt
 
-def cache_password(password: str) -> (bytes, bytes):
+def cache_password(password: str) -> tuple[bytes, bytes]:
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
     return hashed, salt
