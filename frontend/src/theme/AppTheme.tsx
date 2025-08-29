@@ -4,7 +4,8 @@ import {ReactNode} from "react";
 import {createTheme, ThemeProvider} from "@mui/material";
 import muiCardStyles from "./muiCardStyles";
 import muiMenuStyles from "@/theme/muiMenuStyles";
-import {ukUA} from "@mui/x-date-pickers/locales";
+import {ukUA as ukUADataGrid} from "@mui/x-data-grid/locales";
+import {ukUA as ukUADatePicker} from "@mui/x-date-pickers/locales";
 import {ukUA as coreUkUA} from "@mui/material/locale";
 
 /**
@@ -56,8 +57,9 @@ export default function AppTheme({children}: { children: ReactNode }) {
                 ...muiMenuStyles
             }
         },
-        ukUA,
-        coreUkUA
+        coreUkUA,
+        ukUADatePicker,
+        ukUADataGrid
     );
 
     return (
