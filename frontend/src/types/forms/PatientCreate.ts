@@ -1,7 +1,7 @@
-import {UserGender} from "@/schemas/User";
+import {UserGender} from "@/types/models/User";
 import {DateTime} from "luxon";
 
-interface PaatientCreateBase {
+interface PatientCreateBase {
     name: string;
     surname?: string;
     patronymic?: string;
@@ -10,10 +10,10 @@ interface PaatientCreateBase {
     password: string;
 }
 
-export default interface PatientCreate extends PaatientCreateBase {
+export default interface PatientCreate extends PatientCreateBase {
     birth_date: string; // ISO date string
 }
 
-export interface PatientCreateForm extends PaatientCreateBase {
+export interface PatientCreateForm extends PatientCreateBase {
     birth_date: DateTime;
 }

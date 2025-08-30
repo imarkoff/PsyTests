@@ -1,4 +1,4 @@
-import { TestType } from "@/schemas/TestBase";
+import { TestType } from "@/types/models/TestBase";
 import ravenConfig from "@/features/tests/RavenTest/config";
 import mmpiConfig from "@/features/tests/MMPITest/config";
 import pcl5Config from "@/features/tests/PCL5Test/config";

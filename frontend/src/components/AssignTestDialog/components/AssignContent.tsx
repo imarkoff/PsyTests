@@ -1,7 +1,7 @@
 import PatientCard from "@/components/PatientCard/PatientCard";
 import DialogContent from "@mui/material/DialogContent";
-import DoctorPatient from "@/schemas/DoctorPatient";
-import User from "@/schemas/User";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import User from "@/types/models/User";
 
 interface AssignContentProps {
     patients: DoctorPatient[] | undefined;

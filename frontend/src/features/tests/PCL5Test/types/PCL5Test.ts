@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import PCL5Criteria from "@/features/tests/PCL5Test/types/PCL5Criteria";
 import PCL5Answer from "@/features/tests/PCL5Test/types/PCL5Answer";
 import PCL5Question from "@/features/tests/PCL5Test/types/PCL5Question";

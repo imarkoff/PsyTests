@@ -1,4 +1,4 @@
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 export default interface DoctorPatient {
     id: string; // uuid

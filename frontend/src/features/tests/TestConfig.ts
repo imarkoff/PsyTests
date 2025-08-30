@@ -1,7 +1,7 @@
-import TestBase from "@/schemas/TestBase";
-import TestResult from "@/schemas/TestResult";
+import TestBase from "@/types/models/TestBase";
+import TestResult from "@/types/models/TestResult";
 import { ComponentType } from "react";
-import {Role} from "@/schemas/Role";
+import {Role} from "@/types/enums/Role";
 
 /**
  * Configuration of a test components.

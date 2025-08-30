@@ -1,5 +1,5 @@
 import RavenTest from "@/features/tests/RavenTest/schemas/RavenTest";
-import {Roles} from "@/schemas/Role";
+import {Roles} from "@/types/enums/Role";
 import RavenQuestion from "@/features/tests/RavenTest/schemas/RavenQuestion";
 import countTestQuestions from "@/features/tests/RavenTest/utils/countTestQuestions";
 import {Typography} from "@mui/material";

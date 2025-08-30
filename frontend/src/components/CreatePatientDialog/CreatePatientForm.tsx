@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import 'dayjs/locale/uk';
 import {useForm} from "react-hook-form";
-import {PatientCreateForm} from "@/schemas/PatientCreate";
+import {PatientCreateForm} from "@/types/forms/PatientCreate";
 import usePatientSubmit from "@/components/CreatePatientDialog/usePatientSubmit";
 import GenderSelect from "@/components/CreatePatientDialog/components/GenderSelect";
 import BirthDatePicker from "@/components/CreatePatientDialog/components/BirthDatePicker";

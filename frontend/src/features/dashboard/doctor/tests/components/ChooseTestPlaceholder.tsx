@@ -2,7 +2,7 @@ import {ReactNode} from "react";
 import TestsProvider from "@/features/dashboard/doctor/tests/contexts/TestsProvider";
 import {Box} from "@mui/material";
 import TestContent from "@/features/dashboard/doctor/tests/components/TestContent";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import { ApiResponse } from "@/lib/api-client/types";
 import TestPreviewList from "@/features/dashboard/doctor/tests/components/TestPreviewList";
 

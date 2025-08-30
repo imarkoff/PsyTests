@@ -1,6 +1,6 @@
 import {createContext, useContext} from "react";
-import PatientCreate from "@/schemas/PatientCreate";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import PatientCreate from "@/types/forms/PatientCreate";
+import DoctorPatient from "@/types/models/DoctorPatient";
 
 const PatientsContext = createContext<{
     patients?: DoctorPatient[];

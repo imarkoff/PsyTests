@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import TestHistoryShortCard from "./TestHistoryShortCard";
-import TestResultShort from "@/schemas/TestResultShort";
+import TestResultShort from "@/types/models/TestResultShort";
 import { dateMed } from "@/utils/formatDate";
 import "@testing-library/jest-dom";
 import {ReactNode} from "react";

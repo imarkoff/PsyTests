@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import TestHistoryCard from "./TestHistoryCard";
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 import testsConfig from "@/features/tests/config";
 import * as formatDate from "@/utils/formatDate";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import TestConfigType from "@/features/tests/TestConfig";
 import "@testing-library/jest-dom";
 

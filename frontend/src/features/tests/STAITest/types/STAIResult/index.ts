@@ -1,4 +1,4 @@
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 import STAIScaleScore from "@/features/tests/STAITest/types/STAIResult/STAIScaleScore";
 import STAIScaleVerdict from "@/features/tests/STAITest/types/STAIResult/STAIScaleVerdict";
 

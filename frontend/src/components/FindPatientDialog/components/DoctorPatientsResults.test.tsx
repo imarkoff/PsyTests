@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import DoctorPatientsResults from "./DoctorPatientsResults";
-import DoctorPatient from "@/schemas/DoctorPatient";
-import {Roles} from "@/schemas/Role";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import {Roles} from "@/types/enums/Role";
 
 const mockedDoctorPatient: DoctorPatient = {
     id: "10e380ba-aee4-49e6-a6e2-a8511ad36ae5",

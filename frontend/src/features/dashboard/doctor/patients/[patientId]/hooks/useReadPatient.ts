@@ -1,6 +1,6 @@
 import {useEffect} from "react";
-import TestResult from "@/schemas/TestResult";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import TestResult from "@/types/models/TestResult";
+import DoctorPatient from "@/types/models/DoctorPatient";
 
 export default function useReadPatient(
     doctorPatient: DoctorPatient | undefined,

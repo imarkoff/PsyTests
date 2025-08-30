@@ -1,7 +1,7 @@
 import {Box, Skeleton, Typography} from "@mui/material";
 import AssignTestButton from "@/components/AssignTestDialog/AssignTestButton";
 import MarksDialog from "@/components/MarksDialog/MarksDialog";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import { ReactNode } from "react";
 
 interface TestContentHeaderProps {

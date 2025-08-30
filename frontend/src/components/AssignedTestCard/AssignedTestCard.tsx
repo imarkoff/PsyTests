@@ -1,4 +1,4 @@
-import PatientTest from "@/schemas/PatientTest";
+import PatientTest from "@/types/models/PatientTest";
 import {Card, CardContent, CardHeader, Typography} from "@mui/material";
 import AssignedBy from "@/features/dashboard/patient/components/AssignedBy";
 import {dateMed} from "@/utils/formatDate";

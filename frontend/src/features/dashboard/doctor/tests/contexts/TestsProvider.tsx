@@ -1,6 +1,6 @@
 "use client";
 
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import TestsContext from "@/features/dashboard/doctor/tests/contexts/TestsContext";
 import {ReactNode, useState} from "react";
 import { useRouter } from "next/navigation";

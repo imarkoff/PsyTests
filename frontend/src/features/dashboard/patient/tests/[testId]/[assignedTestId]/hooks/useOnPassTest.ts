@@ -1,8 +1,8 @@
 import {useState} from "react";
 import PassTestData from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
-import PassTest from "@/schemas/PassTest";
+import PassTest from "@/types/forms/PassTest";
 import {passTest} from "@/lib/controllers/patientTestController";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 
 export default function useOnPassTest(test: TestBase | undefined, assignedTestId: string) {
     const [passed, setPassed] = useState(false);

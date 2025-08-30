@@ -1,5 +1,5 @@
 import {AxiosInstance} from "axios";
-import UserLogin from "@/schemas/UserLogin";
+import UserLogin from "@/types/forms/UserLogin";
 
 export default class AuthService {
     constructor(private readonly api: AxiosInstance) {}

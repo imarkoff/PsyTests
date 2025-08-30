@@ -1,7 +1,7 @@
 import {Box, Chip, Skeleton, Typography} from "@mui/material";
 import formatPhone from "@/utils/formatPhone";
 import readableGender from "@/utils/getGenderFromEnum";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 import {DateTime} from "luxon";
 import formatYears from "@/utils/formatYears";
 

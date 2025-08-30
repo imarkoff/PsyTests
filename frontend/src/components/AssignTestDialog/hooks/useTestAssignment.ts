@@ -1,6 +1,6 @@
 import usePatients from "@/components/AssignTestDialog/hooks/usePatients";
 import {useState} from "react";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 export default function useTestAssignment(
     testId: string,

@@ -1,4 +1,4 @@
-import {Role, Roles} from "@/schemas/Role";
+import {Role, Roles} from "@/types/enums/Role";
 import doctorNavigation from "@/features/dashboard/doctor/doctorNavigation";
 import adminNavigation from "@/features/admin/adminNavigation";
 

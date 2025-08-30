@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import STAIScale from "@/features/tests/STAITest/types/STAITest/STAIScale";
 import STAIAnswer from "@/features/tests/STAITest/types/STAITest/STAIAnswer";
 import STAIQuestion from "@/features/tests/STAITest/types/STAITest/STAIQuestion";

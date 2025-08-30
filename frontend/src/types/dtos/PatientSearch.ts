@@ -1,5 +1,5 @@
-import DoctorPatient from "@/schemas/DoctorPatient";
-import User from "@/schemas/User";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import User from "@/types/models/User";
 
 export default interface PatientSearch {
     doctor_patients: DoctorPatient[];

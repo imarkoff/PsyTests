@@ -2,7 +2,7 @@ import BDITest from "@/features/tests/BDITest/types/BDITest";
 import getBDITestMetrics from "@/features/tests/BDITest/utils/getBDITestMetrics";
 import { useMemo } from "react";
 import {Typography} from "@mui/material";
-import {Roles} from "@/schemas/Role";
+import {Roles} from "@/types/enums/Role";
 import {TestInfoType} from "@/features/tests/TestConfig";
 
 export default function BDITestHeader({test, role}: TestInfoType<BDITest>) {

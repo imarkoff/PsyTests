@@ -2,7 +2,7 @@
 
 import {fetchProtected} from "@/lib/fetchers";
 import AdminService from "@/lib/services/AdminService";
-import PaginationParams from "@/schemas/PaginationParams";
+import PaginationParams from "@/types/PaginationParams";
 
 export const getDoctors = async (
     paginationParams: PaginationParams

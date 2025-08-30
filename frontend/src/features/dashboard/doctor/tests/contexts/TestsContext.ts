@@ -1,7 +1,7 @@
 "use client";
 
 import {createContext, useContext} from "react";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 
 const TestsContext = createContext<{
     tests: TestBase[] | undefined;

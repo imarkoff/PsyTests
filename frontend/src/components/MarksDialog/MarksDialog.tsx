@@ -2,7 +2,7 @@
 
 import { Box, Button, Dialog } from "@mui/material";
 import {ReactNode, useState} from "react";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import MarksDialogHeader from "@/components/MarksDialog/MarksDialogHeader";
 
 /**

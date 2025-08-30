@@ -1,4 +1,4 @@
-import {UserGender} from "@/schemas/User";
+import {UserGender} from "@/types/models/User";
 
 const readableGender: Record<UserGender, string> = {
     "male": "Чоловік",

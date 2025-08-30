@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 interface AssignActionsProps {
     assignError: string | undefined;

@@ -1,7 +1,7 @@
 import {AxiosInstance} from "axios";
-import DoctorPatient from "@/schemas/DoctorPatient";
-import PatientCreate from "@/schemas/PatientCreate";
-import PatientSearch from "@/schemas/PatientSearch";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import PatientCreate from "@/types/forms/PatientCreate";
+import PatientSearch from "@/types/dtos/PatientSearch";
 
 export default class DoctorPatientService {
     constructor(private readonly api: AxiosInstance) {}

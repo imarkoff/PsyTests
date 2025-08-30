@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import {DialogTitle, Typography} from "@mui/material";
 import Link from "next/link";
 import DialogCloseButton from "@/components/DialogCloseButton";

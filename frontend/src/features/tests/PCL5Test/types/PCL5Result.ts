@@ -1,4 +1,4 @@
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 
 type PCL5Result = TestResult<PCL5Verdict>;
 export default PCL5Result;

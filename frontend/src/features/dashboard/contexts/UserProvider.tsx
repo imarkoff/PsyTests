@@ -2,7 +2,7 @@
 
 import {ReactNode} from "react";
 import UserContext from "@/features/dashboard/contexts/UserContext";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 import { logOut } from "@/lib/controllers/authController";
 import { useRouter } from "next/navigation";
 import {ApiResponse} from "@/lib/api-client/types";

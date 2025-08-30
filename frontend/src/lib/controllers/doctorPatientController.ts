@@ -2,7 +2,7 @@
 
 import {fetchProtected} from "@/lib/fetchers";
 import DoctorPatientService from "@/lib/services/DoctorPatientService";
-import PatientCreate from "@/schemas/PatientCreate";
+import PatientCreate from "@/types/forms/PatientCreate";
 
 export const getAllPatients = async () => fetchProtected(
     DoctorPatientService,

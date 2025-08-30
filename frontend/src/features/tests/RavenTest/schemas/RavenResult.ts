@@ -1,4 +1,4 @@
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 
 type RavenResult = TestResult<RavenVerdict>;
 export default RavenResult;

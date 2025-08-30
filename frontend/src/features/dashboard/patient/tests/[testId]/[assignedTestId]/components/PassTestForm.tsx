@@ -4,7 +4,7 @@ import {FormProvider, useForm} from "react-hook-form";
 import PassTestData from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
 import testsConfig from "@/features/tests/config";
 import {Box, Typography} from "@mui/material";
-import {Roles} from "@/schemas/Role";
+import {Roles} from "@/types/enums/Role";
 import PassTestButton from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/components/PassTestButton";
 import {useTestContext} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/hooks/useTestContext";
 import QuestionCardSkeleton from "@/components/QuestionCard/QuestionCardSkeleton";

@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import MMPIScale from "@/features/tests/MMPITest/schemas/MMPIScale";
 import MMPIQuestion from "@/features/tests/MMPITest/schemas/MMPIQuestion";
 

@@ -1,4 +1,4 @@
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 import {Box, DialogContent} from "@mui/material";
 import TestValues from "@/components/TestValues";
 import {dateMed} from "@/utils/formatDate";

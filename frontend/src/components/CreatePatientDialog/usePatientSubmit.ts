@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {DateTime} from "luxon";
-import PatientCreate, {PatientCreateForm} from "@/schemas/PatientCreate";
+import PatientCreate, {PatientCreateForm} from "@/types/forms/PatientCreate";
 import {AxiosError} from "axios";
 import {usePatientsContext} from "@/features/dashboard/doctor/patients/contexts/PatientsContext";
 

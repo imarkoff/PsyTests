@@ -1,6 +1,6 @@
 import {Typography} from "@mui/material";
 import DoctorPatientCard from "@/components/PatientCard/DoctorPatientCard";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 
 export default function DoctorPatientsResults({patients}: {patients: DoctorPatient[]}) {
     const activePatients = patients.filter(patient => patient.is_active);

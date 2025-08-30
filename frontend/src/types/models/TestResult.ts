@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 
 /**
  * Result of a test

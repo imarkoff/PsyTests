@@ -1,6 +1,6 @@
-import PatientTest from "@/schemas/PatientTest";
-import PassTest from "@/schemas/PassTest";
-import TestResultShort from "@/schemas/TestResultShort";
+import PatientTest from "@/types/models/PatientTest";
+import PassTest from "@/types/forms/PassTest";
+import TestResultShort from "@/types/models/TestResultShort";
 import {AxiosInstance} from "axios";
 
 export default class PatientTestService {

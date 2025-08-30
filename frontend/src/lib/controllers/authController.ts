@@ -1,7 +1,7 @@
 "use server";
 
 import "server-only";
-import UserLogin from "@/schemas/UserLogin";
+import UserLogin from "@/types/forms/UserLogin";
 import {fetchPublic} from "@/lib/fetchers";
 import AuthService from "@/lib/services/AuthService";
 import {deleteAccessTokenFromCookies, setAccessTokenCookie} from "@/lib/auth/tokenManager";

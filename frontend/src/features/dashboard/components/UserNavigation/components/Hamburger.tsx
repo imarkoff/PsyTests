@@ -1,6 +1,6 @@
 "use client";
 
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 import {Divider, IconButton, ListItemIcon, Menu, MenuItem} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import React, { useState } from "react";

@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import RavenQuestion from "@/features/tests/RavenTest/schemas/RavenQuestion";
 
 export default interface RavenTest extends TestBase {

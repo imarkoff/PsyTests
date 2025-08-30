@@ -3,7 +3,7 @@
 import useSWR from "swr";
 import PatientsContext from "./PatientsContext";
 import {ReactNode} from "react";
-import PatientCreate from "@/schemas/PatientCreate";
+import PatientCreate from "@/types/forms/PatientCreate";
 import {addPatient, createPatient, getAllPatients} from "@/lib/controllers/doctorPatientController";
 import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 

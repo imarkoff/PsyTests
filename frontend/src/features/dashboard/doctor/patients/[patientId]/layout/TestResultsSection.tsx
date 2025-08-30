@@ -7,7 +7,7 @@ import PatientSection, {
 import TestHistoryCardSkeleton from "@/components/TestHistoryCard/TestHistoryCardSkeleton";
 import useTestResults from "@/features/dashboard/doctor/patients/[patientId]/hooks/useTestResults";
 import useReadPatient from "@/features/dashboard/doctor/patients/[patientId]/hooks/useReadPatient";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 
 interface TestResultsSectionProps {
     patientId: string;

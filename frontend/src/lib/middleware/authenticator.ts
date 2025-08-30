@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {Role, Roles} from "@/schemas/Role";
+import {Role, Roles} from "@/types/enums/Role";
 import decodeToken from "@/lib/auth/decodeToken";
 import {getAccessTokenFromRequest} from "@/lib/auth/tokenManager";
 import {checkIsProtectedRoute} from "@/lib/middleware/routes";

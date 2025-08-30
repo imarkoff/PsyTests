@@ -1,5 +1,5 @@
 import {Card, CardActionArea, CardHeader} from "@mui/material";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 
 interface TestPreviewProps {
     test: TestBase;

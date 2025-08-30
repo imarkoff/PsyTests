@@ -1,9 +1,9 @@
 "use client";
 
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 import PatientCard from "@/components/PatientCard/PatientCard";
 import {useRouter} from "next/navigation";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 export default function DoctorPatientCard({patient}: {patient: DoctorPatient}) {
     const router = useRouter();

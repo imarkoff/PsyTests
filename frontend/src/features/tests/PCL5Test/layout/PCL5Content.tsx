@@ -4,7 +4,7 @@ import {PCL5Test} from "@/features/tests/PCL5Test/types/PCL5Test";
 import getTestMetrics from "@/features/tests/PCL5Test/utils/getTestMetrics";
 import {useMemo} from "react";
 import {Typography} from "@mui/material";
-import {Roles} from "@/schemas/Role";
+import {Roles} from "@/types/enums/Role";
 import PCL5QuestionCard from "@/features/tests/PCL5Test/components/PCL5QuestionCard";
 import {TestInfoType} from "@/features/tests/TestConfig";
 

@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 
 export default interface BDITest extends TestBase {
     questions: BDIQuestion[];

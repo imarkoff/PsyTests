@@ -1,8 +1,8 @@
 import TestsLayout from "@/features/dashboard/patient/layout/TestsLayout";
 import TestsResultsLayout from "@/features/dashboard/patient/layout/TestsResultsLayout";
 import {ApiResponse} from "@/lib/api-client/types";
-import PatientTest from "@/schemas/PatientTest";
-import TestResultShort from "@/schemas/TestResultShort";
+import PatientTest from "@/types/models/PatientTest";
+import TestResultShort from "@/types/models/TestResultShort";
 
 interface PatientPageProps {
     assignedTestsResponse: ApiResponse<PatientTest[]>;

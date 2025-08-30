@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
-import User from "@/schemas/User";
-import PaginatedList from "@/schemas/PaginatedList";
-import PaginationParams from "@/schemas/PaginationParams";
+import User from "@/types/models/User";
+import PaginatedList from "@/types/PaginatedList";
+import PaginationParams from "@/types/PaginationParams";
 
 export default class AdminService {
     constructor(

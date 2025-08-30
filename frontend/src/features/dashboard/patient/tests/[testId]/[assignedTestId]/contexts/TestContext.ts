@@ -2,7 +2,7 @@
 
 import {createContext} from "react";
 import PassTestData from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 
 /**
  * Context for managing test-related data and actions.

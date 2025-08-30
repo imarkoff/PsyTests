@@ -1,6 +1,6 @@
 "use client";
 
-import UserLogin from "@/schemas/UserLogin";
+import UserLogin from "@/types/forms/UserLogin";
 import {useCallback, useState} from "react";
 import {logIn} from "@/lib/controllers/authController";
 import { useRouter } from "next/navigation";

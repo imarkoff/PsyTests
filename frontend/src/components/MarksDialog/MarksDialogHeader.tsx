@@ -1,4 +1,4 @@
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import {Table, TableCell, TableHead, TableRow, Typography} from "@mui/material";
 import DialogCloseButton from "@/components/DialogCloseButton";
 

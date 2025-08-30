@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import "@testing-library/jest-dom";
 import OtherPatientsResults from '@/components/FindPatientDialog/components/OtherPatientsResults';
 import OtherPatientCard from '@/components/PatientCard/OtherPatientCard';
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 jest.mock(
     '@/components/PatientCard/OtherPatientCard',

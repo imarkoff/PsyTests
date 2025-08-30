@@ -1,7 +1,7 @@
 import {Box} from "@mui/material";
 import TestsLayoutBox, {TestsLayoutError} from "@/features/dashboard/patient/components/TestsLayoutBox";
 import TestHistoryShortCard from "@/components/TestHistoryCard/TestHistoryShortCard";
-import TestResultShort from "@/schemas/TestResultShort";
+import TestResultShort from "@/types/models/TestResultShort";
 import { ApiResponse } from "@/lib/api-client/types";
 
 export default function TestsResultsLayout(

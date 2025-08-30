@@ -1,7 +1,7 @@
 import MMPITest from "@/features/tests/MMPITest/schemas/MMPITest";
 import {Alert, Typography} from "@mui/material";
 import MMPIQuestionCard from "@/features/tests/MMPITest/components/MMPIQuestionCard";
-import {Roles} from "@/schemas/Role";
+import {Roles} from "@/types/enums/Role";
 import {TestInfoType} from "@/features/tests/TestConfig";
 
 export const TestHeader = ({test}: TestInfoType<MMPITest>) => {

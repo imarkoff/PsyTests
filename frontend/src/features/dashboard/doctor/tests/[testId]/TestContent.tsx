@@ -3,7 +3,7 @@
 import {useTestsContext} from "@/features/dashboard/doctor/tests/contexts/TestsContext";
 import useTest from "@/features/dashboard/doctor/tests/[testId]/hooks/useTest";
 import testsConfig from "@/features/tests/config";
-import {Roles} from "@/schemas/Role";
+import {Roles} from "@/types/enums/Role";
 import TestContentHeader from "@/features/dashboard/doctor/tests/[testId]/components/TestContentHeader";
 import QuestionCardSkeleton from "@/components/QuestionCard/QuestionCardSkeleton";
 import { Typography } from "@mui/material";

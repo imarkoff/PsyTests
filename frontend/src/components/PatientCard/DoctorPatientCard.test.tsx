@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import DoctorPatientCard from "@/components/PatientCard/DoctorPatientCard";
 import { useRouter } from "next/navigation";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 import {PatientCardProps} from "@/components/PatientCard/PatientCard";
 import "@testing-library/jest-dom";
 import {mockedPatient} from "@/components/PatientCard/mockedPatient";

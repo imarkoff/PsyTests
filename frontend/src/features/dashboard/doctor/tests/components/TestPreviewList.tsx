@@ -4,7 +4,7 @@ import {Box, Typography} from "@mui/material";
 import TestPreview from "@/features/dashboard/doctor/tests/components/TestPreview";
 import {useTestsContext} from "@/features/dashboard/doctor/tests/contexts/TestsContext";
 import {useParams} from "next/navigation";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 
 export default function TestPreviewList() {
     const { tests, selectedTest, setSelectedTest } = useTestsContext();

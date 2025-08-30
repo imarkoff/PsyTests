@@ -1,4 +1,4 @@
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 
 type MMPIResult = TestResult<MMPIVerdict>;
 export default MMPIResult;

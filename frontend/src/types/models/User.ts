@@ -1,4 +1,4 @@
-import {Role} from "@/schemas/Role";
+import {Role} from "@/types/enums/Role";
 
 export default interface User {
     id: string;

@@ -1,10 +1,10 @@
 import useSWR from "swr";
 import {useState} from "react";
-import PaginationParams from "@/schemas/PaginationParams";
+import PaginationParams from "@/types/PaginationParams";
 import {getPatients} from "@/lib/controllers/adminController";
 import {ApiResponse} from "@/lib/api-client/types";
-import PaginatedList from "@/schemas/PaginatedList";
-import User from "@/schemas/User";
+import PaginatedList from "@/types/PaginatedList";
+import User from "@/types/models/User";
 
 export default function useGetPatientsListApi() {
     const [paginationParams, setPaginationParams] = useState<PaginationParams>({

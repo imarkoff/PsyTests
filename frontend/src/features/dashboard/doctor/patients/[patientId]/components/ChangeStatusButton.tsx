@@ -1,6 +1,6 @@
 "use client";
 
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 import {Button} from "@mui/material";
 import {useState} from "react";
 
