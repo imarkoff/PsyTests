@@ -1,19 +1,21 @@
 import {UserGender} from "@/types/models/User";
 import {DateTime} from "luxon";
+import {Roles} from "@/types/enums/Role";
 
-interface PatientCreateBase {
+interface UserCreateBase {
     name: string;
     surname?: string;
     patronymic?: string;
-    gender: UserGender
+    gender: UserGender;
     phone: string;
     password: string;
+    role: Roles;
 }
 
-export default interface PatientCreate extends PatientCreateBase {
+export default interface UserCreate extends UserCreateBase {
     birth_date: string; // ISO date string
 }
 
-export interface PatientCreateForm extends PatientCreateBase {
+export interface UserCreateForm extends UserCreateBase {
     birth_date: DateTime;
 }

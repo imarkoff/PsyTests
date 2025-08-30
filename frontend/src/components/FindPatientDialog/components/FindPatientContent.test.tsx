@@ -5,7 +5,7 @@ import useFindPatientModal from '@/components/FindPatientDialog/hooks/useFindPat
 import FindInput from '@/components/FindPatientDialog/components/FindInput';
 import DoctorPatientsResults from '@/components/FindPatientDialog/components/DoctorPatientsResults';
 import OtherPatientsResults from '@/components/FindPatientDialog/components/OtherPatientsResults';
-import CreatePatientDialog from '@/components/CreatePatientDialog/CreatePatientDialog';
+import CreatePatientDialog from '@/features/dashboard/doctor/patients/components/CreatePatientDialog';
 
 jest.mock('@/components/FindPatientDialog/hooks/useFindPatientModal');
 jest.mock(
@@ -21,7 +21,7 @@ jest.mock(
     () => jest.fn(() => <div>Other Patients</div>)
 );
 jest.mock(
-    '@/components/CreatePatientDialog/CreatePatientDialog',
+    '@/features/dashboard/doctor/patients/components/CreatePatientDialog',
     () => jest.fn(() => <div>Create Patient Dialog</div>)
 );
 

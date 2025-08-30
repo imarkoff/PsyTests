@@ -1,10 +1,10 @@
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {Control, Controller} from "react-hook-form";
-import {PatientCreateForm} from "@/types/forms/PatientCreate";
+import {UserCreateForm} from "@/types/forms/UserCreate";
 import {AdapterLuxon} from "@mui/x-date-pickers/AdapterLuxon";
 
-export default function BirthDatePicker({control}: { control: Control<PatientCreateForm> }) {
+export default function BirthDatePicker({control}: { control: Control<UserCreateForm> }) {
     return (
         <Controller
             name={"birth_date"}

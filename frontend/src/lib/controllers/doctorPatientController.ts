@@ -2,16 +2,30 @@
 
 import {fetchProtected} from "@/lib/fetchers";
 import DoctorPatientService from "@/lib/services/DoctorPatientService";
-import PatientCreate from "@/types/forms/PatientCreate";
+import UserCreate from "@/types/forms/UserCreate";
+import {AxiosError} from "axios";
 
 export const getAllPatients = async () => fetchProtected(
     DoctorPatientService,
     service => service.getPatients()
 )
 
-export const createPatient = async (patient: PatientCreate) => fetchProtected(
+export const createPatient = async (patient: UserCreate) => fetchProtected(
     DoctorPatientService,
-    service => service.createPatient(patient)
+    async (service) => {
+        try {
+            return await service.createPatient(patient);
+        }
+        catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 409) {
+                    throw new Error("Пацієнт з таким номером телефону вже існує.");
+                } else {
+                    throw new Error(`Помилка при створенні пацієнта: ${error.message}`);
+                }
+            }
+        }
+    }
 )
 
 export const findPatient = async (search: string) => fetchProtected(

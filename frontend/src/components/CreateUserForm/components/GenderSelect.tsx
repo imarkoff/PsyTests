@@ -1,9 +1,9 @@
 import { Controller, Control } from "react-hook-form";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import {PatientCreateForm} from "@/types/forms/PatientCreate";
+import {UserCreateForm} from "@/types/forms/UserCreate";
 import readableGender from "@/utils/getGenderFromEnum";
 
-export default function GenderSelect({ control }: { control: Control<PatientCreateForm> }) {
+export default function GenderSelect({ control }: { control: Control<UserCreateForm> }) {
     const labelId = "gender-select-label";
 
     return (

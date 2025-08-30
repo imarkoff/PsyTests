@@ -1,6 +1,6 @@
 import {AxiosInstance} from "axios";
 import DoctorPatient from "@/types/models/DoctorPatient";
-import PatientCreate from "@/types/forms/PatientCreate";
+import UserCreate from "@/types/forms/UserCreate";
 import PatientSearch from "@/types/dtos/PatientSearch";
 
 export default class DoctorPatientService {
@@ -12,7 +12,7 @@ export default class DoctorPatientService {
         await this.api.get<DoctorPatient[]>(this.endpoint)
             .then(res => res.data);
 
-    createPatient = async (patient: PatientCreate) =>
+    createPatient = async (patient: UserCreate) =>
         await this.api.post<DoctorPatient>(this.endpoint, patient)
             .then(res => res.data);
 

@@ -9,11 +9,11 @@ export const getDoctors = async (
 ) => fetchProtected(
     AdminService,
     service => service.getDoctors(paginationParams)
-)
+);
 
 export const getPatients = async (
     paginationParams: PaginationParams
 ) => fetchProtected(
     AdminService,
     service => service.getPatients(paginationParams)
-)
+);

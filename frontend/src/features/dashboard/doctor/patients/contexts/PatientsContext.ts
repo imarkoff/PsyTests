@@ -1,10 +1,10 @@
 import {createContext, useContext} from "react";
-import PatientCreate from "@/types/forms/PatientCreate";
+import UserCreate from "@/types/forms/UserCreate";
 import DoctorPatient from "@/types/models/DoctorPatient";
 
 const PatientsContext = createContext<{
     patients?: DoctorPatient[];
-    createPatient: (patient: PatientCreate) => Promise<void>
+    createPatient: (patient: UserCreate) => Promise<void>
     addPatient: (patientId: string) => Promise<void>;
 }>({
     createPatient: async () => {},

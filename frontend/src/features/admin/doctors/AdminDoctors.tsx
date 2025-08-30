@@ -1,6 +1,7 @@
 "use client"
 
 import DoctorsDataGrid from "./components/DoctorsDataGrid";
+import CreateDoctorDialog from "./components/CreateDoctorDialog";
 import useGetDoctorsListApi from "./hooks/lib/useGetDoctorsListApi";
 
 export default function AdminDoctors() {
@@ -13,12 +14,16 @@ export default function AdminDoctors() {
     } = useGetDoctorsListApi();
 
     return (
-         <DoctorsDataGrid
-             paginatedDoctors={paginatedDoctors}
-             isLoading={isLoading}
-             error={error?.statusText}
-             paginationParams={paginationParams}
-             setPaginationParams={setPaginationParams}
-         />
+        <>
+            <CreateDoctorDialog />
+            <DoctorsDataGrid
+                paginatedDoctors={paginatedDoctors}
+                isLoading={isLoading}
+                error={error?.statusText}
+                paginationParams={paginationParams}
+                setPaginationParams={setPaginationParams}
+            />
+        </>
+
     );
 }
