@@ -39,7 +39,7 @@ class DoctorPatientDto(BaseModel):
 
         return cls(
             id=doctor_patient.id,
-            patient=UserDto.model_validate(doctor_patient.patient),
+            patient=UserDto.create(doctor_patient.patient),
             assigned_at=doctor_patient.assigned_at,
             is_active=doctor_patient.is_active,
             needs_attention=doctor_patient.needs_attention

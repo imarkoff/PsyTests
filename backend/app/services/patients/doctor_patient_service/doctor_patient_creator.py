@@ -1,3 +1,4 @@
+from uuid import UUID
 from pydantic import UUID4
 
 from app.db.models.doctor_patient import DoctorPatient
@@ -34,16 +35,11 @@ class DoctorPatientCreator:
         await self.doctor_patient_repository.create_doctor_patient(doctor_patient)
         return doctor_patient
 
-    async def create_patient(self, doctor_id: UUID4, patient: PatientCreateDto) -> DoctorPatientDto:
+    async def create_patient(self, doctor_id: UUID, patient: PatientCreateDto) -> DoctorPatientDto:
         """
         Create new patient and add to doctor patients
         :raises AlreadyExistsError: If patient already exists
         """
-
-        existing_user = await self.user_service.get_user_by_phone(patient.phone)
-
-        if existing_user:
-            raise AlreadyExistsError
 
         new_user = UserCreate(
             name=patient.name,

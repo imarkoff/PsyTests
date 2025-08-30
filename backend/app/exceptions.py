@@ -9,6 +9,11 @@ class NotFoundError(Exception):
 
 class AlreadyExistsError(Exception):
     """Raised when a resource already exists"""
+    
+    def __init__(self, message: str = "") -> None:
+        super().__init__(message)
+        self.message = message
+
     pass
 
 class ForbiddenError(Exception):

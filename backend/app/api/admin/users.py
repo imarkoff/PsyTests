@@ -6,7 +6,7 @@ from app.schemas.role import Role
 from app.schemas.user_auth import UserDto, UserCreate, UserUpdate
 from app.services.user_authenticator import Authenticator
 from app.services.user_service import UserService
-from app.exceptions import NotFoundError
+from app.exceptions import AlreadyExistsError, NotFoundError
 
 
 router = APIRouter(prefix="/users", tags=["admin_users"], responses={
@@ -19,7 +19,10 @@ router = APIRouter(prefix="/users", tags=["admin_users"], responses={
         "/", 
         summary="Create a new user",
         status_code=201, response_model=UserDto,
-        response_description="A newly created user"
+        response_description="A newly created user",
+        responses={
+            409: {"description": "User already exists"}
+        }
         )
 async def create_user(
     user_data: UserCreate,
@@ -28,10 +31,12 @@ async def create_user(
 ):
     admin = await authenticator.auth(role=Role.ADMIN)
 
-    user = await user_service.register_user(user_data, registered_by_id=admin.id)
-    user_dto = UserDto.create(user)
-
-    return user_dto
+    try:
+        user = await user_service.register_user(user_data, registered_by_id=admin.id)
+        user_dto = UserDto.create(user)
+        return user_dto
+    except AlreadyExistsError as e:
+        return Response(status_code=409, content=e.message)
 
 
 @router.put(

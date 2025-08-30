@@ -6,7 +6,7 @@ from app.schemas.pagination import PaginatedList, PaginationParams
 from app.schemas.role import Role
 from app.schemas.user_auth import UserCreate, UserDto, UserUpdate
 from app.core.password import cache_password
-from app.exceptions import NotFoundError
+from app.exceptions import AlreadyExistsError, NotFoundError
 from .password_changer import PasswordChanger
 
 
@@ -19,6 +19,22 @@ class UserService:
         self.password_changer = password_changer
 
     async def register_user(self, user_create: UserCreate, registered_by_id: UUID | None = None) -> User:
+        """
+        Register a new user.
+
+        :param user_create: The data to create the user
+        :param registered_by_id: The ID of the user who registered the new user
+
+        :return: The created user.
+
+        :raises AlreadyExistsError: If a user with the same phone number already exists.
+        """
+
+        existing_user = await self.get_user_by_phone(user_create.phone)
+
+        if existing_user:
+            raise AlreadyExistsError(f"User with phone number {user_create.phone} already exists.")
+        
         (password, password_salt) = cache_password(user_create.password)
 
         new_user = user_create.to_user(
