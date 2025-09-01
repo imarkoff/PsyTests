@@ -54,6 +54,8 @@ export default function DoctorsDataGrid(
                         page: paginationParams.offset,
                         pageSize: paginationParams.limit,
                     }}
+                    showToolbar
+                    slots={{ toolbar: GridToolbar }}
                     onPaginationModelChange={handlePageChange}
                     rowCount={paginatedDoctors?.total || 0}
                     paginationMode={"server"}
@@ -69,5 +71,27 @@ export default function DoctorsDataGrid(
                 )}
             </Box>
         </NoSsr>
+    );
+}
+
+const GridToolbar = () => {
+    return (
+        <DataGridToolbar.Root>
+            <DataGridToolbar.Title>
+                Лікарі, зареєстровані в системі
+            </DataGridToolbar.Title>
+            <DataGridToolbar.Options>
+                <DataGridToolbar.Columns />
+                <DataGridToolbar.Filters />
+                <DataGridToolbar.Export />
+                <DataGridToolbar.Divider />
+                <DataGridToolbar.Search
+                    placeholder={"Пошук за П.І.Б. або номером телефону"}
+                    sx={{ width: {xs: '100%', sm: '300px', md: '400px'} }}
+                />
+                <DataGridToolbar.Divider />
+                <CreateDoctorDialog />
+            </DataGridToolbar.Options>
+        </DataGridToolbar.Root>
     );
 }
