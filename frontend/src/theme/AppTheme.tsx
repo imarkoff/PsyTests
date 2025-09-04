@@ -8,6 +8,7 @@ import {ukUA as ukUADataGrid} from "@mui/x-data-grid/locales";
 import {ukUA as ukUADatePicker} from "@mui/x-date-pickers/locales";
 import {ukUA as coreUkUA} from "@mui/material/locale";
 import muiDialogStyles from "@/theme/muiDialogStyles";
+import muiPickersStyles from "@/theme/muiPickersStyles";
 
 /**
  * AppTheme component that provides a custom Material-UI theme to its children.
@@ -50,6 +51,7 @@ export default function AppTheme({children}: { children: ReactNode }) {
                         }
                     }
                 },
+                ...muiPickersStyles,
                 ...muiCardStyles,
                 ...muiMenuStyles,
                 ...muiDialogStyles
