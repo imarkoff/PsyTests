@@ -1,16 +1,15 @@
 import useSWR from "swr";
-import {useState} from "react";
-import PaginationParams from "@/types/PaginationParams";
 import {getDoctors} from "@/lib/controllers/adminController";
 import {ApiResponse} from "@/lib/api-client/types";
-import PaginatedList from "@/types/PaginatedList";
+import PaginatedList from "@/types/pagination/PaginatedList";
 import User from "@/types/models/User";
+import useGridPagination from "@/hooks/useGridPagination";
 
 export default function useGetDoctorsListApi() {
-    const [paginationParams, setPaginationParams] = useState<PaginationParams>({
-        limit: 25,
-        offset: 0
-    });
+    const {
+        paginationParams,
+        ...paginationHandlers
+    } = useGridPagination<User>();
 
     const {
         data: response,
@@ -24,7 +23,6 @@ export default function useGetDoctorsListApi() {
         paginatedDoctors: response?.data,
         isLoading,
         error: response?.error,
-        paginationParams,
-        setPaginationParams
+        ...paginationHandlers
     };
 }

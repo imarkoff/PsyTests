@@ -38,9 +38,23 @@ export default async function errorHandler<T>(
             success: false,
             error: {
                 status: error instanceof AxiosError ? (error.status || 500) : 500,
-                statusText: error instanceof Error ? error.message : "Server error",
+                statusText: getErrorMessage(error),
                 originalError: safeError
             }
         };
     }
+}
+
+const getErrorMessage = (error: unknown): string => {
+    if (error instanceof AxiosError) {
+        if (typeof error.response?.data === "string") {
+            return error.response.data;
+        }
+        return error.message;
+    }
+    if (error instanceof Error) {
+        return error.message;
+    }
+
+    return "Unknown error";
 }

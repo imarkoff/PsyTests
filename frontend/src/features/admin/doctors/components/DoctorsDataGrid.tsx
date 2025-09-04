@@ -1,29 +1,37 @@
-import {DataGrid, GridColDef, GridPaginationModel} from "@mui/x-data-grid";
-import User from "@/types/models/User";
-import PaginationParams from "@/types/PaginationParams";
-import PaginatedList from "@/types/PaginatedList";
+import {DataGrid, GridColDef, GridPaginationModel, GridSortModel, GridFilterModel} from "@mui/x-data-grid";
 import {Alert, AlertTitle, Box, NoSsr} from "@mui/material";
+import User from "@/types/models/User";
+import PaginatedList from "@/types/pagination/PaginatedList";
+import DataGridToolbar from "@/components/DataGridToolbar";
+import CreateDoctorDialog from "./CreateDoctorDialog";
 
 interface DoctorsDataGridProps {
     paginatedDoctors: PaginatedList<User> | undefined;
-    paginationParams: PaginationParams;
-    setPaginationParams: (params: PaginationParams) => void;
+    paginationModel: GridPaginationModel;
+    setPaginationModel: (params: GridPaginationModel) => void;
+    sortModel: GridSortModel;
+    onSortModelChange: (newModel: GridSortModel) => void;
+    filterModel: GridFilterModel;
+    onFilterModelChange: (newModel: GridFilterModel) => void;
     isLoading: boolean;
     error: string | undefined;
 }
 
 const columns: GridColDef<User>[] = [
     {
-        field: "fullName",
-        headerName: "Лікар",
-        width: 200,
-        renderCell: (params) =>
-            `${params.row.surname} ${params.row.name} ${params.row.patronymic || ''}`,
-        sortComparator: (v1, v2) => {
-            const fullName1 = `${v1.surname} ${v1.name} ${v1.patronymic || ''}`;
-            const fullName2 = `${v2.surname} ${v2.name} ${v2.patronymic || ''}`;
-            return fullName1.localeCompare(fullName2);
-        }
+        field: "surname",
+        headerName: "Прізвище",
+        width: 150,
+    },
+    {
+        field: "name",
+        headerName: "Ім'я",
+        width: 150,
+    },
+    {
+        field: "patronymic",
+        headerName: "По батькові",
+        width: 150,
     },
     {
         field: "phone",
@@ -33,32 +41,38 @@ const columns: GridColDef<User>[] = [
 ];
 
 export default function DoctorsDataGrid(
-    { paginatedDoctors, paginationParams, setPaginationParams, isLoading, error }: DoctorsDataGridProps
+    {
+        paginatedDoctors,
+        paginationModel,
+        setPaginationModel,
+        isLoading,
+        error,
+        sortModel,
+        onSortModelChange,
+        filterModel,
+        onFilterModelChange
+    }: DoctorsDataGridProps
 ) {
-    const handlePageChange = (paginationModel: GridPaginationModel) => {
-        setPaginationParams({
-            offset: paginationModel.page,
-            limit: paginationModel.pageSize,
-        });
-    };
-
     return (
         <NoSsr>
             <Box sx={{position: "relative", height: "100%" }}>
                 <DataGrid
                     columns={columns}
                     rows={paginatedDoctors?.data || []}
-                    pageSizeOptions={[25, 50, 100]}
+                    pageSizeOptions={[1, 25, 50, 100]}
                     loading={isLoading}
-                    paginationModel={{
-                        page: paginationParams.offset,
-                        pageSize: paginationParams.limit,
-                    }}
                     showToolbar
                     slots={{ toolbar: GridToolbar }}
-                    onPaginationModelChange={handlePageChange}
                     rowCount={paginatedDoctors?.total || 0}
                     paginationMode={"server"}
+                    sortingMode={"server"}
+                    filterMode={"server"}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
+                    sortModel={sortModel}
+                    onSortModelChange={onSortModelChange}
+                    filterModel={filterModel}
+                    onFilterModelChange={onFilterModelChange}
                 />
                 {error && (
                     <Alert

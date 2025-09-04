@@ -1,7 +1,7 @@
 import {DataGrid, GridColDef, GridPaginationModel} from "@mui/x-data-grid";
 import User from "@/types/models/User";
-import PaginationParams from "@/types/PaginationParams";
-import PaginatedList from "@/types/PaginatedList";
+import PaginationParams from "@/types/pagination/PaginationParams";
+import PaginatedList from "@/types/pagination/PaginatedList";
 import {Alert, AlertTitle, Box, NoSsr} from "@mui/material";
 
 interface PatientsDataGridProps {

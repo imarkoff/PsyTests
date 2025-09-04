@@ -22,6 +22,9 @@ export default function AppTheme({children}: { children: ReactNode }) {
             colorSchemes: {
                 dark: true
             },
+            shape: {
+                borderRadius: 15
+            },
             components: {
                 MuiButton: {
                     styleOverrides: {
