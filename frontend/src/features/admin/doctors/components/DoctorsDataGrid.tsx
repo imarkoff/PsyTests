@@ -1,9 +1,9 @@
-import {DataGrid, GridColDef, GridPaginationModel, GridSortModel, GridFilterModel} from "@mui/x-data-grid";
-import {Alert, AlertTitle, Box, NoSsr} from "@mui/material";
+import {Box, NoSsr} from "@mui/material";
+import {DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
 import User from "@/types/models/User";
 import PaginatedList from "@/types/pagination/PaginatedList";
-import DataGridToolbar from "@/components/DataGridToolbar";
-import CreateDoctorDialog from "./CreateDoctorDialog";
+import DoctorsGridToolbar from "./DoctorsGridToolbar";
+import GettingDoctorsErrorOverlayAlert from "./GettingDoctorsErrorOverlayAlert";
 
 interface DoctorsDataGridProps {
     paginatedDoctors: PaginatedList<User> | undefined;
@@ -62,7 +62,7 @@ export default function DoctorsDataGrid(
                     pageSizeOptions={[1, 25, 50, 100]}
                     loading={isLoading}
                     showToolbar
-                    slots={{ toolbar: GridToolbar }}
+                    slots={{ toolbar: DoctorsGridToolbar }}
                     rowCount={paginatedDoctors?.total || 0}
                     paginationMode={"server"}
                     sortingMode={"server"}
@@ -73,39 +73,17 @@ export default function DoctorsDataGrid(
                     onSortModelChange={onSortModelChange}
                     filterModel={filterModel}
                     onFilterModelChange={onFilterModelChange}
+                    slotProps={{
+                        loadingOverlay: {
+                            variant: 'linear-progress',
+                            noRowsVariant: 'skeleton'
+                        }
+                    }}
                 />
                 {error && (
-                    <Alert
-                        severity={"error"}
-                        sx={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
-                    >
-                        <AlertTitle>Сталася помилка</AlertTitle>
-                        {error}
-                    </Alert>
+                    <GettingDoctorsErrorOverlayAlert error={error} />
                 )}
             </Box>
         </NoSsr>
-    );
-}
-
-const GridToolbar = () => {
-    return (
-        <DataGridToolbar.Root>
-            <DataGridToolbar.Title>
-                Лікарі, зареєстровані в системі
-            </DataGridToolbar.Title>
-            <DataGridToolbar.Options>
-                <DataGridToolbar.Columns />
-                <DataGridToolbar.Filters />
-                <DataGridToolbar.Export />
-                <DataGridToolbar.Divider />
-                <DataGridToolbar.Search
-                    placeholder={"Пошук за П.І.Б. або номером телефону"}
-                    sx={{ width: {xs: '100%', sm: '300px', md: '400px'} }}
-                />
-                <DataGridToolbar.Divider />
-                <CreateDoctorDialog />
-            </DataGridToolbar.Options>
-        </DataGridToolbar.Root>
     );
 }

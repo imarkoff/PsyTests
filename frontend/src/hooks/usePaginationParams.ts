@@ -2,6 +2,12 @@ import {useReducer} from "react";
 import PaginationParams from "@/types/pagination/PaginationParams";
 import PaginationLogicalOperator from "@/types/enums/PaginationLogicalOperator";
 
+/**
+ * Custom hook to manage pagination parameters including sorting and filtering.
+ *
+ * @template TEntity - The type of the data being paginated.
+ * @returns An object containing the current pagination parameters and handlers to update them.
+ */
 export default function usePaginationParams<TEntity extends object>() {
     const [paginationParams, dispatch] = useReducer(paginationReducer, {
         limit: 25,

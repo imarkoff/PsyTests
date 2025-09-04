@@ -16,7 +16,8 @@ export default function useGetDoctorsListApi() {
         isLoading
     } = useSWR<ApiResponse<PaginatedList<User>>>(
         ["admin-doctors", paginationParams],
-        () => getDoctors(paginationParams)
+        () => getDoctors(paginationParams),
+        { keepPreviousData: true }
     );
 
     return {
