@@ -1,24 +1,18 @@
-from pydantic import BaseModel, ConfigDict, computed_field
+from pydantic import ConfigDict, computed_field
 
-
-class PaginationParams(BaseModel):
-    """Pagination parameters for API responses."""
-
-    limit: int = 10
-    """Number of items per page"""
-    offset: int = 0
-    """Page number starting from 0"""
+from app.schemas.pagination.pagination_params import PaginationParams
 
 
 class PaginatedList[T](PaginationParams):
     """
     Paginated list of items with pagination metadata.
     """
-    
+
     data: list[T]
     """
     List of items for the current page.
     """
+
     total: int
     """
     Total number of items available.

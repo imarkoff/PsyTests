@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import User from "@/types/models/User";
-import PaginatedList from "@/types/PaginatedList";
-import PaginationParams from "@/types/PaginationParams";
+import PaginatedList from "@/types/pagination/PaginatedList";
+import QueryPaginationParams from "@/types/pagination/QueryPaginationParams";
 
 export default class AdminService {
     constructor(
@@ -11,15 +11,19 @@ export default class AdminService {
 
     endpoint = "/admin";
 
-    getDoctors = async (paginationParams: PaginationParams) =>
+    getDoctors = async (
+        queryPaginationParams: QueryPaginationParams
+    ) =>
         await this.api.get<PaginatedList<User>>(`${this.endpoint}/doctors`, {
-            params: paginationParams
+            params: queryPaginationParams
         })
             .then(response => response.data)
 
-    getPatients = async (paginationParams: PaginationParams) =>
+    getPatients = async (
+        queryPaginationParams: QueryPaginationParams
+    ) =>
         await this.api.get<PaginatedList<User>>(`${this.endpoint}/patients`, {
-            params: paginationParams
+            params: queryPaginationParams
         })
             .then(response => response.data)
 }

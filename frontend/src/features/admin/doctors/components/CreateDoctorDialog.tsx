@@ -5,6 +5,7 @@ import {Button, Dialog} from "@mui/material";
 import CreateUserForm from "@/components/CreateUserForm";
 import {Roles} from "@/types/enums/Role";
 import useCreateUserApi from "../hooks/lib/useCreateUserApi";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function CreateDoctorDialog() {
     const [open, setOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function CreateDoctorDialog() {
             <Button
                 variant={"contained"}
                 onClick={() => setOpen(true)}
+                startIcon={<AddIcon />}
             >
                 Додати лікаря
             </Button>

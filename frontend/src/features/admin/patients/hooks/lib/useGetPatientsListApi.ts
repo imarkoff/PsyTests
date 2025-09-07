@@ -1,9 +1,9 @@
 import useSWR from "swr";
 import {useState} from "react";
-import PaginationParams from "@/types/PaginationParams";
+import PaginationParams from "@/types/pagination/PaginationParams";
 import {getPatients} from "@/lib/controllers/adminController";
 import {ApiResponse} from "@/lib/api-client/types";
-import PaginatedList from "@/types/PaginatedList";
+import PaginatedList from "@/types/pagination/PaginatedList";
 import User from "@/types/models/User";
 
 export default function useGetPatientsListApi() {
