@@ -1,7 +1,7 @@
 from typing import Any, Callable, Dict
 from sqlalchemy import BinaryExpression, Column, ColumnElement, and_, or_
 
-from app.schemas.pagination import FilterOperator
+from app.schemas.enums.pagination import FilterOperator
 
 
 class FilterOperatorApplier[T: object]:

@@ -1,3 +1,12 @@
+class ErrorWithMessage(Exception):
+    """Base class for exceptions with a message"""
+    def __init__(self, message: str = "") -> None:
+        super().__init__(message)
+        self.message = message
+
+    pass
+
+
 class NotFoundError(Exception):
     """Raised when a resource is not found"""
     def __init__(self, message: str = "") -> None:
@@ -16,30 +25,23 @@ class AlreadyExistsError(Exception):
     pass
 
 
-class ParseSortDirectionError(Exception):
+class PaginationError(ErrorWithMessage):
+    """Raised when there is an error with pagination parameters"""
+    pass
+
+
+class ParseSortDirectionError(PaginationError):
     """Raised when parsing sort direction fails"""
-    def __init__(self, message: str = "") -> None:
-        super().__init__(message)
-        self.message = message
-
     pass
 
 
-class IncorrectFilterOperatorError(Exception):
+class IncorrectFilterOperatorError(PaginationError):
     """Raised when an incorrect filter operator is used"""
-    def __init__(self, message: str = "") -> None:
-        super().__init__(message)
-        self.message = message
-
     pass
 
 
-class IncorrectOperatorError(Exception):
+class IncorrectOperatorError(PaginationError):
     """Raised when an incorrect logical operator is used in filters"""
-    def __init__(self, message: str = "") -> None:
-        super().__init__(message)
-        self.message = message
-
     pass
 
 

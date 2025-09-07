@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Query
 from typing import Any
-from app.schemas.pagination import SortedField, SortingDirection
+from app.schemas.pagination import SortedField
+from app.schemas.enums.pagination import SortingDirection
 
 
 class SQLAlchemyPaginationSorter:

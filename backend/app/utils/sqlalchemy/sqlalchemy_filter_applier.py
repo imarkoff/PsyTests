@@ -3,7 +3,8 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import Query
 from app.exceptions import IncorrectOperatorError
 
-from app.schemas.pagination import Filter, FilterOperator
+from app.schemas.pagination import PaginationFilter
+from app.schemas.enums.pagination import FilterOperator
 from .filter_operator_applier import FilterOperatorApplier
 
 
@@ -17,7 +18,7 @@ class SQLAlchemyFilterApplier:
         cls,
         model: Any,
         query: Query[T],
-        filters: list[Filter],
+        filters: list[PaginationFilter],
         operator: Literal["AND", "OR"],
         fields: list[str]
     ) -> Query[T]:
@@ -51,9 +52,9 @@ class SQLAlchemyFilterApplier:
         return query
 
     @staticmethod
-    def _get_filter_clauses(
+    def _get_filter_clauses[T: object](
         model: Any,
-        filters: list[Filter]
+        filters: list[PaginationFilter]
     ) -> list[Any]:
         filter_clauses: list[Any] = []
 
@@ -61,7 +62,7 @@ class SQLAlchemyFilterApplier:
             column = getattr(model, filter.field)
             op = FilterOperator(filter.operator)
             value = filter.value
-            clause = FilterOperatorApplier[object].apply(op, column, value)
+            clause = FilterOperatorApplier[T].apply(op, column, value)
             filter_clauses.append(clause)
 
         return filter_clauses

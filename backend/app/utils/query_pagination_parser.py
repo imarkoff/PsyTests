@@ -1,8 +1,9 @@
 from app.schemas.not_parsed_pagination_params import NotParsedPaginationParams
 from app.schemas.pagination import (
-    Filter, PaginationParams,
-    SortedField, SortingDirection
+    PaginationFilter, PaginationParams,
+    SortedField
 )
+from app.schemas.enums.pagination import SortingDirection
 
 
 class QueryPaginationParser:
@@ -56,16 +57,16 @@ class QueryPaginationParser:
         return quick_filter.strip().split(" ")
 
     @staticmethod
-    def _parse_filters(filters: str | None) -> list[Filter]:
+    def _parse_filters(filters: str | None) -> list[PaginationFilter]:
         if not filters:
             return []
 
-        parsed_fields: list[Filter] = []
+        parsed_fields: list[PaginationFilter] = []
 
         for filter in filters.strip().split(" "):
             field, operator, value = filter.split(":")
 
-            parsed_field = Filter(
+            parsed_field = PaginationFilter(
                 field=field,
                 operator=operator,
                 value=value

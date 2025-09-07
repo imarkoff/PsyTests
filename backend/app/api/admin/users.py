@@ -16,7 +16,7 @@ router = APIRouter(prefix="/users", tags=["admin_users"], responses={
 
 
 @router.post(
-        "/", 
+        "/",
         summary="Create a new user",
         status_code=201, response_model=UserDto,
         response_description="A newly created user",
