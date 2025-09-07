@@ -49,7 +49,7 @@ export default function useGridPagination<TEntity extends object>(): UseGridPagi
 
     const setSortModel = (newModel: GridSortModel) => {
         handleSortedFieldsChange(newModel.map(sort => ({
-            field: sort.field,
+            field: sort.field as keyof TEntity,
             direction: sort.sort as PaginationFieldSortingDirection
         })));
     };
@@ -66,7 +66,7 @@ export default function useGridPagination<TEntity extends object>(): UseGridPagi
             newModel.items.map(item => ({
                 ...item,
                 field: item.field as keyof TEntity
-            })) as PaginationFilter<TEntity, never>[],
+            })) as PaginationFilter<TEntity, unknown>[],
             newModel.logicOperator === GridLogicOperator.And
                 ? PaginationLogicalOperator.AND : PaginationLogicalOperator.OR
         );

@@ -4,6 +4,7 @@ from app.schemas.pagination import (
     SortedField
 )
 from app.schemas.enums.pagination import SortingDirection
+from app.exceptions import PaginationError
 
 
 class QueryPaginationParser:
@@ -40,7 +41,15 @@ class QueryPaginationParser:
         parsed_fields: list[SortedField] = []
 
         for not_parsed_field in sort_fields.split(" "):
-            field, direction = not_parsed_field.split(":")
+            parts = not_parsed_field.split(":")
+
+            if len(parts) != 2:
+                raise PaginationError(
+                    f"Invalid sort field format: '{not_parsed_field}'. "
+                    "Expected format is 'field:direction'."
+                )
+
+            field, direction = parts
 
             parsed_direction = SortingDirection.parse(direction)
             parsed_field = SortedField(field=field, direction=parsed_direction)
@@ -64,7 +73,15 @@ class QueryPaginationParser:
         parsed_fields: list[PaginationFilter] = []
 
         for filter in filters.strip().split(" "):
-            field, operator, value = filter.split(":")
+            parts = filter.split(":")
+
+            if len(parts) != 3:
+                raise PaginationError(
+                    f"Invalid filter format: '{filter}'. "
+                    "Expected format is 'field:operator:value'."
+                )
+
+            field, operator, value = parts
 
             parsed_field = PaginationFilter(
                 field=field,

@@ -7,7 +7,7 @@ export default interface PaginationParams<
 > {
     limit: number;
     offset: number;
-    sortedFields: SortField[];
+    sortedFields: SortField<TEntity>[];
     quickFilter: string[];
     quickFilterLogicOperator: PaginationLogicalOperator;
     filters: PaginationFilter<TEntity>[];
