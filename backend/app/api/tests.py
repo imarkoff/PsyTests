@@ -8,7 +8,7 @@ from starlette.responses import Response
 from app.dependenies.services import get_authenticator
 from app.dependenies.services import get_test_service
 from app.exceptions import NotFoundError
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.test_types import TestTypes
 from app.services.test_service import TestService

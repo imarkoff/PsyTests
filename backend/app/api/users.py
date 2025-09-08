@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from starlette.responses import Response
 
 from app.dependenies.services import get_authenticator, get_user_service
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.services.user_authenticator import Authenticator
 from app.services.user_service import UserService
 
@@ -22,9 +22,9 @@ async def get_current_user(
     return UserDto.model_validate(user).model_dump()
 
 
-@router.get("/{user_id}", summary="Get user by id", response_model=UserDto, responses={
-    404: {"description": "User not found"},
-})
+@router.get("/{user_id}", summary="Get user by id", response_model=UserDto,
+            responses={404: {"description": "User not found"}}
+            )
 async def get_user_by_id(
         user_id: UUID,
         user_service: UserService = Depends(get_user_service)

@@ -1,17 +1,18 @@
+from datetime import UTC, datetime
 from uuid import UUID
 
 from app.db.models.user import User
 from app.repositories.user_repository import UserRepository
 from app.schemas.pagination import PaginatedList, PaginationParams
-from app.schemas.role import Role
-from app.schemas.user_auth import UserCreate, UserDto, UserUpdate
+from app.schemas.enums.role import Role
+from app.schemas.user import UserCreate, UserDto, UserUpdate
 from app.core.password import cache_password
 from app.exceptions import AlreadyExistsError, NotFoundError
 from .password_changer import PasswordChanger
 
 
 class UserService:
-    def __init__(self, 
+    def __init__(self,
                  user_repository: UserRepository,
                  password_changer: PasswordChanger
                  ):
@@ -89,3 +90,18 @@ class UserService:
 
     async def get_users_by_role(self, role: Role, pagination_params: PaginationParams) -> PaginatedList[User]:
         return await self.user_repository.get_users_by_role(role, pagination_params)
+
+    async def update_last_login(self, user_id: UUID) -> None:
+        """
+        Update the last_login timestamp for a user.
+
+        :param user_id: The ID of the user to update
+        :raises NotFoundError: If the user does not exist
+        """
+        user = await self.get_user_by_id(user_id)
+
+        if user is None:
+            raise NotFoundError(f"User with id {user_id} not found")
+
+        user.last_login = datetime.now(UTC)
+        await self.user_repository.update_user(user)

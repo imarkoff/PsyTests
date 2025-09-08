@@ -1,14 +1,16 @@
+from typing import cast
 from fastapi import APIRouter, Depends, Query
 
 from app.schemas.pagination import PaginatedList, PaginationParams
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.services.user_authenticator import Authenticator
 from app.services.user_service import UserService
 from app.dependenies.services.user_service_di import get_user_service
 from app.dependenies.services.authenticator_di import get_authenticator
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 
 router = APIRouter(prefix="/patients", tags=["admin_patients"])
+
 
 @router.get(
     "/", summary="Get paginated list of patients",
@@ -21,13 +23,10 @@ async def get_patients(
 ):
     await authenticator.auth(role=Role.ADMIN)
 
-    patients = await user_service.get_users_by_role(role=Role.PATIENT, pagination_params=pagination_params)
+    patients = await user_service.get_users_by_role(
+        role=Role.PATIENT, pagination_params=pagination_params)
 
-    patients_dtos = PaginatedList[UserDto](
-        data=[UserDto.create(user) for user in patients.data],
-        limit=patients.limit,
-        offset=patients.offset,
-        total=patients.total
-    )
+    patients_dtos = cast(PaginatedList[UserDto], patients)
+    patients_dtos.data = [UserDto.create(user) for user in patients.data]
 
     return patients_dtos

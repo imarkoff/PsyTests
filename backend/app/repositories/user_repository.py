@@ -4,7 +4,7 @@ from sqlalchemy import or_
 from app.db.models.user import User
 from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
 from app.schemas.pagination import PaginatedList, PaginationParams
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 from app.utils.sqlalchemy import (
     SQLAlchemyPaginationSorter,
     SQLAlchemyQuickFilter,

@@ -8,7 +8,7 @@ from app.dependenies.services.test_history_service_di import get_test_history_se
 from app.exceptions import NotFoundError, ValidationError
 from app.schemas.pass_test import PassTestDto
 from app.schemas.patients.patient_test import PatientTestDto
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 from app.schemas.test_result import TestResultShortDto
 from app.services.patients.patient_test_service import PatientTestService
 from app.services.test_history_service.test_history_service import TestHistoryService

@@ -10,6 +10,8 @@ from app.schemas.enums.user_gender import UserGender
 
 
 class UserDto(BaseModel):
+    """DTO for transferring user data."""
+
     id: UUID
     name: str
     surname: Optional[str] = None
@@ -44,6 +46,12 @@ class UserDto(BaseModel):
 
     @classmethod
     def create(cls, user: User | Type[User]) -> 'UserDto':
+        """
+        Create a UserDto instance from a User model instance.
+        :param user: User model instance or User class.
+        :return: UserDto instance.
+        """
+
         if isinstance(user, type):
             user = cast(User, user)
 
@@ -60,7 +68,6 @@ class UserDto(BaseModel):
             registered_by=user.registered_by_id,
             last_login=user.last_login
         )
-
 
     def get_age(self) -> tuple[int, str]:
         """
@@ -80,7 +87,7 @@ class UserDto(BaseModel):
         match age % 10:
             case 1:
                 age_ending = "рік"
-            case 2, 3, 4:
+            case 2 | 3 | 4:
                 age_ending = "роки"
             case _:
                 age_ending = "років"

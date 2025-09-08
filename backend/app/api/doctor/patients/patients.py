@@ -9,7 +9,7 @@ from app.exceptions import AlreadyExistsError, NotFoundError
 from app.schemas.doctor_patient_dto import DoctorPatientDto
 from app.schemas.patients.patient_create import PatientCreateDto
 from app.schemas.patients.patient_search_dto import PatientSearchDto
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 from app.services.patients.doctor_patient_service import DoctorPatientService
 from app.services.user_authenticator import Authenticator
 

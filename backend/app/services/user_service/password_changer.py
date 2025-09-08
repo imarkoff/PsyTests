@@ -6,7 +6,7 @@ from app.core.password import cache_password
 from app.exceptions import ForbiddenError, NotFoundError
 from app.repositories.user_repository import UserRepository
 from app.core.authorization_rule_checker import AuthorizationRuleChecker
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 
 
 class PasswordChanger(ABC):

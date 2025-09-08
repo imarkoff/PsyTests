@@ -3,7 +3,7 @@ from copy import deepcopy
 from app.domains.tests.raven.schemas.raven_verdict import RavenVerdict
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.raven.schemas.test_history_results import RavenTestResults
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.domains.tests.base.test_processor import TestProcessor
 from app.utils.read_csv_as_matrix import read_csv_as_matrix
 from app.domains.tests.raven.utils import test_includes

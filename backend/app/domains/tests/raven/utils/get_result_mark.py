@@ -1,5 +1,5 @@
 from app.domains.tests.raven.schemas.test_marks import MarksRow
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.domains.tests.raven.utils import test_includes
 from typing import TYPE_CHECKING
 

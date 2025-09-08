@@ -1,5 +1,5 @@
-from app.schemas.not_parsed_pagination_params import NotParsedPaginationParams
 from app.schemas.pagination import (
+    NotParsedPaginationParams,
     PaginationFilter, PaginationParams,
     SortedField
 )

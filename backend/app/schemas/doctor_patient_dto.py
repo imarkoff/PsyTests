@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 from app.db.models.doctor_patient import DoctorPatient
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 
 
 class DoctorPatientDto(BaseModel):

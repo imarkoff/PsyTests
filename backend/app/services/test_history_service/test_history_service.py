@@ -2,7 +2,7 @@ from uuid import UUID
 
 from app.schemas.pass_test import PassTestDto
 from app.schemas.test_result import TestResultDto, TestResultShortDto
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.services.test_history_service.test_history_getter import TestHistoryGetter
 from app.services.test_history_service.test_passer import TestPasser
 from app.services.test_history_service.test_revalidator import TestRevalidator

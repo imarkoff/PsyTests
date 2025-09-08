@@ -7,7 +7,7 @@ from app.dependenies.services import get_authenticator, get_patient_test_service
 from app.dependenies.services.test_history_service_di import get_test_history_service
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 from app.schemas.test_result import TestResultDto
 from app.services.patients.doctor_patient_service import DoctorPatientService
 from app.services.patients.patient_test_service import PatientTestService

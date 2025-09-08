@@ -7,7 +7,7 @@ from app.domains.tests.base.test_verdict import TestVerdict
 from app.exceptions import NotFoundError
 from app.repositories.test_history_repository import TestHistoryRepository
 from app.schemas.test_result import TestResultDto
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.services.test_service import TestService
 
 

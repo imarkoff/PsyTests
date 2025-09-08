@@ -2,12 +2,11 @@ from typing import cast
 from fastapi import APIRouter, Depends, Query, Response
 
 from app.dependenies.services import get_authenticator, get_user_service
-from app.schemas.role import Role
-from app.schemas.user_auth import UserDto
+from app.schemas.enums.role import Role
+from app.schemas.user import UserDto
 from app.services.user_authenticator import Authenticator
 from app.services.user_service import UserService
-from app.schemas.pagination import PaginatedList
-from app.schemas.not_parsed_pagination_params import NotParsedPaginationParams
+from app.schemas.pagination import PaginatedList, NotParsedPaginationParams
 from app.exceptions import PaginationError
 from app.utils.query_pagination_parser import QueryPaginationParser
 

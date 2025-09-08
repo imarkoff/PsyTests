@@ -7,7 +7,7 @@ from app.domains.tests.bdi.schemas.bdi_verdict import BDIVerdict
 from app.domains.tests.bdi.utils.verdict_getter import VerdictGetter
 from app.domains.tests.pcl5.verdicts import get_count_verdicts
 from app.schemas.pass_test import PassTestAnswers
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 

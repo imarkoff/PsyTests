@@ -15,7 +15,7 @@ else:
 from sqlalchemy import String, Enum, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 
 
 class User(Base):
@@ -33,6 +33,7 @@ class User(Base):
     role: Mapped[Role] = mapped_column(Enum(Role), default=Role.PATIENT)
     registered_at: Mapped[datetime] = mapped_column(nullable=False, default=lambda: datetime.now(UTC))
     registered_by_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id"))
+    last_login: Mapped[Optional[datetime]] = mapped_column()
 
     patient_tests: Mapped[List["PatientTest"]] = relationship("PatientTest", back_populates="patient",
                                                               foreign_keys="[PatientTest.patient_id]",

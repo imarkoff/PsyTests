@@ -6,8 +6,8 @@ from app.exceptions import AlreadyExistsError
 from app.repositories.doctor_patient_repository import DoctorPatientRepository
 from app.schemas.doctor_patient_dto import DoctorPatientDto
 from app.schemas.patients.patient_create import PatientCreateDto
-from app.schemas.role import Role
-from app.schemas.user_auth import UserCreate
+from app.schemas.enums.role import Role
+from app.schemas.user import UserCreate
 from app.services.user_service import UserService
 
 

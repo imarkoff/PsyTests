@@ -2,8 +2,8 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, Response
 
 from app.dependenies.services import get_authenticator, get_user_service
-from app.schemas.role import Role
-from app.schemas.user_auth import UserDto, UserCreate, UserUpdate
+from app.schemas.enums.role import Role
+from app.schemas.user import UserDto, UserCreate, UserUpdate
 from app.services.user_authenticator import Authenticator
 from app.services.user_service import UserService
 from app.exceptions import AlreadyExistsError, NotFoundError

@@ -1,4 +1,4 @@
-from app.schemas.user_gender import UserGender
+from app.schemas.enums.user_gender import UserGender
 from app.domains.tests.mmpi.schemas.mmpi_scale import MMPIScale
 from app.domains.tests.mmpi.schemas.mmpi_test import MMPITest
 from app.domains.tests.mmpi.utils.results_manager.abstract_results_converter import AbstractResultsConverter, \

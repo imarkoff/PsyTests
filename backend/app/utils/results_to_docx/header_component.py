@@ -2,7 +2,7 @@ from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 from app.schemas.test_result import TestResultDto
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.utils.results_to_docx.document_component import DocumentComponent
 from app.utils.results_to_docx.document_formatter import DocumentFormatter
 

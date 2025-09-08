@@ -7,7 +7,7 @@ from pydantic import UUID4
 
 from app.core.bearer import JWTBearer
 from app.db.models.user import User
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.services.user_service import UserService
 
 
