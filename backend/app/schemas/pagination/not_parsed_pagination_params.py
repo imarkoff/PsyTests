@@ -16,7 +16,7 @@ class NotParsedPaginationParams(BaseModel):
     """Page number starting from 0"""
 
     sorted_fields: str | None = None
-    """Sorted fields and direction (e.g name:asc%20%age:desc)"""
+    """Sorted fields and direction (e.g name:asc;age:desc)"""
 
     quick_filter: str | None = None
     """Quick search for all fields. Separated by spaces."""
@@ -32,7 +32,8 @@ class NotParsedPaginationParams(BaseModel):
     """
     Additional filters for the query.
     Separated by spaces in the following format:
-    field:operator:value
+    field:operator:value;field:operator:value
+    Example: last_login:onOrAfter:2020-01-01;name:contains:John
     """
 
     filter_logic_operator: Literal["AND", "OR"] = "AND"

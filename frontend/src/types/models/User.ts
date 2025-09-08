@@ -9,6 +9,7 @@ export default interface User {
     birth_date: string;
     phone: string;
     role: Role;
+    last_login: string | null;
 }
 
 export type UserGender = "male" | "female";

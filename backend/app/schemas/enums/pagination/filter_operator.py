@@ -21,6 +21,12 @@ class FilterOperator(Enum):
     IS_EMPTY = "isEmpty"
     IS_NOT_EMPTY = "isNotEmpty"
     IS_ANY_OF = "isAnyOf"
+    IS = "IS"
+    NOT = "NOT"
+    AFTER = "after"
+    ON_OR_AFTER = "onOrAfter"
+    BEFORE = "before"
+    ON_OR_BEFORE = "onOrBefore"
 
     @staticmethod
     def parse(value: str) -> "FilterOperator":

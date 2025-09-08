@@ -40,7 +40,7 @@ class QueryPaginationParser:
 
         parsed_fields: list[SortedField] = []
 
-        for not_parsed_field in sort_fields.split(" "):
+        for not_parsed_field in sort_fields.split(";"):
             parts = not_parsed_field.split(":")
 
             if len(parts) != 2:
@@ -72,8 +72,8 @@ class QueryPaginationParser:
 
         parsed_fields: list[PaginationFilter] = []
 
-        for filter in filters.strip().split(" "):
-            parts = filter.split(":")
+        for filter in filters.strip().split(";"):
+            parts = filter.split(":", 2)
 
             if len(parts) != 3:
                 raise PaginationError(

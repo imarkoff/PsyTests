@@ -38,6 +38,13 @@ const columns: GridColDef<User>[] = [
         headerName: "Номер телефону",
         width: 150,
     },
+    {
+        field: "last_login",
+        headerName: "Останній вхід",
+        width: 200,
+        type: "dateTime",
+        valueGetter: (_, row) => row.last_login ? new Date(row.last_login) : null,
+    }
 ];
 
 export default function DoctorsDataGrid(

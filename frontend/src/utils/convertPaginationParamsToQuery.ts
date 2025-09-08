@@ -15,7 +15,7 @@ export default function convertPaginationParamsToQuery<TEntity extends object>(
     }
 }
 
-// "name:asc age:desc"
+// "name:asc;age:desc"
 function serializeSortedFields<
     TEntity extends object
 >(
@@ -25,7 +25,7 @@ function serializeSortedFields<
 
     return sortedFields
         .map(field => `${String(field.field)}:${field.direction}`)
-        .join(' ');
+        .join(';');
 }
 
 // "search terms"
@@ -39,7 +39,7 @@ function serializeQuickFilter<
     return quickFilter.join(' ');
 }
 
-// "field:operator:value field:operator:value"
+// "field:operator:value;field:operator:value"
 function serializeFilters<
     TEntity extends object
 >(
@@ -49,5 +49,5 @@ function serializeFilters<
 
     return filters
         .map(filter => `${String(filter.field)}:${filter.operator}:${filter.value}`)
-        .join(' ');
+        .join(';');
 }
