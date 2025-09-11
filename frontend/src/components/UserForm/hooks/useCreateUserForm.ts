@@ -2,21 +2,21 @@ import {useForm, UseFormReturn} from "react-hook-form";
 import UserCreate, {UserCreateForm} from "@/types/forms/UserCreate";
 import {Roles} from "@/types/enums/Role";
 
-interface UseCreateUserFormReturn extends Omit<UseFormReturn<UserCreateForm>, 'handleSubmit'> {
-    handleFormSubmit: () => void;
+interface UseCreateUserFormReturn extends UseFormReturn<UserCreateForm> {
+    injectedFormSubmit: () => void;
 }
 
 export default function useCreateUserForm(
     onSubmit: (data: UserCreate) => void,
     userRole: Roles
 ): UseCreateUserFormReturn {
-    const {handleSubmit, ...methods} = useForm<UserCreateForm>({
+    const methods = useForm<UserCreateForm>({
         defaultValues: {
             role: userRole,
         }
     });
 
-    const handleFormSubmit = handleSubmit((data) => {
+    const injectedFormSubmit = methods.handleSubmit((data) => {
         const transformedBirthdate = data.birth_date.toISODate();
 
         if (!transformedBirthdate) {
@@ -33,6 +33,6 @@ export default function useCreateUserForm(
 
     return {
         ...methods,
-        handleFormSubmit
+        injectedFormSubmit
     };
 }

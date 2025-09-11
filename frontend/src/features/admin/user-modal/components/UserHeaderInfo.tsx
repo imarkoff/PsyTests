@@ -1,14 +1,16 @@
-import {Box, Chip, Skeleton, Typography} from "@mui/material";
+import {Box, Skeleton, Typography} from "@mui/material";
 import formatPhone from "@/utils/formatPhone";
 import readableGender from "@/utils/getGenderFromEnum";
-import DoctorPatient from "@/types/models/DoctorPatient";
 import {DateTime} from "luxon";
 import formatYears from "@/utils/formatYears";
+import User from "@/types/models/User";
 import dayjs from "dayjs";
 
-export default function PatientHeaderInfo({doctorPatient}: {doctorPatient: DoctorPatient | undefined}) {
-    const patient = doctorPatient?.patient;
+interface UserHeaderInfoProps {
+    user: User | null;
+}
 
+export default function UserHeaderInfo({user}: UserHeaderInfoProps) {
     return (
         <Box sx={{
             display: "flex",
@@ -25,33 +27,26 @@ export default function PatientHeaderInfo({doctorPatient}: {doctorPatient: Docto
                 rowGap: 1,
                 width: "100%"
             }}>
-                {patient ? (
+                {user ? (
                     <Typography variant="h4" component="h2" fontWeight={600}>
-                        {patient.surname} {patient.name} {patient.patronymic}
+                        {user.surname} {user.name} {user.patronymic}
                     </Typography>
                 ) : (
                     <Skeleton variant={"text"} sx={{ fontSize: "2.5rem", maxWidth: "500px" }} width={"100%"} />
                 )}
-
-                <Chip
-                    color={doctorPatient?.is_active ? "success" : "default"}
-                    label={doctorPatient && doctorPatient.is_active ? "На обліку" : "Виписаний (-а)"}
-                    size={"small"}
-                    sx={{ml: 1, fontWeight: 400}}
-                />
             </Box>
 
-            {patient ? (
+            {user ? (
                 <Box>
                     <Typography color={"textSecondary"}>
-                        Номер телефону: {formatPhone(patient.phone)}
+                        Номер телефону: {formatPhone(user.phone)}
                     </Typography>
                     <Typography color={"textSecondary"}>
-                        Стать: {readableGender[patient.gender]}
+                        Стать: {readableGender[user.gender]}
                     </Typography>
-                    <PatientBirthDate birth_date={patient.birth_date} />
+                    <UserBirthDate birth_date={user.birth_date} />
                     <Typography color={"textSecondary"}>
-                        Останній вхід: {patient.last_login ? dayjs(patient.last_login).format("DD.MM.YYYY hh:mm") : "Ніколи"}
+                        Останній вхід: {user.last_login ? dayjs(user.last_login).format("DD.MM.YYYY hh:mm") : "Ніколи"}
                     </Typography>
                 </Box>
             ) : (
@@ -65,7 +60,7 @@ export default function PatientHeaderInfo({doctorPatient}: {doctorPatient: Docto
     );
 }
 
-const PatientBirthDate = ({birth_date}: {birth_date: string}) => (
+const UserBirthDate = ({birth_date}: {birth_date: string}) => (
     <Typography color={"textSecondary"}>
         Дата народження: {DateTime.fromISO(birth_date).toFormat("dd.MM.yyyy")}
         <Typography component={"span"} sx={{pl: 0.75}}>- {formatYears(birth_date)}</Typography>

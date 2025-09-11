@@ -1,9 +1,17 @@
 import {Box, NoSsr} from "@mui/material";
-import {DataGrid, GridColDef, GridFilterModel, GridPaginationModel, GridSortModel} from "@mui/x-data-grid";
+import {
+    DataGrid,
+    GridColDef,
+    GridFilterModel,
+    GridPaginationModel,
+    GridRowParams,
+    GridSortModel
+} from "@mui/x-data-grid";
 import User from "@/types/models/User";
 import PaginatedList from "@/types/pagination/PaginatedList";
 import DoctorsGridToolbar from "./DoctorsGridToolbar";
 import GettingDoctorsErrorOverlayAlert from "./GettingDoctorsErrorOverlayAlert";
+import dayjs from "dayjs";
 
 interface DoctorsDataGridProps {
     paginatedDoctors: PaginatedList<User> | undefined;
@@ -13,6 +21,7 @@ interface DoctorsDataGridProps {
     onSortModelChange: (newModel: GridSortModel) => void;
     filterModel: GridFilterModel;
     onFilterModelChange: (newModel: GridFilterModel) => void;
+    onDoctorClick: (doctorId: string) => void;
     isLoading: boolean;
     error: string | undefined;
 }
@@ -43,7 +52,9 @@ const columns: GridColDef<User>[] = [
         headerName: "Останній вхід",
         width: 200,
         type: "dateTime",
-        valueGetter: (_, row) => row.last_login ? new Date(row.last_login) : null,
+        valueFormatter: (_, row) => row.last_login
+            ? dayjs(row.last_login).format("DD.MM.YYYY HH:mm")
+            : null,
     }
 ];
 
@@ -57,7 +68,8 @@ export default function DoctorsDataGrid(
         sortModel,
         onSortModelChange,
         filterModel,
-        onFilterModelChange
+        onFilterModelChange,
+        onDoctorClick
     }: DoctorsDataGridProps
 ) {
     return (
@@ -76,6 +88,7 @@ export default function DoctorsDataGrid(
                     filterMode={"server"}
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
+                    onRowClick={({row}: GridRowParams<User>) => onDoctorClick(row.id)}
                     sortModel={sortModel}
                     onSortModelChange={onSortModelChange}
                     filterModel={filterModel}

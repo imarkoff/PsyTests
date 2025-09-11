@@ -24,14 +24,18 @@ interface UseGridPaginationReturn<TEntity extends object> {
  * @returns An object containing pagination, sorting,
  *          and filtering models and their respective handlers for MUI Data Grid.
  */
-export default function useGridPagination<TEntity extends object>(): UseGridPaginationReturn<TEntity> {
+export default function useGridPagination<TEntity extends object>(
+    defaultParams?: Partial<PaginationParams<TEntity>>,
+): UseGridPaginationReturn<TEntity> {
     const {
         paginationParams,
         handlePaginationChange,
         handleSortedFieldsChange,
         handleFiltersChange,
         handleQuickFilterChange
-    } = usePaginationParams<TEntity>();
+    } = usePaginationParams<TEntity>(
+        defaultParams
+    );
 
     const paginationModel: GridPaginationModel = {
         page: paginationParams.offset,

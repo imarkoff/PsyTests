@@ -8,7 +8,11 @@ import PaginationLogicalOperator from "@/types/enums/PaginationLogicalOperator";
  * @template TEntity - The type of the data being paginated.
  * @returns An object containing the current pagination parameters and handlers to update them.
  */
-export default function usePaginationParams<TEntity extends object>() {
+export default function usePaginationParams<
+    TEntity extends object
+>(
+    defaultParams?: Partial<PaginationParams<TEntity>>
+) {
     const [paginationParams, dispatch] = useReducer(paginationReducer, {
         limit: 25,
         offset: 0,
@@ -17,6 +21,7 @@ export default function usePaginationParams<TEntity extends object>() {
         filterLogicOperator: PaginationLogicalOperator.AND,
         quickFilter: [],
         quickFilterLogicOperator: PaginationLogicalOperator.AND,
+        ...defaultParams
     });
 
     const handlePaginationChange = (page: number, pageSize: number) => {

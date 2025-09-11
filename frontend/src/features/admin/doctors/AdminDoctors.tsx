@@ -2,8 +2,10 @@
 
 import DoctorsDataGrid from "./components/DoctorsDataGrid";
 import useGetDoctorsListApi from "./hooks/lib/useGetDoctorsListApi";
+import {useRouter} from "next/navigation";
 
 export default function AdminDoctors() {
+    const router = useRouter();
     const {
         paginatedDoctors,
         isLoading,
@@ -16,6 +18,10 @@ export default function AdminDoctors() {
         setFilterModel
     } = useGetDoctorsListApi();
 
+    const handleDoctorClick = (doctorId: string) => {
+        router.push(`/dashboard/admin/doctors/${doctorId}`);
+    }
+
     return (
         <DoctorsDataGrid
             paginatedDoctors={paginatedDoctors}
@@ -27,6 +33,7 @@ export default function AdminDoctors() {
             onSortModelChange={setSortModel}
             filterModel={filterModel}
             onFilterModelChange={setFilterModel}
+            onDoctorClick={handleDoctorClick}
         />
     );
 }

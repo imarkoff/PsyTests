@@ -1,17 +1,14 @@
-import { Controller, Control } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import {UserCreateForm} from "@/types/forms/UserCreate";
 import readableGender from "@/utils/getGenderFromEnum";
 
-export default function GenderSelect({ control }: { control: Control<UserCreateForm> }) {
+export default function GenderSelect() {
     const labelId = "gender-select-label";
 
     return (
         <Controller
             name="gender"
-            control={control}
             rules={{ required: true }}
-            defaultValue={undefined}
             render={({ field, fieldState }) => (
                 <FormControl
                     fullWidth

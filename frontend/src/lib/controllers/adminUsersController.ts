@@ -4,6 +4,7 @@ import UserCreate from "@/types/forms/UserCreate";
 import {fetchProtected} from "@/lib/fetchers";
 import AdminUsersService from "@/lib/services/AdminUsersService";
 import {AxiosError} from "axios";
+import {UserUpdateDto} from "@/types/forms/UserUpdate";
 
 export const createUser = async (
     userCreate: UserCreate
@@ -20,4 +21,19 @@ export const createUser = async (
             throw error;
         }
     }
+);
+
+export const getUser = async (
+    id: string
+) => fetchProtected(
+    AdminUsersService,
+    service => service.getUser(id)
+);
+
+export const updateUser = async (
+    id: string,
+    userUpdate: UserUpdateDto,
+) => fetchProtected(
+    AdminUsersService,
+    service => service.updateUser(id, userUpdate)
 );
