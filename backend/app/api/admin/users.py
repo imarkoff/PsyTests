@@ -39,8 +39,32 @@ async def create_user(
         return Response(status_code=409, content=e.message)
 
 
+@router.get(
+        "/{user_id}",
+        summary="Get a user by ID",
+        response_model=UserDto,
+        response_description="A user",
+        responses={
+            404: {"description": "User not found"},
+        }
+        )
+async def get_user(
+    user_id: UUID,
+    authenticator: Authenticator = Depends(get_authenticator),
+    user_service: UserService = Depends(get_user_service)
+):
+    await authenticator.auth(role=Role.ADMIN)
+
+    try:
+        user = await user_service.get_user_by_id(user_id=user_id)
+        user_dto = UserDto.create(user)
+        return user_dto
+    except NotFoundError as e:
+        return Response(status_code=404, content=e.message)
+
+
 @router.put(
-        "/", 
+        "/{user_id}",
         summary="Update an existing user",
         response_model=UserDto,
         response_description="An updated user",
@@ -87,4 +111,3 @@ async def change_password(
         return Response(status_code=204)
     except NotFoundError as e:
         return Response(status_code=404, content=e.message)
-    

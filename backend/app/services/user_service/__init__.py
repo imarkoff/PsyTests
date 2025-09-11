@@ -35,7 +35,7 @@ class UserService:
 
         if existing_user:
             raise AlreadyExistsError(f"User with phone number {user_create.phone} already exists.")
-        
+
         (password, password_salt) = cache_password(user_create.password)
 
         new_user = user_create.to_user(
@@ -47,7 +47,7 @@ class UserService:
         await self.user_repository.create_user(new_user)
 
         return new_user
-    
+
     async def update_user(self, user_id: UUID, user_update: UserUpdate) -> User:
         """
         Update an existing user.
@@ -58,13 +58,13 @@ class UserService:
 
         if (user is None):
             raise NotFoundError(f"User with id {user_id} not found")
-        
+ 
         user_update.update_model(user)
 
         await self.user_repository.update_user(user)
-        
+
         return user
-    
+
     async def change_password(self, user_id: UUID, changed_by: User | UserDto, new_password: str) -> None:
         """
         Changes a user's password.
@@ -77,7 +77,6 @@ class UserService:
         :raise ForbiddenError: If the changer is not allowed
         """
         await self.password_changer.change_password(user_id, changed_by, new_password)
-
 
     async def get_user_by_id(self, user_id: UUID) -> User | None:
         return await self.user_repository.get_user_by_id(user_id)
