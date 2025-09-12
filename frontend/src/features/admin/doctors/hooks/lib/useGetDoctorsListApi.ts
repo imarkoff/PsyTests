@@ -5,6 +5,8 @@ import PaginatedList from "@/types/pagination/PaginatedList";
 import User from "@/types/models/User";
 import useGridPagination from "@/hooks/useGridPagination";
 import PaginationFieldSortingDirection from "@/types/enums/PaginationFieldSortingDirection";
+import {useEffect} from "react";
+import useUsersTriggerContext from "@/features/admin/user-modal/hooks/useUsersTriggerContext";
 
 export default function useGetDoctorsListApi() {
     const {
@@ -19,12 +21,19 @@ export default function useGetDoctorsListApi() {
 
     const {
         data: response,
-        isLoading
+        isLoading,
+        mutate
     } = useSWR<ApiResponse<PaginatedList<User>>>(
         ["admin-doctors", paginationParams],
         () => getDoctors(paginationParams),
         { keepPreviousData: true }
     );
+
+    const { setTrigger } = useUsersTriggerContext();
+
+    useEffect(() => {
+        setTrigger(() => mutate);
+    }, [setTrigger, mutate]);
 
     return {
         paginatedDoctors: response?.data,

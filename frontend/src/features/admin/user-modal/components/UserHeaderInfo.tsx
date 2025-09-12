@@ -1,16 +1,17 @@
+"use client";
+
 import {Box, Skeleton, Typography} from "@mui/material";
 import formatPhone from "@/utils/formatPhone";
 import readableGender from "@/utils/getGenderFromEnum";
 import {DateTime} from "luxon";
 import formatYears from "@/utils/formatYears";
-import User from "@/types/models/User";
 import dayjs from "dayjs";
+import useUserContext from "../hooks/useUserContext";
 
-interface UserHeaderInfoProps {
-    user: User | null;
-}
 
-export default function UserHeaderInfo({user}: UserHeaderInfoProps) {
+export default function UserHeaderInfo() {
+    const { user } = useUserContext();
+
     return (
         <Box sx={{
             display: "flex",

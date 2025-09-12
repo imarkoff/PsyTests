@@ -6,10 +6,12 @@ import {ISafeError} from "@/lib/api-client/SafeError";
  */
 export interface ApiResponse<T> {
     data: T | undefined;
-    error?: {
-        status: number;
-        statusText: string;
-        originalError: ISafeError;
-    };
+    error?: ApiResponseError;
     success: boolean;
+}
+
+export interface ApiResponseError {
+    status: number;
+    statusText: string;
+    originalError: ISafeError;
 }

@@ -1,25 +1,26 @@
 "use client";
 
-import User from "@/types/models/User";
 import {useState} from "react";
 import {Button, Dialog} from "@mui/material";
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import UserForm from "@/components/UserForm";
-import usePutUserInfoApi from "@/features/admin/user-modal/hooks/usePutUserInfoApi";
 import UserUpdate from "@/types/forms/UserUpdate";
+import usePutUserInfoApi from "../hooks/lib/usePutUserInfoApi";
+import useUserContext from "../hooks/useUserContext";
+import useUsersTriggerContext from "@/features/admin/user-modal/hooks/useUsersTriggerContext";
 
-interface EditUserButtonProps {
-    user: User | null;
-}
-
-export default function EditUserDialog(
-    {user}: EditUserButtonProps
-) {
+export default function EditUserDialog() {
     const [open, setOpen] = useState(false);
 
     const {
-        response, handlePutUserInfo, isMutating
+        user, changeUser
+    } = useUserContext();
+
+    const {
+        handlePutUserInfo, isMutating
     } = usePutUserInfoApi();
+
+    const { trigger } = useUsersTriggerContext();
 
     const handleOpen = () => {
         if (!!user) {
@@ -32,9 +33,11 @@ export default function EditUserDialog(
     ) => {
         if (!user) return;
 
-        await handlePutUserInfo(user?.id, updateUser);
+        const response = await handlePutUserInfo(user?.id, updateUser);
 
-        if (response?.success) {
+        if (response.success) {
+            changeUser(response.data || null);
+            trigger?.();
             setOpen(false);
         }
     }

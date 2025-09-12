@@ -32,7 +32,12 @@ export default function usePutUserInfoApi() {
         data: response,
         error,
         isMutating,
-    } = useSWRMutation<ApiResponse<User>>(
+    } = useSWRMutation<
+        ApiResponse<User>,
+        Error,
+        string,
+        {id: string; userUpdate: UserUpdate}
+    >(
         "admin/user/update",
         fetcher,
     );

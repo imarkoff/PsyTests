@@ -20,7 +20,7 @@ export default function AdminDoctors() {
 
     const handleDoctorClick = (doctorId: string) => {
         router.push(`/dashboard/admin/doctors/${doctorId}`);
-    }
+    };
 
     return (
         <DoctorsDataGrid
