@@ -72,6 +72,10 @@ export default function DoctorsDataGrid(
         onDoctorClick
     }: DoctorsDataGridProps
 ) {
+    const handleRowClick = ({row}: GridRowParams<User>) => {
+        onDoctorClick(row.id);
+    }
+
     return (
         <NoSsr>
             <Box sx={{position: "relative", height: "100%" }}>
@@ -88,7 +92,7 @@ export default function DoctorsDataGrid(
                     filterMode={"server"}
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
-                    onRowClick={({row}: GridRowParams<User>) => onDoctorClick(row.id)}
+                    onRowClick={handleRowClick}
                     sortModel={sortModel}
                     onSortModelChange={onSortModelChange}
                     filterModel={filterModel}

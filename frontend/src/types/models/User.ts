@@ -10,6 +10,8 @@ export default interface User {
     phone: string;
     role: Role;
     last_login: string | null;
+    registered_by?: string; // UUID
+    registered_at?: string; // ISO date
 }
 
 export type UserGender = "male" | "female";

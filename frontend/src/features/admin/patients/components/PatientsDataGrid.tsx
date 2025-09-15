@@ -1,46 +1,94 @@
-import {DataGrid, GridColDef, GridPaginationModel} from "@mui/x-data-grid";
+import {Box, NoSsr} from "@mui/material";
+import {
+    DataGrid,
+    GridColDef,
+    GridFilterModel,
+    GridPaginationModel,
+    GridRowParams,
+    GridSortModel
+} from "@mui/x-data-grid";
 import User from "@/types/models/User";
-import PaginationParams from "@/types/pagination/PaginationParams";
 import PaginatedList from "@/types/pagination/PaginatedList";
-import {Alert, AlertTitle, Box, NoSsr} from "@mui/material";
+import dayjs from "dayjs";
+import PatientsGridToolbar from "./PatientsGridToolbar";
+import GettingPatientsErrorOverlayAlert from "./GettingPatientsErrorOverlayAlert";
 
 interface PatientsDataGridProps {
     paginatedPatients: PaginatedList<User> | undefined;
-    paginationParams: PaginationParams;
-    setPaginationParams: (params: PaginationParams) => void;
+    paginationModel: GridPaginationModel;
+    setPaginationModel: (params: GridPaginationModel) => void;
+    sortModel: GridSortModel;
+    onSortModelChange: (newModel: GridSortModel) => void;
+    filterModel: GridFilterModel;
+    onFilterModelChange: (newModel: GridFilterModel) => void;
+    onPatientClick: (patientId: string) => void;
     isLoading: boolean;
     error: string | undefined;
 }
 
 const columns: GridColDef<User>[] = [
     {
-        field: "fullName",
-        headerName: "Пацієнт",
-        width: 200,
-        renderCell: (params) =>
-            `${params.row.surname} ${params.row.name} ${params.row.patronymic || ''}`,
-        sortComparator: (v1, v2) => {
-            const fullName1 = `${v1.surname} ${v1.name} ${v1.patronymic || ''}`;
-            const fullName2 = `${v2.surname} ${v2.name} ${v2.patronymic || ''}`;
-            return fullName1.localeCompare(fullName2);
-        }
+        field: "surname",
+        headerName: "Прізвище",
+        width: 150,
+    },
+    {
+        field: "name",
+        headerName: "Ім'я",
+        width: 150,
+    },
+    {
+        field: "patronymic",
+        headerName: "По батькові",
+        width: 150,
     },
     {
         field: "phone",
         headerName: "Номер телефону",
         width: 150,
     },
+    {
+        field: "last_login",
+        headerName: "Останній вхід",
+        width: 200,
+        type: "dateTime",
+        valueFormatter: (_, row) => row.last_login
+            ? dayjs(row.last_login).format("DD.MM.YYYY HH:mm")
+            : null,
+    },
+    {
+        field: "registered_by",
+        headerName: "Ким зареєстрований",
+        width: 300,
+    },
+    {
+        field: "registered_at",
+        headerName: "Дата реєстрації",
+        width: 200,
+        type: "dateTime",
+        valueFormatter: (_, row) => row.registered_at
+            ? dayjs(row.registered_at).format("DD.MM.YYYY HH:mm")
+            : null,
+    }
 ];
 
 export default function PatientsDataGrid(
-    { paginatedPatients, paginationParams, setPaginationParams, isLoading, error }: PatientsDataGridProps
+    {
+        paginatedPatients,
+        paginationModel,
+        setPaginationModel,
+        isLoading,
+        error,
+        sortModel,
+        onSortModelChange,
+        filterModel,
+        onFilterModelChange,
+        onPatientClick
+    }: PatientsDataGridProps
 ) {
-    const handlePageChange = (paginationModel: GridPaginationModel) => {
-        setPaginationParams({
-            offset: paginationModel.page,
-            limit: paginationModel.pageSize,
-        });
-    };
+    const handleRowClick = ({row}: GridRowParams<User>) => {
+        onPatientClick(row.id);
+    }
 
     return (
         <NoSsr>
@@ -48,24 +96,30 @@ export default function PatientsDataGrid(
                 <DataGrid
                     columns={columns}
                     rows={paginatedPatients?.data || []}
-                    pageSizeOptions={[25, 50, 100]}
+                    pageSizeOptions={[1, 25, 50, 100]}
                     loading={isLoading}
-                    paginationModel={{
-                        page: paginationParams.offset,
-                        pageSize: paginationParams.limit,
-                    }}
-                    onPaginationModelChange={handlePageChange}
+                    showToolbar
+                    slots={{ toolbar: PatientsGridToolbar }}
                     rowCount={paginatedPatients?.total || 0}
                     paginationMode={"server"}
+                    sortingMode={"server"}
+                    filterMode={"server"}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
+                    onRowClick={handleRowClick}
+                    sortModel={sortModel}
+                    onSortModelChange={onSortModelChange}
+                    filterModel={filterModel}
+                    onFilterModelChange={onFilterModelChange}
+                    slotProps={{
+                        loadingOverlay: {
+                            variant: 'linear-progress',
+                            noRowsVariant: 'skeleton'
+                        }
+                    }}
                 />
                 {error && (
-                    <Alert
-                        severity={"error"}
-                        sx={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
-                    >
-                        <AlertTitle>Сталася помилка</AlertTitle>
-                        {error}
-                    </Alert>
+                    <GettingPatientsErrorOverlayAlert error={error} />
                 )}
             </Box>
         </NoSsr>

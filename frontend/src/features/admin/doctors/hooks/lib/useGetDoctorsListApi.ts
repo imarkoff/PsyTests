@@ -5,8 +5,7 @@ import PaginatedList from "@/types/pagination/PaginatedList";
 import User from "@/types/models/User";
 import useGridPagination from "@/hooks/useGridPagination";
 import PaginationFieldSortingDirection from "@/types/enums/PaginationFieldSortingDirection";
-import {useEffect} from "react";
-import useUsersTriggerContext from "@/features/admin/user-modal/hooks/useUsersTriggerContext";
+import useSetUserTrigger from "@/features/admin/user-modal/hooks/useSetUserTrigger";
 
 export default function useGetDoctorsListApi() {
     const {
@@ -29,11 +28,7 @@ export default function useGetDoctorsListApi() {
         { keepPreviousData: true }
     );
 
-    const { setTrigger } = useUsersTriggerContext();
-
-    useEffect(() => {
-        setTrigger(() => mutate);
-    }, [setTrigger, mutate]);
+    useSetUserTrigger(mutate);
 
     return {
         paginatedDoctors: response?.data,

@@ -23,9 +23,7 @@ export default function EditUserDialog() {
     const { trigger } = useUsersTriggerContext();
 
     const handleOpen = () => {
-        if (!!user) {
-            setOpen(true);
-        }
+        if (!!user) setOpen(true);
     }
 
     const handleSubmit = async (
