@@ -1,17 +1,26 @@
 import UserCreate from "@/types/forms/UserCreate";
-import {createUser} from "@/lib/controllers/adminUsersController";
 import useSWRMutation from "swr/mutation";
 import User from "@/types/models/User";
+import useUsersContext from "../../hooks/useUsersContext";
+import {ApiResponse} from "@/lib/api-client/types";
 
 export default function useCreateUserApi(
     onSuccess?: (createdUser: User) => void
 ) {
+    const {api: {createUser}} = useUsersContext();
+
     const fetcher = async (
         _: string,
         {arg}: { arg: UserCreate; }
     ) => (
         createUser(arg)
     );
+
+    const handleSuccess = (data: ApiResponse<User>) => {
+        if (onSuccess && data.success) {
+            onSuccess(data.data!);
+        }
+    }
 
     const {
         trigger,
@@ -20,17 +29,11 @@ export default function useCreateUserApi(
     } = useSWRMutation(
         "admin/users/create",
         fetcher,
-        {
-            onSuccess: (data) => {
-                if (onSuccess && data.success) {
-                    onSuccess(data.data!);
-                }
-            }
-        }
+        { onSuccess: handleSuccess }
     );
 
     return {
-        trigger,
+        createUser: trigger,
         loading: isMutating,
         error: response?.error?.statusText,
         createdUser: response?.data

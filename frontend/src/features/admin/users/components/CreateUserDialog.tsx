@@ -2,38 +2,43 @@
 
 import {useState} from "react";
 import {Button, Dialog} from "@mui/material";
-import {Roles} from "@/types/enums/Role";
 import AddIcon from "@mui/icons-material/Add";
 import UserFormDialog from "@/components/UserForm";
-import useCreateUserApi from "@/features/admin/doctors/hooks/lib/useCreateUserApi";
+import useUsersContext from "../hooks/useUsersContext";
+import useCreateUserApi from "../hooks/lib/useCreateUserApi";
+import useUsersTriggerContext from "@/features/admin/user-modal/hooks/useUsersTriggerContext";
 
-export default function CreatePatientDialog() {
+export default function CreateUserDialog() {
     const [open, setOpen] = useState(false);
 
-    const {
-        trigger, loading, error
-    } = useCreateUserApi(
-        () => setOpen(false)
-    );
+    const {grid: {toolbar}, role} = useUsersContext();
+    const {trigger} = useUsersTriggerContext();
+
+    const afterCreate = () => {
+        setOpen(false);
+        trigger?.();
+    }
+
+    const {createUser, loading, error} = useCreateUserApi(afterCreate);
 
     return (
         <>
             <Button
                 variant={"contained"}
                 onClick={() => setOpen(true)}
-                startIcon={<AddIcon />}
+                startIcon={<AddIcon/>}
             >
-                Додати пацієнта
+                {toolbar.createButtonText}
             </Button>
             <Dialog
                 open={open}
                 onClose={() => setOpen(false)}
             >
                 <UserFormDialog.Create
-                    onSubmit={trigger}
+                    onSubmit={createUser}
                     loading={loading}
                     error={error}
-                    userRole={Roles.patient}
+                    userRole={role}
                 />
             </Dialog>
         </>

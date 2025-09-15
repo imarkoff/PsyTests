@@ -1,22 +1,27 @@
-import DataGridToolbar from "@/components/DataGridToolbar";
-import CreatePatientDialog from "./CreatePatientDialog";
+"use client";
 
-export default function PatientsGridToolbar() {
+import DataGridToolbar from "@/components/DataGridToolbar";
+import useUsersContext from "../hooks/useUsersContext";
+import CreateUserDialog from "../components/CreateUserDialog";
+
+export default function UsersGridToolbar() {
+    const {grid: {toolbar}} = useUsersContext();
+
     return (
         <DataGridToolbar.Root>
             <DataGridToolbar.Title>
-                Пацієнти, зареєстровані в системі
+                {toolbar.title}
             </DataGridToolbar.Title>
             <DataGridToolbar.Options>
                 <DataGridToolbar.Columns/>
                 <DataGridToolbar.Filters/>
                 <DataGridToolbar.Divider/>
                 <DataGridToolbar.Search
-                    placeholder={"Пошук за П.І.Б. або номером телефону"}
+                    placeholder={toolbar.searchPlaceholder}
                     sx={{width: {xs: '100%', sm: '300px', md: '400px'}}}
                 />
                 <DataGridToolbar.Divider/>
-                <CreatePatientDialog/>
+                <CreateUserDialog/>
             </DataGridToolbar.Options>
         </DataGridToolbar.Root>
     );
