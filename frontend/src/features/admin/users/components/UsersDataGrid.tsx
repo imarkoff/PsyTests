@@ -9,6 +9,7 @@ import UsersGridToolbar from "./UsersGridToolbar";
 import usersGridColumns from "../configs/usersGridColumns";
 import useUsersContext from "../hooks/useUsersContext";
 import useNavigateToUserDetails from "../hooks/useNavigateToUserDetails";
+import {useMemo} from "react";
 
 interface UsersDataGridProps extends Pick<
     DataGridProps,
@@ -32,11 +33,14 @@ export default function UsersDataGrid(
     const {grid: {extendedColumns}} = useUsersContext();
     const navigateToUserDetails = useNavigateToUserDetails();
 
-    const columns = [...usersGridColumns, ...extendedColumns || []];
+    const columns = useMemo(
+        () => [...usersGridColumns, ...extendedColumns || []],
+        [extendedColumns]
+    );
 
     const handleRowClick = ({row}: GridRowParams<User>) => {
         navigateToUserDetails(row.id);
-    }
+    };
 
     return (
         <NoSsr>
@@ -45,7 +49,7 @@ export default function UsersDataGrid(
                     columns={columns}
                     rows={paginatedUsers?.data || []}
 
-                    pageSizeOptions={[1, 25, 50, 100]}
+                    pageSizeOptions={[25, 50, 100]}
                     rowCount={paginatedUsers?.total || 0}
                     loading={isLoading}
 

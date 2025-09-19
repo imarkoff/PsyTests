@@ -2,6 +2,20 @@ import {useReducer} from "react";
 import PaginationParams from "@/types/pagination/PaginationParams";
 import PaginationLogicalOperator from "@/types/enums/PaginationLogicalOperator";
 
+export interface UsePaginationParamsReturn<TEntity extends object> {
+    paginationParams: PaginationParams<TEntity>;
+    handlePaginationChange: (page: number, pageSize: number) => void;
+    handleSortedFieldsChange: (sortedFields: PaginationParams<TEntity>['sortedFields']) => void;
+    handleFiltersChange: (
+        filters: PaginationParams<TEntity>['filters'],
+        filterLogicOperator: PaginationParams<TEntity>['filterLogicOperator']
+    ) => void;
+    handleQuickFilterChange: (
+        quickFilter: PaginationParams<TEntity>['quickFilter'],
+        quickFilterLogicOperator: PaginationParams<TEntity>['quickFilterLogicOperator']
+    ) => void;
+}
+
 /**
  * Custom hook to manage pagination parameters including sorting and filtering.
  *
@@ -12,7 +26,7 @@ export default function usePaginationParams<
     TEntity extends object
 >(
     defaultParams?: Partial<PaginationParams<TEntity>>
-) {
+): UsePaginationParamsReturn<TEntity> {
     const [paginationParams, dispatch] = useReducer(paginationReducer, {
         limit: 25,
         offset: 0,

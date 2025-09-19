@@ -1,4 +1,4 @@
-export default enum PaginationFilterOperator {
+enum PaginationFilterOperator {
     EQ = "eq",
     NE = "ne",
     LT = "lt",
@@ -16,3 +16,5 @@ export default enum PaginationFilterOperator {
     IS_NOT_EMPTY = "isNotEmpty",
     IS_ANY_OF = "isAnyOf"
 }
+
+export default PaginationFilterOperator;
