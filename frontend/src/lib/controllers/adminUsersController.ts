@@ -37,3 +37,11 @@ export const updateUser = async (
     AdminUsersService,
     service => service.updateUser(id, userUpdate)
 );
+
+export const changeUserPassword = async (
+    id: string,
+    newPassword: string
+) => fetchProtected(
+    AdminUsersService,
+    service => service.changeUserPassword(id, newPassword)
+);

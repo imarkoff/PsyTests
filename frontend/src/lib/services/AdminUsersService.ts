@@ -22,4 +22,14 @@ export default class AdminUsersService {
     updateUser = async (id: string, userUpdate: UserUpdateDto) =>
         this.api.put<User>(`${this.endpoint}/${id}`, userUpdate)
             .then(res => res.data);
+
+    changeUserPassword = async (id: string, newPassword: string) =>
+        this.api.patch<void>(
+            `${this.endpoint}/${id}/password`,
+            newPassword,
+            {
+                headers: {'Content-Type': 'text/plain'}
+            }
+        )
+            .then(res => res.data);
 }

@@ -12,15 +12,9 @@ import useUsersTriggerContext from "@/features/admin/user-modal/hooks/useUsersTr
 export default function EditUserDialog() {
     const [open, setOpen] = useState(false);
 
-    const {
-        user, changeUser
-    } = useUserContext();
-
-    const {
-        handlePutUserInfo, isMutating
-    } = usePutUserInfoApi();
-
-    const { trigger } = useUsersTriggerContext();
+    const {user, changeUser} = useUserContext();
+    const {handlePutUserInfo, isMutating} = usePutUserInfoApi();
+    const {trigger} = useUsersTriggerContext();
 
     const handleOpen = () => {
         if (!!user) setOpen(true);
@@ -43,7 +37,7 @@ export default function EditUserDialog() {
     return (
         <>
             <Button
-                startIcon={<EditRoundedIcon />}
+                startIcon={<EditRoundedIcon/>}
                 onClick={handleOpen}
                 disabled={!user}
             >
