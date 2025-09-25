@@ -32,7 +32,10 @@ async def create_user(
     admin = await authenticator.auth(role=Role.ADMIN)
 
     try:
-        user = await user_service.register_user(user_data, registered_by_id=admin.id)
+        user = await user_service.register_user(
+            user_create=user_data,
+            registered_by_id=admin.id
+        )
         user_dto = UserDto.create(user)
         return user_dto
     except AlreadyExistsError as e:
@@ -81,7 +84,10 @@ async def update_user(
     await authenticator.auth(role=Role.ADMIN)
 
     try:
-        updated_user = await user_service.update_user(user_id=user_id, user_update=user_data)
+        updated_user = await user_service.update_user(
+            user_id=user_id,
+            user_update=user_data
+        )
         user_dto = UserDto.create(updated_user)
 
         return user_dto
@@ -90,7 +96,7 @@ async def update_user(
 
 
 @router.patch(
-    "/change-password",
+    "/{user_id}/password",
     summary="Change a user's password",
     status_code=204,
     response_description="Password changed successfully",
@@ -107,7 +113,11 @@ async def change_password(
     admin = await authenticator.auth(role=Role.ADMIN)
 
     try:
-        await user_service.change_password(user_id=user_id, changed_by=admin, new_password=new_password)
+        await user_service.change_password(
+            user_id=user_id,
+            changed_by=admin,
+            new_password=new_password
+        )
         return Response(status_code=204)
     except NotFoundError as e:
         return Response(status_code=404, content=e.message)
