@@ -42,24 +42,14 @@ class PatientTestRepository(SQLAlchemyRepository):
 
         query = (
             self.db.query(PatientTest)
-            .join(
-                DoctorPatient,
-                DoctorPatient.patient_id == PatientTest.patient_id
-            )
-            .filter(
-                DoctorPatient.doctor_id == doctor_id
-            )
+            .filter(PatientTest.assigned_by_id == doctor_id)
         )
 
         paginated_list = SQLAlchemyPaginator.paginate(
             model=PatientTest,
             query=query,
             pagination_params=pagination_params,
-            filters_fields=[
-                PatientTest.assigned_at,
-                PatientTest.unassigned_at,
-                PatientTest.test_id,
-            ]
+            filters_fields=[]
         )
 
         return paginated_list

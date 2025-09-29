@@ -19,7 +19,7 @@ class SQLAlchemyPaginator:
         model: T,
         query: Query[T],
         pagination_params: PaginationParams,
-        filters_fields: list[str]
+        filters_fields: list[str] = []
     ) -> PaginatedList[T]:
         """
         Paginate a SQLAlchemy query
@@ -28,9 +28,12 @@ class SQLAlchemyPaginator:
         Params:
             model: The SQLAlchemy model class.
             query: The SQLAlchemy query to paginate.
-            pagination_params: The pagination parameters including
+            pagination_params:
+                The pagination parameters including
                 offset, limit, sorting, and filtering.
-            filters_fields: List of fields to apply filtering on.
+            filters_fields:
+                List of fields to apply filtering on.
+                If empty, filters won't be applied.
 
         Returns:
             A PaginatedList containing the paginated results and metadata.
