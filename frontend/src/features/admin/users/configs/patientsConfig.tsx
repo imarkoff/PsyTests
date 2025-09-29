@@ -3,6 +3,7 @@ import {createUser} from "@/lib/controllers/adminUsersController";
 import {getPatients} from "@/lib/controllers/adminController";
 import {Roles} from "@/types/enums/Role";
 import UserEntityConfig from "../types/UserEntityConfig";
+import UserCredentialsChip from "@/components/UserCredentialsChip";
 
 const doctorsConfig: UserEntityConfig = {
     api: {
@@ -24,13 +25,22 @@ const doctorsConfig: UserEntityConfig = {
             {
                 field: "registered_by",
                 headerName: "Ким зареєстрований",
-                width: 300,
+                width: 200,
+                headerAlign: "center",
+                align: "center",
+                renderCell: ({ row }) => (
+                    row.registered_by
+                        ? <UserCredentialsChip userId={row.registered_by} format="compact" />
+                        : "-"
+                )
             },
             {
                 field: "registered_at",
                 headerName: "Дата реєстрації",
-                width: 200,
+                width: 175,
                 type: "dateTime",
+                headerAlign: "center",
+                align: "center",
                 valueFormatter: (_, row) => row.registered_at
                     ? dayjs(row.registered_at).format("DD.MM.YYYY HH:mm")
                     : null,

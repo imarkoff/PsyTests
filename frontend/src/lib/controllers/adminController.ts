@@ -5,6 +5,7 @@ import AdminService from "@/lib/services/AdminService";
 import PaginationParams from "@/types/pagination/PaginationParams";
 import User from "@/types/models/User";
 import convertPaginationParamsToQuery from "@/utils/convertPaginationParamsToQuery";
+import PatientTest from "@/types/models/PatientTest";
 
 export const getDoctors = async (
     paginationParams: PaginationParams<User>,
@@ -20,6 +21,17 @@ export const getPatients = async (
 ) => fetchProtected(
     AdminService,
     service => service.getPatients(
+        convertPaginationParamsToQuery(paginationParams)
+    )
+);
+
+export const getDoctorAssignedTests = async (
+    doctorId: string,
+    paginationParams: PaginationParams<PatientTest>
+) => fetchProtected(
+    AdminService,
+    service => service.getDoctorAssignedTests(
+        doctorId,
         convertPaginationParamsToQuery(paginationParams)
     )
 );

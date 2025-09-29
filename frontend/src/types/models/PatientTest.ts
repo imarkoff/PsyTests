@@ -6,4 +6,5 @@ export default interface PatientTest {
     assigned_by_id: string;
     test: TestBase;
     assigned_at: string; // ISO date
+    unassigned_at: string | null; // ISO date or null
 }

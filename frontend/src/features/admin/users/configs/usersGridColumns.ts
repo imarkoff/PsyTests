@@ -28,6 +28,8 @@ const columns: GridColDef<User>[] = [
         headerName: "Останній вхід",
         width: 200,
         type: "dateTime",
+        headerAlign: "center",
+        align: "center",
         valueFormatter: (_, row) => row.last_login
             ? dayjs(row.last_login).format("DD.MM.YYYY HH:mm")
             : null,
