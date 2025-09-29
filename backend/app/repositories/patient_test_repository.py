@@ -5,6 +5,8 @@ from uuid import UUID
 from app.db.models.doctor_patient import DoctorPatient
 from app.db.models.patient_test import PatientTest
 from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
+from app.schemas.pagination import PaginationParams, PaginatedList
+from app.utils.sqlalchemy import SQLAlchemyPaginator
 
 
 class PatientTestRepository(SQLAlchemyRepository):
@@ -24,6 +26,43 @@ class PatientTestRepository(SQLAlchemyRepository):
             PatientTest.unassigned_at == None
         ).all()
         return cast(list[PatientTest], result)
+
+    async def get_assigned_tests_by_doctor_id(
+        self,
+        doctor_id: UUID,
+        pagination_params: PaginationParams
+    ) -> PaginatedList[PatientTest]:
+        """
+        Get all tests assigned by a specific doctor
+        :param doctor_id: ID of the doctor
+        :param pagination_params: Pagination parameters for the query
+        :return: Paginated list of patient tests
+        :raises PaginationError: If pagination parameters are invalid
+        """
+
+        query = (
+            self.db.query(PatientTest)
+            .join(
+                DoctorPatient,
+                DoctorPatient.patient_id == PatientTest.patient_id
+            )
+            .filter(
+                DoctorPatient.doctor_id == doctor_id
+            )
+        )
+
+        paginated_list = SQLAlchemyPaginator.paginate(
+            model=PatientTest,
+            query=query,
+            pagination_params=pagination_params,
+            filters_fields=[
+                PatientTest.assigned_at,
+                PatientTest.unassigned_at,
+                PatientTest.test_id,
+            ]
+        )
+
+        return paginated_list
 
     async def get_assigned_patient_tests_by_doctor_id(self, doctor_id: UUID, patient_id: UUID) -> list[PatientTest]:
         result = (self.db.query(PatientTest)

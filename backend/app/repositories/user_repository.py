@@ -5,12 +5,7 @@ from app.db.models.user import User
 from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
 from app.schemas.pagination import PaginatedList, PaginationParams
 from app.schemas.enums.role import Role
-from app.utils.sqlalchemy import (
-    SQLAlchemyPaginationSorter,
-    SQLAlchemyQuickFilter,
-    SQLAlchemyPaginate,
-    SQLAlchemyFilterApplier
-)
+from app.utils.sqlalchemy import SQLAlchemyPaginator
 
 
 class UserRepository(SQLAlchemyRepository):
@@ -42,45 +37,17 @@ class UserRepository(SQLAlchemyRepository):
         self.db.refresh(user)
 
     async def get_users_by_role(
-            self,
-            role: Role,
-            pagination_params: PaginationParams
-            ) -> PaginatedList[User]:
+        self,
+        role: Role,
+        pagination_params: PaginationParams
+    ) -> PaginatedList[User]:
         query = self.db.query(User).filter(User.role == role)
 
-        query = SQLAlchemyPaginationSorter.sort(
+        paginated_list = SQLAlchemyPaginator.paginate(
             model=User,
             query=query,
-            fields=pagination_params.sorted_fields
-        )
-        query = SQLAlchemyQuickFilter.apply(
-            model=User,
-            query=query,
-            filters=pagination_params.quick_filter,
-            operator=pagination_params.quick_filter_operator,
-            fields=["name", "surname", "patronymic", "phone"]
-        )
-        query = SQLAlchemyFilterApplier.apply(
-            model=User,
-            query=query,
-            filters=pagination_params.filters,
-            operator=pagination_params.filter_logic_operator,
-            fields=["name", "surname", "patronymic", "phone"]
+            pagination_params=pagination_params,
+            filters_fields=["name", "surname", "patronymic", "phone"]
         )
 
-        total_count = query.count()
-
-        paginated_result = SQLAlchemyPaginate.paginate(
-            query=query,
-            page=pagination_params.offset,
-            per_page=pagination_params.limit
-        ).all()
-
-        return PaginatedList(
-            data=paginated_result,
-            offset=pagination_params.offset,
-            limit=pagination_params.limit,
-            total=total_count,
-            sorted_fields=pagination_params.sorted_fields,
-            quick_filter=pagination_params.quick_filter
-        )
+        return paginated_list

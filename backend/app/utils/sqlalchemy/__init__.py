@@ -1,3 +1,4 @@
+from .sqlalchemy_paginator import SQLAlchemyPaginator
 from .sqlalchemy_pagination_sorter import SQLAlchemyPaginationSorter
 from .sqlalchemy_quick_filter import SQLAlchemyQuickFilter
 from .sqlalchemy_paginate import SQLAlchemyPaginate

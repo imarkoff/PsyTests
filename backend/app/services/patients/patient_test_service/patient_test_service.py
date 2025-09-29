@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from app.schemas.pagination import PaginationParams
 from app.schemas.patients.patient_test import PatientTestDto
 from app.services.patients.patient_test_service.patient_test_assigner import PatientTestAssigner
 from app.services.patients.patient_test_service.patient_test_getter import PatientTestGetter
@@ -30,8 +31,12 @@ class PatientTestService:
     async def get_patient_tests(self, patient_id: UUID) -> list[PatientTestDto]:
         return await self.getter.get_patient_tests(patient_id)
 
-    async def get_patient_tests_by_doctor(self, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
-        return await self.getter.get_patient_tests_by_doctor(doctor_id, patient_id)
+    async def get_patient_tests_by_doctor(self, doctor_id: UUID, pagination_params: PaginationParams) -> list[PatientTestDto]:
+        """Get all tests assigned by a specific doctor"""
+        return await self.getter.get_patient_tests_by_doctor(doctor_id, pagination_params)
+
+    async def get_patient_tests_by_doctor_and_patient(self, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
+        return await self.getter.get_patient_tests_by_doctor_and_patient(doctor_id, patient_id)
 
     async def get_patient_test(self, patient_id: UUID, test_id: UUID) -> PatientTestDto:
         """

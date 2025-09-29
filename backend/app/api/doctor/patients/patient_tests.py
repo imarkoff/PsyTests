@@ -28,7 +28,7 @@ async def get_patient_tests(
         patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
     doctor = await authenticator.auth(role=Role.DOCTOR)
-    return await patient_test_service.get_patient_tests_by_doctor(doctor_id=doctor.id, patient_id=patient_id)
+    return await patient_test_service.get_patient_tests_by_doctor_and_patient(doctor_id=doctor.id, patient_id=patient_id)
 
 
 @router.get("/history", summary="Get passed tests history of patient", response_model=list[TestResultDto])
