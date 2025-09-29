@@ -34,4 +34,4 @@ async def get_user_by_id(
     if user is None:
         return Response(status_code=404)
 
-    return UserDto.model_validate(user).model_dump()
+    return UserDto.create(user)
