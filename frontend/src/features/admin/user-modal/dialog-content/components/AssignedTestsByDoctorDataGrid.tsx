@@ -1,6 +1,6 @@
 "use client";
 
-import {NoSsr, Typography} from "@mui/material";
+import {Box, NoSsr, Typography} from "@mui/material";
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import PatientTest from "@/types/models/PatientTest";
 import useGetAssignedTestsByDoctorAdminApi from "../hooks/lib/useGetAssignedTestsByDoctorAdminApi";
@@ -48,7 +48,9 @@ const columns: GridColDef<PatientTest>[] = [
         type: "dateTime",
         headerAlign: 'center',
         align: 'center',
-        valueFormatter: (_, row) => row.unassigned_at ? dayjs(row.unassigned_at).format('DD.MM.YYYY HH:mm') : '—'
+        valueFormatter: (_, row) => row.unassigned_at
+            ? dayjs(row.unassigned_at).format('DD.MM.YYYY HH:mm')
+            : '—'
     }
 ];
 
@@ -65,29 +67,31 @@ export default function AssignedTestsByDoctorDataGrid(
     } = useGetAssignedTestsByDoctorAdminApi(doctorId);
 
     return (
-        <NoSsr>
+        <Box>
             <Typography variant="h6" gutterBottom>
                 Історія призначених тестів
             </Typography>
-            <DataGrid
-                columns={columns}
-                rows={paginatedTests?.data ?? []}
-                rowCount={paginatedTests?.total ?? 0}
+            <NoSsr>
+                <DataGrid
+                    columns={columns}
+                    rows={paginatedTests?.data ?? []}
+                    rowCount={paginatedTests?.total ?? 0}
 
-                loading={isLoading}
+                    loading={isLoading}
 
-                pageSizeOptions={[25]}
+                    pageSizeOptions={[25]}
 
-                paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
-                paginationMode={"server"}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={setPaginationModel}
+                    paginationMode={"server"}
 
-                sortModel={sortModel}
-                onSortModelChange={setSortModel}
-                sortingMode={"server"}
+                    sortModel={sortModel}
+                    onSortModelChange={setSortModel}
+                    sortingMode={"server"}
 
-                disableColumnFilter
-            />
-        </NoSsr>
+                    disableColumnFilter
+                />
+            </NoSsr>
+        </Box>
     );
 }

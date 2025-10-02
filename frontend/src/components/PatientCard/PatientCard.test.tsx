@@ -2,6 +2,7 @@ import {render, screen, fireEvent} from "@testing-library/react";
 import PatientCard from "./PatientCard";
 import { mockedPatient } from "./mockedPatient";
 import "@testing-library/jest-dom";
+import NeedsAttentionChip from "@/components/NeedsAttentionChip";
 
 jest.mock("@/utils/formatPhone", () => (
     {
@@ -9,6 +10,11 @@ jest.mock("@/utils/formatPhone", () => (
         default: (phone: string) => `mocked-${phone}`,
     })
 );
+
+jest.mock("@/components/NeedsAttentionChip", () => ({
+    __esModule: true,
+    default: jest.fn()
+}));
 
 it("renders patient full name and formatted phone", () => {
     render(<PatientCard patient={{...mockedPatient, patronymic: "Smith"}} />);
@@ -35,14 +41,13 @@ it("calls onClick with patient when card is clicked", () => {
 it("shows needs attention chip when needsAttention is true", () => {
     render(<PatientCard patient={mockedPatient} needsAttention />);
 
-    expect(screen.getByText("Потребує уваги")).toBeInTheDocument();
-    expect(screen.getByTestId("ErrorOutlineIcon")).toBeInTheDocument();
+    expect(NeedsAttentionChip).toHaveBeenCalled();
 });
 
 it("does not show needs attention chip when needsAttention is false", () => {
     render(<PatientCard patient={mockedPatient} />);
 
-    expect(screen.queryByText("Потребує уваги")).not.toBeInTheDocument();
+    expect(NeedsAttentionChip).not.toHaveBeenCalled();
 });
 
 it("applies selected style when selected is true", () => {

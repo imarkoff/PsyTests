@@ -3,6 +3,7 @@ import User from "@/types/models/User";
 import PaginatedList from "@/types/pagination/PaginatedList";
 import QueryPaginationParams from "@/types/pagination/QueryPaginationParams";
 import PatientTest from "@/types/models/PatientTest";
+import DoctorPatient from "@/types/models/DoctorPatient";
 
 export default class AdminService {
     constructor(
@@ -27,6 +28,16 @@ export default class AdminService {
     ) =>
         await this.api.get<PaginatedList<PatientTest>>(
             `${this.endpoint}/doctors/${doctorId}/tests`,
+            {params: queryPaginationParams}
+        )
+            .then(response => response.data)
+
+    getPatientsByDoctor = async (
+        doctorId: string,
+        queryPaginationParams: QueryPaginationParams
+    ) =>
+        await this.api.get<PaginatedList<DoctorPatient>>(
+            `${this.endpoint}/doctors/${doctorId}/patients`,
             {params: queryPaginationParams}
         )
             .then(response => response.data)

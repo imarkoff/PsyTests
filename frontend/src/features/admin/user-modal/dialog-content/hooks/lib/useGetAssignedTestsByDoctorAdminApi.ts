@@ -5,6 +5,7 @@ import {ApiResponse} from "@/lib/api-client/types";
 import {getDoctorAssignedTests} from "@/lib/controllers/adminController";
 import PaginatedList from "@/types/pagination/PaginatedList";
 import PaginationFieldSortingDirection from "@/types/enums/PaginationFieldSortingDirection";
+import PaginationParams from "@/types/pagination/PaginationParams";
 
 export default function useGetAssignedTestsByDoctorAdminApi(
     doctorId: string | null
@@ -18,11 +19,11 @@ export default function useGetAssignedTestsByDoctorAdminApi(
         ]
     });
 
-    const fetcher = () => {
-        if (doctorId) {
-            return getDoctorAssignedTests(doctorId, paginationParams);
-        }
-    };
+    const fetcher = (
+        [doctorId, paginationParams]: [string, PaginationParams<PatientTest>]
+    ) => (
+        getDoctorAssignedTests(doctorId, paginationParams)
+    );
 
     const {
         data: response,
@@ -30,7 +31,7 @@ export default function useGetAssignedTestsByDoctorAdminApi(
     } = useSWR<
         ApiResponse<PaginatedList<PatientTest>>
     >(
-        ["admin/doctor/assigned-tests", doctorId, paginationParams],
+        doctorId ? [doctorId, paginationParams, "admin/doctor/assigned-tests"] : null,
         fetcher,
         {
             revalidateOnFocus: false,
