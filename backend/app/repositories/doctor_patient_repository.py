@@ -5,18 +5,32 @@ from sqlalchemy.orm import Session
 
 from app.db.models.doctor_patient import DoctorPatient
 from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
+from app.schemas.pagination import PaginationParams, PaginatedList
+from app.utils.sqlalchemy import SQLAlchemyPaginator
 
 
 class DoctorPatientRepository(SQLAlchemyRepository):
     def __init__(self, db: Session):
         super().__init__(db)
 
-    async def get_by_doctor_id(self, doctor_id: UUID4) -> list[DoctorPatient]:
-        result = self.db.query(DoctorPatient).filter(
+    async def get_by_doctor_id(
+        self,
+        doctor_id: UUID4,
+        pagination_params: PaginationParams
+    ) -> PaginatedList[DoctorPatient]:
+        query = self.db.query(DoctorPatient).filter(
             DoctorPatient.doctor_id == doctor_id,
             DoctorPatient.is_active.is_(True)
-        ).all()
-        return cast(list[DoctorPatient], result)
+        )
+
+        paginated_doctor_patients = SQLAlchemyPaginator.paginate(
+            model=DoctorPatient,
+            query=query,
+            pagination_params=pagination_params,
+            filters_fields=[]
+        )
+
+        return paginated_doctor_patients
 
     async def get_by_doctor_id_and_patient_id(self, doctor_id: UUID4, patient_id: UUID4) -> DoctorPatient | None:
         return self.db.query(DoctorPatient).filter(

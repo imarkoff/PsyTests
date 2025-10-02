@@ -3,8 +3,11 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Query, Response
 
 from app.dependenies.services import get_authenticator, get_user_service
+from app.dependenies.services.doctor_patient_service_di import get_doctor_patient_service
+from app.schemas.doctor_patient_dto import DoctorPatientDto
 from app.schemas.enums.role import Role
 from app.schemas.user import UserDto
+from app.services.patients.doctor_patient_service import DoctorPatientService
 from app.services.user_authenticator import Authenticator
 from app.services.user_service import UserService
 from app.schemas.pagination import PaginatedList, NotParsedPaginationParams
@@ -63,7 +66,7 @@ async def get_doctors(
         404: {"description": "Doctor not found"},
     }
 )
-async def get_doctor_tests(
+async def get_assigned_tests_by_doctor(
         doctor_id: UUID,
         not_parsed_pagination_params: NotParsedPaginationParams = Query(),
         authenticator: Authenticator = Depends(get_authenticator),
@@ -84,6 +87,43 @@ async def get_doctor_tests(
         )
 
         return tests
+    except PaginationError as e:
+        return Response(status_code=400, content=e.message)
+    except NotFoundError as e:
+        return Response(status_code=404, content=e.message)
+
+
+@router.get(
+    "/{doctor_id}/patients",
+    summary="Get all patients assigned to a doctor",
+    response_model=PaginatedList[DoctorPatientDto],
+    response_description="A list of paginated patients",
+    responses={
+        400: {"description": "Invalid pagination parameters"},
+        404: {"description": "Doctor not found"},
+    }
+)
+async def get_patients_by_doctor(
+        doctor_id: UUID,
+        not_parsed_pagination_params: NotParsedPaginationParams = Query(),
+        authenticator: Authenticator = Depends(get_authenticator),
+        doctor_patient_service: DoctorPatientService = Depends(
+            get_doctor_patient_service
+        )
+):
+    await authenticator.auth(role=Role.ADMIN)
+
+    try:
+        parsed_pagination_params = QueryPaginationParser.parse(
+            not_parsed_pagination_params
+        )
+
+        paginated_patients = await doctor_patient_service.get_patients(
+            doctor_id=doctor_id,
+            pagination_params=parsed_pagination_params
+        )
+
+        return paginated_patients
     except PaginationError as e:
         return Response(status_code=400, content=e.message)
     except NotFoundError as e:
