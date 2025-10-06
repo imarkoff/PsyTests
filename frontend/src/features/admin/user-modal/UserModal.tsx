@@ -2,15 +2,12 @@
 
 import {useRouter} from "next/navigation";
 import {useState} from "react";
-import PasswordIcon from "@mui/icons-material/Password";
-import {Box, Button, Dialog, DialogContent, DialogTitle} from "@mui/material";
+import {Dialog, DialogContent, DialogTitle} from "@mui/material";
 import DialogCloseButton from "@/components/DialogCloseButton";
 import UserHeaderInfo from "./components/UserHeaderInfo";
-import EditUserDialog from "./components/EditUserDialog";
-import ChangePasswordDialog from "./components/ChangePasswordDialog/ChangePasswordDialog";
-import DeleteUserDialog from "./components/DeleteUserDialog";
 import UserProvider from "./contexts/UserProvider";
 import UserModalContent from "./dialog-content/UserModalContent";
+import MoreMenu from "@/features/admin/user-modal/components/MoreMenu";
 
 interface DoctorModalProps {
     userId: string;
@@ -37,21 +34,7 @@ export default function UserModal(
             >
                 <DialogTitle sx={{display: "flex", alignItems: "center", gap: 3}}>
                     <UserHeaderInfo />
-                    <Box sx={{display: "flex", flexDirection: "column", alignItems: "start"}}>
-                        <EditUserDialog />
-                        <ChangePasswordDialog
-                            OpenButton={({onClick, disabled}) =>
-                                <Button
-                                    startIcon={<PasswordIcon/>}
-                                    onClick={onClick}
-                                    disabled={disabled}
-                                >
-                                    Змінити пароль
-                                </Button>
-                            }
-                        />
-                        <DeleteUserDialog onUserDialogClose={handleClose} />
-                    </Box>
+                    <MoreMenu handleClose={handleClose} />
                     <DialogCloseButton onClose={handleClose} />
                 </DialogTitle>
                 <DialogContent>

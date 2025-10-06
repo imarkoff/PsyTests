@@ -1,15 +1,20 @@
 "use client";
 
-import {useState} from "react";
-import {Button, Dialog} from "@mui/material";
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import {ComponentType, useState} from "react";
+import {Dialog} from "@mui/material";
 import UserForm from "@/components/UserForm";
 import UserUpdate from "@/types/forms/UserUpdate";
 import usePutUserInfoApi from "../hooks/lib/usePutUserInfoApi";
 import useUserContext from "../hooks/useUserContext";
 import useUsersTriggerContext from "@/features/admin/user-modal/hooks/useUsersTriggerContext";
 
-export default function EditUserDialog() {
+interface EditUserDialogProps {
+    OpenButton: ComponentType<{onClick: () => void; disabled: boolean}>
+}
+
+export default function EditUserDialog(
+    {OpenButton}: EditUserDialogProps
+) {
     const [open, setOpen] = useState(false);
 
     const {user, changeUser} = useUserContext();
@@ -36,13 +41,10 @@ export default function EditUserDialog() {
 
     return (
         <>
-            <Button
-                startIcon={<EditRoundedIcon/>}
+            <OpenButton
                 onClick={handleOpen}
                 disabled={!user}
-            >
-                Змінити дані
-            </Button>
+            />
             {user && (
                 <Dialog
                     open={open}

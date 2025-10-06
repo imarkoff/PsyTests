@@ -1,17 +1,23 @@
-import {useState} from "react";
-import {Button, Typography, Alert} from "@mui/material";
+"use client";
+
+import {ComponentType, ReactNode, useState} from "react";
+import {Typography, Alert} from "@mui/material";
 import useUserContext from "@/features/admin/user-modal/hooks/useUserContext";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import getDialogText from "./utils/getDialogText";
 import useDeleteUser from "./hooks/useDeleteUser";
 import ActionDialog from "@/components/ActionDialog";
 
 interface DeleteUserDialogProps {
+    OpenButton: ComponentType<{
+        onClick: () => void;
+        disabled: boolean;
+        children: ReactNode;
+    }>
     onUserDialogClose: () => void;
 }
 
 export default function DeleteUserDialog(
-    {onUserDialogClose}: DeleteUserDialogProps
+    {OpenButton, onUserDialogClose}: DeleteUserDialogProps
 ) {
     const [isOpen, setIsOpen] = useState(false);
     const handleClose = () => setIsOpen(false);
@@ -33,14 +39,12 @@ export default function DeleteUserDialog(
 
     return (
         <>
-            <Button
-                color={"error"}
+            <OpenButton
                 onClick={handleOpen}
                 disabled={!user}
-                startIcon={<DeleteForeverIcon/>}
             >
                 {dialogText.buttonText}
-            </Button>
+            </OpenButton>
             <ActionDialog.Root
                 open={isOpen}
                 onClose={handleClose}
