@@ -1,15 +1,16 @@
 "use client";
 
-import {Box, Button, Dialog, DialogContent, DialogTitle} from "@mui/material";
-import UserHeaderInfo from "./components/UserHeaderInfo";
-import DialogCloseButton from "@/components/DialogCloseButton";
 import {useRouter} from "next/navigation";
 import {useState} from "react";
-import EditUserDialog from "@/features/admin/user-modal/components/EditUserDialog";
-import UserProvider from "@/features/admin/user-modal/contexts/UserProvider";
-import ChangePasswordDialog from "@/features/admin/user-modal/components/ChangePasswordDialog/ChangePasswordDialog";
 import PasswordIcon from "@mui/icons-material/Password";
-import UserModalContent from "@/features/admin/user-modal/dialog-content/UserModalContent";
+import {Box, Button, Dialog, DialogContent, DialogTitle} from "@mui/material";
+import DialogCloseButton from "@/components/DialogCloseButton";
+import UserHeaderInfo from "./components/UserHeaderInfo";
+import EditUserDialog from "./components/EditUserDialog";
+import ChangePasswordDialog from "./components/ChangePasswordDialog/ChangePasswordDialog";
+import DeleteUserDialog from "./components/DeleteUserDialog";
+import UserProvider from "./contexts/UserProvider";
+import UserModalContent from "./dialog-content/UserModalContent";
 
 interface DoctorModalProps {
     userId: string;
@@ -49,6 +50,7 @@ export default function UserModal(
                                 </Button>
                             }
                         />
+                        <DeleteUserDialog onUserDialogClose={handleClose} />
                     </Box>
                     <DialogCloseButton onClose={handleClose} />
                 </DialogTitle>

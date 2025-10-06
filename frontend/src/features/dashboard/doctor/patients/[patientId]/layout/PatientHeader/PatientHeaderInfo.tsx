@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 
 export default function PatientHeaderInfo({doctorPatient}: {doctorPatient: DoctorPatient | undefined}) {
     const patient = doctorPatient?.patient;
+    const isActive = doctorPatient?.unassigned_at === null;
 
     return (
         <Box sx={{
@@ -34,8 +35,8 @@ export default function PatientHeaderInfo({doctorPatient}: {doctorPatient: Docto
                 )}
 
                 <Chip
-                    color={doctorPatient?.is_active ? "success" : "default"}
-                    label={doctorPatient && doctorPatient.is_active ? "На обліку" : "Виписаний (-а)"}
+                    color={isActive ? "success" : "default"}
+                    label={isActive ? "На обліку" : "Виписаний (-а)"}
                     size={"small"}
                     sx={{ml: 1, fontWeight: 400}}
                 />

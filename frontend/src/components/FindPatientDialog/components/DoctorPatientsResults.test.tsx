@@ -3,6 +3,7 @@ import "@testing-library/jest-dom";
 import DoctorPatientsResults from "./DoctorPatientsResults";
 import DoctorPatient from "@/types/models/DoctorPatient";
 import {Roles} from "@/types/enums/Role";
+import User from "@/types/models/User";
 
 const mockedDoctorPatient: DoctorPatient = {
     id: "10e380ba-aee4-49e6-a6e2-a8511ad36ae5",
@@ -14,9 +15,9 @@ const mockedDoctorPatient: DoctorPatient = {
         gender: "male",
         phone: "380999999999",
         role: Roles.patient
-    },
+    } as User,
     assigned_at: "2023-10-01T12:00:00Z",
-    is_active: true,
+    unassigned_at: null,
     needs_attention: false,
 };
 
@@ -43,8 +44,8 @@ describe("DoctorPatientsResults", () => {
 
     it("displays inactive patients with correct heading", () => {
         const patients: DoctorPatient[] = [
-            { ...mockedDoctorPatient, id: "1", is_active: false },
-            { ...mockedDoctorPatient, id: "2", is_active: false },
+            { ...mockedDoctorPatient, id: "1", unassigned_at: "2023-10-01T12:00:00Z" },
+            { ...mockedDoctorPatient, id: "2", unassigned_at: "2023-10-02T12:00:00Z", },
         ];
 
         render(<DoctorPatientsResults patients={patients} />);
@@ -57,8 +58,8 @@ describe("DoctorPatientsResults", () => {
 
     it("displays both active and inactive patients with separate headings", () => {
         const patients: DoctorPatient[] = [
-            { ...mockedDoctorPatient, id: "1", is_active: true },
-            { ...mockedDoctorPatient, id: "2", is_active: false },
+            { ...mockedDoctorPatient, id: "1", unassigned_at: null },
+            { ...mockedDoctorPatient, id: "2", unassigned_at: "2023-10-01T12:00:00Z" },
         ];
 
         render(<DoctorPatientsResults patients={patients} />);

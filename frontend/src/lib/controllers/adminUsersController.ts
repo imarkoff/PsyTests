@@ -45,3 +45,10 @@ export const changeUserPassword = async (
     AdminUsersService,
     service => service.changeUserPassword(id, newPassword)
 );
+
+export const deleteUser = async (
+    userId: string
+) => fetchProtected(
+    AdminUsersService,
+    service => service.deleteUser(userId)
+);

@@ -32,4 +32,8 @@ export default class AdminUsersService {
             }
         )
             .then(res => res.data);
+
+    deleteUser = async (userId: string) =>
+        this.api.delete<void>(`${this.endpoint}/${userId}`)
+            .then(res => res.data);
 }

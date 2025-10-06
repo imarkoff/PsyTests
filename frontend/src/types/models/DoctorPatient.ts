@@ -4,6 +4,6 @@ export default interface DoctorPatient {
     id: string; // uuid
     patient: User;
     assigned_at: string; // date-time
-    is_active: boolean;
+    unassigned_at: string | null; // date-time or null
     needs_attention: boolean;
 }

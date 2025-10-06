@@ -3,8 +3,8 @@ import DoctorPatientCard from "@/components/PatientCard/DoctorPatientCard";
 import DoctorPatient from "@/types/models/DoctorPatient";
 
 export default function DoctorPatientsResults({patients}: {patients: DoctorPatient[]}) {
-    const activePatients = patients.filter(patient => patient.is_active);
-    const inactivePatients = patients.filter(patient => !patient.is_active);
+    const activePatients = patients.filter(patient => patient.unassigned_at === null);
+    const inactivePatients = patients.filter(patient => patient.unassigned_at !== null);
 
     return (
         <>
