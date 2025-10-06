@@ -2,9 +2,11 @@ from uuid import UUID
 from fastapi import APIRouter, Body, Depends, Response
 
 from app.dependenies.services import get_authenticator, get_user_service
+from app.dependenies.services.user_remover_di import get_user_remover
 from app.schemas.enums.role import Role
 from app.schemas.user import UserDto, UserCreate, UserUpdate
 from app.services.user_authenticator import Authenticator
+from app.services.user_remover import UserRemover
 from app.services.user_service import UserService
 from app.exceptions import AlreadyExistsError, NotFoundError
 
@@ -91,6 +93,29 @@ async def update_user(
         user_dto = UserDto.create(updated_user)
 
         return user_dto
+    except NotFoundError as e:
+        return Response(status_code=404, content=e.message)
+
+
+@router.delete(
+    "/{user_id}",
+    summary="Delete a user by ID",
+    status_code=204,
+    response_description="User deleted successfully",
+    responses={
+        404: {"description": "User not found"},
+    }
+)
+async def delete_user(
+    user_id: UUID,
+    authenticator: Authenticator = Depends(get_authenticator),
+    user_remover: UserRemover = Depends(get_user_remover),
+):
+    await authenticator.auth(role=Role.ADMIN)
+
+    try:
+        await user_remover.remove_user(user_id=user_id)
+        return Response(status_code=204)
     except NotFoundError as e:
         return Response(status_code=404, content=e.message)
 

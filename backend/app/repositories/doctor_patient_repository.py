@@ -1,6 +1,7 @@
+import datetime
 from typing import cast
+from uuid import UUID
 
-from pydantic import UUID4
 from sqlalchemy.orm import Session
 
 from app.db.models.doctor_patient import DoctorPatient
@@ -15,12 +16,13 @@ class DoctorPatientRepository(SQLAlchemyRepository):
 
     async def get_by_doctor_id(
         self,
-        doctor_id: UUID4,
+        doctor_id: UUID,
         pagination_params: PaginationParams
     ) -> PaginatedList[DoctorPatient]:
         query = self.db.query(DoctorPatient).filter(
             DoctorPatient.doctor_id == doctor_id,
-            DoctorPatient.is_active.is_(True)
+            DoctorPatient.unassigned_at.is_(None),
+            DoctorPatient.deleted_at.is_(None)
         )
 
         paginated_doctor_patients = SQLAlchemyPaginator.paginate(
@@ -32,16 +34,26 @@ class DoctorPatientRepository(SQLAlchemyRepository):
 
         return paginated_doctor_patients
 
-    async def get_by_doctor_id_and_patient_id(self, doctor_id: UUID4, patient_id: UUID4) -> DoctorPatient | None:
+    async def get_by_doctor_id_and_patient_id(
+        self,
+        doctor_id: UUID,
+        patient_id: UUID
+    ) -> DoctorPatient | None:
         return self.db.query(DoctorPatient).filter(
             DoctorPatient.doctor_id == doctor_id,
-            DoctorPatient.patient_id == patient_id
+            DoctorPatient.patient_id == patient_id,
+            DoctorPatient.deleted_at.is_(None)
         ).first()
 
-    async def get_by_patient_id_list(self, doctor_id: UUID4, patients: list[UUID4]) -> list[DoctorPatient]:
+    async def get_by_patient_id_list(
+        self,
+        doctor_id: UUID,
+        patients: list[UUID]
+    ) -> list[DoctorPatient]:
         result = self.db.query(DoctorPatient).filter(
             DoctorPatient.doctor_id == doctor_id,
-            DoctorPatient.patient_id.in_(patients)
+            DoctorPatient.patient_id.in_(patients),
+            DoctorPatient.deleted_at.is_(None)
         ).all()
         return cast(list[DoctorPatient], result)
 
@@ -54,20 +66,61 @@ class DoctorPatientRepository(SQLAlchemyRepository):
         self.db.delete(doctor_patient)
         self.db.commit()
 
-    async def change_attention(self, patient_id: UUID4, needs_attention: bool):
+    async def delete_all_patients_from_doctor(self, doctor_id: UUID):
+        self.db.query(DoctorPatient).filter(
+            DoctorPatient.doctor_id == doctor_id
+        ).update(
+            {
+                DoctorPatient.deleted_at: datetime.now(datetime.UTC),
+                DoctorPatient.needs_attention: False,
+                DoctorPatient.unassigned_at: (
+                    DoctorPatient.assigned_at
+                    if DoctorPatient.unassigned_at is not None
+                    else datetime.now(datetime.UTC)
+                )
+            },
+            synchronize_session=False
+        )
+        self.db.commit()
+
+    async def delete_all_relations_of_patient(self, patient_id: UUID):
         self.db.query(DoctorPatient).filter(
             DoctorPatient.patient_id == patient_id
+        ).update(
+            {
+                DoctorPatient.deleted_at: datetime.now(datetime.UTC),
+                DoctorPatient.needs_attention: False,
+                DoctorPatient.unassigned_at: (
+                    DoctorPatient.assigned_at
+                    if DoctorPatient.unassigned_at is not None
+                    else datetime.now(datetime.UTC)
+                )
+            },
+            synchronize_session=False
+        )
+        self.db.commit()
+
+    async def change_attention(self, patient_id: UUID, needs_attention: bool):
+        self.db.query(DoctorPatient).filter(
+            DoctorPatient.patient_id == patient_id,
+            DoctorPatient.deleted_at.is_(None)
         ).update(
             {DoctorPatient.needs_attention: needs_attention},
             synchronize_session=False
         )
         self.db.commit()
 
-    async def change_status(self, patient_id: UUID4, is_active: bool) -> None:
+    async def change_status(self, patient_id: UUID, is_active: bool) -> None:
         self.db.query(DoctorPatient).filter(
-            DoctorPatient.patient_id == patient_id
+            DoctorPatient.patient_id == patient_id,
+            DoctorPatient.deleted_at.is_(None)
         ).update(
-            {DoctorPatient.is_active: is_active},
+            {
+                DoctorPatient.unassigned_at: (
+                    datetime.now(datetime.UTC)
+                    if not is_active else None
+                )
+            },
             synchronize_session=False
         )
         self.db.commit()

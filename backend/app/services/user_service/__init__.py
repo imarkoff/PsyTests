@@ -104,3 +104,11 @@ class UserService:
 
         user.last_login = datetime.now(UTC)
         await self.user_repository.update_user(user)
+
+    async def delete_user(self, user: User) -> None:
+        """
+        Soft delete a user by setting the deleted_at timestamp.
+        :param user: The user to delete
+        """
+
+        await self.user_repository.delete_user(user)

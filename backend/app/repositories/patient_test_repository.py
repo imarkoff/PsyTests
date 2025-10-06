@@ -93,3 +93,23 @@ class PatientTestRepository(SQLAlchemyRepository):
             synchronize_session=False
         )
         self.db.commit()
+
+    async def unassign_tests_by_patient(self, patient_id: UUID):
+        self.db.query(PatientTest).filter(
+            PatientTest.patient_id == patient_id,
+            PatientTest.unassigned_at is None
+        ).update(
+            {PatientTest.unassigned_at: datetime.now(UTC)},
+            synchronize_session=False
+        )
+        self.db.commit()
+
+    async def unassign_tests_by_doctor(self, doctor_id: UUID):
+        self.db.query(PatientTest).filter(
+            PatientTest.assigned_by_id == doctor_id,
+            PatientTest.unassigned_at is None
+        ).update(
+            {PatientTest.unassigned_at: datetime.now(UTC)},
+            synchronize_session=False
+        )
+        self.db.commit()

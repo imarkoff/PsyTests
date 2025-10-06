@@ -34,6 +34,7 @@ class User(Base):
     registered_at: Mapped[datetime] = mapped_column(nullable=False, default=lambda: datetime.now(UTC))
     registered_by_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id"))
     last_login: Mapped[Optional[datetime]] = mapped_column()
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(default=None)
 
     patient_tests: Mapped[List["PatientTest"]] = relationship("PatientTest", back_populates="patient",
                                                               foreign_keys="[PatientTest.patient_id]",
