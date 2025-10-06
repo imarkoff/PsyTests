@@ -1,15 +1,11 @@
 "use client";
 
-import {DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import DialogCloseButton from "@/components/DialogCloseButton";
-import ChangePasswordTitle from "./components/ChangePasswordTitle";
-import PreviousPasswordWillBecomeInvalidAlert from "./components/PreviousPasswordWillBecomeInvalidAlert";
+import {Alert} from "@mui/material";
 import PasswordInput from "./components/PasswordInput";
 import ChangingPasswordErrorAlert from "./components/ChangingPasswordErrorAlert";
-import CancelButton from "./components/CancelButton";
-import SubmitButton from "./components/SubmitButton";
 import useUserContext from "@/features/admin/user-modal/hooks/useUserContext";
 import usePasswordForm from "./hooks/usePasswordForm";
+import ActionDialog from "@/components/ActionDialog";
 
 interface ChangePasswordFormProps {
     onClose: () => void;
@@ -30,16 +26,20 @@ export default function ChangePasswordForm(
     
     return (
         <>
-            <DialogTitle
-                component={"div"}
-                sx={{display: "flex", alignItems: "center", gap: 3}}
-            >
-                <ChangePasswordTitle user={user}/>
-                <DialogCloseButton onClose={onClose}/>
-            </DialogTitle>
+            <ActionDialog.Header
+                header={"Зміна пароля користувача"}
+                subheader={user ? (
+                    <>
+                        Для <strong>{user.surname} {user.name} {user.patronymic}</strong>
+                    </>
+                ) : undefined}
+                hasCloseButton
+            />
 
-            <DialogContent sx={{overflow: "visible", display: "flex", flexDirection: "column", gap: 2}}>
-                <PreviousPasswordWillBecomeInvalidAlert/>
+            <ActionDialog.Content sx={{overflow: "visible"}}>
+                <Alert severity={"warning"}>
+                    Після зміни пароля, попередній пароль буде недійсний.
+                </Alert>
                 <PasswordInput
                     label={"Новий пароль"}
                     placeholder={"Введіть новий пароль"}
@@ -52,19 +52,24 @@ export default function ChangePasswordForm(
                         message={response.error.statusText}
                     />
                 )}
-            </DialogContent>
+            </ActionDialog.Content>
 
-            <DialogActions>
-                <CancelButton
-                    onClose={onClose}
-                    isMutating={isMutating}
-                />
-                <SubmitButton
-                    onSubmit={handleSubmit}
-                    isPasswordEmpty={password.length === 0}
-                    isMutating={isMutating}
-                />
-            </DialogActions>
+            <ActionDialog.Actions>
+                <ActionDialog.Button
+                    onClick={onClose}
+                    disabled={isMutating}
+                >
+                    Відмінити
+                </ActionDialog.Button>
+                <ActionDialog.Button
+                    variant={"contained"}
+                    onClick={handleSubmit}
+                    disabled={password.length === 0}
+                    loading={isMutating}
+                >
+                    Зберегти
+                </ActionDialog.Button>
+            </ActionDialog.Actions>
         </>
     );
 }

@@ -1,10 +1,10 @@
 import {useState} from "react";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Alert, Box} from "@mui/material";
-import DialogCloseButton from "@/components/DialogCloseButton";
+import {Button, Typography, Alert} from "@mui/material";
 import useUserContext from "@/features/admin/user-modal/hooks/useUserContext";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import getDialogText from "./utils/getDialogText";
 import useDeleteUser from "./hooks/useDeleteUser";
+import ActionDialog from "@/components/ActionDialog";
 
 interface DeleteUserDialogProps {
     onUserDialogClose: () => void;
@@ -18,6 +18,7 @@ export default function DeleteUserDialog(
     const handleOpen = () => setIsOpen(true);
 
     const {user} = useUserContext();
+    const dialogText = getDialogText(user?.role);
 
     const {
         handleDelete,
@@ -25,7 +26,7 @@ export default function DeleteUserDialog(
         error,
     } = useDeleteUser(
         () => {
-            handleClose();
+            setIsOpen(false);
             onUserDialogClose();
         }
     );
@@ -38,61 +39,48 @@ export default function DeleteUserDialog(
                 disabled={!user}
                 startIcon={<DeleteForeverIcon/>}
             >
-                {getDialogText(user?.role).buttonText}
+                {dialogText.buttonText}
             </Button>
-            <Dialog
+            <ActionDialog.Root
                 open={isOpen}
                 onClose={handleClose}
-                fullWidth
-                slotProps={{paper: {sx: {maxWidth: "400px"}}}}
             >
-                <DialogTitle
-                    component={"div"}
-                    sx={{display: "flex", alignItems: "center", gap: 3}}
-                >
-                    <Box>
-                        <Typography component={"h2"} variant={"h6"}>
-                            {getDialogText(user?.role).titleText}
-                        </Typography>
-                        {user && (
-                            <Typography variant="body2" sx={{color: "text.secondary"}}>
-                                <strong>{user.surname} {user.name} {user.patronymic}</strong>
-                            </Typography>
-                        )}
-                    </Box>
-                    <DialogCloseButton onClose={handleClose}/>
-                </DialogTitle>
+                <ActionDialog.Header
+                    header={dialogText.titleText}
+                    subheader={user ? (
+                        <strong>{user.surname} {user.name} {user.patronymic}</strong>
+                    ) : undefined}
+                    hasCloseButton
+                />
 
-                <DialogContent sx={{overflow: "visible", display: "flex", flexDirection: "column", gap: 2}}>
+                <ActionDialog.Content>
                     <Typography>
-                        {getDialogText(user?.role).contentText}
+                        {dialogText.contentText}
                     </Typography>
                     {error && !isMutating && (
                         <Alert color={"error"}>
                             {error.statusText || "Сталася помилка під час видалення користувача."}
                         </Alert>
                     )}
-                </DialogContent>
+                </ActionDialog.Content>
 
-                <DialogActions>
-                    <Button
+                <ActionDialog.Actions>
+                    <ActionDialog.Button
                         onClick={handleClose}
                         disabled={isMutating}
-                        fullWidth
                     >
                         Відмінити
-                    </Button>
-                    <Button
+                    </ActionDialog.Button>
+                    <ActionDialog.Button
                         onClick={handleDelete}
                         color={"error"}
                         variant={"contained"}
-                        fullWidth
                         disabled={isMutating}
                     >
                         Видалити
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                    </ActionDialog.Button>
+                </ActionDialog.Actions>
+            </ActionDialog.Root>
         </>
     );
 }

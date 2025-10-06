@@ -1,9 +1,9 @@
 "use client";
 
 import {ComponentType, useState} from "react";
-import {Dialog} from "@mui/material";
 import useUserContext from "@/features/admin/user-modal/hooks/useUserContext";
 import ChangePasswordForm from "./ChangePasswordForm";
+import ActionDialog from "@/components/ActionDialog";
 
 interface ChangePasswordDialogProps {
     OpenButton: ComponentType<{ onClick: () => void, disabled: boolean }>;
@@ -24,13 +24,13 @@ export default function ChangePasswordDialog(
                 onClick={handleOpen}
                 disabled={!user}
             />
-            <Dialog
+            <ActionDialog.Root
                 open={open}
                 onClose={handleClose}
                 maxWidth={"sm"}
             >
                 <ChangePasswordForm onClose={handleClose}/>
-            </Dialog>
+            </ActionDialog.Root>
         </>
     );
 }
