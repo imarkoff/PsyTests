@@ -29,7 +29,7 @@ class DoctorPatientRepository(SQLAlchemyRepository):
             model=DoctorPatient,
             query=query,
             pagination_params=pagination_params,
-            filters_fields=[]
+            filters_fields=["patient", "needs_attention", "assigned_at"]
         )
 
         return paginated_doctor_patients

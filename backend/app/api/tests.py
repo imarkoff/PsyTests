@@ -1,8 +1,7 @@
 from typing import Optional
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException
-from fastapi.params import Depends
+from fastapi import APIRouter, HTTPException, Depends
 from starlette.responses import Response
 
 from app.dependenies.services import get_authenticator

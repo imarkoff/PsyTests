@@ -1,28 +1,50 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette.responses import Response
 
 from app.api.doctor.patients import patient_tests
 from app.dependenies.services import get_authenticator, get_doctor_patient_service
-from app.exceptions import AlreadyExistsError, NotFoundError
+from app.exceptions import AlreadyExistsError, NotFoundError, PaginationError
 from app.schemas.doctor_patient_dto import DoctorPatientDto
+from app.schemas.pagination import PaginatedList, NotParsedPaginationParams
 from app.schemas.patients.patient_create import PatientCreateDto
 from app.schemas.patients.patient_search_dto import PatientSearchDto
 from app.schemas.enums.role import Role
 from app.services.patients.doctor_patient_service import DoctorPatientService
 from app.services.user_authenticator import Authenticator
+from app.utils.query_pagination_parser import QueryPaginationParser
 
 router = APIRouter(prefix="/patients")
 patients_router = APIRouter(tags=["doctor_patients"])
 
-@patients_router.get("/", summary="Get active doctor patients", response_model=list[DoctorPatientDto])
+
+@patients_router.get(
+        "/",
+        summary="Get active doctor patients",
+        response_model=PaginatedList[DoctorPatientDto]
+)
 async def get_patients(
-        authenticator: Authenticator = Depends(get_authenticator),
-        doctor_patient_service: DoctorPatientService = Depends(get_doctor_patient_service)
+    not_parsed_pagination_params: NotParsedPaginationParams = Query(),
+    authenticator: Authenticator = Depends(get_authenticator),
+    doctor_patient_service: DoctorPatientService = Depends(get_doctor_patient_service)
 ):
     doctor = await authenticator.auth(role=Role.DOCTOR)
-    return await doctor_patient_service.get_patients(doctor_id=doctor.id)
+
+    try:
+        pagination_params = QueryPaginationParser.parse(
+            not_parsed_pagination_params
+        )
+        return await doctor_patient_service.get_patients(
+            doctor_id=doctor.id,
+            pagination_params=pagination_params
+        )
+    except PaginationError as e:
+        return Response(
+            status_code=400,
+            content=e.message,
+            media_type="plain/text"
+        )
 
 
 @patients_router.get("/find",
