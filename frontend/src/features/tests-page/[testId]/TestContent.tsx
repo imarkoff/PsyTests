@@ -1,10 +1,10 @@
 "use client";
 
-import {useTestsContext} from "@/features/dashboard/doctor/tests/contexts/TestsContext";
-import useTest from "@/features/dashboard/doctor/tests/[testId]/hooks/useTest";
+import {useTestsContext} from "@/features/tests-page/contexts/TestsContext";
+import useTest from "@/features/tests-page/[testId]/hooks/useTest";
 import testsConfig from "@/features/tests/config";
 import {Roles} from "@/types/enums/Role";
-import TestContentHeader from "@/features/dashboard/doctor/tests/[testId]/components/TestContentHeader";
+import TestContentHeader from "@/features/tests-page/[testId]/components/TestContentHeader";
 import QuestionCardSkeleton from "@/components/QuestionCard/QuestionCardSkeleton";
 import { Typography } from "@mui/material";
 

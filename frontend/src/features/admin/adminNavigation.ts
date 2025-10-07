@@ -10,6 +10,10 @@ const adminNavigation: NavigationProps[] = [
     {
         href: `${endpoint}/patients`,
         label: "Пацієнти"
+    },
+    {
+        href: `${endpoint}/tests`,
+        label: "Тести"
     }
 ]
 

@@ -2,8 +2,8 @@
 
 import {ReactNode} from "react";
 import {Paper} from "@mui/material";
-import TestDrawer from "@/features/dashboard/doctor/tests/components/TestDrawer";
-import {useTestsContext} from "@/features/dashboard/doctor/tests/contexts/TestsContext";
+import TestDrawer from "@/features/tests-page/components/TestDrawer";
+import {useTestsContext} from "@/features/tests-page/contexts/TestsContext";
 import useWindowSize from "@/hooks/useWindowSize";
 import {useParams} from "next/navigation";
 
@@ -27,7 +27,7 @@ export default function TestContent({children}: { children: ReactNode }) {
             )}
             <Paper sx={{
                 overflowY: "scroll",
-                borderRadius: 5,
+                borderRadius: 1,
                 width: 600,
                 maxHeight: "100%",
                 position: "relative",

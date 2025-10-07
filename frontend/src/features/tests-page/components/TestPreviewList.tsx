@@ -1,8 +1,8 @@
 "use client";
 
 import {Box, Typography} from "@mui/material";
-import TestPreview from "@/features/dashboard/doctor/tests/components/TestPreview";
-import {useTestsContext} from "@/features/dashboard/doctor/tests/contexts/TestsContext";
+import TestPreview from "@/features/tests-page/components/TestPreview";
+import {useTestsContext} from "@/features/tests-page/contexts/TestsContext";
 import {useParams} from "next/navigation";
 import TestBase from "@/types/models/TestBase";
 

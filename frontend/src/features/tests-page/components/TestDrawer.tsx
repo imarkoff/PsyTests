@@ -1,6 +1,6 @@
 import {ReactNode, useEffect, useState} from "react";
 import {Box, SwipeableDrawer} from "@mui/material";
-import Puller from "@/features/dashboard/doctor/tests/components/Puller";
+import Puller from "@/features/tests-page/components/Puller";
 
 interface TestDrawerProps {
     children: ReactNode;

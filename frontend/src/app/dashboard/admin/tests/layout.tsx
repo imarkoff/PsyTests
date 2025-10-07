@@ -1,13 +1,13 @@
 import {ReactNode} from "react";
 import {getAllTests} from "@/lib/controllers/testController";
-import DoctorTests from "@/features/dashboard/doctor/tests/DoctorTests";
+import AdminTests from "@/features/admin/tests/AdminTests";
 
 export default async function Layout({children}: { children: ReactNode }) {
     const allTestsResponse = await getAllTests();
 
     return (
-        <DoctorTests testsResponse={allTestsResponse}>
+        <AdminTests testsResponse={allTestsResponse}>
             {children}
-        </DoctorTests>
+        </AdminTests>
     );
 }
