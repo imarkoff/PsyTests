@@ -39,7 +39,7 @@ export default function UserHeaderInfo() {
                         <UserGenderIcon gender={user.gender} />
                     </>
                 ) : (
-                    <Skeleton variant={"text"} sx={{ fontSize: "2.5rem", maxWidth: "500px" }} width={"100%"} />
+                    <Skeleton variant={"text"} sx={{ fontSize: "2.5rem", maxWidth: "400px" }} width={"100%"} />
                 )}
             </Box>
 
@@ -69,11 +69,17 @@ export default function UserHeaderInfo() {
                     </Tooltip>
                 </Stack>
             ) : (
-                <Box sx={{ alignItems: { xs: "center", sm: "flex-start" }, display: "flex", flexDirection: "column"}}>
-                    <Skeleton variant={"text"} width={250} />
+                <Stack
+                    direction={"row"}
+                    flexWrap={"wrap"}
+                    columnGap={1.5}
+                    rowGap={0.5}
+                    divider={<Divider orientation="vertical" flexItem />}
+                >
                     <Skeleton variant={"text"} width={150} />
-                    <Skeleton variant={"text"} width={300} />
-                </Box>
+                    <Skeleton variant={"text"} width={150} />
+                    <Skeleton variant={"text"} width={150} />
+                </Stack>
             )}
         </Box>
     );

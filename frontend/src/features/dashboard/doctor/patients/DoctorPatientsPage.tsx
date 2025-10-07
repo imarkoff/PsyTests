@@ -1,30 +1,41 @@
-import {Box} from "@mui/material";
-import PatientEntities from "@/features/dashboard/doctor/patients/components/PatientEntities";
-import PatientsProvider from "@/features/dashboard/doctor/patients/contexts/PatientsProvider";
-import PatientsHeader from "@/features/dashboard/doctor/patients/components/PatientsHeader";
+"use client";
+
+import DoctorPatientsDataGrid from "./components/DoctorPatientsDataGrid";
+import useGetPatientsApi from "./hooks/lib/useGetPatientsApi";
+import {useRouter} from "next/navigation";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import routeConfig from "@/config/routeConfig";
 
 export default function DoctorPatientsPage() {
+    const router = useRouter();
+
+    const {
+        paginatedPatients,
+        isLoading,
+        error,
+        paginationHandlers: {
+            paginationModel, setPaginationModel,
+            sortModel, setSortModel,
+            filterModel, setFilterModel
+        }
+    } = useGetPatientsApi();
+
+    const handlePatientClick = (doctorPatient: DoctorPatient) => {
+        router.push(routeConfig.dashboard.doctor.patients.patientId.route(doctorPatient.patient.id));
+    };
+
     return (
-        <PatientsProvider>
-            <Box sx={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                flexWrap: "wrap-reverse",
-                alignItems: "center",
-                gap: 1,
-                flexGrow: 1
-            }}>
-                <Box sx={{
-                    display: "grid",
-                    gap: 1,
-                    gridTemplateColumns: {xs: "1fr", sm: "1fr 1fr", lg: "1fr 1fr 1fr"},
-                    maxWidth: "1200px",
-                    width: "100%",
-                }}>
-                    <PatientsHeader />
-                    <PatientEntities />
-                </Box>
-            </Box>
-        </PatientsProvider>
+        <DoctorPatientsDataGrid
+            paginatedPatients={paginatedPatients}
+            loading={isLoading}
+            sortModel={sortModel}
+            onSortModelChange={setSortModel}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            filterModel={filterModel}
+            onFilterModelChange={setFilterModel}
+            onPatientClick={handlePatientClick}
+            error={error}
+        />
     );
 }

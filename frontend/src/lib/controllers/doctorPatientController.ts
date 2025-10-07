@@ -4,10 +4,17 @@ import {fetchProtected} from "@/lib/fetchers";
 import DoctorPatientService from "@/lib/services/DoctorPatientService";
 import UserCreate from "@/types/forms/UserCreate";
 import {AxiosError} from "axios";
+import PaginationParams from "@/types/pagination/PaginationParams";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import convertPaginationParamsToQuery from "@/utils/convertPaginationParamsToQuery";
 
-export const getAllPatients = async () => fetchProtected(
+export const getAllPatients = async (
+    paginationParams: PaginationParams<DoctorPatient>
+) => fetchProtected(
     DoctorPatientService,
-    service => service.getPatients()
+    service => service.getPatients(
+        convertPaginationParamsToQuery(paginationParams)
+    )
 )
 
 export const createPatient = async (patient: UserCreate) => fetchProtected(

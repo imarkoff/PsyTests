@@ -14,7 +14,7 @@ export default function FindModalOpener({handleOpen}: {handleOpen: () => void}) 
             variant={"outlined"}
             sx={{
                 py: 2.5, px: 1,
-                borderRadius: 3,
+                borderRadius: 0.75,
                 gap: 1,
                 borderColor: "divider"
             }}

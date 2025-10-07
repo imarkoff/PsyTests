@@ -72,7 +72,6 @@ const modalPaperStyles = {
     borderColor: 'divider',
     boxShadow: 24,
     display: "grid",
-    borderRadius: 4,
 };
 
 const resultSectionStyles = {

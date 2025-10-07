@@ -12,6 +12,12 @@ const routeConfig = {
         },
         doctor: {
             route: "/dashboard/doctor",
+            patients: {
+                route: "/dashboard/doctor/patients",
+                patientId: {
+                    route: (patientId: string) => `/dashboard/doctor/patients/${patientId}`
+                }
+            },
             tests: {
                 route: "/dashboard/doctor/tests",
                 testId: {

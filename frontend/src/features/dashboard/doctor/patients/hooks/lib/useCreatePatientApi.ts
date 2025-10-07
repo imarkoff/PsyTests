@@ -1,30 +1,32 @@
 import UserCreate from "@/types/forms/UserCreate";
-import {usePatientsContext} from "../../contexts/PatientsContext";
 import useSWRMutation from "swr/mutation";
+import {createPatient} from "@/lib/controllers/doctorPatientController";
 
 export default function useCreatePatientApi(afterCreateAction?: () => void) {
-    const { createPatient } = usePatientsContext();
-
     const fetcher = async (
         _: string,
         {arg}: { arg: UserCreate; }
-    ) => {
-        await createPatient(arg);
-        afterCreateAction?.();
-    }
+    ) => (
+        createPatient(arg)
+    );
 
     const {
         trigger,
         isMutating,
-        error
+        data: response
     } = useSWRMutation(
         "createPatient",
         fetcher
     );
 
+    const handlePatientCreate = async (newPatient: UserCreate) => {
+        await trigger(newPatient);
+        afterCreateAction?.();
+    };
+
     return {
-        onSubmit: trigger,
+        handlePatientCreate,
         loading: isMutating,
-        error
+        error: response?.error?.statusText
     };
 }

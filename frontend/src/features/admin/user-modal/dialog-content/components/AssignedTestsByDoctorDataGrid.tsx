@@ -90,6 +90,8 @@ export default function AssignedTestsByDoctorDataGrid(
                     sortingMode={"server"}
 
                     disableColumnFilter
+
+                    sx={{borderRadius: 0.5}}
                 />
             </NoSsr>
         </Box>

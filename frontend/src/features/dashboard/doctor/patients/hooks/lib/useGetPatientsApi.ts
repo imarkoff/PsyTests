@@ -1,6 +1,11 @@
 import useSWR from "swr";
 import {getAllPatients} from "@/lib/controllers/doctorPatientController";
-import { useMemo } from "react";
+import {ApiResponse} from "@/lib/api-client/types";
+import PaginatedList from "@/types/pagination/PaginatedList";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import useGridPagination from "@/hooks/pagination/mui/useGridPagination";
+import PaginationFieldSortingDirection from "@/types/enums/PaginationFieldSortingDirection";
+import useSetTrigger from "@/hooks/trigger/useSetTrigger";
 
 /**
  * Gets all patients from the server.
@@ -9,25 +14,30 @@ import { useMemo } from "react";
  */
 export default function useGetPatientsApi() {
     const {
+        paginationParams,
+        ...paginationHandlers
+    } = useGridPagination<DoctorPatient>({
+        sortedFields: [{
+            field: "needs_attention",
+            direction: PaginationFieldSortingDirection.DESC
+        }]
+    });
+
+    const {
         data: response,
         isLoading,
-    } = useSWR("getAllPatients", getAllPatients);
+        mutate
+    } = useSWR<ApiResponse<PaginatedList<DoctorPatient>>>(
+        ["/doctor/patients", paginationParams],
+        () => getAllPatients(paginationParams)
+    );
 
-    const allPatients = response?.data;
-
-    const needsAttention = useMemo(() => (
-        allPatients?.filter(patient => patient.needs_attention)
-    ), [allPatients]);
-
-    const normalPatients = useMemo(() => (
-        allPatients?.filter(patient => !patient.needs_attention)
-    ), [allPatients]);
+    useSetTrigger("/doctor/patients", mutate);
 
     return {
-        allPatients,
-        normalPatients,
-        needsAttention,
+        paginatedPatients: response?.data,
         isLoading,
-        error: response?.error?.statusText
+        error: response?.error,
+        paginationHandlers
     };
 }

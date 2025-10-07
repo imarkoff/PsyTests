@@ -2,14 +2,24 @@ import {AxiosInstance} from "axios";
 import DoctorPatient from "@/types/models/DoctorPatient";
 import UserCreate from "@/types/forms/UserCreate";
 import PatientSearch from "@/types/dtos/PatientSearch";
+import PaginatedList from "@/types/pagination/PaginatedList";
+import QueryPaginationParams from "@/types/pagination/QueryPaginationParams";
 
 export default class DoctorPatientService {
-    constructor(private readonly api: AxiosInstance) {}
+    constructor(
+        private readonly api: AxiosInstance
+    ) {
+    }
 
     endpoint = "/doctor/patients";
 
-    getPatients = async () =>
-        await this.api.get<DoctorPatient[]>(this.endpoint)
+    getPatients = async (
+        queryPaginationParams: QueryPaginationParams
+    ) =>
+        await this.api.get<PaginatedList<DoctorPatient>>(
+            this.endpoint,
+            {params: queryPaginationParams}
+        )
             .then(res => res.data);
 
     createPatient = async (patient: UserCreate) =>
@@ -17,7 +27,7 @@ export default class DoctorPatientService {
             .then(res => res.data);
 
     findPatient = async (search: string) =>
-        await this.api.get<PatientSearch>(`${this.endpoint}/find`, { params: { search } })
+        await this.api.get<PatientSearch>(`${this.endpoint}/find`, {params: {search}})
             .then(res => res.data);
 
     getPatient = async (patientId: string) =>
@@ -37,6 +47,6 @@ export default class DoctorPatientService {
             .then(res => res.data);
 
     changePatientStatus = async (patientId: string, isActive: boolean) =>
-        await this.api.patch<void>(`${this.endpoint}/${patientId}/status`, null, { params: { status: isActive } })
+        await this.api.patch<void>(`${this.endpoint}/${patientId}/status`, null, {params: {status: isActive}})
             .then(res => res.data);
 }

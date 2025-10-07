@@ -8,11 +8,11 @@ import UserFormDialog from "@/components/UserForm";
 export default function CreatePatientForm(
     {afterCreateAction}: { afterCreateAction?: () => void }
 ) {
-    const {onSubmit, loading, error} = useCreatePatientApi(afterCreateAction);
+    const {handlePatientCreate, loading, error} = useCreatePatientApi(afterCreateAction);
 
     return (
         <UserFormDialog.Create
-            onSubmit={onSubmit}
+            onSubmit={handlePatientCreate}
             loading={loading}
             error={error}
             userRole={Roles.patient}
