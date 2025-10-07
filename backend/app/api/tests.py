@@ -16,29 +16,39 @@ from app.services.user_authenticator import Authenticator
 
 router = APIRouter(prefix="/tests", tags=["tests"])
 
-@router.get("/", summary="Gets all available tests", response_model=list[TestBase], responses={
-    401: {"description": "Unauthorized"},
-    403: {"description": "Forbidden"},
-})
+
+@router.get(
+        "/",
+        summary="Gets all available tests",
+        response_model=list[TestBase],
+        responses={
+            401: {"description": "Unauthorized"},
+            403: {"description": "Forbidden"},
+        }
+)
 async def get_tests(
     authenticator: Authenticator = Depends(get_authenticator),
     test_service: TestService = Depends(get_test_service)
 ):
-    await authenticator.auth(role=Role.DOCTOR)
+    await authenticator.auth(role=[Role.DOCTOR, Role.ADMIN])
     return await test_service.get_all_tests()
 
 
-@router.get("/{test_id}", summary="Get test info. If doctor, show correct answers",
-            response_model=TestTypes, responses={
-        404: {"description": "Test not found"},
-    })
+@router.get(
+        "/{test_id}",
+        summary="Get test info. If doctor, show correct answers",
+        response_model=TestTypes,
+        responses={
+            404: {"description": "Test not found"},
+        }
+)
 async def get_test(
         test_id: UUID,
         authenticator: Authenticator = Depends(get_authenticator),
         test_service: TestService = Depends(get_test_service)
 ):
     try:
-        await authenticator.auth(role=Role.DOCTOR)  # check if role allows to see answers
+        await authenticator.auth(role=[Role.DOCTOR, Role.ADMIN]) 
         test_bundle = await test_service.get_test(test_id)
         return test_bundle.model.model_dump()
     except HTTPException:
@@ -48,10 +58,14 @@ async def get_test(
         return Response(e.message, status_code=404, media_type="plain/text")
 
 
-@router.get("/{test_id}/image", summary="Get test image", responses={
-    404: {"description": "Test or image not found"},
-    200: {"content": {"image/jpeg": {}}}
-})
+@router.get(
+        "/{test_id}/image",
+        summary="Get test image",
+        responses={
+            404: {"description": "Test or image not found"},
+            200: {"content": {"image/jpeg": {}}}
+        }
+)
 async def get_test_image(
         test_id: UUID,
         image_path: str,
@@ -59,23 +73,30 @@ async def get_test_image(
         test_service: TestService = Depends(get_test_service),
 ):
     try:
-        image = await test_service.get_test_image(test_id, module_path, image_path)
+        image = await test_service.get_test_image(
+            test_id=test_id,
+            module_path=module_path,
+            image_name=image_path
+        )
         return Response(content=image, media_type="image/jpeg")
     except NotFoundError:
         return Response(status_code=404)
 
 
-@router.get("/{test_id}/marks", summary="Get test marks",
-            responses={
-    404: {"description": "Test not found"},
-    200: {"model": any}
-})
+@router.get(
+        "/{test_id}/marks",
+        summary="Get test marks",
+        responses={
+            404: {"description": "Test not found"},
+            200: {"model": any}
+        }
+)
 async def get_test_marks(
         test_id: UUID,
         authenticator: Authenticator = Depends(get_authenticator),
         test_service: TestService = Depends(get_test_service)
 ):
-    await authenticator.auth(role=Role.DOCTOR)
+    await authenticator.auth(role=[Role.DOCTOR, Role.ADMIN])
     try:
         test_bundle = await test_service.get_test(test_id)
         return await test_bundle.service.get_marks_system()

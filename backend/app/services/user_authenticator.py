@@ -7,6 +7,7 @@ from pydantic import UUID4
 
 from app.core.bearer import JWTBearer
 from app.db.models.user import User
+from app.schemas.enums.role import Role
 from app.schemas.user import UserDto
 from app.services.user_service import UserService
 
@@ -22,7 +23,7 @@ class Authenticator:
         self.user_service = user_service
         self.jwt_bearer = jwt_bearer
 
-    async def auth(self, role: str = None) -> UserDto:
+    async def auth(self, role: Role | list[Role] = None) -> UserDto:
         """
         Authenticate user by JWT token.
         Automatically raises HTTPException if token is invalid,
@@ -56,8 +57,21 @@ class Authenticator:
             raise HTTPException(status_code=401)
 
     @staticmethod
-    def _verify_token_by_role(token: dict, role: str):
-        if role and token.get("role") != role:
+    def _verify_token_by_role(token: dict, role: Role | list[Role] | None):
+        token_role = token.get("role", None)
+
+        if not token_role:
+            raise HTTPException(status_code=401)
+
+        has_access = False
+
+        if isinstance(role, list):
+            has_access = token_role in role
+
+        elif isinstance(role, Role):
+            has_access = token_role == role
+
+        if not has_access and role is not None:
             raise HTTPException(status_code=403)
 
     async def _verify_user_exists(self, token: dict) -> User:
