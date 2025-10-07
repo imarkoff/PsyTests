@@ -32,10 +32,10 @@ export default function UserModal(
                 onClose={handleClose}
                 maxWidth={"lg"}
             >
-                <DialogTitle sx={{display: "flex", alignItems: "center", gap: 3}}>
+                <DialogTitle sx={{display: "flex", alignItems: "center", gap: 1}}>
                     <UserHeaderInfo />
                     <MoreMenu handleClose={handleClose} />
-                    <DialogCloseButton onClose={handleClose} />
+                    <DialogCloseButton onClose={handleClose} sx={{m:0}} />
                 </DialogTitle>
                 <DialogContent>
                     <UserModalContent />

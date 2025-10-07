@@ -1,7 +1,7 @@
 "use client";
 
 import {useState} from "react";
-import {IconButton, Menu, MenuItem, Tooltip} from "@mui/material";
+import {IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import PasswordIcon from "@mui/icons-material/Password";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -44,14 +44,21 @@ export default function MoreMenu(
                         'aria-labelledby': 'user-more-button',
                     },
                 }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{horizontal: "right", vertical: "bottom"}}
             >
+                <Typography variant={"subtitle2"} gutterBottom sx={{color: "text.secondary", px: 2, py: 0.5}}>
+                    Дії з користувачем
+                </Typography>
                 <EditUserDialog
                     OpenButton={({onClick, disabled}) => (
                         <MenuItem
                             onClick={onClick}
                             disabled={disabled}
                         >
-                            <EditRoundedIcon sx={{mr: 1.5}}/>
+                            <ListItemIcon>
+                                <EditRoundedIcon fontSize={"small"}/>
+                            </ListItemIcon>
                             Змінити дані
                         </MenuItem>
                     )}
@@ -62,7 +69,9 @@ export default function MoreMenu(
                             onClick={onClick}
                             disabled={disabled}
                         >
-                            <PasswordIcon sx={{mr: 1.5}}/>
+                            <ListItemIcon>
+                                <PasswordIcon fontSize={"small"}/>
+                            </ListItemIcon>
                             Змінити пароль
                         </MenuItem>
                     )}
@@ -75,7 +84,9 @@ export default function MoreMenu(
                             disabled={disabled}
                             sx={{color: "error.main"}}
                         >
-                            <DeleteForeverIcon sx={{mr: 1.5}}/>
+                            <ListItemIcon sx={{color: "error.main"}}>
+                                <DeleteForeverIcon fontSize={"small"}/>
+                            </ListItemIcon>
                             {children}
                         </MenuItem>
                     )}
