@@ -6,12 +6,22 @@ import NeedsAttentionChip from "@/components/NeedsAttentionChip";
 
 const columns: GridColDef<DoctorPatient>[] = [
     {
-        field: "patient",
-        headerName: "Пацієнт",
-        renderCell: ({row}) => (
-            `${row.patient.surname} ${row.patient.name} ${row.patient.patronymic ?? ''}`.trim()
-        ),
-        width: 300
+        field: "patient.surname",
+        headerName: "Прізвище",
+        renderCell: ({row}) => row.patient.surname,
+        width: 200
+    },
+    {
+        field: "patient.name",
+        headerName: "Ім'я",
+        renderCell: ({row}) => row.patient.name,
+        width: 200
+    },
+    {
+        field: "patient.patronymic",
+        headerName: "По батькові",
+        renderCell: ({row}) => row.patient.patronymic,
+        width: 200
     },
     {
         field: "phone",

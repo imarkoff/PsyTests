@@ -1,33 +1,59 @@
-import usePatients from "@/components/AssignTestDialog/hooks/usePatients";
 import {useState} from "react";
 import User from "@/types/models/User";
+import usePostAssignTestApi from "@/components/AssignTestDialog/hooks/lib/usePostAssignTestApi";
+import {ApiResponseError} from "@/lib/api-client/types";
+
+export interface UseTestAssignmentReturn {
+    isMutating: boolean;
+    error: ApiResponseError | null;
+    selectedPatient: User | null;
+    handleAssign: () => Promise<void>;
+    handleChoose: (patient: User) => void;
+    handleClose: () => void;
+}
 
 export default function useTestAssignment(
     testId: string,
     setOpenAction: (open: boolean) => void
-) {
-    const { patients, onAssign, assignError, setAssignError } = usePatients();
-    const [selectedPatient, setSelectedPatient] = useState<User>();
+): UseTestAssignmentReturn {
+    const {
+        assignTest,
+        isMutating,
+        error,
+        reset
+    } = usePostAssignTestApi();
+
+    const [selectedPatient, setSelectedPatient] = useState<User | null>(null);
 
     const handleAssign = async () => {
         if (!selectedPatient) return;
-        await onAssign(selectedPatient.id, testId);
-        setOpenAction(false);
+        const response = await assignTest(
+            selectedPatient.id, testId
+        );
+
+        if (response?.success) {
+            setOpenAction(false);
+            setSelectedPatient(null);
+            reset();
+        }
     };
 
     const handleChoose = (patient: User) => {
         setSelectedPatient(patient);
-        setAssignError(undefined);
+        reset();
     };
 
-    const handleClose = () => setOpenAction(false);
+    const handleClose = () => {
+        setOpenAction(false);
+        setSelectedPatient(null);
+    };
 
     return {
-        patients,
+        isMutating,
+        error: error ?? null,
         selectedPatient,
-        assignError,
         handleAssign,
         handleChoose,
         handleClose
-    }
+    };
 }

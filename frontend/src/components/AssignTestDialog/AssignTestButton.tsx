@@ -2,9 +2,10 @@
 
 import {Button} from "@mui/material";
 import {useState} from "react";
-import AssignTestDialog from "@/components/AssignTestDialog/index";
+import TestBase from "@/types/models/TestBase";
+import AssignTestDialog from "./AssignTestDialog";
 
-export default function AssignTestButton({testId}: {testId: string}) {
+export default function AssignTestButton({test}: {test: TestBase}) {
     const [open, setOpen] = useState(false);
     const onOpen = () => setOpen(true);
 
@@ -13,8 +14,11 @@ export default function AssignTestButton({testId}: {testId: string}) {
             <Button variant={"contained"} onClick={onOpen}>
                 Назначити тест
             </Button>
-            <AssignTestDialog testId={testId} open={open} setOpenAction={setOpen} />
+            <AssignTestDialog
+                test={test}
+                open={open}
+                setOpenAction={setOpen}
+            />
         </>
     );
-
 }

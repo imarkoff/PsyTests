@@ -8,6 +8,9 @@ export default function DoctorPatientsToolbar() {
                 Пацієнти на вашому обліку
             </DataGridToolbar.Title>
             <DataGridToolbar.Options>
+                <DataGridToolbar.Filters/>
+                <DataGridToolbar.Columns/>
+                <DataGridToolbar.Divider/>
                 <FindPatientDialog />
             </DataGridToolbar.Options>
         </DataGridToolbar.Root>

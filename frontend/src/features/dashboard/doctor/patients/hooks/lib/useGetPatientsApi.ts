@@ -29,7 +29,10 @@ export default function useGetPatientsApi() {
         mutate
     } = useSWR<ApiResponse<PaginatedList<DoctorPatient>>>(
         ["/doctor/patients", paginationParams],
-        () => getAllPatients(paginationParams)
+        () => getAllPatients(paginationParams),
+        {
+            keepPreviousData: true
+        }
     );
 
     useSetTrigger("/doctor/patients", mutate);

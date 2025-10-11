@@ -25,7 +25,10 @@ export default function TestPreview({test, onClick, selected}: TestPreviewProps)
                 <CardHeader
                     title={test.name}
                     subheader={test.description}
-                    slotProps={{ subheader: {textOverflow: "ellipsis"} }}
+                    slotProps={{
+                        subheader: {textOverflow: "ellipsis"},
+                        title: { variant: "h6" }
+                    }}
                 />
             </CardActionArea>
         </Card>

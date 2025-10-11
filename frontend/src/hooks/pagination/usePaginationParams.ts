@@ -1,4 +1,4 @@
-import {useReducer} from "react";
+import {useCallback, useReducer} from "react";
 import PaginationParams from "@/types/pagination/PaginationParams";
 import PaginationLogicalOperator from "@/types/enums/PaginationLogicalOperator";
 
@@ -53,12 +53,12 @@ export default function usePaginationParams<
         dispatch({type: 'SET_FILTERS', filters, filterLogicOperator});
     };
 
-    const handleQuickFilterChange = (
+    const handleQuickFilterChange = useCallback((
         quickFilter: PaginationParams<TEntity>['quickFilter'],
         quickFilterLogicOperator: PaginationParams<TEntity>['quickFilterLogicOperator']
     ) => {
         dispatch({type: 'SET_QUICK_FILTER', quickFilter, quickFilterLogicOperator});
-    };
+    }, [dispatch]);
 
     return {
         paginationParams,

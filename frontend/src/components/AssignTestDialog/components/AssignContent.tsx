@@ -1,30 +1,49 @@
+"use client";
+
+import {Alert, AlertTitle, Typography} from "@mui/material";
 import PatientCard from "@/components/PatientCard/PatientCard";
 import DialogContent from "@mui/material/DialogContent";
-import DoctorPatient from "@/types/models/DoctorPatient";
-import User from "@/types/models/User";
+import useDoctorPatientsContext from "../hooks/useDoctorPatientsContext";
+import useTestAssignmentContext from "../hooks/useTestAssignmentContext";
 
-interface AssignContentProps {
-    patients: DoctorPatient[] | undefined;
-    onChoose: (patient: User) => void;
-    selectedPatient: User | undefined;
-}
+export default function AssignContent() {
+    const {paginatedPatients, error} = useDoctorPatientsContext();
+    const {selectedPatient, handleChoose} = useTestAssignmentContext();
 
-export default function AssignContent({patients, onChoose, selectedPatient}: AssignContentProps) {
     return (
         <DialogContent sx={{
-            p: 1,
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(275px, 1fr))",
-            gap: 1
-        }} dividers>
-            {patients?.map((patient) => (
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            p: 2,
+            pt: "2px !important"
+        }}>
+            {paginatedPatients?.data.map((patient) => (
                 <PatientCard
                     patient={patient.patient}
                     key={patient.patient.id}
-                    onClick={onChoose}
                     selected={patient.patient.id === selectedPatient?.id}
+                    onClick={() => handleChoose(patient.patient)}
                 />
             ))}
+            {paginatedPatients && paginatedPatients.total === 0 && (
+                <Typography
+                    variant={"body2"}
+                    color={"textSecondary"}
+                    textAlign={"center"}
+                >
+                    Нікого не знайдено. <br/>
+                    Переконайтеся, що бажаний пацієнт на вашому обліку.
+                </Typography>
+            )}
+            {error && (
+                <Alert severity={"error"}>
+                    <AlertTitle>
+                        Виникла помилка при отриманні пацієнтів
+                    </AlertTitle>
+                    {error.statusText}
+                </Alert>
+            )}
         </DialogContent>
     );
 }

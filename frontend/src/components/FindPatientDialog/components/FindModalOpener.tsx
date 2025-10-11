@@ -7,7 +7,7 @@ export default function FindModalOpener({handleOpen}: {handleOpen: () => void}) 
             icon={<SearchIcon />}
             label={
                 <Typography variant={"body1"} color={"textSecondary"}>
-                    Знайти пацієнта...
+                    Знайти або додати пацієнта...
                 </Typography>
             }
             color={"primary"}

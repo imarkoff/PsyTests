@@ -35,7 +35,7 @@ export default function UserModal(
                 <DialogTitle sx={{display: "flex", alignItems: "center", gap: 1}}>
                     <UserHeaderInfo />
                     <MoreMenu handleClose={handleClose} />
-                    <DialogCloseButton onClose={handleClose} sx={{m:0}} />
+                    <DialogCloseButton onClose={handleClose} gutterRight={false} />
                 </DialogTitle>
                 <DialogContent>
                     <UserModalContent />

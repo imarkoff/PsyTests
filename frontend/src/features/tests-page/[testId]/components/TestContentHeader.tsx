@@ -1,5 +1,5 @@
 import {Box, Skeleton, Typography} from "@mui/material";
-import AssignTestButton from "@/components/AssignTestDialog/AssignTestButton";
+import {AssignTestButton} from "@/components/AssignTestDialog";
 import MarksDialog from "@/components/MarksDialog/MarksDialog";
 import TestBase from "@/types/models/TestBase";
 import { ReactNode } from "react";
@@ -32,7 +32,7 @@ export default function TestContentHeader({test, header, marks, isLoading}: Test
             )}
 
             <Box sx={{display: "flex", alignItems: "center", gap: 1, py: 1}}>
-                <AssignTestButton testId={test.id} />
+                <AssignTestButton test={test} />
                 {marks && (
                     <MarksDialog test={test}>
                         {marks}
