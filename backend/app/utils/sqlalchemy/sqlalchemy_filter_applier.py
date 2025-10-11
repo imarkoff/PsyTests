@@ -5,6 +5,9 @@ from app.exceptions import IncorrectOperatorError
 
 from app.schemas.pagination import PaginationFilter
 from app.schemas.enums.pagination import FilterOperator
+from app.utils.sqlalchemy.nested_attribute_resolver import (
+    NestedAttributeResolver
+)
 from .filter_operator_applier import FilterOperatorApplier
 
 
@@ -51,15 +54,19 @@ class SQLAlchemyFilterApplier:
 
         return query
 
-    @staticmethod
+    @classmethod
     def _get_filter_clauses[T: object](
+        cls,
         model: Any,
         filters: list[PaginationFilter]
     ) -> list[Any]:
         filter_clauses: list[Any] = []
 
         for filter in filters:
-            column = getattr(model, filter.field)
+            column = NestedAttributeResolver.get_nested_attribute(
+                model=model,
+                path=filter.field
+            )
             op = FilterOperator(filter.operator)
             value = filter.value
             clause = FilterOperatorApplier[T].apply(op, column, value)

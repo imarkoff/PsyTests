@@ -35,6 +35,7 @@ class DoctorPatientRepository(SQLAlchemyRepository):
                 User.name,
                 User.surname,
                 User.patronymic,
+                User.phone,
                 DoctorPatient.needs_attention,
                 DoctorPatient.assigned_at
             ]

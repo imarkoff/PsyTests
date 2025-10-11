@@ -35,9 +35,8 @@ class SQLAlchemyQuickFilter:
         return or_(
             *[
                 field.ilike(f"%{term}%")
-                if cls._is_string_column(field)
-                else field == term
                 for field in fields
+                if cls._is_string_column(field)
             ]
         )
 

@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Query
 from typing import Any
-from app.schemas.pagination import SortedField
 from app.schemas.enums.pagination import SortingDirection
+from app.schemas.pagination import SortedField
+from app.utils.sqlalchemy.nested_attribute_resolver import (
+    NestedAttributeResolver
+)
 
 
 class SQLAlchemyPaginationSorter:
@@ -23,13 +26,17 @@ class SQLAlchemyPaginationSorter:
         :param query: The SQLAlchemy query to sort.
         :param fields: A list of SortedField instances defining the sorting.
         """
-        
+
         mutated_query = query
         for field in fields:
+            nested_attr = NestedAttributeResolver.get_nested_attribute(
+                model=model,
+                path=field.field
+            )
             mutated_query = mutated_query.order_by(
-                getattr(model, field.field).asc()
+                nested_attr.asc()
                 if field.direction == SortingDirection.ASC
-                else getattr(model, field.field).desc()
+                else nested_attr.desc()
             )
 
         mutated_query = cls._add_tie_breaker(
