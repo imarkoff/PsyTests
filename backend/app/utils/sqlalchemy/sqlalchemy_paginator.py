@@ -1,3 +1,4 @@
+from typing import Any
 from sqlalchemy.orm import Query
 
 from app.schemas.pagination import PaginationParams
@@ -17,22 +18,30 @@ class SQLAlchemyPaginator:
     def paginate[T: object](
         cls,
         model: T,
-        query: Query[T],
+        query: Query[Any],
         pagination_params: PaginationParams,
-        filters_fields: list[str] = []
+        joins: list[T] = [],
+        filters_fields: list[Any] = []
     ) -> PaginatedList[T]:
         """
         Paginate a SQLAlchemy query
         based on the provided pagination parameters.
 
         Params:
-            model: The SQLAlchemy model class.
+            model: The SQLAlchemy model class being queried.
             query: The SQLAlchemy query to paginate.
             pagination_params:
                 The pagination parameters including
                 offset, limit, sorting, and filtering.
+            joins:
+                List of related models to join in the query.
+                This is necessary for filtering and sorting
+                on related model fields.
+                E.g., [Model.relationship].
             filters_fields:
                 List of fields to apply filtering on.
+                Can include related model fields, if they are joined
+                e.g. "NestedModel.field" (not Model.relationship.field).
                 If empty, filters won't be applied.
 
         Returns:
@@ -43,7 +52,26 @@ class SQLAlchemyPaginator:
                 If an invalid operator for applying filters is provided.
             IncorrectFilterOperatorError:
                 If an invalid filter operator is used inside a filter.
+
+        Example:
+            ```python
+            paginated_items = SQLAlchemyPaginator.paginate(
+                model=DoctorPatient,
+                query=session.query(DoctorPatient),
+                pagination_params=pagination_params,
+                joins=[DoctorPatient.patient],
+                filters_fields=[
+                    User.name,        # not DoctorPatient.patient.name
+                    User.surname,     # not DoctorPatient.patient.surname
+                    User.patronymic,  # not DoctorPatient.patient.patronymic
+                    DoctorPatient.needs_attention,
+                    DoctorPatient.assigned_at
+                ]
+            )
+            ```
         """
+
+        query = cls._apply_joins(query, joins)
 
         query = SQLAlchemyPaginationSorter.sort(
             model=model,
@@ -81,3 +109,12 @@ class SQLAlchemyPaginator:
             sorted_fields=pagination_params.sorted_fields,
             quick_filter=pagination_params.quick_filter
         )
+
+    @staticmethod
+    def _apply_joins[T: object](
+        query: Query[T],
+        joins: list[Any]
+    ) -> Query[T]:
+        for join in joins:
+            query = query.join(join)
+        return query

@@ -20,7 +20,7 @@ class SQLAlchemyFilterApplier:
         query: Query[T],
         filters: list[PaginationFilter],
         operator: Literal["AND", "OR"],
-        fields: list[str]
+        fields: list[Any]
     ) -> Query[T]:
         """
         Apply filters to the SQLAlchemy query.

@@ -5,6 +5,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.db.models.doctor_patient import DoctorPatient
+from app.db.models.user import User
 from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
 from app.schemas.pagination import PaginationParams, PaginatedList
 from app.utils.sqlalchemy import SQLAlchemyPaginator
@@ -29,7 +30,14 @@ class DoctorPatientRepository(SQLAlchemyRepository):
             model=DoctorPatient,
             query=query,
             pagination_params=pagination_params,
-            filters_fields=["patient", "needs_attention", "assigned_at"]
+            joins=[DoctorPatient.patient],
+            filters_fields=[
+                User.name,
+                User.surname,
+                User.patronymic,
+                DoctorPatient.needs_attention,
+                DoctorPatient.assigned_at
+            ]
         )
 
         return paginated_doctor_patients
