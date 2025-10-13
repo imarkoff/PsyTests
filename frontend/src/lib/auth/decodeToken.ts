@@ -1,5 +1,5 @@
 import "server-only";
-import {Role} from "@/schemas/Role";
+import {Role} from "@/types/enums/Role";
 import {JWTPayload, jwtVerify} from "jose";
 
 const secretKey = process.env.JWT_SECRET;

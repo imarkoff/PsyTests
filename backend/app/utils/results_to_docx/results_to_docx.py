@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from docx import Document
 from docx.shared import Pt
 
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.utils.results_to_docx.document_formatter import DocumentFormatter
 from app.utils.results_to_docx.header_component import HeaderComponent
 

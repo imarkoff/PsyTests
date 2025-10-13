@@ -7,7 +7,7 @@ from app.dependenies.services import get_authenticator, get_patient_test_service
 from app.dependenies.services.test_history_service_di import get_test_history_service
 from app.exceptions import NotFoundError, AlreadyExistsError
 from app.schemas.patients.patient_test import PatientTestDto
-from app.schemas.role import Role
+from app.schemas.enums.role import Role
 from app.schemas.test_result import TestResultDto
 from app.services.patients.doctor_patient_service import DoctorPatientService
 from app.services.patients.patient_test_service import PatientTestService
@@ -28,7 +28,7 @@ async def get_patient_tests(
         patient_test_service: PatientTestService = Depends(get_patient_test_service)
 ):
     doctor = await authenticator.auth(role=Role.DOCTOR)
-    return await patient_test_service.get_patient_tests_by_doctor(doctor_id=doctor.id, patient_id=patient_id)
+    return await patient_test_service.get_patient_tests_by_doctor_and_patient(doctor_id=doctor.id, patient_id=patient_id)
 
 
 @router.get("/history", summary="Get passed tests history of patient", response_model=list[TestResultDto])

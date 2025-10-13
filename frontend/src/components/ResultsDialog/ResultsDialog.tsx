@@ -1,6 +1,6 @@
 "use client";
 
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 import {Button, Dialog} from "@mui/material";
 import {useState} from "react";
 import ResultsTitle from "@/components/ResultsDialog/components/ResultsTitle";

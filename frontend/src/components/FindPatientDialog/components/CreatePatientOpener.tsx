@@ -5,7 +5,7 @@ export default function CreatePatientOpener({handleOpen}: {handleOpen: () => voi
         <Box sx={{
             position: "sticky", top: 0, ml: "auto",
             display: "flex", alignItems: "baseline", justifyContent: "flex-end",
-            backgroundColor: "background.paper", borderRadius: 3,
+            backgroundColor: "background.paper", borderRadius: 0.5,
             border: "1px solid", borderColor: "divider",
             p: 0.5, zIndex: 1
         }}>

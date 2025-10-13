@@ -1,5 +1,5 @@
 import {Box} from "@mui/material";
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 import PatientHeaderInfo from "@/features/dashboard/doctor/patients/[patientId]/layout/PatientHeader/PatientHeaderInfo";
 import ChangeStatusButton from "@/features/dashboard/doctor/patients/[patientId]/components/ChangeStatusButton";
 import DeletePatientButton from "@/features/dashboard/doctor/patients/[patientId]/components/DeletePatientButton";

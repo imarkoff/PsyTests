@@ -1,7 +1,7 @@
 "use client";
 
 import PatientCard from "@/components/PatientCard/PatientCard";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import {IconButton, Tooltip} from "@mui/material";

@@ -1,6 +1,6 @@
 import {Box, Paper, Typography} from "@mui/material";
 import FindInput from "@/components/FindPatientDialog/components/FindInput";
-import CreatePatientDialog from "@/components/CreatePatientDialog/CreatePatientDialog";
+import CreatePatientDialog from "@/features/dashboard/doctor/patients/components/CreatePatientDialog";
 import CreatePatientOpener from "@/components/FindPatientDialog/components/CreatePatientOpener";
 import DoctorPatientsResults from "@/components/FindPatientDialog/components/DoctorPatientsResults";
 import OtherPatientsResults from "@/components/FindPatientDialog/components/OtherPatientsResults";
@@ -72,7 +72,6 @@ const modalPaperStyles = {
     borderColor: 'divider',
     boxShadow: 24,
     display: "grid",
-    borderRadius: 4,
 };
 
 const resultSectionStyles = {

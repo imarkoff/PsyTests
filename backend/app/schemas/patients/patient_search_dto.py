@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from app.db.models.doctor_patient import DoctorPatient
 from app.db.models.test_history import User
 from app.schemas.doctor_patient_dto import DoctorPatientDto
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 
 
 class PatientSearchDto(BaseModel):

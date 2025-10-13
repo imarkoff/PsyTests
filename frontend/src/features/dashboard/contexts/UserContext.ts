@@ -1,5 +1,5 @@
 import {createContext, useContext} from "react";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 const UserContext = createContext<{
     me?: User | null,

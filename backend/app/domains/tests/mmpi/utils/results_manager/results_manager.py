@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from app.schemas.pass_test import PassTestAnswers
-from app.schemas.user_gender import UserGender
+from app.schemas.enums.user_gender import UserGender
 from app.domains.tests.mmpi.utils.results_manager.results_converter import ResultsConverter
 from app.domains.tests.mmpi.utils.results_manager.abstract_results_converter import AbstractResultsConverter, \
     ConvertedResults

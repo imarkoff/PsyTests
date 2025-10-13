@@ -4,7 +4,7 @@ from typing import Type
 from app.domains.tests.base.test_verdict import TestVerdict
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.base.test_base import TestBase
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 

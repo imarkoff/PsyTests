@@ -7,7 +7,7 @@ from app.domains.tests.stai.schemas.stai_verdict import STAIVerdict
 from app.domains.tests.stai.utils.verdict_getter import STAIVerdictGetter
 from app.domains.tests.stai.verdicts import get_stai_verdicts
 from app.schemas.pass_test import PassTestAnswers
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.utils.results_to_docx.results_to_docx import ResultsToDocx
 
 

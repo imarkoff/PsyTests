@@ -1,7 +1,7 @@
 from app.domains.tests.base.test_verdict import TestVerdict
 from app.schemas.pass_test import PassTestAnswers
 from app.domains.tests.base.test_base import TestBase
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.domains.tests.base.test_processor import TestProcessor
 from app.domains.tests.base.services.results_to_docx_impl import ResultsToDocxImpl
 

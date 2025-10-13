@@ -1,4 +1,4 @@
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 export const mockedPatient: User = {
     id: "4afc891b-7181-4cff-840a-8cd176537985",

@@ -1,4 +1,4 @@
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 import {Typography} from "@mui/material";
 import OtherPatientCard from "@/components/PatientCard/OtherPatientCard";
 

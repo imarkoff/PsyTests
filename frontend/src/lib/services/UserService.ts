@@ -1,5 +1,5 @@
 import {AxiosInstance} from "axios";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 
 export default class UserService {
     constructor(private readonly api: AxiosInstance) {}

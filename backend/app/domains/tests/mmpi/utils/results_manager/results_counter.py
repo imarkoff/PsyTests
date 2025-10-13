@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, TypeAlias
 
 from app.schemas.pass_test import PassTestAnswers
-from app.schemas.user_gender import UserGender
+from app.schemas.enums.user_gender import UserGender
 from app.domains.tests.mmpi.schemas.mmpi_question import MMPIAnswer
 
 if TYPE_CHECKING:

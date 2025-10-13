@@ -21,7 +21,29 @@ class DoctorPatientDeleter:
         doctor_patient = await self.doctor_patient_repository.get_by_doctor_id_and_patient_id(doctor_id, patient_id)
 
         if doctor_patient:
-            await self.patient_test_unassigner.unassign_doctor_tests(doctor_id, patient_id)
+            await self.patient_test_unassigner.unassign_tests_by_doctor_and_patient(doctor_id, patient_id)
             await self.doctor_patient_repository.delete_doctor_patient(doctor_patient)
         else:
             raise NotFoundError
+
+    async def unassign_all_patients_from_doctor(self, doctor_id: UUID):
+        """
+        Unassign all patients from doctor
+        """
+        await self.patient_test_unassigner.unassign_tests_by_doctor(
+            doctor_id=doctor_id
+        )
+        await self.doctor_patient_repository.delete_all_patients_from_doctor(
+            doctor_id=doctor_id
+        )
+
+    async def unassign_all_doctors_from_patient(self, patient_id: UUID):
+        """
+        Unassign all doctors from patient
+        """
+        await self.patient_test_unassigner.unassign_tests_by_patient(
+            patient_id=patient_id
+        )
+        await self.doctor_patient_repository.delete_all_doctors_from_patient(
+            patient_id=patient_id
+        )

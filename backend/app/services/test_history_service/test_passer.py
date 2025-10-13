@@ -5,7 +5,7 @@ from app.exceptions import ValidationError
 from app.repositories.test_history_repository import TestHistoryRepository
 from app.schemas.pass_test import PassTestDto, PassTestAnswers
 from app.schemas.test_result import TestResultShortDto
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.services.patients.doctor_patient_service import DoctorPatientChanger
 from app.services.patients.patient_test_service import PatientTestGetter
 from app.services.test_service import TestService

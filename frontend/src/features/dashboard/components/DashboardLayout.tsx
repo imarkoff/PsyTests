@@ -2,7 +2,7 @@ import {ReactNode} from "react";
 import UserProvider from "@/features/dashboard/contexts/UserProvider";
 import {Box} from "@mui/material";
 import { ApiResponse } from "@/lib/api-client/types";
-import User from "@/schemas/User";
+import User from "@/types/models/User";
 import NavigationBar from "@/features/dashboard/components/NavigationBar";
 
 export default function DashboardLayout(

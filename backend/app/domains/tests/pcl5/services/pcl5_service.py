@@ -1,6 +1,6 @@
 from app.domains.tests.pcl5.schemas.pcl5_verdict import PCL5Verdict
 from app.schemas.pass_test import PassTestAnswers
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.domains.tests.base.test_processor import TestProcessor
 from app.domains.tests.pcl5.schemas.pcl5_test import PCL5Test
 from app.domains.tests.pcl5.to_docx.pcl5_to_docx import PCL5ToDocx

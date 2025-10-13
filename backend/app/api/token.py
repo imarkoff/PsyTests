@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import HTTPException, APIRouter, Depends
 from starlette.requests import Request
 from starlette.responses import Response
@@ -9,11 +10,15 @@ from app.services.user_service import UserService
 router = APIRouter(prefix="/token", tags=["token"])
 
 
-@router.post("/refresh", summary="Refresh access token",
-    response_class=Response, responses={
-        401: {"description": "Invalid refresh token"},
-        200: {"content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}}, "description": "New access token"}
-    }
+@router.post(
+        "/refresh", summary="Refresh access token",
+        response_class=Response, responses={
+            401: {"description": "Invalid refresh token"},
+            200: {
+                "content": {"text/plain": {"example": "xxxx.yyyy.zzzz"}},
+                "description": "New access token"
+            }
+        }
 )
 async def refresh_token(
     request: Request,
@@ -29,6 +34,8 @@ async def refresh_token(
 
     if not user:
         raise HTTPException(status_code=401)
+
+    asyncio.create_task(user_service.update_last_login(user.id))
 
     new_access_token = JWTBearer.sign(user)
     return Response(status_code=200, content=new_access_token, media_type="text/plain")

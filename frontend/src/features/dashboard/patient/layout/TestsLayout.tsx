@@ -4,7 +4,7 @@ import {Box} from "@mui/material";
 import AssignedTestCard from "@/components/AssignedTestCard/AssignedTestCard";
 import TestsLayoutBox, { TestsLayoutError } from "@/features/dashboard/patient/components/TestsLayoutBox";
 import {useRouter} from "next/navigation";
-import PatientTest from "@/schemas/PatientTest";
+import PatientTest from "@/types/models/PatientTest";
 import {ApiResponse} from "@/lib/api-client/types";
 
 export default function TestsLayout(

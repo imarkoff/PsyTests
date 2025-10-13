@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: FastAPI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "cwd": "${workspaceFolder}/backend",
+            "env": {
+                "CORS_ORIGINS": "https://localhost:3000,http://localhost:3000",
+                "DOMAIN": "0.0.0.0",
+                "POSTGRESQL_URL": "postgresql://imarkoff:phoenix@localhost:54320/psytests",
+                "SECRET_KEY": "v}eTez+>eQBc4}8F{>n\":wM'NF$0b(?5RV\"ZoHc:V4Rva]IL<82i!ZrNV8}P$:y"
+            },
+            "args": [
+                "app.main:app",
+                "--reload",
+                "--port=8000",
+                "--ssl-keyfile=/home/imarkoff/Projects/PsyTests/certs/privkey.pem",
+                "--ssl-certfile=/home/imarkoff/Projects/PsyTests/certs/fullchain.pem"
+            ],
+            "jinja": true
+        }
+    ]
+}

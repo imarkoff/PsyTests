@@ -1,6 +1,6 @@
 "use client";
 
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 import {Button, Snackbar} from "@mui/material";
 import React, {useState} from "react";
 import CheckIcon from '@mui/icons-material/Check';

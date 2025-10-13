@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import ResultsContent from "./ResultsContent";
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 import "@testing-library/jest-dom";
 
 // eslint-disable-next-line react/display-name
@@ -22,7 +22,7 @@ const ContentMock = jest.fn(({ test }) => <div data-testid="content-mock">{test.
 const FooterMock = jest.fn(({ test }) => <div data-testid="footer-mock">{test.id}</div>);
 
 
-jest.mock("@/features/tests/config", () => ({
+jest.mock("@/features/shared/psy-test-definitions/config", () => ({
     __esModule: true,
     default: {
         "raven": {

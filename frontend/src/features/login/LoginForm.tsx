@@ -13,7 +13,7 @@ import {
 import PasswordInput from "@/features/login/components/PasswordInput";
 import SignInContainer from "@/features/login/components/SignInContainer";
 import {FormProvider, useForm} from "react-hook-form";
-import UserLogin from "@/schemas/UserLogin";
+import UserLogin from "@/types/forms/UserLogin";
 import useOnLogIn from "@/features/login/hooks/useOnLogIn";
 
 export default function LoginForm() {

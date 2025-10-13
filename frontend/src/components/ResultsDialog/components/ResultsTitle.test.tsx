@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import ResultsTitle from "./ResultsTitle";
-import TestBase from "@/schemas/TestBase";
+import TestBase from "@/types/models/TestBase";
 import "@testing-library/jest-dom";
 
 /* eslint-disable react/display-name */

@@ -2,16 +2,37 @@
 
 import {fetchProtected} from "@/lib/fetchers";
 import DoctorPatientService from "@/lib/services/DoctorPatientService";
-import PatientCreate from "@/schemas/PatientCreate";
+import UserCreate from "@/types/forms/UserCreate";
+import {AxiosError} from "axios";
+import PaginationParams from "@/types/pagination/PaginationParams";
+import DoctorPatient from "@/types/models/DoctorPatient";
+import convertPaginationParamsToQuery from "@/utils/convertPaginationParamsToQuery";
 
-export const getAllPatients = async () => fetchProtected(
+export const getAllPatients = async (
+    paginationParams: PaginationParams<DoctorPatient>
+) => fetchProtected(
     DoctorPatientService,
-    service => service.getPatients()
+    service => service.getPatients(
+        convertPaginationParamsToQuery(paginationParams)
+    )
 )
 
-export const createPatient = async (patient: PatientCreate) => fetchProtected(
+export const createPatient = async (patient: UserCreate) => fetchProtected(
     DoctorPatientService,
-    service => service.createPatient(patient)
+    async (service) => {
+        try {
+            return await service.createPatient(patient);
+        }
+        catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response?.status === 409) {
+                    throw new Error("Пацієнт з таким номером телефону вже існує.");
+                } else {
+                    throw new Error(`Помилка при створенні пацієнта: ${error.message}`);
+                }
+            }
+        }
+    }
 )
 
 export const findPatient = async (search: string) => fetchProtected(

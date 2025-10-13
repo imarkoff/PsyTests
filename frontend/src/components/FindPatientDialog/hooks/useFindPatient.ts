@@ -1,7 +1,7 @@
 "use client";
 
 import {useCallback, useEffect, useState} from "react";
-import PatientSearch from "@/schemas/PatientSearch";
+import PatientSearch from "@/types/dtos/PatientSearch";
 import {findPatient} from "@/lib/controllers/doctorPatientController";
 import withSafeErrorHandling from "@/lib/fetchers/withSafeErrorHandling";
 import useDebounce from "@/hooks/useDebounce";

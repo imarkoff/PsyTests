@@ -5,6 +5,8 @@ from uuid import UUID
 from app.db.models.doctor_patient import DoctorPatient
 from app.db.models.patient_test import PatientTest
 from app.repositories.sql_alchemy_repository import SQLAlchemyRepository
+from app.schemas.pagination import PaginationParams, PaginatedList
+from app.utils.sqlalchemy import SQLAlchemyPaginator
 
 
 class PatientTestRepository(SQLAlchemyRepository):
@@ -24,6 +26,33 @@ class PatientTestRepository(SQLAlchemyRepository):
             PatientTest.unassigned_at == None
         ).all()
         return cast(list[PatientTest], result)
+
+    async def get_assigned_tests_by_doctor_id(
+        self,
+        doctor_id: UUID,
+        pagination_params: PaginationParams
+    ) -> PaginatedList[PatientTest]:
+        """
+        Get all tests assigned by a specific doctor
+        :param doctor_id: ID of the doctor
+        :param pagination_params: Pagination parameters for the query
+        :return: Paginated list of patient tests
+        :raises PaginationError: If pagination parameters are invalid
+        """
+
+        query = (
+            self.db.query(PatientTest)
+            .filter(PatientTest.assigned_by_id == doctor_id)
+        )
+
+        paginated_list = SQLAlchemyPaginator.paginate(
+            model=PatientTest,
+            query=query,
+            pagination_params=pagination_params,
+            filters_fields=[]
+        )
+
+        return paginated_list
 
     async def get_assigned_patient_tests_by_doctor_id(self, doctor_id: UUID, patient_id: UUID) -> list[PatientTest]:
         result = (self.db.query(PatientTest)
@@ -59,6 +88,26 @@ class PatientTestRepository(SQLAlchemyRepository):
         self.db.query(PatientTest).filter(
             PatientTest.patient_id == patient_id,
             PatientTest.assigned_by_id == doctor_id
+        ).update(
+            {PatientTest.unassigned_at: datetime.now(UTC)},
+            synchronize_session=False
+        )
+        self.db.commit()
+
+    async def unassign_tests_by_patient(self, patient_id: UUID):
+        self.db.query(PatientTest).filter(
+            PatientTest.patient_id == patient_id,
+            PatientTest.unassigned_at is None
+        ).update(
+            {PatientTest.unassigned_at: datetime.now(UTC)},
+            synchronize_session=False
+        )
+        self.db.commit()
+
+    async def unassign_tests_by_doctor(self, doctor_id: UUID):
+        self.db.query(PatientTest).filter(
+            PatientTest.assigned_by_id == doctor_id,
+            PatientTest.unassigned_at is None
         ).update(
             {PatientTest.unassigned_at: datetime.now(UTC)},
             synchronize_session=False

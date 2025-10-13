@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {Role, Roles} from "@/schemas/Role";
+import {Role, Roles} from "@/types/enums/Role";
 import decodeToken from "@/lib/auth/decodeToken";
 import {getAccessTokenFromRequest} from "@/lib/auth/tokenManager";
 import {checkIsProtectedRoute} from "@/lib/middleware/routes";
@@ -45,6 +45,7 @@ const handleRoleBasedRouting = (
     if (pathname === "/dashboard" || pathname === "/dashboard/") {
         if (role === Roles.patient) return NextResponse.redirect(new URL('/dashboard/patient', url));
         if (role === Roles.doctor) return NextResponse.redirect(new URL('/dashboard/doctor', url));
+        if (role === Roles.admin) return NextResponse.redirect(new URL('/dashboard/admin', url))
     }
     return null;
 }
@@ -54,11 +55,13 @@ const checkRoleBasedAccess = (
 ) => {
     const patientRoutePattern = /^\/dashboard\/patient(?:\/.*)?$/;
     const doctorRoutePattern = /^\/dashboard\/doctor(?:\/.*)?$/;
-    
+    const adminRoutePattern = /^\/dashboard\/admin(?:\/.*)?$/;
+
     const noAccessToPatientRoute = patientRoutePattern.test(pathname) && role !== Roles.patient;
     const noAccessToDoctorRoute = doctorRoutePattern.test(pathname) && role !== Roles.doctor;
+    const noAccessToAdminRoute = adminRoutePattern.test(pathname) && role !== Roles.admin;
 
-    if (noAccessToDoctorRoute || noAccessToPatientRoute) {
+    if (noAccessToDoctorRoute || noAccessToPatientRoute || noAccessToAdminRoute) {
         return NextResponse.redirect(new URL('/dashboard', url));
     }
     

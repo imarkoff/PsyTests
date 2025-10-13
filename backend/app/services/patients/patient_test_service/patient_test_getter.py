@@ -1,8 +1,10 @@
+from typing import cast
 from uuid import UUID
 
 from app.db.models.patient_test import PatientTest
 from app.exceptions import NotFoundError
 from app.repositories.patient_test_repository import PatientTestRepository
+from app.schemas.pagination import PaginatedList, PaginationParams
 from app.schemas.patients.patient_test import PatientTestDto
 from app.services.test_service import TestService
 
@@ -31,7 +33,27 @@ class PatientTestGetter:
         patient_tests = await self.repository.get_assigned_tests_by_patient_id(patient_id)
         return [await self._patient_test_to_dto(test) for test in patient_tests]
 
-    async def get_patient_tests_by_doctor(self, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
+    async def get_patient_tests_by_doctor(
+        self,
+        doctor_id: UUID,
+        pagination_params: PaginationParams
+    ) -> PaginatedList[PatientTestDto]:
+        """Get all tests assigned by a specific doctor"""
+
+        patient_tests = await self.repository.get_assigned_tests_by_doctor_id(
+            doctor_id=doctor_id,
+            pagination_params=pagination_params
+        )
+
+        patient_tests_dtos = cast(PaginatedList[PatientTestDto], patient_tests)
+        patient_tests_dtos.data = [
+            await self._patient_test_to_dto(test)
+            for test in patient_tests.data
+        ]
+
+        return patient_tests_dtos
+
+    async def get_patient_tests_by_doctor_and_patient(self, doctor_id: UUID, patient_id: UUID) -> list[PatientTestDto]:
         """Get all tests assigned to a patient by a specific doctor"""
         patient_tests = await self.repository.get_assigned_patient_tests_by_doctor_id(doctor_id, patient_id)
         return [await self._patient_test_to_dto(test) for test in patient_tests]

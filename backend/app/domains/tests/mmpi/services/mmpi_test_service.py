@@ -3,7 +3,7 @@ from typing import Type
 
 from app.domains.tests.mmpi.schemas.mmpi_verdict import MMPIVerdict
 from app.schemas.pass_test import PassTestAnswers
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 from app.domains.tests.base.test_processor import TestProcessor
 from app.domains.tests.mmpi import verdicts
 from app.domains.tests.mmpi.schemas.mmpi_test import MMPITest

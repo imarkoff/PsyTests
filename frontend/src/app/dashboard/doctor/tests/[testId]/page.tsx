@@ -1,9 +1,9 @@
-import TestContent from "@/features/dashboard/doctor/tests/[testId]/TestContent";
+import DoctorTestPage from "@/features/dashboard/doctor/tests/DoctorTestPage";
 
 export default async function TestPage(
     {params}: { params: Promise<{ testId: string }> }
 ) {
-    const { testId } = await params;
+    const {testId} = await params;
 
-    return <TestContent testId={testId} />;
+    return <DoctorTestPage testId={testId}/>;
 }

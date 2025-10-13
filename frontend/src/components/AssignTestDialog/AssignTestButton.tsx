@@ -1,20 +1,29 @@
 "use client";
 
-import {Button} from "@mui/material";
 import {useState} from "react";
-import AssignTestDialog from "@/components/AssignTestDialog/index";
+import {Button} from "@mui/material";
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import TestBase from "@/types/models/TestBase";
+import AssignTestDialog from "./AssignTestDialog";
 
-export default function AssignTestButton({testId}: {testId: string}) {
+export default function AssignTestButton({test}: {test: TestBase}) {
     const [open, setOpen] = useState(false);
     const onOpen = () => setOpen(true);
 
     return (
         <>
-            <Button variant={"contained"} onClick={onOpen}>
+            <Button
+                startIcon={<AssignmentIndIcon />}
+                variant={"contained"}
+                onClick={onOpen}
+            >
                 Назначити тест
             </Button>
-            <AssignTestDialog testId={testId} open={open} setOpenAction={setOpen} />
+            <AssignTestDialog
+                test={test}
+                open={open}
+                setOpenAction={setOpen}
+            />
         </>
     );
-
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import DoctorPatient from "@/schemas/DoctorPatient";
+import DoctorPatient from "@/types/models/DoctorPatient";
 import {Button} from "@mui/material";
 import {useState} from "react";
 
@@ -9,11 +9,15 @@ export default function ChangeStatusButton(
 ) {
     const [loading, setLoading] = useState(false);
 
+    const isActive = patient?.unassigned_at === null;
+
     const handleOnClick = async () => {
         setLoading(true);
 
         try {
-            if (patient) await changeAction(!patient.is_active);
+            if (patient) {
+                await changeAction(!isActive);
+            }
         }
         finally {
             setLoading(false);
@@ -28,7 +32,7 @@ export default function ChangeStatusButton(
             onClick={handleOnClick}
             loading={loading}
         >
-            {patient?.is_active ? "Виписати" : "Поставити на облік"}
+            {isActive ? "Виписати" : "Поставити на облік"}
         </Button>
     );
 }

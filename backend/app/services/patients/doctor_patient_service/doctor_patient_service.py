@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from app.schemas.doctor_patient_dto import DoctorPatientDto
+from app.schemas.pagination import PaginationParams, PaginatedList
 from app.schemas.patients.patient_create import PatientCreateDto
 from app.schemas.patients.patient_search_dto import PatientSearchDto
 from app.services.patients.doctor_patient_service.doctor_patient_changer import DoctorPatientChanger
@@ -25,9 +26,13 @@ class DoctorPatientService:
         self.changer = doctor_patient_changer
         self.deleter = doctor_patient_deleter
 
-    async def get_patients(self, doctor_id: UUID) -> list[DoctorPatientDto]:
+    async def get_patients(
+        self,
+        doctor_id: UUID,
+        pagination_params: PaginationParams
+    ) -> PaginatedList[DoctorPatientDto]:
         """Get active doctor patients"""
-        return await self.getter.get_patients(doctor_id)
+        return await self.getter.get_patients(doctor_id, pagination_params)
 
     async def get_patient(self, doctor_id: UUID, patient_id: UUID) -> DoctorPatientDto:
         """

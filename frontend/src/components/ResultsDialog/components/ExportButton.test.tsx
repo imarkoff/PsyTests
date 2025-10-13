@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import ExportButton from "./ExportButton";
-import TestResult from "@/schemas/TestResult";
+import TestResult from "@/types/models/TestResult";
 import "@testing-library/jest-dom";
 
 jest.mock("@/lib/urls/getExportTestResultUrl", () => jest.fn(() => "https://mocked-url.com"));

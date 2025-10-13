@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import TypeAlias
 
-from app.schemas.user_gender import UserGender
+from app.schemas.enums.user_gender import UserGender
 from app.domains.tests.mmpi.schemas.mmpi_test import MMPITest
 from app.domains.tests.mmpi.utils.results_manager.results_counter import RawResults
 

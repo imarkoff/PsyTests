@@ -14,8 +14,11 @@ class DoctorPatient(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, index=True, default=uuid4, unique=True)
     doctor_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True, nullable=False)
     doctor: Mapped["User"] = relationship(back_populates="doctor_patient_doctor", foreign_keys=[doctor_id])
+
     patient_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True, nullable=False)
     patient: Mapped["User"] = relationship(back_populates="doctor_patient_patient", foreign_keys=[patient_id])
+
     assigned_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(UTC))
-    is_active: Mapped[bool] = mapped_column(default=True)
-    needs_attention: Mapped[bool] = mapped_column(default=False) # If patient has new test results
+    unassigned_at: Mapped[datetime | None] = mapped_column(default=None)
+    deleted_at: Mapped[datetime | None] = mapped_column(default=None)
+    needs_attention: Mapped[bool] = mapped_column(default=False)

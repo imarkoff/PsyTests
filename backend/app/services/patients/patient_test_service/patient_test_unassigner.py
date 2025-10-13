@@ -23,8 +23,20 @@ class PatientTestUnassigner:
 
         await self.repository.unassign_test(test)
 
-    async def unassign_doctor_tests(self, doctor_id: UUID, patient_id: UUID) -> None:
+    async def unassign_tests_by_doctor_and_patient(self, doctor_id: UUID, patient_id: UUID) -> None:
         """
         Unassign all tests assigned by a doctor from patient
         """
         await self.repository.unassign_patient_tests_assigned_by_doctor(doctor_id, patient_id)
+
+    async def unassign_tests_by_patient(self, patient_id: UUID) -> None:
+        """
+        Unassign all tests from patient
+        """
+        await self.repository.unassign_tests_by_patient(patient_id)
+
+    async def unassign_tests_by_doctor(self, doctor_id: UUID) -> None:
+        """
+        Unassign all tests assigned by a doctor from all patients
+        """
+        await self.repository.unassign_tests_by_doctor(doctor_id)

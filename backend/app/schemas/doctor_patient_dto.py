@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 from app.db.models.doctor_patient import DoctorPatient
-from app.schemas.user_auth import UserDto
+from app.schemas.user import UserDto
 
 
 class DoctorPatientDto(BaseModel):
@@ -16,7 +16,7 @@ class DoctorPatientDto(BaseModel):
     id: UUID
     patient: UserDto
     assigned_at: datetime
-    is_active: bool
+    unassigned_at: datetime | None
     needs_attention: bool
 
     model_config = ConfigDict(
@@ -26,7 +26,7 @@ class DoctorPatientDto(BaseModel):
                 "id": "123e4567-e89b-12d3-a456-426614174000",
                 "patient": UserDto.model_json_schema().get("example"),
                 "assigned_at": "2021-07-06T13:00:00",
-                "is_active": True,
+                "unassigned_at": None,
                 "needs_attention": False
             }
         }
@@ -39,8 +39,8 @@ class DoctorPatientDto(BaseModel):
 
         return cls(
             id=doctor_patient.id,
-            patient=UserDto.model_validate(doctor_patient.patient),
+            patient=UserDto.create(doctor_patient.patient),
             assigned_at=doctor_patient.assigned_at,
-            is_active=doctor_patient.is_active,
+            unassigned_at=doctor_patient.unassigned_at,
             needs_attention=doctor_patient.needs_attention
         )

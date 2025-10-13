@@ -1,6 +1,6 @@
 import {AxiosInstance} from "axios";
-import TestBase from "@/schemas/TestBase";
-import CsvData from "@/schemas/CsvData";
+import TestBase from "@/types/models/TestBase";
+import CsvData from "@/types/dtos/CsvData";
 
 export default class TestService {
     constructor(private readonly api: AxiosInstance) {}

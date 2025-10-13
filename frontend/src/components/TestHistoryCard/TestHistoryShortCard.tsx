@@ -1,4 +1,4 @@
-import TestResultShort from "@/schemas/TestResultShort";
+import TestResultShort from "@/types/models/TestResultShort";
 import {Card, CardContent, CardHeader} from "@mui/material";
 import TestValues from "@/components/TestValues";
 import {dateMed} from "@/utils/formatDate";

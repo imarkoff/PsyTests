@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
-from app.schemas.user_gender import UserGender
+from app.schemas.enums.user_gender import UserGender
 
 
 class MMPIAnswer(BaseModel):

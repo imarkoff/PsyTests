@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import TestHistoryCard from "./TestHistoryCard";
-import TestResult from "@/schemas/TestResult";
-import testsConfig from "@/features/tests/config";
+import TestResult from "@/types/models/TestResult";
+import testsConfig from "@/features/shared/psy-test-definitions/config";
 import * as formatDate from "@/utils/formatDate";
-import TestBase from "@/schemas/TestBase";
-import TestConfigType from "@/features/tests/TestConfig";
+import TestBase from "@/types/models/TestBase";
+import TestConfigType from "@/features/shared/psy-test-definitions/TestConfig";
 import "@testing-library/jest-dom";
 
 jest.mock(

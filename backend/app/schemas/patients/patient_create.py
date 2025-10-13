@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app.schemas.user_gender import UserGender
+from app.schemas.enums.user_gender import UserGender
 
 
 class PatientCreateDto(BaseModel):

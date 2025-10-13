@@ -1,29 +1,32 @@
-import Typography from "@mui/material/Typography";
+"use client";
+
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
-import User from "@/schemas/User";
+import {Alert, Box} from "@mui/material";
+import useTestAssignmentContext from "../hooks/contexts/useTestAssignmentContext";
+import PatientsPagination from "./PatientsPagination";
 
-interface AssignActionsProps {
-    assignError: string | undefined;
-    handleAssign: () => Promise<void>;
-    selectedPatient: User | undefined;
-}
+export default function AssignActions() {
+    const {handleAssign, isMutating, error, selectedPatient} = useTestAssignmentContext();
 
-export default function AssignActions({assignError, handleAssign, selectedPatient}: AssignActionsProps) {
     return (
-        <DialogActions sx={{flexWrap: "wrap"}}>
-            {assignError && (
-                <Typography
-                    color={"error"}
-                    variant={"body2"}
-                    sx={{mr: "auto", ml: 1}}
-                >
-                    {assignError}
-                </Typography>
+        <DialogActions sx={{flexDirection: "column", gap: 1}}>
+            {error && (
+                <Alert severity={"error"} sx={{width: "100%"}}>
+                    {error.statusText}
+                </Alert>
             )}
-            <Button autoFocus onClick={handleAssign} disabled={!selectedPatient}>
-                Назначити {selectedPatient && `для ${selectedPatient.name}`}
-            </Button>
+            <Box sx={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+                <PatientsPagination/>
+                <Button
+                    autoFocus
+                    onClick={handleAssign}
+                    loading={isMutating}
+                    disabled={!selectedPatient}
+                >
+                    Назначити {selectedPatient && `для ${selectedPatient.name}`}
+                </Button>
+            </Box>
         </DialogActions>
     );
 }
