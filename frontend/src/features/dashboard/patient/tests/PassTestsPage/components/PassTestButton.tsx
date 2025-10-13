@@ -1,11 +1,13 @@
 import {Box, Button} from "@mui/material";
 import DoneIcon from '@mui/icons-material/Done';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import {goToPatientPage} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/utils";
-import {useTestContext} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/hooks/useTestContext";
+import {goToPatientPage} from "@/features/dashboard/patient/tests/PassTestsPage/utils";
+import {usePassTestContext} from "@/features/dashboard/patient/tests/PassTestsPage/hooks/usePassTestContext";
+import {usePsyTestContext} from "@/features/shared/psy-test-viewer";
 
 export default function PassTestButton() {
-    const { isTestLoading, passed, loading, error } = useTestContext();
+    const {isLoading: isTestLoading, error} = usePsyTestContext();
+    const { passed, loading } = usePassTestContext();
 
     return (
         <Box sx={{height: 60}}>

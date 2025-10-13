@@ -1,5 +1,5 @@
 import {useState} from "react";
-import PassTestData from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
+import PassTestData from "../types/PassTestData";
 import PassTest from "@/types/forms/PassTest";
 import {passTest} from "@/lib/controllers/patientTestController";
 import TestBase from "@/types/models/TestBase";

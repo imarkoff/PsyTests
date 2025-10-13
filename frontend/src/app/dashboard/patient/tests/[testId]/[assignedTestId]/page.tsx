@@ -1,4 +1,4 @@
-import PassTestPage from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/PassTestPage";
+import PassTestPage from "@/features/dashboard/patient/tests/PassTestsPage";
 
 export default async function Page({ params }: {
     params: Promise<{ testId: string; assignedTestId: string }>
