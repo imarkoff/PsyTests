@@ -3,7 +3,7 @@ import {useEffect} from "react";
 
 export default function useSetTrigger(
     key: string,
-    trigger: () => void
+    trigger: (() => Promise<void>) | (() => void),
 ) {
     const { addTrigger, removeTrigger } = useTriggerContext();
 

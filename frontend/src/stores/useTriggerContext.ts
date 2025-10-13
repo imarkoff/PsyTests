@@ -1,14 +1,17 @@
 import {create} from "zustand";
 
 interface TriggerState {
-    triggers: Record<string, (() => Promise<void>) | undefined>;
-    addTrigger: (key: string, value: () => Promise<void>) => void;
+    triggers: Record<string, ((() => Promise<void>) | (() => void)) | undefined>;
+    addTrigger: (key: string, value: (() => Promise<void>) | (() => void)) => void;
     removeTrigger: (key: string) => void;
 }
 
 const useTriggerContext = create<TriggerState>()((set) => ({
     triggers: {},
-    addTrigger: (key: string, value: () => Promise<void>) => set((state) => ({
+    addTrigger: (
+        key: string,
+        value: (() => Promise<void>) | (() => void)
+    ) => set((state) => ({
         ...state,
         triggers: {
             ...state.triggers,

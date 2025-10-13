@@ -7,5 +7,6 @@ export const mockedPatient: User = {
     gender: "male",
     birth_date: "2000-01-01",
     phone: "0",
-    role: "patient"
+    role: "patient",
+    last_login: "2021-01-01",
 };

@@ -7,9 +7,7 @@ type ActionDialogRootProps = DialogProps & {
 
 export default function ActionDialogRoot(props: ActionDialogRootProps) {
     return (
-        <ActionDialogProvider
-            isOpen={props.open}
-            onClose={props.onClose}
+        <ActionDialogProvider onClose={props.onClose}
         >
             <StyledDialog {...props} />
         </ActionDialogProvider>
