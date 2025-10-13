@@ -2,10 +2,10 @@
 
 import {useState} from "react";
 import {Box, Dialog} from "@mui/material";
-import usePsyTestContext from "@/features/shared/psy-test-viewer/hooks/usePsyTestContext";
+import usePsyTestContext from "../../hooks/usePsyTestContext";
 import MarksDialogHeader from "./components/MarksDialogHeader";
 import DialogOpener from "./components/DialogOpener";
-import PsyTestViewer from "@/features/shared/psy-test-viewer";
+import PsyTestMarksSystem from "../PsyTestMarksSystem";
 
 export default function MarksDialog() {
     const {test} = usePsyTestContext();
@@ -28,7 +28,7 @@ export default function MarksDialog() {
                 >
                     <MarksDialogHeader test={test} onClose={handleClose}/>
                     <Box sx={{position: "relative", overflowY: "auto"}}>
-                        <PsyTestViewer.Marks/>
+                        <PsyTestMarksSystem/>
                     </Box>
                 </Dialog>
             )}
