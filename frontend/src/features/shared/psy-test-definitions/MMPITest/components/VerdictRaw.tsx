@@ -5,7 +5,7 @@ export default function VerdictRaw(
     {raw = {}}: { raw: MMPIVerdict["raw"] | undefined }
 ) {
     return (
-        <TableContainer sx={{border: 1, borderColor: 'divider', borderRadius: 3, minHeight: 145}}>
+        <TableContainer sx={{border: 1, borderColor: 'divider', borderRadius: 0.75, minHeight: 145}}>
             <Typography
                 variant={"body1"}
                 fontWeight={500}
