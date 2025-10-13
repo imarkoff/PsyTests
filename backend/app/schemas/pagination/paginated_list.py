@@ -24,7 +24,7 @@ class PaginatedList[T](PaginationParams):
         """
         Check if there is a next page.
         """
-        return self.offset * self.limit < self.total
+        return self.offset + self.limit < self.total
 
     @computed_field
     @property
@@ -32,7 +32,7 @@ class PaginatedList[T](PaginationParams):
         """
         Check if there is a previous page.
         """
-        return self.offset > 1
+        return self.offset > 0
 
     @computed_field
     @property
