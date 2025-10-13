@@ -1,6 +1,6 @@
 "use client";
 
-import {ComponentType, ReactNode, useState} from "react";
+import {ComponentType, useState} from "react";
 import {Typography, Alert} from "@mui/material";
 import useUserContext from "@/features/admin/user-modal/hooks/useUserContext";
 import getDialogText from "./utils/getDialogText";
@@ -11,7 +11,7 @@ interface DeleteUserDialogProps {
     OpenButton: ComponentType<{
         onClick: () => void;
         disabled: boolean;
-        children: ReactNode;
+        title: string;
     }>
     onUserDialogClose: () => void;
 }
@@ -42,9 +42,8 @@ export default function DeleteUserDialog(
             <OpenButton
                 onClick={handleOpen}
                 disabled={!user}
-            >
-                {dialogText.buttonText}
-            </OpenButton>
+                title={dialogText.buttonText}
+            />
             <ActionDialog.Root
                 open={isOpen}
                 onClose={handleClose}

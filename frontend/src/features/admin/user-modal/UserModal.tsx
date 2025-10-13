@@ -7,7 +7,7 @@ import DialogCloseButton from "@/components/DialogCloseButton";
 import UserHeaderInfo from "./components/UserHeaderInfo";
 import UserProvider from "./contexts/UserProvider";
 import UserModalContent from "./dialog-content/UserModalContent";
-import MoreMenu from "@/features/admin/user-modal/components/MoreMenu";
+import ActionsGroup from "@/features/admin/user-modal/components/ActionsGroup";
 
 interface DoctorModalProps {
     userId: string;
@@ -28,13 +28,14 @@ export default function UserModal(
     return (
         <UserProvider userId={userId}>
             <Dialog
+                id={"user-modal"}
                 open={open}
                 onClose={handleClose}
                 maxWidth={"lg"}
             >
-                <DialogTitle sx={{display: "flex", alignItems: "center", gap: 1}}>
+                <DialogTitle sx={{display: "flex", flexWrap: "wrap-reverse", alignItems: "center", gap: 1}}>
                     <UserHeaderInfo />
-                    <MoreMenu handleClose={handleClose} />
+                    <ActionsGroup handleClose={handleClose} />
                     <DialogCloseButton onClose={handleClose} gutterRight={false} />
                 </DialogTitle>
                 <DialogContent>
