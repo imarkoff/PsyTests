@@ -3,7 +3,7 @@
 import {PropsWithChildren} from "react";
 import {Dialog} from "@mui/material";
 import {DIALOG_TITLE_ID} from "../constants";
-import useTestAssignmentContext from "../hooks/useTestAssignmentContext";
+import useTestAssignmentContext from "../hooks/contexts/useTestAssignmentContext";
 
 interface AssignDialogProps extends PropsWithChildren {
     open: boolean;

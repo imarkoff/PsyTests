@@ -3,8 +3,8 @@
 import {Alert, AlertTitle, Typography} from "@mui/material";
 import PatientCard from "@/components/PatientCard/PatientCard";
 import DialogContent from "@mui/material/DialogContent";
-import useDoctorPatientsContext from "../hooks/useDoctorPatientsContext";
-import useTestAssignmentContext from "../hooks/useTestAssignmentContext";
+import useDoctorPatientsContext from "../hooks/contexts/useDoctorPatientsContext";
+import useTestAssignmentContext from "../hooks/contexts/useTestAssignmentContext";
 
 export default function AssignContent() {
     const {paginatedPatients, error} = useDoctorPatientsContext();

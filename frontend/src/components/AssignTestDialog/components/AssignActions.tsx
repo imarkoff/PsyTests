@@ -2,12 +2,11 @@
 
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
-import {Alert, Box, Pagination} from "@mui/material";
-import useDoctorPatientsContext from "../hooks/useDoctorPatientsContext";
-import useTestAssignmentContext from "../hooks/useTestAssignmentContext";
+import {Alert, Box} from "@mui/material";
+import useTestAssignmentContext from "../hooks/contexts/useTestAssignmentContext";
+import PatientsPagination from "./PatientsPagination";
 
 export default function AssignActions() {
-    const {paginatedPatients} = useDoctorPatientsContext();
     const {handleAssign, isMutating, error, selectedPatient} = useTestAssignmentContext();
 
     return (
@@ -18,12 +17,7 @@ export default function AssignActions() {
                 </Alert>
             )}
             <Box sx={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-                <Pagination
-                    count={paginatedPatients?.total_pages}
-                    page={paginatedPatients ? paginatedPatients.offset + 1 : 1}
-                    color={"primary"}
-                    variant={"outlined"}
-                />
+                <PatientsPagination/>
                 <Button
                     autoFocus
                     onClick={handleAssign}

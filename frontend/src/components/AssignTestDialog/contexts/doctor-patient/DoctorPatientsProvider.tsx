@@ -1,13 +1,8 @@
 "use client";
 
-import {createContext, PropsWithChildren} from "react";
-import useGetPatientsApi, {UseGetPatientsApiReturn} from "../hooks/lib/useGetPatientsApi";
-
-export const DoctorPatientsContext = createContext<
-    UseGetPatientsApiReturn | undefined
->(
-    undefined
-);
+import {PropsWithChildren} from "react";
+import useGetPatientsApi from "../../hooks/lib/useGetPatientsApi";
+import DoctorPatientsContext from "./DoctorPatientsContext";
 
 export default function DoctorPatientsProvider({ children }: PropsWithChildren) {
     const getPatientsApi = useGetPatientsApi();

@@ -4,11 +4,13 @@ import {ApiResponse, ApiResponseError} from "@/lib/api-client/types";
 import PaginatedList from "@/types/pagination/PaginatedList";
 import DoctorPatient from "@/types/models/DoctorPatient";
 import usePaginationParams, {UsePaginationParamsReturn} from "@/hooks/pagination/usePaginationParams";
+import PaginationParams from "@/types/pagination/PaginationParams";
 
 export interface UseGetPatientsApiReturn {
     paginatedPatients: PaginatedList<DoctorPatient> | undefined;
     isLoading: boolean;
     error: ApiResponseError | undefined;
+    paginationParams: PaginationParams<DoctorPatient>;
     paginationHandlers: Omit<UsePaginationParamsReturn<DoctorPatient>, 'paginationParams'>;
 }
 
@@ -35,6 +37,7 @@ export default function useGetPatientsApi(): UseGetPatientsApiReturn {
         paginatedPatients: response?.data,
         isLoading,
         error: response?.error,
+        paginationParams,
         paginationHandlers
     };
 }

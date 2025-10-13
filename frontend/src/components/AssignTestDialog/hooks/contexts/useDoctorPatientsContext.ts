@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {DoctorPatientsContext} from "../stores/DoctorPatientsProvider";
+import DoctorPatientsContext from "@/components/AssignTestDialog/contexts/doctor-patient/DoctorPatientsContext";
 import {OutOfReactContextError} from "@/errors";
 
 export default function useDoctorPatientsContext() {

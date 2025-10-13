@@ -1,20 +1,17 @@
 "use client";
 
-import {createContext, PropsWithChildren} from "react";
-import useTestAssignment, {UseTestAssignmentReturn} from "../hooks/useTestAssignment";
-
-export const TestAssignmentContext = createContext<
-    UseTestAssignmentReturn | undefined
->(
-    undefined
-);
+import {PropsWithChildren} from "react";
+import useTestAssignment from "../../hooks/useTestAssignment";
+import TestAssignmentContext from "./TestAssignmentContext";
 
 interface TestAssignmentProviderProps extends PropsWithChildren {
     testId: string;
     setOpenAction: (open: boolean) => void;
 }
 
-export default function TestAssignmentProvider({ testId, setOpenAction, children }: TestAssignmentProviderProps) {
+export default function TestAssignmentProvider(
+    { testId, setOpenAction, children }: TestAssignmentProviderProps
+) {
     const testAssignment = useTestAssignment(
         testId,
         setOpenAction,

@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {CircularProgress, InputAdornment, TextField} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import useDebounce from "@/hooks/useDebounce";
-import useDoctorPatientsContext from "../hooks/useDoctorPatientsContext";
+import useDoctorPatientsContext from "../hooks/contexts/useDoctorPatientsContext";
 import PaginationLogicalOperator from "@/types/enums/PaginationLogicalOperator";
 
 export default function PatientsInput() {

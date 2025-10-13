@@ -2,8 +2,8 @@ import TestBase from "@/types/models/TestBase";
 import AssignHeader from "./components/AssignHeader";
 import AssignContent from "./components/AssignContent";
 import AssignActions from "./components/AssignActions";
-import DoctorPatientsProvider from "./stores/DoctorPatientsProvider";
-import TestAssignmentProvider from "./stores/TestAssignmentProvider";
+import DoctorPatientsProvider from "@/components/AssignTestDialog/contexts/doctor-patient/DoctorPatientsProvider";
+import TestAssignmentProvider from "@/components/AssignTestDialog/contexts/test-assignment/TestAssignmentProvider";
 import AssignDialog from "./components/AssignDialog";
 
 interface AssignTestDialogProps {

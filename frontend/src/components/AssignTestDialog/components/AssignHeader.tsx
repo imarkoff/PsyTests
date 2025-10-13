@@ -4,7 +4,7 @@ import {Typography, Box} from "@mui/material";
 import DialogCloseButton from "@/components/DialogCloseButton";
 import TestBase from "@/types/models/TestBase";
 import PatientsInput from "./PatientsInput";
-import useTestAssignmentContext from "../hooks/useTestAssignmentContext";
+import useTestAssignmentContext from "../hooks/contexts/useTestAssignmentContext";
 import {DIALOG_TITLE_ID} from "../constants";
 
 interface AssignHeaderProps {

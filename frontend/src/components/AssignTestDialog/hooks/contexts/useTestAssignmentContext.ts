@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {TestAssignmentContext} from "../stores/TestAssignmentProvider";
+import TestAssignmentContext from "@/components/AssignTestDialog/contexts/test-assignment/TestAssignmentContext";
 import {OutOfReactContextError} from "@/errors";
 
 export default function useTestAssignmentContext() {
