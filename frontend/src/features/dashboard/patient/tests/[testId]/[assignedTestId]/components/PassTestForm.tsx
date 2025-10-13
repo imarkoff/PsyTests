@@ -2,7 +2,7 @@
 
 import {FormProvider, useForm} from "react-hook-form";
 import PassTestData from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/schemas/PassTestData";
-import testsConfig from "@/features/tests/config";
+import testsConfig from "@/features/shared/psy-test-definitions/config";
 import {Box, Typography} from "@mui/material";
 import {Roles} from "@/types/enums/Role";
 import PassTestButton from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/components/PassTestButton";
@@ -19,7 +19,7 @@ export default function PassTestForm() {
     return (
         <Box component={"form"} onSubmit={methods.handleSubmit(passTest)} sx={{display: "grid", gap: 2}}>
             <FormProvider {...methods}>
-                {!isTestLoading && Content && (<Content test={test} role={Roles.patient} disabled={passed} />)}
+                {!!Content && (<Content test={test} role={Roles.patient} disabled={passed} />)}
 
                 {!test && (
                     Array.from({length: 3}).map((_, index) => (

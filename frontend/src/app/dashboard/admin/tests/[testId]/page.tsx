@@ -1,9 +1,11 @@
-import TestContent from "@/features/tests-page/[testId]/TestContent";
+import AdminTestPage from "@/features/admin/tests/AdminTestPage";
 
 export default async function TestPage(
     {params}: { params: Promise<{ testId: string }> }
 ) {
     const { testId } = await params;
 
-    return <TestContent testId={testId} />;
+    return (
+        <AdminTestPage testId={testId} />
+    );
 }

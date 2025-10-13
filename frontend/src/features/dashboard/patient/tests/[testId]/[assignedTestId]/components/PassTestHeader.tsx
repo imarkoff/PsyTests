@@ -3,7 +3,7 @@
 import LeaveTestButton from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/components/LeaveTestButton";
 import {Box, Skeleton, Typography} from "@mui/material";
 import {Roles} from "@/types/enums/Role";
-import testsConfig from "@/features/tests/config";
+import testsConfig from "@/features/shared/psy-test-definitions/config";
 import {useTestContext} from "@/features/dashboard/patient/tests/[testId]/[assignedTestId]/hooks/useTestContext";
 
 export default function PassTestHeader() {

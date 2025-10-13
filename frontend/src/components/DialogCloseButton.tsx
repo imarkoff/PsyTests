@@ -2,17 +2,18 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {IconButtonProps, Tooltip} from "@mui/material";
 
-interface DialogCloseButtonProps extends IconButtonProps {
+interface DialogCloseButtonProps extends Omit<IconButtonProps, 'onClick'> {
     onClose: () => void;
     gutterRight?: boolean;
 }
 
 export default function DialogCloseButton(
-    {gutterRight = true, ...iconButtonProps}: DialogCloseButtonProps
+    {gutterRight = true, onClose, ...iconButtonProps}: DialogCloseButtonProps
 ) {
     return (
         <Tooltip title="Закрити вікно">
             <IconButton
+                onClick={onClose}
                 {...iconButtonProps}
                 sx={{
                     marginLeft: "auto",

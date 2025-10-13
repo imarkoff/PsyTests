@@ -1,4 +1,4 @@
-import TestsPage from "@/features/tests-page/TestsPage";
+import TestsPage from "@/features/shared/psy-test-catalog/TestsPage";
 
 export default function Page() {
     return <TestsPage />;

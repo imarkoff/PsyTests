@@ -1,6 +1,6 @@
 "use client";
 
-import TestsLayout, {TestsLayoutProps} from "@/features/tests-page/TestsLayout";
+import TestsLayout, {TestsLayoutProps} from "@/features/shared/psy-test-catalog/TestsLayout";
 import routeConfig from "@/config/routeConfig";
 
 type AdminTestsProps = Omit<TestsLayoutProps, 'testRoute'>;

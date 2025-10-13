@@ -1,7 +1,8 @@
 "use client";
 
-import {Button} from "@mui/material";
 import {useState} from "react";
+import {Button} from "@mui/material";
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import TestBase from "@/types/models/TestBase";
 import AssignTestDialog from "./AssignTestDialog";
 
@@ -11,7 +12,11 @@ export default function AssignTestButton({test}: {test: TestBase}) {
 
     return (
         <>
-            <Button variant={"contained"} onClick={onOpen}>
+            <Button
+                startIcon={<AssignmentIndIcon />}
+                variant={"contained"}
+                onClick={onOpen}
+            >
                 Назначити тест
             </Button>
             <AssignTestDialog

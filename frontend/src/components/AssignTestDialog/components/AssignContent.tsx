@@ -18,7 +18,7 @@ export default function AssignContent() {
             p: 2,
             pt: "2px !important"
         }}>
-            {paginatedPatients?.data.map((patient) => (
+            {paginatedPatients?.data?.map((patient) => (
                 <PatientCard
                     patient={patient.patient}
                     key={patient.patient.id}

@@ -3,7 +3,7 @@ import {Box, DialogContent} from "@mui/material";
 import TestValues from "@/components/TestValues";
 import {dateMed} from "@/utils/formatDate";
 import ExportButton from "@/components/ResultsDialog/components/ExportButton";
-import testsConfig from "@/features/tests/config";
+import testsConfig from "@/features/shared/psy-test-definitions/config";
 
 export default function ResultsContent({ testResult }: { testResult: TestResult }) {
     const testResultComponents = testsConfig[testResult.test.type]?.results;
