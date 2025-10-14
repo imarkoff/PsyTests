@@ -1,4 +1,4 @@
-import os
+
 from uuid import UUID
 
 from app.domains.tests.base.test_factory import TestBundle
@@ -6,12 +6,19 @@ from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.test_factories import TestFactories
 from app.exceptions import NotFoundError
 from app.repositories.test_repository import TestRepository
+from app.services.test_image_getter import TestImageGetter
 
 
 class TestService:
-    def __init__(self, test_repository: TestRepository, test_factories: TestFactories):
+    def __init__(
+        self,
+        test_repository: TestRepository,
+        test_factories: TestFactories,
+        test_image_getter: TestImageGetter
+    ):
         self.repository = test_repository
         self.test_factories = test_factories
+        self.test_image_getter = test_image_getter
 
     async def get_all_tests(self) -> list[TestBase]:
         """Get all available tests in default format"""
@@ -60,14 +67,20 @@ class TestService:
 
         return test_base
 
-    async def get_test_image(self, test_id: UUID, module_path: str, image_name: str) -> bytes:
+    async def get_test_image(self, test_id: UUID, image_path: str) -> bytes:
         """
         Get test image by name
         :raises NotFoundError: If image not found
         """
-        image = await self.repository.get_image(test_id, os.path.join(module_path, image_name))
+
+        image = await self.test_image_getter.get_test_image(
+            test_id=test_id,
+            relative_image_path=image_path
+        )
 
         if image is None:
-            raise NotFoundError(f"Image {image_name} for test {test_id} not found")
+            raise NotFoundError(
+                f"Image {image_path} for test {test_id} not found"
+            )
 
         return image

@@ -5,18 +5,20 @@ from uuid import UUID
 from app.domains.tests.base.test_base import TestBase
 from app.domains.tests.base.test_factory import TestFactory
 from app.repositories.file_system_repository import FileSystemRepository
+from app.settings import Settings
 
 
 class TestRepository(FileSystemRepository):
     TEST_DEFINITION_FILENAME = 'test.json'
 
-    def __init__(self, entity_dir: str, test_factory: TestFactory):
+    def __init__(self, test_factory: TestFactory, settings: Settings):
         """
         :param entity_dir: Directory where test files are stored
         :param test_factory: Factory to create test instances
         """
         self.test_factory = test_factory
-        super().__init__(entity_dir)
+        self.entity_dir = settings.PSY_TESTS_DIR
+        super().__init__(self.entity_dir)
 
     async def get_all_tests(self) -> list[TestBase]:
         """Get all available tests"""
@@ -46,19 +48,5 @@ class TestRepository(FileSystemRepository):
         if os.path.isfile(test_file):
             with open(test_file, 'r') as file:
                 return json.load(file)
-        else:
-            return None
-
-    async def get_image(self, test_id: UUID, relative_image_path: str) -> bytes | None:
-        """Get test image"""
-        image_path = os.path.join(
-            self.entity_dir,
-            test_id.__str__(),
-            relative_image_path
-        )
-
-        if os.path.isfile(image_path):
-            with open(image_path, 'rb') as file:
-                return file.read()
         else:
             return None

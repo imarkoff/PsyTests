@@ -68,18 +68,20 @@ async def get_test(
 async def get_test_image(
         test_id: UUID,
         image_path: str,
-        module_path: Optional[str] = "",
         test_service: TestService = Depends(get_test_service),
 ):
     try:
         image = await test_service.get_test_image(
             test_id=test_id,
-            module_path=module_path,
-            image_name=image_path
+            image_path=image_path
         )
         return Response(content=image, media_type="image/jpeg")
-    except NotFoundError:
-        return Response(status_code=404)
+    except NotFoundError as e:
+        return Response(
+            status_code=404,
+            content=e.message,
+            media_type="plain/text"
+        )
 
 
 @router.get(

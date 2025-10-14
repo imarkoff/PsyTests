@@ -1,13 +1,13 @@
 from typing import Type
 
-from app.domains.tests.base.test_factory import TestFactory
-from app.domains.tests.base.services.test_factory_impl import TestFactoryImpl
-from app.domains.tests.bdi.services.bdi_factory import BDITestFactory
-from app.domains.tests.mmpi.services.mmpi_test_factory import MMPITestFactory
-from app.domains.tests.mmpi_big.services.mmpi_big_test_factory import MMPIBigTestFactory
-from app.domains.tests.pcl5.services.pcl5_factory import PCL5TestFactory
-from app.domains.tests.raven.services.raven_test_factory import RavenTestFactory
-from app.domains.tests.stai.services.stai_factory import STAITestFactory
+from .base.test_factory import TestFactory
+from .base.services.test_factory_impl import TestFactoryImpl
+from .bdi.services.bdi_factory import BDITestFactory
+from .mmpi.services.mmpi_test_factory import MMPITestFactory
+from .mmpi_big.services.mmpi_big_test_factory import MMPIBigTestFactory
+from .pcl5.services.pcl5_factory import PCL5TestFactory
+from .raven.services.raven_test_factory import RavenTestFactory
+from .stai.services.stai_factory import STAITestFactory
 
 
 class TestFactories:
