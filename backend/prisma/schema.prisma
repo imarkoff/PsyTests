@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum UserRole {
+  ADMIN
+  DOCTOR
+  PATIENT
+}
+
+/// Users of the system, including doctors and patients
+model User {
+  id             String    @id @default(uuid()) @db.Uuid
+  /// First name of the user
+  name           String    @db.VarChar(100)
+  /// Last name of the user
+  surname        String    @db.VarChar(100)
+  /// Optional patronymic of the user
+  patronymic     String?   @db.VarChar(100)
+  /// Gender of the user
+  gender         Gender
+  /// Phone number of the user, must be unique and in E.164 format without '+'
+  phone          String    @unique @db.VarChar(15)
+  /// Date of birth of the user
+  birthDate      DateTime
+  /// Hashed password of the user
+  password       Bytes
+  /// Salt used for hashing the password
+  passwordSalt   Bytes
+  /// Role of the user in the system
+  role           UserRole  @default(PATIENT)
+  /// Date and time when the user registered
+  registeredAt   DateTime  @default(now())
+  /// The user (doctor or admin) who registered this user
+  registeredBy   User?     @relation(name: "User_registeredBy", fields: [registeredById], references: [id])
+  registeredById String?   @db.Uuid
+  /// Date and time of the user's last login
+  lastLoginAt    DateTime?
+  /// Date and time when the user was deleted (soft delete)
+  deletedAt      DateTime?
+
+  doctorPatientsAsDoctor  DoctorPatient[] @relation(name: "DoctorPatient_doctor")
+  doctorPatientsAsPatient DoctorPatient[] @relation(name: "DoctorPatient_patient")
+
+  assignedTestsAsPatient AssignedTest[] @relation(name: "AssignedTest_assignedToPatient")
+  assignedTestsAsDoctor  AssignedTest[] @relation(name: "AssignedTest_assignedByDoctor")
+
+  testResults TestResult[] @relation(name: "TestResult_completedByPatient")
+
+  registeredUsers User[] @relation(name: "User_registeredBy")
+}
+
+/// Many-to-many relationship between doctors and patients
+model DoctorPatient {
+  /// Unique identifier for the doctor-patient relationship
+  id             String    @id @default(uuid()) @db.Uuid
+  /// The doctor in the relationship
+  doctor         User      @relation(name: "DoctorPatient_doctor", fields: [doctorId], references: [id])
+  doctorId       String    @db.Uuid
+  /// The patient in the relationship
+  patient        User      @relation(name: "DoctorPatient_patient", fields: [patientId], references: [id])
+  patientId      String    @db.Uuid
+  /// Date and time when the relationship was established
+  assignedAt     DateTime  @default(now())
+  /// Date and time when the relationship was ended (if applicable)
+  unassignedAt   DateTime?
+  /// Indicates if the relationship needs attention (e.g., patient completed a test)
+  needsAttention Boolean   @default(false)
+  /// Date and time when the relationship was deleted (soft delete)
+  deletedAt      DateTime?
+}
+
+/// Psychological tests that are assigned to patients
+model AssignedTest {
+  /// Unique identifier for the assigned test
+  id                  String    @id @default(uuid()) @db.Uuid
+  /// Identifier of the test being assigned
+  testId              String    @db.Uuid
+  /// The patient to whom the test is assigned
+  assignedToPatient   User      @relation(name: "AssignedTest_assignedToPatient", fields: [assignedToPatientId], references: [id])
+  assignedToPatientId String    @db.Uuid
+  /// The doctor who assigned the test
+  assignedByDoctor    User      @relation(name: "AssignedTest_assignedByDoctor", fields: [assignedByDoctorId], references: [id])
+  assignedByDoctorId  String    @db.Uuid
+  /// Date and time when the test was assigned
+  assignedAt          DateTime  @default(now())
+  /// Date and time when the test was completed (if applicable)
+  unassignedAt        DateTime?
+}
+
+/// Results of psychological tests completed by patients
+model TestResult {
+  /// Unique identifier for the test result
+  id                   String   @id @default(uuid()) @db.Uuid
+  /// Identifier of the test that was completed
+  testId               String   @db.Uuid
+  /// The patient who completed the test
+  completedByPatient   User     @relation(name: "TestResult_completedByPatient", fields: [completedByPatientId], references: [id])
+  completedByPatientId String   @db.Uuid
+  /// Date and time when the test was completed
+  completedAt          DateTime @default(now())
+  /// Raw data of the test result in JSON format. Can be unique for each test type.
+  resultData           Json
+  /// Optional verdict or interpretation of the test result in JSON format. Can be unique for each test type.
+  verdictData          Json?
+}
