@@ -3,6 +3,10 @@ import path from 'node:path';
 
 export class PathTraversalValidatorImpl implements PathTraversalValidator {
   isValid(basePath: string, fullPath: string): boolean {
+    if (basePath.length === 0) {
+      return false;
+    }
+
     const normalizedBasePath = path.normalize(path.join(basePath, path.sep));
     const normalizedFullPath = path.normalize(fullPath);
     return normalizedFullPath.startsWith(normalizedBasePath);
