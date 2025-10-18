@@ -7,6 +7,7 @@ export default () => {
 
   return {
     fileDbBasePath: path.join(process.cwd(), process.env.FILE_DB_BASE_PATH),
+    fileDbEntityFileName: process.env.FILE_DB_ENTITY_FILE_NAME,
     psyTestsDir: process.env.FILE_DB_PSY_TESTS_DIR,
   };
 };

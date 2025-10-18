@@ -1,45 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, type LoggerService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import path from 'node:path';
-import { validate as validateUUID } from 'uuid';
 import { UUID } from 'node:crypto';
-import { readFile, readdir } from 'node:fs/promises';
 import { FileStorageService } from './file-storage.interface';
+import { FileSystemService } from './file-system/file-system.interface';
+import { FileNotFoundError } from '../exceptions/file-storage/file-not-found.error';
+import { FileNoAccessError } from '../exceptions/file-storage/file-no-access.error';
+import { UUIDValidator } from '../validations/uuid-validator/uuid-validator.interface';
+import { FileStorageEntityValidator } from './validations/file-storage-entity-validator/file-storage-entity-validator.interface';
+import { PathTraversalValidator } from './validations/path-traversal-validator/path-traversal-validator.interface';
+import { DirectoryNotFoundError } from '../exceptions/file-storage/directory-not-found.error';
+import { EntityIsInvalidError } from '../exceptions/file-storage/entity-is-invalid.error';
+import { UUIDIsInvalidError } from '../exceptions/file-storage/uuid-is-invalid.error';
 
 @Injectable()
 export class FileStorageServiceImpl implements FileStorageService {
   private readonly basePath: string;
-  private readonly entityFileName = 'entity.json';
+  private readonly entityFileName: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly fs: FileSystemService,
+    private readonly uuidValidator: UUIDValidator,
+    private readonly entityValidator: FileStorageEntityValidator,
+    private readonly pathTraversalValidator: PathTraversalValidator,
+    private readonly configService: ConfigService,
+    private readonly logger: LoggerService,
+  ) {
     this.basePath = this.configService.get<string>('fileDbBasePath')!;
+    this.entityFileName = this.configService.get<string>(
+      'fileDbEntityFileName',
+    )!;
   }
 
   async getById<T>(entity: string, id: UUID): Promise<T | null> {
-    if (!this.isEntityValid(entity)) {
-      throw new Error(`Invalid entity name.`);
-    }
+    this.validateEntityAndId(entity, id);
 
-    if (!validateUUID(id)) {
-      throw new TypeError(`Invalid UUID has been provided.`);
-    }
-
-    const filePath = path.join(this.basePath, entity, id, this.entityFileName);
+    const filePath = this.getEntityJsonPath(entity, id);
 
     try {
-      const fileContent = await readFile(filePath, { encoding: 'utf-8' });
-      return JSON.parse(fileContent) as T;
+      const fileContent = await this.fs.readFile(filePath, {
+        encoding: 'utf-8',
+      });
+
+      return JSON.parse(fileContent as string) as T;
     } catch (error) {
-      console.error(`Error reading or parsing file at ${filePath}:`, error);
-      return null;
+      if (error instanceof FileNotFoundError) {
+        return null;
+      }
+      if (error instanceof FileNoAccessError) {
+        this.logger.error(`No access to file at ${filePath}:`, error);
+        return null;
+      }
+      this.logger.error(`Error reading file at ${filePath}:`, error);
+      throw error;
     }
   }
 
   async getAll<T>(entity: string): Promise<T[]> {
+    if (!this.entityValidator.isValid(entity)) {
+      throw new EntityIsInvalidError(`Invalid entity name.`);
+    }
+
     const entitiesPath = path.join(this.basePath, entity);
 
-    const ids = await readdir(entitiesPath).catch(() => {
-      throw new Error(`The specified entity does not exist.`);
+    const ids = await this.fs.readDir(entitiesPath).catch((error) => {
+      if (error instanceof DirectoryNotFoundError) {
+        throw new EntityIsInvalidError('The specified entity does not exist.');
+      }
+      this.logger.error(`Error reading directory at ${entitiesPath}:`, error);
+      throw error;
     });
 
     const entities = [];
@@ -58,45 +87,43 @@ export class FileStorageServiceImpl implements FileStorageService {
     entity: string,
     id: UUID,
     filePath: string,
-  ): Promise<Buffer | null> {
-    if (!this.isEntityValid(entity)) {
-      throw new Error(`Invalid entity name.`);
-    }
+  ): Promise<string | Buffer | null> {
+    this.validateEntityAndId(entity, id);
 
-    if (!validateUUID(id)) {
-      throw new TypeError(`Provided id is not a valid UUID.`);
-    }
+    const basePath = this.getEntityBasePath(entity, id);
+    const fullPath = path.join(basePath, filePath);
 
-    if (this.isPathTraversalAttempt(entity, id, filePath)) {
-      console.error('Path traversal attempt detected:', filePath);
+    if (!this.pathTraversalValidator.isValid(basePath, fullPath)) {
+      this.logger.error('Path traversal attempt detected:', filePath);
       return null;
     }
-
-    const fullPath = path.join(this.basePath, entity, id, filePath);
 
     try {
-      return await readFile(fullPath);
+      return await this.fs.readFile(fullPath);
     } catch (error) {
-      console.error(`Error reading file at ${fullPath}:`, error);
+      if (error instanceof FileNotFoundError) {
+        return null;
+      }
+      this.logger.error(`Error reading file at ${fullPath}:`, error);
       return null;
     }
   }
 
-  private isEntityValid(entity: string): boolean {
-    return /^[a-zA-Z0-9_-]+$/.test(entity);
+  private validateEntityAndId(entity: string, id: UUID): void {
+    if (!this.entityValidator.isValid(entity)) {
+      throw new EntityIsInvalidError(`Invalid entity name.`);
+    }
+
+    if (!this.uuidValidator.isValid(id)) {
+      throw new UUIDIsInvalidError(`Invalid UUID has been provided.`);
+    }
   }
 
-  private isPathTraversalAttempt(
-    entity: string,
-    id: string,
-    filePath: string,
-  ): boolean {
-    const fullPath = path.normalize(
-      path.join(this.basePath, entity, id, filePath),
-    );
-    const expectedBasePath = path.normalize(
-      path.join(this.basePath, entity, id),
-    );
-    return !fullPath.startsWith(expectedBasePath);
+  private getEntityBasePath(entity: string, id: UUID): string {
+    return path.join(this.basePath, entity, id);
+  }
+
+  private getEntityJsonPath(entity: string, id: UUID): string {
+    return path.join(this.getEntityBasePath(entity, id), this.entityFileName);
   }
 }
