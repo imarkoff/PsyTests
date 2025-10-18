@@ -10,6 +10,6 @@ import { UuidValidatorImpl } from './uuid-validator/uuid-validator.service';
       useClass: UuidValidatorImpl,
     },
   ],
-  exports: [],
+  exports: [UUIDValidator],
 })
 export class ValidationsModule {}

@@ -3,7 +3,7 @@ import path from 'node:path';
 
 export class PathTraversalValidatorImpl implements PathTraversalValidator {
   isValid(basePath: string, fullPath: string): boolean {
-    if (basePath.length === 0) {
+    if (!basePath.trim()) {
       return false;
     }
 
