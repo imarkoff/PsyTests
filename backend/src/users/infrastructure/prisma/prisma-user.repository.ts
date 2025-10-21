@@ -1,0 +1,104 @@
+import { User } from '../../domain/entities/user.entity';
+import { UserRole } from '../../../shared/enums/user-role.enum';
+import { PrismaService } from '../../../core/prisma/prisma.service';
+import { PrismaPaginator } from '../../../shared/pagination/prisma-applier/prisma-paginator.service';
+import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
+import { Injectable } from '@nestjs/common';
+import { UUID } from 'crypto';
+import { PaginatedList } from '../../../shared/pagination/types/paginated-list.type';
+import { UserRepository } from '../../domain/interfaces/user.repository.interface';
+import { User as PrismaUser } from 'generated/prisma';
+
+@Injectable()
+export class PrismaUserRepository implements UserRepository {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly prismaPaginationApplier: PrismaPaginator,
+  ) {}
+
+  async getUsers(params: PaginationParams<User>): Promise<PaginatedList<User>> {
+    const prismaPaginatedList =
+      await this.prismaPaginationApplier.applyPagination<'User', PrismaUser>(
+        (args) => this.prisma.user.findMany(args),
+        (args) => this.prisma.user.count(args),
+        params as PaginationParams<PrismaUser>,
+        ['surname', 'name', 'patronymic', 'phone'],
+      );
+
+    return {
+      ...prismaPaginatedList,
+      items: prismaPaginatedList.items
+        .map((prismaUser) => this.mapToDomainUser(prismaUser))
+        .filter((user): user is User => user !== null),
+    };
+  }
+
+  async getUsersByRole(
+    role: UserRole,
+    params: PaginationParams<User>,
+  ): Promise<PaginatedList<User>> {
+    const prismaPaginatedList =
+      await this.prismaPaginationApplier.applyPagination<'User', PrismaUser>(
+        (args) => this.prisma.user.findMany(args),
+        (args) => this.prisma.user.count(args),
+        params as PaginationParams<PrismaUser>,
+        ['surname', 'name', 'patronymic', 'phone'],
+        { role },
+      );
+
+    return {
+      ...prismaPaginatedList,
+      items: prismaPaginatedList.items
+        .map((prismaUser) => this.mapToDomainUser(prismaUser))
+        .filter((user): user is User => user !== null),
+    };
+  }
+
+  async getUserById(id: UUID): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    return this.mapToDomainUser(user);
+  }
+
+  async getUserByPhone(phone: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({ where: { phone } });
+    return this.mapToDomainUser(user);
+  }
+
+  async createUser(data: User): Promise<User> {
+    const user = await this.prisma.user.create({ data });
+    return this.mapToDomainUser(user)!;
+  }
+
+  async updateUser(id: UUID, data: Partial<User>): Promise<User> {
+    const user = await this.prisma.user.update({ where: { id }, data });
+    return this.mapToDomainUser(user)!;
+  }
+
+  async deleteUser(id: UUID) {
+    await this.prisma.user.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+  }
+
+  private mapToDomainUser(prismaUser: PrismaUser | null): User | null {
+    if (!prismaUser) return null;
+
+    return User.fromPersistence(
+      prismaUser.id as UUID,
+      prismaUser.name,
+      prismaUser.surname,
+      prismaUser.patronymic,
+      prismaUser.gender,
+      prismaUser.birthDate,
+      prismaUser.phone,
+      prismaUser.password,
+      prismaUser.passwordSalt,
+      prismaUser.role,
+      prismaUser.registeredById as UUID | null,
+      prismaUser.registeredAt,
+      prismaUser.lastLoginAt,
+      prismaUser.deletedAt,
+    );
+  }
+}
