@@ -1,5 +1,4 @@
 import { PaginationParams } from '../types/pagination-params.type';
-import { PaginatedList } from '../types/paginated-list.type';
 import {
   PrismaModelKey,
   PrismaModelOperations,
@@ -8,6 +7,7 @@ import { PrismaFilterApplier } from './prisma-filter-applier.service';
 import { PrismaQuickFilterApplier } from './prisma-quick-filter-applier.service';
 import { PrismaOrderApplier } from './prisma-order-applier.service';
 import { Injectable } from '@nestjs/common';
+import { DbPaginated } from '../types/db-paginated.type';
 
 type FindManyFunction<
   TPrismaModel extends PrismaModelKey,
@@ -42,7 +42,7 @@ export class PrismaPaginator {
     filterFields: (keyof TModel)[] = [],
     whereClause: PrismaModelOperations<TPrismaModel>['whereClause'] = {},
     include?: PrismaModelOperations<TPrismaModel>['findMany']['include'],
-  ): Promise<PaginatedList<TModel>> {
+  ): Promise<DbPaginated<TModel>> {
     const orderBy = this.orderApplier.applyOrder(paginationParams.sortedFields);
 
     const where: PrismaModelOperations<TPrismaModel>['whereClause'] = {
@@ -66,18 +66,9 @@ export class PrismaPaginator {
       include,
     });
 
-    const totalPages = Math.ceil(total / paginationParams.pageSize);
-    const hasNextPage =
-      paginationParams.page * paginationParams.pageSize < total;
-    const hasPreviousPage = paginationParams.page > 1;
-
     return {
-      ...paginationParams,
       items: data,
       totalCount: total,
-      totalPages,
-      hasNextPage,
-      hasPreviousPage,
     };
   }
 }

@@ -8,6 +8,7 @@ import { UUID } from 'crypto';
 import { PaginatedList } from '../../../shared/pagination/types/paginated-list.type';
 import { UserRepository } from '../../domain/interfaces/user.repository.interface';
 import { User as PrismaUser } from 'generated/prisma';
+import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -16,7 +17,7 @@ export class PrismaUserRepository implements UserRepository {
     private readonly prismaPaginationApplier: PrismaPaginator,
   ) {}
 
-  async getUsers(params: PaginationParams<User>): Promise<PaginatedList<User>> {
+  async getUsers(params: PaginationParams<User>): Promise<DbPaginated<User>> {
     const prismaPaginatedList =
       await this.prismaPaginationApplier.applyPagination<'User', PrismaUser>(
         (args) => this.prisma.user.findMany(args),
@@ -26,18 +27,13 @@ export class PrismaUserRepository implements UserRepository {
         { deletedAt: null },
       );
 
-    return {
-      ...prismaPaginatedList,
-      items: prismaPaginatedList.items
-        .map((prismaUser) => this.mapToDomainUser(prismaUser))
-        .filter((user): user is User => user !== null),
-    };
+    return prismaPaginatedList as DbPaginated<User>;
   }
 
   async getUsersByRole(
     role: UserRole,
     params: PaginationParams<User>,
-  ): Promise<PaginatedList<User>> {
+  ): Promise<DbPaginated<User>> {
     const prismaPaginatedList =
       await this.prismaPaginationApplier.applyPagination<'User', PrismaUser>(
         (args) => this.prisma.user.findMany(args),
@@ -47,12 +43,7 @@ export class PrismaUserRepository implements UserRepository {
         { role, deletedAt: null },
       );
 
-    return {
-      ...prismaPaginatedList,
-      items: prismaPaginatedList.items
-        .map((prismaUser) => this.mapToDomainUser(prismaUser))
-        .filter((user): user is User => user !== null),
-    };
+    return prismaPaginatedList as PaginatedList<User>;
   }
 
   async getUserById(id: UUID): Promise<User | null> {

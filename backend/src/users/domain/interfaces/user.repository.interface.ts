@@ -1,8 +1,8 @@
 import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
 import { User } from '../entities/user.entity';
 import { UserRole } from '../../../shared/enums/user-role.enum';
-import { PaginatedList } from '../../../shared/pagination/types/paginated-list.type';
 import { UUID } from 'crypto';
+import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
 
 export abstract class UserRepository {
   /**
@@ -10,9 +10,7 @@ export abstract class UserRepository {
    * @param params - Pagination parameters.
    * @returns A promise that resolves to a paginated list of users.
    */
-  abstract getUsers(
-    params: PaginationParams<User>,
-  ): Promise<PaginatedList<User>>;
+  abstract getUsers(params: PaginationParams<User>): Promise<DbPaginated<User>>;
 
   /**
    * Get a paginated list of users by role.
@@ -23,7 +21,7 @@ export abstract class UserRepository {
   abstract getUsersByRole(
     role: UserRole,
     params: PaginationParams<User>,
-  ): Promise<PaginationParams<User>>;
+  ): Promise<DbPaginated<User>>;
 
   /**
    * Get a user by their unique identifier.
