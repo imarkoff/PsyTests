@@ -1,6 +1,6 @@
-import { UserDto } from '../../presentation/dtos/user.dto';
+import { UserDto } from '../../../presentation/dtos/user.dto';
 import { Command } from '@nestjs/cqrs';
-import { UserCreateDto } from '../../presentation/dtos/user-create.dto';
+import { UserCreateDto } from '../../../presentation/dtos/user-create.dto';
 import { UUID } from 'crypto';
 
 /**

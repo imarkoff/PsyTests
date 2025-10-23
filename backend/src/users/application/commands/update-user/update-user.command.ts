@@ -1,6 +1,6 @@
 import { Command } from '@nestjs/cqrs';
-import { UserDto } from '../../presentation/dtos/user.dto';
-import { UserUpdateDto } from '../../presentation/dtos/user-update.dto';
+import { UserDto } from '../../../presentation/dtos/user.dto';
+import { UserUpdateDto } from '../../../presentation/dtos/user-update.dto';
 import { UUID } from 'node:crypto';
 
 export class UpdateUserCommand extends Command<UserDto> {

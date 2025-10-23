@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { GetPaginatedUsersQuery } from '../get-paginated-users.query';
+import { GetPaginatedUsersQuery } from './get-paginated-users.query';
 import { PaginatedList } from 'src/shared/pagination/types/paginated-list.type';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserMapper } from '../../mappers/user.mapper';

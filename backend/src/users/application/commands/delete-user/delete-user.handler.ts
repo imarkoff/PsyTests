@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DeleteUserCommand } from '../delete-user.command';
+import { DeleteUserCommand } from './delete-user.command';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';

@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { ChangePasswordByAdminCommand } from '../change-password-by-admin.command';
+import { ChangePasswordByAdminCommand } from './change-password-by-admin.command';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';

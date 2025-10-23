@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from './commands/create-user.command';
+import { CreateUserCommand } from './commands/create-user/create-user.command';
 import { UserCreateDto } from '../presentation/dtos/user-create.dto';
 import { UUID } from 'crypto';
 import { UserUpdateDto } from '../presentation/dtos/user-update.dto';
-import { UpdateUserCommand } from './commands/update-user.command';
+import { UpdateUserCommand } from './commands/update-user/update-user.command';
 import { PaginationParams } from '../../shared/pagination/types/pagination-params.type';
 import { User } from '../domain/entities/user.entity';
-import { GetPaginatedUsersQuery } from './queries/get-paginated-users.query';
-import { GetUserByIdQuery } from './queries/get-user-by-id.query';
+import { GetPaginatedUsersQuery } from './queries/get-paginated-users/get-paginated-users.query';
+import { GetUserByIdQuery } from './queries/get-user-by-id/get-user-by-id.query';
 import { UserNotFoundException } from '../domain/exceptions/user-not-found.exception';
-import { GetUserByPhoneQuery } from './queries/get-user-by-phone.query';
+import { GetUserByPhoneQuery } from './queries/get-user-by-phone/get-user-by-phone.query';
 import { UserByPhoneNotFoundException } from '../domain/exceptions/user-by-phone-not-found.exception';
 
 @Injectable()

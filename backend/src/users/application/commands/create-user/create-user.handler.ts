@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CreateUserCommand } from '../create-user.command';
+import { CreateUserCommand } from './create-user.command';
 import { User } from '../../../domain/entities/user.entity';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { PasswordHasher } from '../../../../core/auth/password-hasher/password-hasher.interface';

@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UpdateUserCommand } from '../update-user.command';
+import { UpdateUserCommand } from './update-user.command';
 import { UserDto } from 'src/users/presentation/dtos/user.dto';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';

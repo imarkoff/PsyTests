@@ -1,4 +1,4 @@
-import { GetUserByPhoneQuery } from '../get-user-by-phone.query';
+import { GetUserByPhoneQuery } from './get-user-by-phone.query';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserMapper } from '../../mappers/user.mapper';

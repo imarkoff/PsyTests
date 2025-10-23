@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UpdateLastLoginCommand } from '../update-last-login.command';
+import { UpdateLastLoginCommand } from './update-last-login.command';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 
