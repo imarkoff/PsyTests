@@ -7,6 +7,7 @@ import { CreateUserHandler } from './application/commands/handlers/create-user.h
 import { UsersOrchestratorService } from './application/users-orchestrator.service';
 import { UserRepository } from './domain/interfaces/user.repository.interface';
 import { CqrsModule } from '@nestjs/cqrs';
+import { UpdateUserHandler } from './application/commands/handlers/update-user.handler';
 
 @Module({
   imports: [PrismaModule, AuthModule, CqrsModule],
@@ -17,6 +18,7 @@ import { CqrsModule } from '@nestjs/cqrs';
       useClass: PrismaUserRepository,
     },
     CreateUserHandler,
+    UpdateUserHandler,
     UsersOrchestratorService,
   ],
   exports: [],

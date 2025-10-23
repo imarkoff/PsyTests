@@ -43,16 +43,16 @@ export abstract class UserRepository {
    * Create a new user.
    * @param data - The data of the user to create.
    * @returns A promise that resolves to the created user.
+   * @throws PhoneIsAlreadyTakenException if the phone number is already in use.
    */
   abstract createUser(data: User): Promise<User>;
 
   /**
    * Update an existing user.
-   * @param id - The unique identifier of the user to update.
-   * @param data - The data to update the user with.
+   * @param updatedUser - The user entity with updated data.
    * @returns A promise that resolves to the updated user.
    */
-  abstract updateUser(id: UUID, data: Partial<User>): Promise<User>;
+  abstract updateUser(updatedUser: User): Promise<User>;
 
   /**
    * Delete a user by their unique identifier.

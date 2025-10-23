@@ -23,6 +23,7 @@ export class PrismaUserRepository implements UserRepository {
         (args) => this.prisma.user.count(args),
         params as PaginationParams<PrismaUser>,
         ['surname', 'name', 'patronymic', 'phone'],
+        { deletedAt: null },
       );
 
     return {
@@ -43,7 +44,7 @@ export class PrismaUserRepository implements UserRepository {
         (args) => this.prisma.user.count(args),
         params as PaginationParams<PrismaUser>,
         ['surname', 'name', 'patronymic', 'phone'],
-        { role },
+        { role, deletedAt: null },
       );
 
     return {
@@ -55,12 +56,16 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async getUserById(id: UUID): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id, deletedAt: null },
+    });
     return this.mapToDomainUser(user);
   }
 
   async getUserByPhone(phone: string): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({ where: { phone } });
+    const user = await this.prisma.user.findUnique({
+      where: { phone, deletedAt: null },
+    });
     return this.mapToDomainUser(user);
   }
 
@@ -69,8 +74,11 @@ export class PrismaUserRepository implements UserRepository {
     return this.mapToDomainUser(user)!;
   }
 
-  async updateUser(id: UUID, data: Partial<User>): Promise<User> {
-    const user = await this.prisma.user.update({ where: { id }, data });
+  async updateUser(updatedUser: User): Promise<User> {
+    const user = await this.prisma.user.update({
+      where: { id: updatedUser.id },
+      data: updatedUser,
+    });
     return this.mapToDomainUser(user)!;
   }
 
