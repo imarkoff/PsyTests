@@ -4,6 +4,7 @@ import { UserGender } from '../../../shared/enums/user-gender.enum';
 import { UserCreateDto } from '../../presentation/dtos/user-create.dto';
 import { randomUUID } from 'node:crypto';
 import { HashedPassword } from '../../../core/auth/password-hasher/types/hashed-password.type';
+import { UserUpdateDto } from '../../presentation/dtos/user-update.dto';
 
 export class User {
   private constructor(
@@ -77,6 +78,25 @@ export class User {
       registeredAt,
       lastLoginAt,
       deletedAt,
+    );
+  }
+
+  static updateFromDto(user: User, updateData: UserUpdateDto): User {
+    return new User(
+      user.id,
+      updateData.name,
+      updateData.surname,
+      updateData.patronymic || null,
+      updateData.gender,
+      updateData.birthDate,
+      updateData.phone,
+      user.password,
+      user.passwordSalt,
+      user.role,
+      user.registeredById,
+      user.registeredAt,
+      user.lastLoginAt,
+      user.deletedAt,
     );
   }
 }

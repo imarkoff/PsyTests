@@ -1,0 +1,23 @@
+import { randomBytes, scrypt } from 'crypto';
+import { CryptoService } from './crypto.interface';
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class NodeCryptoService implements CryptoService {
+  randomBytes(length: number): Buffer {
+    return randomBytes(length);
+  }
+
+  async scrypt(
+    password: string,
+    salt: Buffer,
+    keylen: number,
+  ): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      scrypt(password, salt, keylen, (err, derivedKey) => {
+        if (err) reject(err);
+        else resolve(derivedKey);
+      });
+    });
+  }
+}
