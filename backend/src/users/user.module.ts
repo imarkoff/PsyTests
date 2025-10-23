@@ -11,6 +11,10 @@ import { UpdateUserHandler } from './application/commands/handlers/update-user.h
 import { ChangePasswordByAdminHandler } from './application/commands/handlers/change-password-by-admin.handler';
 import { UpdateLastLoginHandler } from './application/commands/handlers/update-last-login.handler';
 import { DeleteUserHandler } from './application/commands/handlers/delete-user.handler';
+import { GetPaginatedUsersHandler } from './application/queries/handlers/get-paginated-users.handler';
+import { GetPaginatedUsersByRoleHandler } from './application/queries/handlers/get-paginated-users-by-role.handler';
+import { GetUserByPhoneHandler } from './application/queries/handlers/get-user-by-phone.handler';
+import { GetUserByIdHandler } from './application/queries/handlers/get-user-by-id.handler';
 
 @Module({
   imports: [PrismaModule, AuthModule, CqrsModule],
@@ -25,6 +29,10 @@ import { DeleteUserHandler } from './application/commands/handlers/delete-user.h
     ChangePasswordByAdminHandler,
     UpdateLastLoginHandler,
     DeleteUserHandler,
+    GetPaginatedUsersHandler,
+    GetPaginatedUsersByRoleHandler,
+    GetUserByIdHandler,
+    GetUserByPhoneHandler,
     UsersOrchestratorService,
   ],
   exports: [],

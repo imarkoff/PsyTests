@@ -20,14 +20,14 @@ export class GetPaginatedUsersHandler
    */
   async execute({
     paginationParams,
-  }: GetPaginatedUsersQuery): Promise<PaginatedList<UserDto>> {
+  }: GetPaginatedUsersQuery): Promise<PaginatedList<UserDto, User>> {
     const paginatedDbUsers =
       await this.userRepository.getUsers(paginationParams);
 
     return PaginatedListMapper.toDto(
       paginationParams,
       paginatedDbUsers,
-      (model: User) => UserMapper.toDto(model),
+      (model) => UserMapper.toDto(model),
     );
   }
 }

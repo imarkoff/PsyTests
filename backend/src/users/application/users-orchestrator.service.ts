@@ -1,14 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from './commands/create-user.command';
 import { UserCreateDto } from '../presentation/dtos/user-create.dto';
 import { UUID } from 'crypto';
 import { UserUpdateDto } from '../presentation/dtos/user-update.dto';
 import { UpdateUserCommand } from './commands/update-user.command';
+import { PaginationParams } from '../../shared/pagination/types/pagination-params.type';
+import { User } from '../domain/entities/user.entity';
+import { GetPaginatedUsersQuery } from './queries/get-paginated-users.query';
+import { GetUserByIdQuery } from './queries/get-user-by-id.query';
+import { UserNotFoundException } from '../domain/exceptions/user-not-found.exception';
+import { GetUserByPhoneQuery } from './queries/get-user-by-phone.query';
+import { UserByPhoneNotFoundException } from '../domain/exceptions/user-by-phone-not-found.exception';
 
 @Injectable()
 export class UsersOrchestratorService {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
+  ) {}
 
   /**
    * Create a new user by dispatching the CreateUserCommand.
@@ -35,5 +45,23 @@ export class UsersOrchestratorService {
     return this.commandBus.execute(
       new UpdateUserCommand(userId, userUpdateDto),
     );
+  }
+
+  getPaginatedUsers(paginationParams: PaginationParams<User>) {
+    return this.queryBus.execute(new GetPaginatedUsersQuery(paginationParams));
+  }
+
+  async getUserById(userId: UUID) {
+    const user = await this.queryBus.execute(new GetUserByIdQuery(userId));
+    if (!user) throw new UserNotFoundException(userId);
+    return user;
+  }
+
+  async getUserByPhoneNumber(phoneNumber: string) {
+    const user = await this.queryBus.execute(
+      new GetUserByPhoneQuery(phoneNumber),
+    );
+    if (!user) throw new UserByPhoneNotFoundException(phoneNumber);
+    return user;
   }
 }

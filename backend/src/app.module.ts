@@ -7,6 +7,7 @@ import { appConfig, dbConfig, fileStorageConfig } from './core/config';
 import { UserModule } from './users/user.module';
 import { PrismaModule } from './core/prisma/prisma.module';
 import { PaginationModule } from './shared/pagination/pagination.module';
+import { ValidationsModule } from './core/validations/validations.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PaginationModule } from './shared/pagination/pagination.module';
     UserModule,
     PrismaModule,
     PaginationModule,
+    ValidationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

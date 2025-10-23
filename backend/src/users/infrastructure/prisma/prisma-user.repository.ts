@@ -5,7 +5,6 @@ import { PrismaPaginator } from '../../../shared/pagination/prisma-applier/prism
 import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
 import { Injectable } from '@nestjs/common';
 import { UUID } from 'crypto';
-import { PaginatedList } from '../../../shared/pagination/types/paginated-list.type';
 import { UserRepository } from '../../domain/interfaces/user.repository.interface';
 import { User as PrismaUser } from 'generated/prisma';
 import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
@@ -43,7 +42,7 @@ export class PrismaUserRepository implements UserRepository {
         { role, deletedAt: null },
       );
 
-    return prismaPaginatedList as PaginatedList<User>;
+    return prismaPaginatedList as DbPaginated<User>;
   }
 
   async getUserById(id: UUID): Promise<User | null> {

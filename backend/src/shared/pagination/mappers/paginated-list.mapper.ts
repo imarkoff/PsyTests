@@ -7,9 +7,9 @@ export class PaginatedListMapper {
     paginationParams: PaginationParams<TModel>,
     dbPaginated: DbPaginated<TModel>,
     convertModel: (model: TModel) => TDto,
-  ): PaginatedList<TDto> {
+  ): PaginatedList<TDto, TModel> {
     return {
-      ...(paginationParams as unknown as PaginationParams<TDto>),
+      ...paginationParams,
       items: dbPaginated.items.map(convertModel),
       totalCount: dbPaginated.totalCount,
       totalPages: Math.ceil(dbPaginated.totalCount / paginationParams.pageSize),

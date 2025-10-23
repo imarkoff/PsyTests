@@ -1,12 +1,16 @@
 import { SortDirection } from '../enums/sort-direction.enum';
 import { FilterOperator } from '../enums/filter-operator.enum';
 
-export interface PaginationParams<T extends object> {
+/**
+ * Pagination parameters for querying paginated data.
+ * @template TModel - The type of the model entity. Model type because sorting and filtering are done on model fields.
+ */
+export interface PaginationParams<TModel extends object> {
   page: number;
   pageSize: number;
-  sortedFields: SortedField<T>[];
+  sortedFields: SortedField<TModel>[];
   quickFilter?: QuickFilter;
-  filter?: Filter<T>;
+  filter?: Filter<TModel>;
 }
 
 export interface SortedField<T extends object> {
