@@ -49,27 +49,29 @@ export class PrismaUserRepository implements UserRepository {
     const user = await this.prisma.user.findUnique({
       where: { id, deletedAt: null },
     });
-    return this.mapToDomainUser(user);
+    return user ? User.fromPersistence(user) : null;
   }
 
   async getUserByPhone(phone: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { phone, deletedAt: null },
     });
-    return this.mapToDomainUser(user);
+    return user ? User.fromPersistence(user) : null;
   }
 
   async createUser(data: User): Promise<User> {
-    const user = await this.prisma.user.create({ data });
-    return this.mapToDomainUser(user)!;
+    const convertedUser = data.toPersistence();
+    const createdUser = await this.prisma.user.create({ data: convertedUser });
+    return User.fromPersistence(createdUser);
   }
 
   async updateUser(updatedUser: User): Promise<User> {
+    const convertedUser = updatedUser.toPersistence();
     const user = await this.prisma.user.update({
       where: { id: updatedUser.id },
-      data: updatedUser,
+      data: convertedUser,
     });
-    return this.mapToDomainUser(user)!;
+    return User.fromPersistence(user);
   }
 
   async deleteUser(id: UUID) {
@@ -77,10 +79,5 @@ export class PrismaUserRepository implements UserRepository {
       where: { id },
       data: { deletedAt: new Date() },
     });
-  }
-
-  private mapToDomainUser(prismaUser: PrismaUser | null): User | null {
-    if (!prismaUser) return null;
-    return User.fromPersistence(prismaUser);
   }
 }

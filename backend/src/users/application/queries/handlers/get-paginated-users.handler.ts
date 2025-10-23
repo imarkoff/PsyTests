@@ -1,11 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetPaginatedUsersQuery } from '../get-paginated-users.query';
 import { PaginatedList } from 'src/shared/pagination/types/paginated-list.type';
-import { UserDto } from 'src/users/presentation/dtos/user.dto';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserMapper } from '../../mappers/user.mapper';
 import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
 import { User } from '../../../domain/entities/user.entity';
+import { UserDto } from '../../../presentation/dtos/user.dto';
 
 @QueryHandler(GetPaginatedUsersQuery)
 export class GetPaginatedUsersHandler

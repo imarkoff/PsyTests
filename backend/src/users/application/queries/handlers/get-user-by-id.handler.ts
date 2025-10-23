@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetUserByIdQuery } from '../get-user-by-id.query';
-import { UserDto } from 'src/users/presentation/dtos/user.dto';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserMapper } from '../../mappers/user.mapper';
+import { UserDto } from '../../../presentation/dtos/user.dto';
 
 @QueryHandler(GetUserByIdQuery)
 export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {

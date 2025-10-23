@@ -7,7 +7,7 @@ import { UserDto } from '../../../presentation/dtos/user.dto';
 import { UserMapper } from '../../mappers/user.mapper';
 import { PhoneIsAlreadyTakenException } from '../../../domain/exceptions/phone-is-already-taken.exception';
 import { UUID } from 'crypto';
-import { UserRole } from '../../../../shared/enums/user-role.enum';
+import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';
 
 /**
  * Command handler responsible for creating a new user.
@@ -19,6 +19,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly passwordHasher: PasswordHasher,
+    private readonly roleValidator: RoleValidator,
   ) {}
 
   /**
@@ -68,10 +69,10 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     const registeringUser =
       await this.userRepository.getUserById(registeredById);
 
-    return !(
-      !registeringUser ||
-      registeringUser.deletedAt ||
-      registeringUser.role === UserRole.PATIENT
+    return Boolean(
+      registeringUser &&
+        !registeringUser.deletedAt &&
+        this.roleValidator.isDoctorOrAdmin(registeringUser.role),
     );
   }
 }

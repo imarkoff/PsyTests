@@ -194,6 +194,25 @@ export class User {
     );
   }
 
+  toPersistence(): PrismaUser {
+    return {
+      id: this.id,
+      name: this.name,
+      surname: this.surname,
+      patronymic: this.patronymic,
+      gender: this.gender,
+      birthDate: this.birthDate,
+      phone: this.phone,
+      password: this.password,
+      passwordSalt: this.passwordSalt,
+      role: this.role,
+      registeredById: this.registeredById,
+      registeredAt: this.registeredAt,
+      lastLoginAt: this.lastLoginAt,
+      deletedAt: this.deletedAt,
+    };
+  }
+
   applyChanges(updateData: UserUpdateDto) {
     this.name = updateData.name;
     this.surname = updateData.surname;
