@@ -99,4 +99,23 @@ export class User {
       user.deletedAt,
     );
   }
+
+  static changePassword(user: User, hashedPassword: HashedPassword): User {
+    return new User(
+      user.id,
+      user.name,
+      user.surname,
+      user.patronymic,
+      user.gender,
+      user.birthDate,
+      user.phone,
+      hashedPassword.hash,
+      hashedPassword.salt,
+      user.role,
+      user.registeredById,
+      user.registeredAt,
+      user.lastLoginAt,
+      user.deletedAt,
+    );
+  }
 }
