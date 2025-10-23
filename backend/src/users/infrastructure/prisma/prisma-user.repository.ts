@@ -91,22 +91,6 @@ export class PrismaUserRepository implements UserRepository {
 
   private mapToDomainUser(prismaUser: PrismaUser | null): User | null {
     if (!prismaUser) return null;
-
-    return User.fromPersistence(
-      prismaUser.id as UUID,
-      prismaUser.name,
-      prismaUser.surname,
-      prismaUser.patronymic,
-      prismaUser.gender,
-      prismaUser.birthDate,
-      prismaUser.phone,
-      prismaUser.password,
-      prismaUser.passwordSalt,
-      prismaUser.role,
-      prismaUser.registeredById as UUID | null,
-      prismaUser.registeredAt,
-      prismaUser.lastLoginAt,
-      prismaUser.deletedAt,
-    );
+    return User.fromPersistence(prismaUser);
   }
 }

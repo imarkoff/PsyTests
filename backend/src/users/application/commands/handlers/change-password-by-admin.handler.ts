@@ -5,7 +5,6 @@ import { UserNotFoundException } from '../../../domain/exceptions/user-not-found
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';
 import { ForbiddenToChangePasswordException } from '../../../domain/exceptions/forbidden-to-change-password.exception';
 import { PasswordHasher } from '../../../../core/auth/password-hasher/password-hasher.interface';
-import { User } from '../../../domain/entities/user.entity';
 
 @CommandHandler(ChangePasswordByAdminCommand)
 export class ChangePasswordByAdminHandler
@@ -17,6 +16,14 @@ export class ChangePasswordByAdminHandler
     private readonly passwordHasher: PasswordHasher,
   ) {}
 
+  /**
+   * Change the password of a user by an administrator.
+   * @param userId - The unique identifier of the user whose password is to be changed.
+   * @param changedById - The unique identifier of the administrator performing the change.
+   * @param newPassword - The new password to be set for the user.
+   * @throws UserNotFoundException if either the user or the administrator does not exist.
+   * @throws ForbiddenToChangePasswordException if the user performing the change is not an administrator.
+   */
   async execute({
     userId,
     changedById,
@@ -36,7 +43,7 @@ export class ChangePasswordByAdminHandler
 
     const hashedPassword = await this.passwordHasher.hashPassword(newPassword);
 
-    const updatedUser = User.changePassword(user, hashedPassword);
-    await this.userRepository.updateUser(updatedUser);
+    user.changePassword(hashedPassword);
+    await this.userRepository.updateUser(user);
   }
 }

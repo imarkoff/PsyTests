@@ -4,7 +4,6 @@ import { UserDto } from 'src/users/presentation/dtos/user.dto';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { PhoneIsAlreadyTakenException } from '../../../domain/exceptions/phone-is-already-taken.exception';
-import { User } from '../../../domain/entities/user.entity';
 import { UserMapper } from '../../mappers/user.mapper';
 
 @CommandHandler(UpdateUserCommand)
@@ -25,10 +24,10 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
 
     await this.checkCanUpdatePhone(user.phone, updateData.phone);
 
-    const updatedUser = User.updateFromDto(user, updateData);
-    await this.userRepository.updateUser(updatedUser);
+    user.applyChanges(updateData);
+    await this.userRepository.updateUser(user);
 
-    return UserMapper.toDto(updatedUser);
+    return UserMapper.toDto(user);
   }
 
   private async checkCanUpdatePhone(

@@ -8,6 +8,9 @@ import { UsersOrchestratorService } from './application/users-orchestrator.servi
 import { UserRepository } from './domain/interfaces/user.repository.interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UpdateUserHandler } from './application/commands/handlers/update-user.handler';
+import { ChangePasswordByAdminHandler } from './application/commands/handlers/change-password-by-admin.handler';
+import { UpdateLastLoginHandler } from './application/commands/handlers/update-last-login.handler';
+import { DeleteUserHandler } from './application/commands/handlers/delete-user.handler';
 
 @Module({
   imports: [PrismaModule, AuthModule, CqrsModule],
@@ -19,6 +22,9 @@ import { UpdateUserHandler } from './application/commands/handlers/update-user.h
     },
     CreateUserHandler,
     UpdateUserHandler,
+    ChangePasswordByAdminHandler,
+    UpdateLastLoginHandler,
+    DeleteUserHandler,
     UsersOrchestratorService,
   ],
   exports: [],
