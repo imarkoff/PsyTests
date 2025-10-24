@@ -18,4 +18,12 @@ export abstract class CryptoService {
     salt: Buffer,
     keylen: number,
   ): Promise<Buffer>;
+
+  /**
+   * Compares two Buffers in a way that is resistant to timing attacks.
+   * @param a - The first Buffer to compare.
+   * @param b - The second Buffer to compare.
+   * @returns True if the Buffers are equal, false otherwise.
+   */
+  abstract timingSafeEqual(a: Buffer, b: Buffer): boolean;
 }

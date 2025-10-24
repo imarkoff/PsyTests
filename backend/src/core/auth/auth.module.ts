@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from './crypto/crypto.interface';
 import { NodeCryptoService } from './crypto/crypto.service';
-import { PasswordHasher } from './password-hasher/password-hasher.interface';
-import { PasswordHasherImpl } from './password-hasher/password-hasher.service';
+import { PasswordService } from './password/password.interface';
+import { PasswordServiceImpl } from './password/password.service';
 
 @Module({
   providers: [
@@ -11,10 +11,10 @@ import { PasswordHasherImpl } from './password-hasher/password-hasher.service';
       useClass: NodeCryptoService,
     },
     {
-      provide: PasswordHasher,
-      useClass: PasswordHasherImpl,
+      provide: PasswordService,
+      useClass: PasswordServiceImpl,
     },
   ],
-  exports: [PasswordHasher],
+  exports: [PasswordService],
 })
 export class AuthModule {}

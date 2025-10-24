@@ -1,4 +1,4 @@
-import { randomBytes, scrypt } from 'crypto';
+import { randomBytes, scrypt, timingSafeEqual } from 'node:crypto';
 import { CryptoService } from './crypto.interface';
 import { Injectable } from '@nestjs/common';
 
@@ -19,5 +19,12 @@ export class NodeCryptoService implements CryptoService {
         else resolve(derivedKey);
       });
     });
+  }
+
+  timingSafeEqual(a: Buffer, b: Buffer): boolean {
+    if (a.length !== b.length) {
+      return false;
+    }
+    return timingSafeEqual(a, b);
   }
 }

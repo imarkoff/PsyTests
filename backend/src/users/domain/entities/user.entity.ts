@@ -3,7 +3,7 @@ import { UserRole } from '../../../shared/enums/user-role.enum';
 import { UserGender } from '../../../shared/enums/user-gender.enum';
 import { UserCreateDto } from '../../presentation/dtos/user-create.dto';
 import { randomUUID } from 'node:crypto';
-import { HashedPassword } from '../../../core/auth/password-hasher/types/hashed-password.type';
+import { HashedPassword } from '../../../core/auth/password/types/hashed-password.type';
 import { UserUpdateDto } from '../../presentation/dtos/user-update.dto';
 import { User as PrismaUser } from 'generated/prisma';
 
