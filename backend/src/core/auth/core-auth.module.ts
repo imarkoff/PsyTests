@@ -17,4 +17,4 @@ import { PasswordServiceImpl } from './password/password.service';
   ],
   exports: [PasswordService],
 })
-export class AuthModule {}
+export class CoreAuthModule {}

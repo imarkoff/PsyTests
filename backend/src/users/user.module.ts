@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './presentation/users.controller';
 import { PrismaUserRepository } from './infrastructure/prisma/prisma-user.repository';
 import { PrismaModule } from '../core/prisma/prisma.module';
-import { AuthModule } from '../core/auth/auth.module';
+import { CoreAuthModule } from '../core/auth/core-auth.module';
 import { CreateUserHandler } from './application/commands/create-user/create-user.handler';
 import { UsersOrchestratorService } from './application/users-orchestrator.service';
 import { UserRepository } from './domain/interfaces/user.repository.interface';
@@ -18,7 +18,7 @@ import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-use
 import { GetUserModelByPhoneHandler } from './application/queries/get-user-model-by-phone/get-user-model-by-phone.handler';
 
 @Module({
-  imports: [PrismaModule, AuthModule, CqrsModule],
+  imports: [PrismaModule, CoreAuthModule, CqrsModule],
   controllers: [UsersController],
   providers: [
     {

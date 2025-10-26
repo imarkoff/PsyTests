@@ -64,19 +64,19 @@ export class User {
     this._phone = phone;
   }
 
-  private _password: Uint8Array<ArrayBufferLike>;
-  get password(): Uint8Array<ArrayBufferLike> {
+  private _password: Uint8Array;
+  get password(): Uint8Array {
     return this._password;
   }
-  private set password(password: Uint8Array<ArrayBufferLike>) {
+  private set password(password: Uint8Array) {
     this._password = password;
   }
 
-  private _passwordSalt: Uint8Array<ArrayBufferLike>;
-  get passwordSalt(): Uint8Array<ArrayBufferLike> {
+  private _passwordSalt: Uint8Array;
+  get passwordSalt(): Uint8Array {
     return this._passwordSalt;
   }
-  private set passwordSalt(passwordSalt: Uint8Array<ArrayBufferLike>) {
+  private set passwordSalt(passwordSalt: Uint8Array) {
     this._passwordSalt = passwordSalt;
   }
 
@@ -203,8 +203,8 @@ export class User {
       gender: this.gender,
       birthDate: this.birthDate,
       phone: this.phone,
-      password: this.password,
-      passwordSalt: this.passwordSalt,
+      password: this.password as Uint8Array<ArrayBuffer>,
+      passwordSalt: this.passwordSalt as Uint8Array<ArrayBuffer>,
       role: this.role,
       registeredById: this.registeredById,
       registeredAt: this.registeredAt,
