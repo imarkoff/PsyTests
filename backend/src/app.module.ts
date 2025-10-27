@@ -7,6 +7,7 @@ import {
   appConfig,
   dbConfig,
   fileStorageConfig,
+  jwtConfig,
   passwordConfig,
 } from './core/config';
 import { UserModule } from './users/user.module';
@@ -21,7 +22,7 @@ import { DecoratorsModule } from './core/decorators/decorators.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env'],
-      load: [appConfig, dbConfig, fileStorageConfig, passwordConfig],
+      load: [appConfig, dbConfig, fileStorageConfig, jwtConfig, passwordConfig],
     }),
     UserModule,
     PrismaModule,

@@ -1,12 +1,12 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { AuthService } from '../application/auth.service';
 import { User } from '../../users/domain/entities/user.entity';
 import { Injectable } from '@nestjs/common';
+import { AuthValidator } from '../application/auth-validator/auth-validator.interface';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly authValidator: AuthValidator) {
     super({
       usernameField: 'phoneNumber',
       passwordField: 'password',
@@ -14,6 +14,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(phoneNumber: string, password: string): Promise<User> {
-    return this.authService.validateUser(phoneNumber, password);
+    return this.authValidator.validateUser(phoneNumber, password);
   }
 }
