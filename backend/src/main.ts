@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+import { JwtAuthGuard } from './auth/infrastructure/guards/jwt-auth.guard';
+import { RolesGuard } from './auth/infrastructure/guards/roles.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +23,10 @@ async function bootstrap() {
   );
 
   app.use(cookieParser());
+
+  const jwtGuard = app.get(JwtAuthGuard);
+  const rolesGuard = app.get(RolesGuard);
+  app.useGlobalGuards(jwtGuard, rolesGuard);
 
   await app.listen(port);
 }

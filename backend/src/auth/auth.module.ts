@@ -16,6 +16,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
 import { TokenCreator } from './application/token-creator/token-creator.abstract';
 import { TokenCreatorImpl } from './application/token-creator/token-creator.impl';
+import { RolesGuard } from './infrastructure/guards/roles.guard';
+import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
 
 @Module({
   imports: [CqrsModule, CoreAuthModule, JwtModule.register({})],
@@ -41,6 +43,8 @@ import { TokenCreatorImpl } from './application/token-creator/token-creator.impl
       provide: TokenCreator,
       useClass: TokenCreatorImpl,
     },
+    JwtAuthGuard,
+    RolesGuard,
     SetRefreshTokenInterceptor,
     LocalStrategy,
     JwtStrategy,

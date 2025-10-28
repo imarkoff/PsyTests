@@ -13,6 +13,7 @@ import { SessionCreator } from '../application/session-creator/session-creator.a
 import { SetRefreshTokenInterceptor } from '../infrastructure/interceptors/set-refresh-token.interceptor';
 import { RefreshTokenCookieSetter } from '../application/refresh-token-cookie-setter/refresh-token-cookie-setter.abstract';
 import { RefreshTokenGuard } from '../infrastructure/guards/refresh-token.guard';
+import { Public } from '../../core/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +22,7 @@ export class AuthController {
     private readonly refreshTokenSetter: RefreshTokenCookieSetter,
   ) {}
 
+  @Public()
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(SetRefreshTokenInterceptor)
   @Post('login')
@@ -28,6 +30,7 @@ export class AuthController {
     return this.sessionCreator.createSession(user);
   }
 
+  @Public()
   @UseGuards(RefreshTokenGuard)
   @UseInterceptors(SetRefreshTokenInterceptor)
   @Post('refresh-token')
@@ -35,6 +38,7 @@ export class AuthController {
     return this.sessionCreator.createSession(user);
   }
 
+  @Public()
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     this.refreshTokenSetter.clearRefreshTokenCookie(res);
