@@ -6,15 +6,19 @@ export interface JwtConfig {
   refreshTokenExpiresInDays: number;
 }
 
-export default (): JwtConfig => {
+export default (): { jwt: JwtConfig } => {
   const secret = process.env.JWT_SECRET;
   if (!secret) throw new Error('JWT_SECRET is not set');
 
   return {
-    secret,
-    accessTokenExpiresInMinutes: parseEnvInt(
-      'JWT_ACCESS_TOKEN_EXPIRES_IN_MINUTES',
-    ),
-    refreshTokenExpiresInDays: parseEnvInt('JWT_REFRESH_TOKEN_EXPIRES_IN_DAYS'),
+    jwt: {
+      secret,
+      accessTokenExpiresInMinutes: parseEnvInt(
+        'JWT_ACCESS_TOKEN_EXPIRES_IN_MINUTES',
+      ),
+      refreshTokenExpiresInDays: parseEnvInt(
+        'JWT_REFRESH_TOKEN_EXPIRES_IN_DAYS',
+      ),
+    },
   };
 };

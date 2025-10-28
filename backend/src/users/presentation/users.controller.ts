@@ -6,16 +6,27 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersOrchestratorService } from '../application/users-orchestrator.service';
 import { UserCreateDto } from './dtos/user-create.dto';
 import { UserUpdateDto } from './dtos/user-update.dto';
 import { type UUID } from 'node:crypto';
 import { UserByPhoneDto } from './dtos/user-by-phone.dto';
+import { JwtAuthGuard } from '../../auth/infrastructure/guards/jwt-auth.guard';
+import { UserFromAuth } from '../../core/decorators/user-from-auth.decorator';
+import { User } from '../domain/entities/user.entity';
+import { UserMapper } from '../application/mappers/user.mapper';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersOrchestrator: UsersOrchestratorService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getCurrentUser(@UserFromAuth() user: User) {
+    return UserMapper.toDto(user);
+  }
 
   @Get()
   async getUsers() {

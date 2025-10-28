@@ -1,4 +1,4 @@
-import { AuthValidator } from './auth-validator.interface';
+import { AuthValidator } from './auth-validator.abstract';
 import { Injectable } from '@nestjs/common';
 import { User } from '../../../users/domain/entities/user.entity';
 import { GetUserModelByPhoneQuery } from '../../../users/application/queries/get-user-model-by-phone/get-user-model-by-phone.query';

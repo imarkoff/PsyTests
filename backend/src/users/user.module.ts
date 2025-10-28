@@ -16,6 +16,7 @@ import { GetPaginatedUsersByRoleHandler } from './application/queries/get-pagina
 import { GetUserByPhoneHandler } from './application/queries/get-user-by-phone/get-user-by-phone.handler';
 import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-user-by-id.handler';
 import { GetUserModelByPhoneHandler } from './application/queries/get-user-model-by-phone/get-user-model-by-phone.handler';
+import { GetUserModelByIdHandler } from './application/queries/get-user-model-by-id/get-user-model-by-id.handler';
 
 @Module({
   imports: [PrismaModule, CoreAuthModule, CqrsModule],
@@ -34,6 +35,7 @@ import { GetUserModelByPhoneHandler } from './application/queries/get-user-model
     GetPaginatedUsersByRoleHandler,
     GetUserByIdHandler,
     GetUserByPhoneHandler,
+    GetUserModelByIdHandler,
     GetUserModelByPhoneHandler,
     UsersOrchestratorService,
   ],
