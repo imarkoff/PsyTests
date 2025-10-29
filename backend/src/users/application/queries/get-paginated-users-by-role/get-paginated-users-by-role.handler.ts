@@ -3,11 +3,14 @@ import { GetPaginatedUsersByRoleQuery } from './get-paginated-users-by-role.quer
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
 import { UserMapper } from '../../mappers/user.mapper';
+import { Logger } from '@nestjs/common';
 
 @QueryHandler(GetPaginatedUsersByRoleQuery)
 export class GetPaginatedUsersByRoleHandler
   implements IQueryHandler<GetPaginatedUsersByRoleQuery>
 {
+  private readonly logger = new Logger(GetPaginatedUsersByRoleHandler.name);
+
   constructor(private readonly userRepository: UserRepository) {}
 
   /**
@@ -20,6 +23,11 @@ export class GetPaginatedUsersByRoleHandler
     const paginatedDbUsers = await this.userRepository.getUsersByRole(
       role,
       paginationParams,
+    );
+
+    this.logger.log(
+      `Fetched ${paginatedDbUsers.items.length} users with role ${role}.
+      with page size ${paginationParams.pageSize} on page ${paginationParams.page}.`,
     );
 
     return PaginatedListMapper.toDto(

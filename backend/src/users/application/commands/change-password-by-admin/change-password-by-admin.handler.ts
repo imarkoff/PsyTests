@@ -5,11 +5,14 @@ import { UserNotFoundException } from '../../../domain/exceptions/user-not-found
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';
 import { ForbiddenToChangePasswordException } from '../../../domain/exceptions/forbidden-to-change-password.exception';
 import { PasswordService } from '../../../../core/auth/password/password.interface';
+import { Logger } from '@nestjs/common';
 
 @CommandHandler(ChangePasswordByAdminCommand)
 export class ChangePasswordByAdminHandler
   implements ICommandHandler<ChangePasswordByAdminCommand>
 {
+  private readonly logger = new Logger(ChangePasswordByAdminHandler.name);
+
   constructor(
     private readonly userRepository: UserRepository,
     private readonly roleValidator: RoleValidator,
@@ -29,13 +32,27 @@ export class ChangePasswordByAdminHandler
     changedById,
     newPassword,
   }: ChangePasswordByAdminCommand): Promise<void> {
+    this.logger.debug('Executing ChangePasswordByAdminCommand', {
+      userId,
+      changedById,
+    });
+
     const user = await this.userRepository.getUserById(userId);
-    if (!user) throw new UserNotFoundException(userId);
+    if (!user) {
+      this.logger.warn(`User with ID ${userId} not found.`);
+      throw new UserNotFoundException(userId);
+    }
 
     const changedBy = await this.userRepository.getUserById(changedById);
-    if (!changedBy) throw new UserNotFoundException(changedById);
+    if (!changedBy) {
+      this.logger.warn(`Admin user with ID ${changedById} not found.`);
+      throw new UserNotFoundException(changedById);
+    }
 
     if (!this.roleValidator.isAdmin(changedBy.role)) {
+      this.logger.warn(
+        `User with ID ${changedById} is not authorized to change passwords.`,
+      );
       throw new ForbiddenToChangePasswordException(
         "Only administrators can change other users' passwords.",
       );
@@ -45,5 +62,9 @@ export class ChangePasswordByAdminHandler
 
     user.changePassword(hashedPassword);
     await this.userRepository.updateUser(user);
+
+    this.logger.debug(
+      `Password for user ID ${userId} changed successfully by admin ID ${changedById}.`,
+    );
   }
 }

@@ -6,13 +6,12 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import type { Request, Response } from 'express';
+import type { Request } from 'express';
 
 @Injectable()
 export class ControllerLoggerInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const req = context.switchToHttp().getRequest<Request>();
-    const res = context.switchToHttp().getResponse<Response>();
     const handlerName = context.getHandler().name;
     const className = context.getClass().name;
 
@@ -27,13 +26,13 @@ export class ControllerLoggerInterceptor implements NestInterceptor {
         next: () => {
           const duration = Date.now() - startTime;
           logger.log(
-            `Request handled successfully: ${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms`,
+            `Request handled successfully: ${req.method} ${req.originalUrl} - ${duration}ms`,
           );
         },
         error: (err: Error) => {
           const duration = Date.now() - startTime;
           logger.error(
-            `Request handling failed: ${req.method} ${req.originalUrl} - ${res.statusCode} - ${duration}ms`,
+            `Request handling failed: ${req.method} ${req.originalUrl} - ${duration}ms`,
             err.stack,
           );
         },

@@ -6,11 +6,14 @@ import { UserMapper } from '../../mappers/user.mapper';
 import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
 import { User } from '../../../domain/entities/user.entity';
 import { UserDto } from '../../../presentation/dtos/user.dto';
+import { Logger } from '@nestjs/common';
 
 @QueryHandler(GetPaginatedUsersQuery)
 export class GetPaginatedUsersHandler
   implements IQueryHandler<GetPaginatedUsersQuery>
 {
+  private readonly logger = new Logger(GetPaginatedUsersHandler.name);
+
   constructor(private readonly userRepository: UserRepository) {}
 
   /**
@@ -23,6 +26,12 @@ export class GetPaginatedUsersHandler
   }: GetPaginatedUsersQuery): Promise<PaginatedList<UserDto, User>> {
     const paginatedDbUsers =
       await this.userRepository.getUsers(paginationParams);
+
+    this.logger.log(
+      `Fetched ${paginatedDbUsers.items.length} users 
+      for page ${paginationParams.page} 
+      with page size ${paginationParams.pageSize}.`,
+    );
 
     return PaginatedListMapper.toDto(
       paginationParams,
