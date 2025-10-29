@@ -1,5 +1,5 @@
 import { PayloadValidator } from './payload-validator.abstract';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { TokenPayload } from '../../domain/types/token-payload.type';
 import { QueryBus } from '@nestjs/cqrs';
 import { User } from '../../../users/domain/entities/user.entity';
@@ -8,6 +8,8 @@ import { UserFromJwtNotFoundException } from '../../domain/exceptions/user-from-
 
 @Injectable()
 export class PayloadValidatorImpl implements PayloadValidator {
+  private readonly logger = new Logger(PayloadValidator.name);
+
   constructor(private readonly queryBus: QueryBus) {}
 
   async validatePayload(payload: TokenPayload): Promise<User> {
@@ -15,7 +17,12 @@ export class PayloadValidatorImpl implements PayloadValidator {
       new GetUserModelByIdQuery(payload.sub),
     );
 
-    if (!user) throw new UserFromJwtNotFoundException();
+    if (!user) {
+      this.logger.warn(`User not found for ID: ${payload.sub}`);
+      throw new UserFromJwtNotFoundException();
+    }
+
+    this.logger.debug(`User validated successfully for ID: ${payload.sub}`);
 
     return user;
   }

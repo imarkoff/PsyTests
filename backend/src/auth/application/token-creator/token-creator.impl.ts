@@ -4,11 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import { JwtConfig } from '../../../core/config/jwt.config';
 import { TokenPayload } from '../../domain/types/token-payload.type';
 import { CreatedSession } from '../../domain/types/created-session.type';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { TokenCreator } from './token-creator.abstract';
 
 @Injectable()
 export class TokenCreatorImpl implements TokenCreator {
+  private readonly logger = new Logger(TokenCreatorImpl.name);
   private readonly jwtConfig: JwtConfig;
 
   constructor(
@@ -19,9 +20,13 @@ export class TokenCreatorImpl implements TokenCreator {
   }
 
   createTokens(user: User): CreatedSession {
+    this.logger.debug(`Creating tokens for user with ID: ${user.id}`);
+
     const payload: TokenPayload = { sub: user.id, role: user.role };
     const accessToken = this.createAccessToken(payload);
     const refreshToken = this.createRefreshToken(payload);
+
+    this.logger.debug(`Creating refresh token for user with ID: ${user.id}`);
 
     return {
       accessToken: accessToken[0],

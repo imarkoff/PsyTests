@@ -25,10 +25,10 @@ describe('JwtAuthGuard', () => {
   });
 
   describe('canActivate', () => {
-    it('returns true when the route is public', () => {
+    it('returns true when the route is public', async () => {
       jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(true);
 
-      const result = guard.canActivate(context);
+      const result = await guard.canActivate(context);
 
       expect(result).toBe(true);
       expect(reflector.getAllAndOverride).toHaveBeenCalledWith(IS_PUBLIC_KEY, [
@@ -37,25 +37,25 @@ describe('JwtAuthGuard', () => {
       ]);
     });
 
-    it('returns the result from passport AuthGuard when route is not public and passport allows access (true)', () => {
+    it('returns the result from passport AuthGuard when route is not public and passport allows access (true)', async () => {
       jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
       const canActivateSpy = jest
         .spyOn(AuthGuard('jwt').prototype, 'canActivate')
         .mockReturnValue(true);
 
-      const result = guard.canActivate(context);
+      const result = await guard.canActivate(context);
 
       expect(result).toBe(true);
       expect(canActivateSpy).toHaveBeenCalledWith(context);
     });
 
-    it('returns the result from passport AuthGuard when route is not public and passport denies access (false)', () => {
+    it('returns the result from passport AuthGuard when route is not public and passport denies access (false)', async () => {
       jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
       const canActivateSpy = jest
         .spyOn(AuthGuard('jwt').prototype, 'canActivate')
         .mockReturnValue(false);
 
-      const result = guard.canActivate(context);
+      const result = await guard.canActivate(context);
 
       expect(result).toBe(false);
       expect(canActivateSpy).toHaveBeenCalledWith(context);

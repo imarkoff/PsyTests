@@ -2,6 +2,7 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
+  Logger,
   NestInterceptor,
 } from '@nestjs/common';
 import type { Response } from 'express';
@@ -30,6 +31,8 @@ import { RefreshTokenCookieSetter } from '../../application/refresh-token-cookie
  */
 @Injectable()
 export class SetRefreshTokenInterceptor implements NestInterceptor {
+  private readonly logger = new Logger(SetRefreshTokenInterceptor.name);
+
   constructor(private readonly cookieService: RefreshTokenCookieSetter) {}
 
   intercept(
@@ -45,6 +48,11 @@ export class SetRefreshTokenInterceptor implements NestInterceptor {
             res,
             data.refreshToken,
             data.refreshTokenExpiresIn,
+          );
+          this.logger.debug('Refresh token cookie set successfully');
+        } else {
+          this.logger.warn(
+            'No refresh token found in the created session to set cookie. Returning access token only.',
           );
         }
 

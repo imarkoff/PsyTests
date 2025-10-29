@@ -93,6 +93,9 @@
     "moduleDirectories": [
       "node_modules",
       "<rootDir>/.."
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/../jest.setup.ts"
     ]
   }
 }
