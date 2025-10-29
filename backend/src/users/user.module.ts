@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './presentation/users.controller';
 import { PrismaUserRepository } from './infrastructure/prisma/prisma-user.repository';
 import { PrismaModule } from '../core/prisma/prisma.module';
-import { AuthModule } from '../core/auth/auth.module';
+import { CoreAuthModule } from '../core/auth/core-auth.module';
 import { CreateUserHandler } from './application/commands/create-user/create-user.handler';
 import { UsersOrchestratorService } from './application/users-orchestrator.service';
 import { UserRepository } from './domain/interfaces/user.repository.interface';
@@ -15,9 +15,11 @@ import { GetPaginatedUsersHandler } from './application/queries/get-paginated-us
 import { GetPaginatedUsersByRoleHandler } from './application/queries/get-paginated-users-by-role/get-paginated-users-by-role.handler';
 import { GetUserByPhoneHandler } from './application/queries/get-user-by-phone/get-user-by-phone.handler';
 import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-user-by-id.handler';
+import { GetUserModelByPhoneHandler } from './application/queries/get-user-model-by-phone/get-user-model-by-phone.handler';
+import { GetUserModelByIdHandler } from './application/queries/get-user-model-by-id/get-user-model-by-id.handler';
 
 @Module({
-  imports: [PrismaModule, AuthModule, CqrsModule],
+  imports: [PrismaModule, CoreAuthModule, CqrsModule],
   controllers: [UsersController],
   providers: [
     {
@@ -33,6 +35,8 @@ import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-use
     GetPaginatedUsersByRoleHandler,
     GetUserByIdHandler,
     GetUserByPhoneHandler,
+    GetUserModelByIdHandler,
+    GetUserModelByPhoneHandler,
     UsersOrchestratorService,
   ],
   exports: [],

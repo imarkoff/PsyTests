@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from './create-user.command';
 import { User } from '../../../domain/entities/user.entity';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
-import { PasswordHasher } from '../../../../core/auth/password-hasher/password-hasher.interface';
+import { PasswordService } from '../../../../core/auth/password/password.interface';
 import { UserDto } from '../../../presentation/dtos/user.dto';
 import { UserMapper } from '../../mappers/user.mapper';
 import { PhoneIsAlreadyTakenException } from '../../../domain/exceptions/phone-is-already-taken.exception';
@@ -18,7 +18,7 @@ import { RoleValidator } from '../../../../core/validations/role-validator/role-
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly passwordHasher: PasswordHasher,
+    private readonly passwordService: PasswordService,
     private readonly roleValidator: RoleValidator,
   ) {}
 
@@ -35,7 +35,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   }: CreateUserCommand): Promise<UserDto> {
     await this.checkPhoneUnique(userCreateDto.phone);
 
-    const hashedPassword = await this.passwordHasher.hashPassword(
+    const hashedPassword = await this.passwordService.hashPassword(
       userCreateDto.password,
     );
 

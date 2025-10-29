@@ -12,10 +12,18 @@ import { UserCreateDto } from './dtos/user-create.dto';
 import { UserUpdateDto } from './dtos/user-update.dto';
 import { type UUID } from 'node:crypto';
 import { UserByPhoneDto } from './dtos/user-by-phone.dto';
+import { UserFromAuth } from '../../core/decorators/user-from-auth.decorator';
+import { User } from '../domain/entities/user.entity';
+import { UserMapper } from '../application/mappers/user.mapper';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersOrchestrator: UsersOrchestratorService) {}
+
+  @Get('me')
+  getCurrentUser(@UserFromAuth() user: User) {
+    return UserMapper.toDto(user);
+  }
 
   @Get()
   async getUsers() {

@@ -5,9 +5,9 @@ import {
   IsEnum,
   IsPhoneNumber,
   IsString,
-  IsStrongPassword,
   MaxLength,
 } from 'class-validator';
+import { IsPasswordValid } from '../../../core/decorators/is-password-valid.decorator';
 
 export class UserCreateDto {
   @IsString()
@@ -37,20 +37,7 @@ export class UserCreateDto {
   })
   phone: string;
 
-  @IsString()
-  @IsStrongPassword(
-    {
-      minLength: 6,
-      minLowercase: 1,
-      minUppercase: 0,
-      minNumbers: 1,
-      minSymbols: 0,
-    },
-    {
-      message:
-        'Password should be at least 6 characters long and contain at least one number.',
-    },
-  )
+  @IsPasswordValid()
   password: string;
 
   @IsEnum(UserRole, { message: 'Role must be a valid user role.' })

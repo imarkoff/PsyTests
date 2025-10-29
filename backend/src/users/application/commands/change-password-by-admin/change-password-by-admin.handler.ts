@@ -4,7 +4,7 @@ import { UserRepository } from '../../../domain/interfaces/user.repository.inter
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';
 import { ForbiddenToChangePasswordException } from '../../../domain/exceptions/forbidden-to-change-password.exception';
-import { PasswordHasher } from '../../../../core/auth/password-hasher/password-hasher.interface';
+import { PasswordService } from '../../../../core/auth/password/password.interface';
 
 @CommandHandler(ChangePasswordByAdminCommand)
 export class ChangePasswordByAdminHandler
@@ -13,7 +13,7 @@ export class ChangePasswordByAdminHandler
   constructor(
     private readonly userRepository: UserRepository,
     private readonly roleValidator: RoleValidator,
-    private readonly passwordHasher: PasswordHasher,
+    private readonly passwordService: PasswordService,
   ) {}
 
   /**
@@ -41,7 +41,7 @@ export class ChangePasswordByAdminHandler
       );
     }
 
-    const hashedPassword = await this.passwordHasher.hashPassword(newPassword);
+    const hashedPassword = await this.passwordService.hashPassword(newPassword);
 
     user.changePassword(hashedPassword);
     await this.userRepository.updateUser(user);
