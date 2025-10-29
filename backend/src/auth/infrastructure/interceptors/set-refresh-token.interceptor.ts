@@ -10,6 +10,24 @@ import { CreatedSession } from '../../domain/types/created-session.type';
 import { CreatedSessionDto } from '../../presentation/dtos/created-session.dto';
 import { RefreshTokenCookieSetter } from '../../application/refresh-token-cookie-setter/refresh-token-cookie-setter.abstract';
 
+/**
+ * Interceptor that sets the refresh token cookie in the response
+ * when a new session is created.
+ * It removes the refresh token from the response body.
+ *
+ * @example
+ * ```typescript
+ * // In a controller method:
+ * @UseInterceptors(SetRefreshTokenInterceptor)
+ * createSession(...): CreatedSession {
+ *  // Logic to create a session and return tokens
+ *  return {
+ *    accessToken, accessTokenExpiresIn,
+ *    refreshToken, refreshTokenExpiresIn
+ *  };
+ * }
+ * ```
+ */
 @Injectable()
 export class SetRefreshTokenInterceptor implements NestInterceptor {
   constructor(private readonly cookieService: RefreshTokenCookieSetter) {}

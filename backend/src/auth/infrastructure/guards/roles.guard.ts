@@ -3,6 +3,11 @@ import { Reflector } from '@nestjs/core';
 import { Roles } from '../../../core/decorators/roles.decorator';
 import { User } from '../../../users/domain/entities/user.entity';
 
+/**
+ * Guard that checks if the user has the required roles to access a route.
+ * Uses the Roles decorator to get the required roles.
+ * If no roles are specified, access is granted.
+ */
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}

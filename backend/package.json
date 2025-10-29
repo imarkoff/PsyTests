@@ -85,6 +85,13 @@
     "testEnvironment": "node",
     "transformIgnorePatterns": [
       "node_modules/(?!uuid/.*)"
+    ],
+    "moduleNameMapper": {
+      "^generated/(.*)$": "<rootDir>/../generated/$1"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>/.."
     ]
   }
 }
