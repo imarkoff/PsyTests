@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import { JwtAuthGuard } from './auth/infrastructure/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/infrastructure/guards/roles.guard';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ControllerLoggerInterceptor } from './core/interceptors/controller-logger.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -39,6 +40,9 @@ async function bootstrap() {
     .build();
   const documentFactory = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, documentFactory);
+
+  const controllerLoggerInterceptor = app.get(ControllerLoggerInterceptor);
+  app.useGlobalInterceptors(controllerLoggerInterceptor);
 
   const jwtGuard = app.get(JwtAuthGuard);
   const rolesGuard = app.get(RolesGuard);

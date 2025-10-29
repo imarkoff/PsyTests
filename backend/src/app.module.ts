@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import {
@@ -14,6 +14,8 @@ import { PaginationModule } from './shared/pagination/pagination.module';
 import { ValidationsModule } from './core/validations/validations.module';
 import { AuthModule } from './auth/auth.module';
 import { DecoratorsModule } from './core/decorators/decorators.module';
+import { LoggerMiddleware } from './core/middlewares/logger.middleware';
+import { ControllerLoggerInterceptor } from './core/interceptors/controller-logger.interceptor';
 
 @Module({
   imports: [
@@ -29,6 +31,10 @@ import { DecoratorsModule } from './core/decorators/decorators.module';
     ValidationsModule,
     AuthModule,
   ],
-  providers: [AppService],
+  providers: [AppService, ControllerLoggerInterceptor],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
