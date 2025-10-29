@@ -7,11 +7,13 @@ export interface PasswordConfig {
   minSymbols: number;
 }
 
-export default (): PasswordConfig => ({
-  minLength: 6,
-  maxLength: 64,
-  minLowercase: 1,
-  minUppercase: 0,
-  minNumbers: 1,
-  minSymbols: 0,
+export default (): { password: PasswordConfig } => ({
+  password: {
+    minLength: 6,
+    maxLength: 64,
+    minLowercase: 1,
+    minUppercase: 0,
+    minNumbers: 1,
+    minSymbols: 0,
+  },
 });

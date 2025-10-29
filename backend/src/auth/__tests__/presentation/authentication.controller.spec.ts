@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from '../../presentation/auth.controller';
+import { AuthenticationController } from '../../presentation/authentication.controller';
 import { SessionCreator } from '../../application/session-creator/session-creator.abstract';
 import { RefreshTokenCookieSetter } from '../../application/refresh-token-cookie-setter/refresh-token-cookie-setter.abstract';
 import { User } from '../../../users/domain/entities/user.entity';
@@ -13,8 +13,8 @@ import { IS_PUBLIC_KEY } from '../../../core/decorators/public.decorator';
 import { SetRefreshTokenInterceptor } from '../../infrastructure/interceptors/set-refresh-token.interceptor';
 import { RequestMethod } from '@nestjs/common';
 
-describe('AuthController', () => {
-  let controller: AuthController;
+describe('AuthenticationController', () => {
+  let controller: AuthenticationController;
   let sessionCreator: SessionCreator;
   let refreshTokenSetter: RefreshTokenCookieSetter;
   let reflector: Reflector;
@@ -29,7 +29,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
+      controllers: [AuthenticationController],
       providers: [
         {
           provide: SessionCreator,
@@ -48,7 +48,7 @@ describe('AuthController', () => {
       .useValue({ canActivate: () => true })
       .compile();
 
-    controller = module.get<AuthController>(AuthController);
+    controller = module.get<AuthenticationController>(AuthenticationController);
     sessionCreator = module.get<SessionCreator>(SessionCreator);
     refreshTokenSetter = module.get<RefreshTokenCookieSetter>(
       RefreshTokenCookieSetter,

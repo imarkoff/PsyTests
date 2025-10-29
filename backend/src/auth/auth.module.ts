@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { LocalStrategy } from './infrastructure/strategies/local.strategy';
-import { AuthController } from './presentation/auth.controller';
+import { AuthenticationController } from './presentation/authentication.controller';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CoreAuthModule } from '../core/auth/core-auth.module';
 import { AuthValidator } from './application/auth-validator/auth-validator.abstract';
@@ -21,7 +21,7 @@ import { JwtAuthGuard } from './infrastructure/guards/jwt-auth.guard';
 
 @Module({
   imports: [CqrsModule, CoreAuthModule, JwtModule.register({})],
-  controllers: [AuthController],
+  controllers: [AuthenticationController],
   providers: [
     {
       provide: AuthValidator,
