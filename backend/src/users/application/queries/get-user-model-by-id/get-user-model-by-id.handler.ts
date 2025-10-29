@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetUserModelByIdQuery } from './get-user-model-by-id.query';
-import { User } from 'src/users/domain/entities/user.entity';
+import { User } from '../../../domain/entities/user.entity';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 
 @QueryHandler(GetUserModelByIdQuery)

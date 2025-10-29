@@ -1,4 +1,4 @@
-import { User } from 'src/users/domain/entities/user.entity';
+import { User } from '../../../users/domain/entities/user.entity';
 import { SessionCreator } from './session-creator.abstract';
 import { CreatedSession } from '../../domain/types/created-session.type';
 import { Injectable } from '@nestjs/common';

@@ -1,4 +1,4 @@
-import { User } from 'src/users/domain/entities/user.entity';
+import { User } from '../../../users/domain/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtConfig } from '../../../core/config/jwt.config';

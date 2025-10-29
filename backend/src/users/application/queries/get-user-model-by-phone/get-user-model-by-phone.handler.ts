@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetUserModelByPhoneQuery } from './get-user-model-by-phone.query';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
-import { User } from 'src/users/domain/entities/user.entity';
+import { User } from '../../../domain/entities/user.entity';
 
 @QueryHandler(GetUserModelByPhoneQuery)
 export class GetUserModelByPhoneHandler
