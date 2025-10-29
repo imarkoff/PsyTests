@@ -4,7 +4,7 @@ import { PrismaUserRepository } from './infrastructure/prisma/prisma-user.reposi
 import { PrismaModule } from '../core/prisma/prisma.module';
 import { CoreAuthModule } from '../core/auth/core-auth.module';
 import { CreateUserHandler } from './application/commands/create-user/create-user.handler';
-import { UsersOrchestratorService } from './application/users-orchestrator.service';
+import { UsersOrchestratorImpl } from './application/services/users-orchestrator/users-orchestrator.impl';
 import { UserRepository } from './domain/interfaces/user.repository.interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { UpdateUserHandler } from './application/commands/update-user/update-user.handler';
@@ -17,6 +17,7 @@ import { GetUserByPhoneHandler } from './application/queries/get-user-by-phone/g
 import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-user-by-id.handler';
 import { GetUserModelByPhoneHandler } from './application/queries/get-user-model-by-phone/get-user-model-by-phone.handler';
 import { GetUserModelByIdHandler } from './application/queries/get-user-model-by-id/get-user-model-by-id.handler';
+import { UsersOrchestrator } from './application/services/users-orchestrator/users-orchestrator.abstract';
 
 @Module({
   imports: [PrismaModule, CoreAuthModule, CqrsModule],
@@ -25,6 +26,10 @@ import { GetUserModelByIdHandler } from './application/queries/get-user-model-by
     {
       provide: UserRepository,
       useClass: PrismaUserRepository,
+    },
+    {
+      provide: UsersOrchestrator,
+      useClass: UsersOrchestratorImpl,
     },
     CreateUserHandler,
     UpdateUserHandler,
@@ -37,7 +42,6 @@ import { GetUserModelByIdHandler } from './application/queries/get-user-model-by
     GetUserByPhoneHandler,
     GetUserModelByIdHandler,
     GetUserModelByPhoneHandler,
-    UsersOrchestratorService,
   ],
   exports: [],
 })
