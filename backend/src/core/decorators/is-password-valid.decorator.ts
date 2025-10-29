@@ -12,34 +12,45 @@ import { PasswordConfig } from '../config/password.config';
 @ValidatorConstraint({ name: 'IsPasswordValid', async: false })
 @Injectable()
 export class PasswordConstraint implements ValidatorConstraintInterface {
-  constructor(private readonly config: ConfigService) {}
+  private readonly passwordConfig: PasswordConfig;
+
+  constructor(config: ConfigService) {
+    const cfg = config.get<PasswordConfig>('password');
+    if (!cfg) {
+      throw new Error('Password configuration is not defined.');
+    }
+  }
 
   validate(value: any): boolean {
     if (typeof value !== 'string') return false;
 
-    const cfg = this.config.get<PasswordConfig>('password');
-    if (!cfg) {
-      throw new Error('Password configuration is not defined.');
-    }
-
-    if (value.length > cfg.maxLength) return false;
+    if (value.length > this.passwordConfig.maxLength) return false;
 
     return validator.isStrongPassword(value, {
-      minLength: cfg.minLength,
-      minLowercase: cfg.minLowercase,
-      minUppercase: cfg.minUppercase,
-      minNumbers: cfg.minNumbers,
-      minSymbols: cfg.minSymbols,
+      minLength: this.passwordConfig.minLength,
+      minLowercase: this.passwordConfig.minLowercase,
+      minUppercase: this.passwordConfig.minUppercase,
+      minNumbers: this.passwordConfig.minNumbers,
+      minSymbols: this.passwordConfig.minSymbols,
     });
   }
 
   defaultMessage(): string {
+    const {
+      minLength,
+      maxLength,
+      minLowercase,
+      minUppercase,
+      minNumbers,
+      minSymbols,
+    } = this.passwordConfig;
+
     return (
       'Password should be a valid string ' +
-      'with at least $constraint1 characters long (max $constraint2), ' +
-      'including at least $constraint3 lowercase letter(s), ' +
-      '$constraint4 uppercase letter(s), ' +
-      '$constraint5 number(s), and $constraint6 special character(s).'
+      `with at least ${minLength} characters long (max ${maxLength}), ` +
+      `including at least ${minLowercase} lowercase letter(s), ` +
+      `${minUppercase} uppercase letter(s), ` +
+      `${minNumbers} number(s), and ${minSymbols} special character(s).`
     );
   }
 }
