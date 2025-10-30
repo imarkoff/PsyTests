@@ -19,6 +19,7 @@ export class PasswordConstraint implements ValidatorConstraintInterface {
     if (!cfg) {
       throw new Error('Password configuration is not defined.');
     }
+    this.passwordConfig = cfg;
   }
 
   validate(value: any): boolean {
