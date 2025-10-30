@@ -11,6 +11,8 @@ export class CreateUserCommand extends Command<UserDto> {
    * @param userCreateDto - Data Transfer Object containing user creation details.
    * @param registeredById - Optional ID of the user who is registering the new user.
    * @throws PhoneIsAlreadyTakenException if the phone number is already in use.
+   * @throws UserNotFoundException if the registering user does not exist.
+   * @throws ForbiddenToRegisterUserException if the registering user does not have sufficient privileges.
    */
   constructor(
     public readonly userCreateDto: UserCreateDto,

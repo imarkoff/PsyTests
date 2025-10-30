@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from './app.service';
 import {
   appConfig,
   dbConfig,
@@ -31,7 +30,7 @@ import { ControllerLoggerInterceptor } from './core/interceptors/controller-logg
     ValidationsModule,
     AuthModule,
   ],
-  providers: [AppService, ControllerLoggerInterceptor],
+  providers: [ControllerLoggerInterceptor],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

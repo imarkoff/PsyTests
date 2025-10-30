@@ -9,6 +9,8 @@ import { PhoneIsAlreadyTakenException } from '../../../domain/exceptions/phone-i
 import { UUID } from 'crypto';
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';
 import { Logger } from '@nestjs/common';
+import { ForbiddenToRegisterUserException } from '../../../domain/exceptions/forbidden-to-register-user.exception';
+import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 
 /**
  * Command handler responsible for creating a new user.
@@ -31,6 +33,8 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
    * @param registeredById - Optional ID of the user who is registering the new user. Should exist and not be a patient.
    * @returns A Promise that resolves to the created UserDto.
    * @throws PhoneIsAlreadyTakenException if the phone number is already in use.
+   * @throws UserNotFoundException if the registering user does not exist.
+   * @throws ForbiddenToRegisterUserException if the registering user does not have sufficient privileges.
    */
   async execute({
     userCreateDto,
@@ -42,26 +46,16 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     );
 
     await this.checkPhoneUnique(userCreateDto.phone);
+    await this.checkRegisteredByCanRegister(registeredById);
 
     const hashedPassword = await this.passwordService.hashPassword(
       userCreateDto.password,
     );
 
-    const userExists = await this.checkRegisteredByExists(registeredById);
-    this.logger.debug(
-      `Registering user exists: ${userExists}. Proceeding to create user.`,
-    );
-
-    const user = User.create(
-      userCreateDto,
-      hashedPassword,
-      userExists ? registeredById : undefined,
-    );
-
+    const user = User.create(userCreateDto, hashedPassword, registeredById);
     const createdUser = await this.userRepository.createUser(user);
 
     this.logger.log(`User created with ID: ${createdUser.id}`);
-
     return UserMapper.toDto(createdUser);
   }
 
@@ -73,23 +67,35 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     }
   }
 
-  private async checkRegisteredByExists(
-    registeredById: UUID | undefined,
-  ): Promise<boolean> {
+  private async checkRegisteredByCanRegister(registeredById: UUID | undefined) {
     if (!registeredById) {
       this.logger.debug(
-        'No registering user ID provided, proceeding with self-registration.',
+        `No registeredById provided. Proceeding with self-registration.`,
       );
-      return false;
+      return;
     }
+
+    this.logger.debug(
+      `Registered by ID provided: ${registeredById}. Validating registering user.`,
+    );
 
     const registeringUser =
       await this.userRepository.getUserById(registeredById);
 
-    return Boolean(
-      registeringUser &&
-        !registeringUser.deletedAt &&
-        this.roleValidator.isDoctorOrAdmin(registeringUser.role),
+    if (!registeringUser) {
+      this.logger.warn(`Registering user with ID ${registeredById} not found.`);
+      throw new UserNotFoundException(registeredById);
+    }
+
+    this.checkRegisteredByIsDoctorOrAdmin(registeringUser);
+  }
+
+  private checkRegisteredByIsDoctorOrAdmin(registeringUser: User) {
+    if (this.roleValidator.isDoctorOrAdmin(registeringUser.role)) return;
+
+    this.logger.warn(
+      `Registering user with ID ${registeringUser.id} does not have sufficient privileges.`,
     );
+    throw new ForbiddenToRegisterUserException();
   }
 }

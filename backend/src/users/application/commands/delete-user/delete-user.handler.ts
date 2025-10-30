@@ -49,7 +49,7 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
     return user;
   }
 
-  private async checkAdminExists(deletedById: UUID): Promise<User> {
+  private async checkAdminExists(deletedById: UUID) {
     const adminUser = await this.userRepository.getUserById(deletedById);
 
     if (!adminUser) {
@@ -58,8 +58,6 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
     }
 
     this.validateIsAdminUser(adminUser);
-
-    return adminUser;
   }
 
   private validateIsAdminUser(possibleAdmin: User): void {
