@@ -36,7 +36,7 @@ model User {
   patronymic     String?   @db.VarChar(100)
   /// Gender of the user
   gender         Gender
-  /// Phone number of the user, must be unique and in E.164 format without '+'
+  /// Phone number of the user, must be unique and in E.164 format
   phone          String    @unique @db.VarChar(15)
   /// Date of birth of the user
   birthDate      DateTime
