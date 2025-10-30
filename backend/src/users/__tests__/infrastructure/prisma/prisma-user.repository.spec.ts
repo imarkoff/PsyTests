@@ -214,10 +214,10 @@ describe(PrismaUserRepository.name, () => {
 
       await repository.deleteUser(id);
 
-      const now = new Date();
       expect(prismaService.user.update).toHaveBeenCalledWith({
         where: { id },
-        data: { deletedAt: now },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        data: { deletedAt: expect.any(Date) },
       });
       expect(prismaService.user.delete).not.toHaveBeenCalled();
     });
