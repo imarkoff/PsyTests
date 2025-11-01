@@ -10,8 +10,8 @@ class ProfileParagraphsComponent(DocumentComponent):
 
     def __init__(self, document: Document, formatter: DocumentFormatter, test_result: TestResultDto):
         super().__init__(document, formatter)
-        self.profile_types = test_result.verdict.get("profile_types")
-        self.profile_inclinations = test_result.verdict.get("profile_inclinations")
+        self.profile_types = test_result.verdict.profile_types
+        self.profile_inclinations = test_result.verdict.profile_inclinations
 
     def render(self) -> None:
         self._add_profiles_paragraph(self.profile_types, "Типи профілю")

@@ -7,7 +7,7 @@ class PCL5ToDocx(ResultsToDocx):
     """Generate a document for passed PCL5 test"""
 
     def _create_content(self):
-        verdict = PCL5Verdict(**self.test_result.verdict)
+        verdict: PCL5Verdict = self.test_result.verdict
 
         self._add_results_table(verdict)
 

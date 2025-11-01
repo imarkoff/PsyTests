@@ -29,7 +29,7 @@ class ResultBarsComponent(DocumentComponent):
         return temp_file
 
     def _prepare_chart_data(self):
-        (x, y) = zip(*self.test_result.verdict.get("converted").items())
+        (x, y) = zip(*self.test_result.verdict.converted.items())
         bar_colors = ['red' if val <= 30 or val >= 70 else 'green' for val in y]
         return {'x': x, 'y': y, 'colors': bar_colors}
 
