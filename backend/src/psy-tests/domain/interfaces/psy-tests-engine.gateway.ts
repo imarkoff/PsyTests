@@ -27,4 +27,19 @@ export abstract class PsyTestsEngineGateway {
   abstract getTestByIdWithoutAnswers(
     id: UUID,
   ): Promise<PsyTestWithDetails | null>;
+
+  /**
+   * Fetches the image associated with a psychological test by its ID.
+   * @param id - The ID of the psychological test.
+   * @param imagePath - The path to the image within the test resources.
+   * @returns A promise that resolves to a Buffer containing the image data or null if not found.
+   */
+  abstract getTestImage(id: UUID, imagePath: string): Promise<Buffer | null>;
+
+  /**
+   * Fetches the marks system for a psychological test by its ID.
+   * @param id - The ID of the psychological test.
+   * @returns A promise that resolves to an object, array, or null representing the marks system.
+   */
+  abstract getTestMarksSystem(id: UUID): Promise<object | [] | null>;
 }

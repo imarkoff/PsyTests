@@ -12,6 +12,9 @@ import { RoleValidator } from '../../../../core/validations/role-validator/role-
 import { GetPsyTestByIdQuery } from '../../queries/get-psy-test-by-id/get-psy-test-by-id.query';
 import { GetPsyTestByIdWithoutAnswersQuery } from '../../queries/get-psy-test-by-id-without-answers/get-psy-test-by-id-without-answers.query';
 import { PsyTestNotFoundException } from '../../../domain/exceptions/psy-test-not-found.exception';
+import { GetPsyTestImageQuery } from '../../queries/get-psy-test-image/get-psy-test-image.query';
+import { PsyTestImageNotFoundException } from '../../../domain/exceptions/psy-test-image-not-found.exception';
+import { GetPsyTestMarksSystemQuery } from '../../queries/get-psy-test-marks-system/get-psy-test-marks-system.query';
 
 @Injectable()
 export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
@@ -29,7 +32,7 @@ export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
   async getTestById(
     testId: UUID,
     requestedBy: User | null,
-  ): Promise<PsyTestWithDetails | null> {
+  ): Promise<PsyTestWithDetails> {
     let test;
 
     if (requestedBy && this.roleValidator.isDoctorOrAdmin(requestedBy.role)) {
@@ -49,5 +52,29 @@ export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
 
     if (!test) throw new PsyTestNotFoundException(testId);
     return test;
+  }
+
+  async getTestImage(testId: UUID, imagePath: string): Promise<Buffer> {
+    const buffer = await this.queryBus.execute(
+      new GetPsyTestImageQuery(testId, imagePath),
+    );
+
+    if (!buffer) {
+      throw new PsyTestImageNotFoundException(testId, imagePath);
+    }
+
+    return buffer;
+  }
+
+  async getTestMarksSystem(testId: UUID): Promise<any> {
+    const marksSystem = await this.queryBus.execute(
+      new GetPsyTestMarksSystemQuery(testId),
+    );
+
+    if (!marksSystem) {
+      throw new PsyTestNotFoundException(testId);
+    }
+
+    return marksSystem;
   }
 }

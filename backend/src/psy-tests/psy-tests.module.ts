@@ -10,6 +10,8 @@ import { TESTS_CLIENTS } from './domain/constants/tests-package.constant';
 import { PsyTestsEngineGateway } from './domain/interfaces/psy-tests-engine.gateway';
 import { GrpcTestsEngineGateway } from './infrastructure/grpc/grpc-tests-engine.gateway';
 import { GetPsyTestByIdWithoutAnswersHandler } from './application/queries/get-psy-test-by-id-without-answers/get-psy-test-by-id-without-answers.handler';
+import { GetPsyTestImageHandler } from './application/queries/get-psy-test-image/get-psy-test-image.handler';
+import { GetPsyTestsMarksSystemHandler } from './application/queries/get-psy-test-marks-system/get-psy-tests-marks-system.handler';
 
 @Module({
   imports: [CqrsModule, ClientsModule.registerAsync(TESTS_CLIENTS)],
@@ -26,6 +28,8 @@ import { GetPsyTestByIdWithoutAnswersHandler } from './application/queries/get-p
     GetPsyTestsHandler,
     GetPsyTestByIdHandler,
     GetPsyTestByIdWithoutAnswersHandler,
+    GetPsyTestImageHandler,
+    GetPsyTestsMarksSystemHandler,
   ],
 })
 export class PsyTestsModule {}

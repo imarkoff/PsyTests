@@ -18,11 +18,15 @@ export abstract class PsyTestsOrchestrator {
    * @param requestedBy - The user requesting the test.
    * @returns A promise that resolves to
    *  a PsyTest if the user is a patient
-   *  or PsyTestWithDetails if the user is admin or doctor,
-   *  or null if not found
+   *  or PsyTestWithDetails if the user is admin or doctor
+   * @throws PsyTestNotFoundException if the test is not found
    */
   abstract getTestById(
     testId: UUID,
     requestedBy: User | null,
-  ): Promise<PsyTest | PsyTestWithDetails | null>;
+  ): Promise<PsyTest | PsyTestWithDetails>;
+
+  abstract getTestImage(testId: UUID, imagePath: string): Promise<Buffer>;
+
+  abstract getTestMarksSystem(testId: UUID): Promise<any>;
 }

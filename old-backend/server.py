@@ -1,4 +1,5 @@
 import asyncio
+import json
 from typing import Any
 from uuid import UUID
 import grpc.aio as grpc
@@ -12,7 +13,11 @@ from proto.psy_tests_engine_pb2 import (
     TestMetadata,
     GetAllTestsResponse,
     GetTestByIdRequest,
-    GetTestByIdResponse
+    GetTestByIdResponse,
+    GetTestImageRequest,
+    GetTestImageResponse,
+    GetTestMarksSystemRequest,
+    GetTestMarksSystemResponse,
 )
 from app.exceptions import NotFoundError
 from app.services.test_service import TestService
@@ -77,6 +82,33 @@ class PsyTestsEngine(PsyTestsEngineServicer):
             )
         except NotFoundError:
             return GetTestByIdResponse(json="")
+
+    async def GetTestImage(self, request: GetTestImageRequest, context: Any):
+        try:
+            image = await self.test_service.get_test_image(
+                test_id=UUID(request.test_id),
+                image_path=request.image_path
+            )
+            return GetTestImageResponse(image_data=image)
+        except NotFoundError:
+            return GetTestImageResponse(image_data=b"")
+
+    async def GetTestMarksSystem(
+        self,
+        request: GetTestMarksSystemRequest,
+        context: Any
+    ):
+        try:
+            test_bundle = await self.test_service.get_test(
+                test_id=UUID(request.test_id)
+            )
+            marks_system = await test_bundle.service.get_marks_system()
+
+            return GetTestMarksSystemResponse(
+                marks_system_json=json.dumps(marks_system)
+            )
+        except NotFoundError:
+            return GetTestMarksSystemResponse(marks_system_json="")
 
 
 async def serve():

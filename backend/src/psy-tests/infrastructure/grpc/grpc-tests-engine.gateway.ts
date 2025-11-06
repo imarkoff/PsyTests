@@ -78,4 +78,47 @@ export class GrpcTestsEngineGateway
     this.logger.debug(`Retrieved test with ID ${testId} from Tests Engine.`);
     return JSON.parse(json) as PsyTestWithDetails;
   }
+
+  async getTestImage(id: UUID, imagePath: string): Promise<Buffer | null> {
+    this.logger.debug(
+      `Getting image for psychological test by ID ${id} from Tests Engine...`,
+    );
+    const observable = this.testsClient.getTestImage({
+      testId: id,
+      imagePath: imagePath,
+    });
+    const response = await firstValueFrom(observable);
+
+    if (!response.imageData) {
+      this.logger.debug(
+        `Image for test with ID ${id} not found in Tests Engine.`,
+      );
+      return null;
+    }
+
+    this.logger.debug(
+      `Retrieved image for test with ID ${id} from Tests Engine.`,
+    );
+    return response.imageData;
+  }
+
+  async getTestMarksSystem(id: UUID): Promise<object | [] | null> {
+    this.logger.debug(
+      `Getting marks system for psychological test by ID ${id} from Tests Engine...`,
+    );
+    const observable = this.testsClient.getTestMarksSystem({ testId: id });
+    const response = await firstValueFrom(observable);
+
+    if (!response.marksSystemJson) {
+      this.logger.debug(
+        `Marks system for test with ID ${id} not found in Tests Engine.`,
+      );
+      return null;
+    }
+
+    this.logger.debug(
+      `Retrieved marks system for test with ID ${id} from Tests Engine.`,
+    );
+    return JSON.parse(response.marksSystemJson) as object | [];
+  }
 }
