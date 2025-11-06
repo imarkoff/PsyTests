@@ -37,6 +37,7 @@ async function bootstrap() {
       'Endpoints related to user authentication and authorization',
     )
     .addTag('Users', 'Endpoints for managing user accounts and profiles')
+    .addTag('Psychological Tests', 'Endpoints for managing psychological tests')
     .build();
   const documentFactory = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api-docs', app, documentFactory);

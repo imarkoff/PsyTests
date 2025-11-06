@@ -5,6 +5,7 @@ import {
   dbConfig,
   jwtConfig,
   passwordConfig,
+  psyTestsEngineConfig,
 } from './core/config';
 import { UserModule } from './users/user.module';
 import { PrismaModule } from './core/prisma/prisma.module';
@@ -14,21 +15,23 @@ import { AuthModule } from './auth/auth.module';
 import { DecoratorsModule } from './core/decorators/decorators.module';
 import { LoggerMiddleware } from './core/middlewares/logger.middleware';
 import { ControllerLoggerInterceptor } from './core/interceptors/controller-logger.interceptor';
+import { PsyTestsModule } from './psy-tests/psy-tests.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env'],
-      load: [appConfig, dbConfig, fileStorageConfig, jwtConfig, passwordConfig],
       load: [
         appConfig,
         dbConfig,
         jwtConfig,
         passwordConfig,
+        psyTestsEngineConfig,
       ],
     }),
     UserModule,
+    PsyTestsModule,
     PrismaModule,
     PaginationModule,
     DecoratorsModule,
