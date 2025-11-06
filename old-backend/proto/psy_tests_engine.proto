@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package psy_tests_engine;
+
+service PsyTestsEngine {
+    rpc GetAllTests (Empty) returns (GetAllTestsResponse);
+    rpc GetTestById (GetTestByIdRequest) returns (GetTestByIdResponse);
+    rpc GetTestByIdWithoutAnswers (GetTestByIdRequest) returns (GetTestByIdResponse);
+}
+
+message Empty {}
+
+message GetAllTestsResponse {
+    repeated TestMetadata tests = 1;
+}
+
+message TestMetadata {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string type = 4;
+}
+
+message GetTestByIdRequest {
+    string test_id = 1;
+}
+
+message GetTestByIdResponse {
+    string json = 1;
+}
