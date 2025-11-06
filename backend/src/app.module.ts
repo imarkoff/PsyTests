@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import {
   appConfig,
   dbConfig,
-  fileStorageConfig,
   jwtConfig,
   passwordConfig,
 } from './core/config';
@@ -22,6 +21,12 @@ import { ControllerLoggerInterceptor } from './core/interceptors/controller-logg
       isGlobal: true,
       envFilePath: ['.env'],
       load: [appConfig, dbConfig, fileStorageConfig, jwtConfig, passwordConfig],
+      load: [
+        appConfig,
+        dbConfig,
+        jwtConfig,
+        passwordConfig,
+      ],
     }),
     UserModule,
     PrismaModule,
