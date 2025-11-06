@@ -1,21 +1,17 @@
-import { parseEnvInt } from '../../utils/env.util';
+import { parseProcessEnvInt } from '../../utils/parse-process-env-int.util';
 import { JwtConfig } from './jwt-config.interface';
+import { parseProcessEnv } from '../../utils/parse-process-env.util';
 
 export const JWT_CONFIG_KEY = 'jwt';
 
-export const jwtConfig = (): { jwt: JwtConfig } => {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error('JWT_SECRET is not set');
-
-  return {
-    jwt: {
-      secret,
-      accessTokenExpiresInMinutes: parseEnvInt(
-        'JWT_ACCESS_TOKEN_EXPIRES_IN_MINUTES',
-      ),
-      refreshTokenExpiresInDays: parseEnvInt(
-        'JWT_REFRESH_TOKEN_EXPIRES_IN_DAYS',
-      ),
-    },
-  };
-};
+export const jwtConfig = () => ({
+  jwt: <JwtConfig>{
+    secret: parseProcessEnv('JWT_SECRET'),
+    accessTokenExpiresInMinutes: parseProcessEnvInt(
+      'JWT_ACCESS_TOKEN_EXPIRES_IN_MINUTES',
+    ),
+    refreshTokenExpiresInDays: parseProcessEnvInt(
+      'JWT_REFRESH_TOKEN_EXPIRES_IN_DAYS',
+    ),
+  },
+});

@@ -1,15 +1,16 @@
-import { parseEnvInt } from '../../utils/env.util';
+import { parseProcessEnvInt } from '../../utils/parse-process-env-int.util';
 import { DatabaseConfig } from './database-config.interface';
+import { parseProcessEnv } from '../../utils/parse-process-env.util';
 
 export const DATABASE_CONFIG_KEY = 'database';
 
 export const databaseConfig = () => ({
   [DATABASE_CONFIG_KEY]: <DatabaseConfig>{
-    host: process.env.DB_HOST,
-    port: parseEnvInt('DB_PORT'),
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    name: process.env.DB_NAME,
-    url: process.env.DATABASE_URL,
+    host: parseProcessEnv('DB_HOST'),
+    port: parseProcessEnvInt('DB_PORT'),
+    username: parseProcessEnv('DB_USER'),
+    password: parseProcessEnv('DB_PASSWORD'),
+    name: parseProcessEnv('DB_NAME'),
+    url: parseProcessEnv('DATABASE_URL'),
   },
 });
