@@ -1,11 +1,11 @@
 import path from 'node:path';
+import { PsyTestsEngineConfig } from './psy-tests-engine-config.interface';
 
-export interface PsyTestsEngineConfig {
-  url: string;
-  protoPath: string;
-}
+export const PSY_TESTS_ENGINE_CONFIG_KEY = 'psyTestsEngine';
 
-export default (): { psyTestsEngine: PsyTestsEngineConfig } => {
+export const psyTestsEngineConfig = (): {
+  psyTestsEngine: PsyTestsEngineConfig;
+} => {
   if (!process.env.PSY_TESTS_ENGINE_URL) {
     throw new Error('PSY_TESTS_ENGINE_URL is not specified');
   }
@@ -19,7 +19,7 @@ export default (): { psyTestsEngine: PsyTestsEngineConfig } => {
   );
 
   return {
-    psyTestsEngine: {
+    [PSY_TESTS_ENGINE_CONFIG_KEY]: {
       url: process.env.PSY_TESTS_ENGINE_URL,
       protoPath: protoPath,
     },

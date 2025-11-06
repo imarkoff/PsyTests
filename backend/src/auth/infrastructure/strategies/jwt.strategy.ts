@@ -3,17 +3,16 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { TokenPayload } from '../../domain/types/token-payload.type';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { JwtConfig } from '../../../core/config/jwt.config';
 import { PayloadValidator } from '../../application/payload-validator/payload-validator.abstract';
+import { JwtConfigGetter } from '../../../core/config/configs/jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    configService: ConfigService,
+    configGetter: JwtConfigGetter,
     private readonly payloadValidator: PayloadValidator,
   ) {
-    const jwtConfig: JwtConfig = configService.get<JwtConfig>('jwt')!;
+    const jwtConfig = configGetter.get();
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

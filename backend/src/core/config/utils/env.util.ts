@@ -1,7 +1,9 @@
+import { EnvVariableNotFoundError } from '../errors/env-variable-not-found.error';
+
 export function parseEnvInt(name: string, fallback?: number): number {
   const raw = process.env[name];
   if (raw == null) {
-    if (fallback == null) throw new Error(`${name} is not set`);
+    if (fallback == null) throw new EnvVariableNotFoundError(name);
     return fallback;
   }
   const val = parseInt(raw, 10);

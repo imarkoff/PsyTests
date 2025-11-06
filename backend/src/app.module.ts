@@ -1,12 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import {
-  appConfig,
-  dbConfig,
-  jwtConfig,
-  passwordConfig,
-  psyTestsEngineConfig,
-} from './core/config';
 import { UserModule } from './users/user.module';
 import { PrismaModule } from './core/prisma/prisma.module';
 import { PaginationModule } from './shared/pagination/pagination.module';
@@ -16,20 +8,11 @@ import { DecoratorsModule } from './core/decorators/decorators.module';
 import { LoggerMiddleware } from './core/middlewares/logger.middleware';
 import { ControllerLoggerInterceptor } from './core/interceptors/controller-logger.interceptor';
 import { PsyTestsModule } from './psy-tests/psy-tests.module';
+import { CoreConfigModule } from './core/config/core-config.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: ['.env'],
-      load: [
-        appConfig,
-        dbConfig,
-        jwtConfig,
-        passwordConfig,
-        psyTestsEngineConfig,
-      ],
-    }),
+    CoreConfigModule,
     UserModule,
     PsyTestsModule,
     PrismaModule,

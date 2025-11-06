@@ -1,12 +1,9 @@
-import { parseEnvInt } from './env.util';
+import { parseEnvInt } from '../../utils/env.util';
+import { JwtConfig } from './jwt-config.interface';
 
-export interface JwtConfig {
-  secret: string;
-  accessTokenExpiresInMinutes: number;
-  refreshTokenExpiresInDays: number;
-}
+export const JWT_CONFIG_KEY = 'jwt';
 
-export default (): { jwt: JwtConfig } => {
+export const jwtConfig = (): { jwt: JwtConfig } => {
   const secret = process.env.JWT_SECRET;
   if (!secret) throw new Error('JWT_SECRET is not set');
 

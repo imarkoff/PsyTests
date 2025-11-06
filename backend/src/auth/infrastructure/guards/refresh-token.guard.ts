@@ -8,9 +8,8 @@ import type { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadValidator } from '../../application/payload-validator/payload-validator.abstract';
 import { TokenPayload } from '../../domain/types/token-payload.type';
-import { ConfigService } from '@nestjs/config';
-import { JwtConfig } from '../../../core/config/jwt.config';
 import { RefreshTokenNotFoundException } from '../../domain/exceptions/refresh-token-not-found.exception';
+import { JwtConfig, JwtConfigGetter } from '../../../core/config/configs/jwt';
 
 /**
  * Guard that validates the refresh token from cookies.
@@ -22,11 +21,11 @@ export class RefreshTokenGuard implements CanActivate {
   private readonly jwtConfig: JwtConfig;
 
   constructor(
-    private readonly configService: ConfigService,
+    private readonly jwtConfigGetter: JwtConfigGetter,
     private readonly jwtService: JwtService,
     private readonly payloadValidator: PayloadValidator,
   ) {
-    this.jwtConfig = this.configService.get<JwtConfig>('jwt')!;
+    this.jwtConfig = this.jwtConfigGetter.get();
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
