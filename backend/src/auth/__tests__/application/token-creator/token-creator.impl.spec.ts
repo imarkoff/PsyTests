@@ -1,15 +1,15 @@
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { TokenCreatorImpl } from '../../../application/token-creator/token-creator.impl';
 import { User } from '../../../../users/domain/entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
+import { JwtConfigGetter } from '../../../../core/config/configs/jwt';
 
-describe('TokenCreatorImpl', () => {
+describe(TokenCreatorImpl.name, () => {
   jest.useFakeTimers().setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
 
   let jwtService: JwtService;
-  let configService: ConfigService;
+  let jwtConfigGetter: JwtConfigGetter;
   let tokenCreator: TokenCreatorImpl;
 
   beforeEach(async () => {
@@ -26,7 +26,7 @@ describe('TokenCreatorImpl', () => {
           },
         },
         {
-          provide: ConfigService,
+          provide: JwtConfigGetter,
           useValue: {
             get: jest.fn().mockReturnValue({
               secret: 'secret',
@@ -38,9 +38,9 @@ describe('TokenCreatorImpl', () => {
       ],
     }).compile();
 
-    jwtService = module.get<JwtService>(JwtService);
-    configService = module.get<ConfigService>(ConfigService);
-    tokenCreator = module.get<TokenCreatorImpl>(TokenCreatorImpl);
+    jwtService = module.get(JwtService);
+    jwtConfigGetter = module.get(JwtConfigGetter);
+    tokenCreator = module.get(TokenCreatorImpl);
   });
 
   describe('createTokens', () => {
@@ -65,12 +65,12 @@ describe('TokenCreatorImpl', () => {
 
     it('returns expirations equal to now when configured expirations are zero', () => {
       const user = User.fromPersistence(createUserPersistence());
-      configService.get = jest.fn().mockReturnValue({
+      jwtConfigGetter.get = jest.fn().mockReturnValue({
         secret: 's',
         accessTokenExpiresInMinutes: 0,
         refreshTokenExpiresInDays: 0,
       });
-      tokenCreator = new TokenCreatorImpl(jwtService, configService);
+      tokenCreator = new TokenCreatorImpl(jwtService, jwtConfigGetter);
 
       const result = tokenCreator.createTokens(user);
 
