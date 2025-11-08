@@ -1,10 +1,10 @@
 import { UUID } from 'node:crypto';
-import { PsyTest } from '../entities/psy-test.entity';
+import { PsyTestDto } from '../../presentation/dtos/psy-test.dto';
 import { Observable } from 'rxjs';
 
 type Empty = object;
 
-type GetAllTestsResponse = { tests: PsyTest[] };
+type GetAllTestsResponse = { tests: PsyTestDto[] };
 
 type GetTestByIdRequest = { testId: UUID };
 type GetTestByIdResponse = { json: string | undefined };

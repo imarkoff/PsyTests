@@ -1,7 +1,4 @@
-import {
-  PsyTest,
-  PsyTestWithDetails,
-} from '../../../domain/entities/psy-test.entity';
+import { PsyTestDto } from '../../../presentation/dtos/psy-test.dto';
 import { PsyTestsOrchestrator } from './psy-tests-orchestrator.abstract';
 import { Injectable, Logger } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
@@ -15,6 +12,7 @@ import { PsyTestNotFoundException } from '../../../domain/exceptions/psy-test-no
 import { GetPsyTestImageQuery } from '../../queries/get-psy-test-image/get-psy-test-image.query';
 import { PsyTestImageNotFoundException } from '../../../domain/exceptions/psy-test-image-not-found.exception';
 import { GetPsyTestMarksSystemQuery } from '../../queries/get-psy-test-marks-system/get-psy-test-marks-system.query';
+import { PsyTestWithDetailsDto } from '../../../presentation/dtos/psy-test-with-details.dto';
 
 @Injectable()
 export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
@@ -25,14 +23,14 @@ export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
     private readonly roleValidator: RoleValidator,
   ) {}
 
-  getTests(): Promise<PsyTest[]> {
+  getTests(): Promise<PsyTestDto[]> {
     return this.queryBus.execute(new GetPsyTestsQuery());
   }
 
   async getTestById(
     testId: UUID,
     requestedBy: User | null,
-  ): Promise<PsyTestWithDetails> {
+  ): Promise<PsyTestWithDetailsDto> {
     let test;
 
     if (requestedBy && this.roleValidator.isDoctorOrAdmin(requestedBy.role)) {

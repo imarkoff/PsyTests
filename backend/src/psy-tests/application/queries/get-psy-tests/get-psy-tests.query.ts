@@ -1,7 +1,7 @@
-import { PsyTest } from '../../../domain/entities/psy-test.entity';
+import { PsyTestDto } from '../../../presentation/dtos/psy-test.dto';
 import { Query } from '@nestjs/cqrs';
 
-export class GetPsyTestsQuery extends Query<PsyTest[]> {
+export class GetPsyTestsQuery extends Query<PsyTestDto[]> {
   constructor() {
     super();
   }

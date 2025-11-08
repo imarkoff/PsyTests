@@ -1,9 +1,6 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PsyTestsEngineGateway } from '../../domain/interfaces/psy-tests-engine.gateway';
-import {
-  PsyTest,
-  PsyTestWithDetails,
-} from 'src/psy-tests/domain/entities/psy-test.entity';
+import { PsyTestDto } from 'src/psy-tests/presentation/dtos/psy-test.dto';
 import { TestsEngineClient } from '../../domain/interfaces/tests-engine.client';
 import {
   TESTS_ENGINE_NAME,
@@ -12,6 +9,7 @@ import {
 import { type ClientGrpc } from '@nestjs/microservices';
 import { UUID } from 'node:crypto';
 import { firstValueFrom } from 'rxjs';
+import { PsyTestWithDetailsDto } from '../../presentation/dtos/psy-test-with-details.dto';
 
 @Injectable()
 export class GrpcTestsEngineGateway
@@ -29,7 +27,7 @@ export class GrpcTestsEngineGateway
       this.client.getService<TestsEngineClient>(TESTS_ENGINE_NAME);
   }
 
-  async getAllTests(): Promise<PsyTest[]> {
+  async getAllTests(): Promise<PsyTestDto[]> {
     this.logger.debug('Getting all psychological tests from Tests Engine...');
 
     const observable = this.testsClient.getAllTests({});
@@ -41,7 +39,7 @@ export class GrpcTestsEngineGateway
 
     return response.tests;
   }
-  async getTestById(id: UUID): Promise<PsyTestWithDetails | null> {
+  async getTestById(id: UUID): Promise<PsyTestWithDetailsDto | null> {
     this.logger.debug(
       `Getting psychological test by ID ${id} from Tests Engine...`,
     );
@@ -53,7 +51,7 @@ export class GrpcTestsEngineGateway
 
   async getTestByIdWithoutAnswers(
     id: UUID,
-  ): Promise<PsyTestWithDetails | null> {
+  ): Promise<PsyTestWithDetailsDto | null> {
     this.logger.debug(
       `Getting psychological test by ID ${id} without answers from Tests Engine...`,
     );
@@ -69,14 +67,14 @@ export class GrpcTestsEngineGateway
   private parseTestJson(
     testId: UUID,
     json: string | undefined,
-  ): PsyTestWithDetails | null {
+  ): PsyTestWithDetailsDto | null {
     if (!json) {
       this.logger.debug(`Test with ID ${testId} not found in Tests Engine.`);
       return null;
     }
 
     this.logger.debug(`Retrieved test with ID ${testId} from Tests Engine.`);
-    return JSON.parse(json) as PsyTestWithDetails;
+    return JSON.parse(json) as PsyTestWithDetailsDto;
   }
 
   async getTestImage(id: UUID, imagePath: string): Promise<Buffer | null> {

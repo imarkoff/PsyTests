@@ -1,7 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetPsyTestByIdWithoutAnswersQuery } from './get-psy-test-by-id-without-answers.query';
 import { PsyTestsEngineGateway } from '../../../domain/interfaces/psy-tests-engine.gateway';
-import { PsyTestWithDetails } from '../../../domain/entities/psy-test.entity';
+
+import { PsyTestWithDetailsDto } from '../../../presentation/dtos/psy-test-with-details.dto';
 
 @QueryHandler(GetPsyTestByIdWithoutAnswersQuery)
 export class GetPsyTestByIdWithoutAnswersHandler
@@ -11,7 +12,7 @@ export class GetPsyTestByIdWithoutAnswersHandler
 
   execute({
     testId,
-  }: GetPsyTestByIdWithoutAnswersQuery): Promise<PsyTestWithDetails | null> {
+  }: GetPsyTestByIdWithoutAnswersQuery): Promise<PsyTestWithDetailsDto | null> {
     return this.psyTestsEngineGateway.getTestByIdWithoutAnswers(testId);
   }
 }

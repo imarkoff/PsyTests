@@ -1,8 +1,8 @@
 import { Query } from '@nestjs/cqrs';
-import { PsyTestWithDetails } from '../../../domain/entities/psy-test.entity';
 import { UUID } from 'node:crypto';
+import { PsyTestWithDetailsDto } from '../../../presentation/dtos/psy-test-with-details.dto';
 
-export class GetPsyTestByIdWithoutAnswersQuery extends Query<PsyTestWithDetails | null> {
+export class GetPsyTestByIdWithoutAnswersQuery extends Query<PsyTestWithDetailsDto | null> {
   constructor(public readonly testId: UUID) {
     super();
   }
