@@ -58,7 +58,7 @@ export class PsyTestsController {
   @Get(':testId')
   getTestById(
     @Param('testId', new ParseUUIDPipe()) testId: UUID,
-    @UserFromAuth() user: User | null,
+    @UserFromAuth() user: User,
   ) {
     return this.psyTestsOrchestrator.getTestById(testId, user);
   }

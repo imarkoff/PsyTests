@@ -21,7 +21,7 @@ export abstract class PsyTestsOrchestrator {
    */
   abstract getTestById(
     testId: UUID,
-    requestedBy: User | null,
+    requestedBy: User,
   ): Promise<PsyTestWithDetailsDto>;
 
   abstract getTestImage(testId: UUID, imagePath: string): Promise<Buffer>;

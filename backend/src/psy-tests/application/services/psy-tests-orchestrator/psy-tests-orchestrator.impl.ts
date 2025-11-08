@@ -29,11 +29,11 @@ export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
 
   async getTestById(
     testId: UUID,
-    requestedBy: User | null,
+    requestedBy: User,
   ): Promise<PsyTestWithDetailsDto> {
     let test;
 
-    if (requestedBy && this.roleValidator.isDoctorOrAdmin(requestedBy.role)) {
+    if (this.roleValidator.isDoctorOrAdmin(requestedBy.role)) {
       this.logger.debug(
         `User ${requestedBy.id} is a doctor or admin, fetching full test details.`,
       );

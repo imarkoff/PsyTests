@@ -8,10 +8,7 @@ export class GetPsyTestImageHandler
 {
   constructor(private readonly psyTestsEngineGateway: PsyTestsEngineGateway) {}
 
-  execute({
-    testId,
-    imagePath,
-  }: GetPsyTestImageQuery): Promise<Buffer<ArrayBufferLike> | null> {
+  execute({ testId, imagePath }: GetPsyTestImageQuery): Promise<Buffer | null> {
     return this.psyTestsEngineGateway.getTestImage(testId, imagePath);
   }
 }
