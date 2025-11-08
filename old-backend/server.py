@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 from typing import Any
 from uuid import UUID
 import grpc.aio as grpc
@@ -25,6 +26,10 @@ from app.domains.tests.test_factories import TestFactories
 from app.services.test_image_getter import TestImageGetter
 from app.settings import settings
 from app.repositories.test_repository import TestRepository
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def get_test_service() -> TestService:
@@ -118,8 +123,14 @@ async def serve():
         PsyTestsEngine(test_service=test_service),
         server
     )
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port(f'[::]:{settings.PSY_TESTS_ENGINE_PORT}')
     await server.start()
+
+    logger.info(
+        f'PsyTests Engine gRPC server is running on port '
+        f'{settings.PSY_TESTS_ENGINE_PORT}'
+    )
+
     await server.wait_for_termination()
 
 
