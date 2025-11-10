@@ -9,12 +9,14 @@ import { LoggerMiddleware } from './core/middlewares/logger.middleware';
 import { ControllerLoggerInterceptor } from './core/interceptors/controller-logger.interceptor';
 import { PsyTestsModule } from './psy-tests/psy-tests.module';
 import { CoreConfigModule } from './core/config/core-config.module';
+import { DoctorPatientsModule } from './doctor-patients/doctor-patients.module';
 
 @Module({
   imports: [
     CoreConfigModule,
     UserModule,
     PsyTestsModule,
+    DoctorPatientsModule,
     PrismaModule,
     PaginationModule,
     DecoratorsModule,
