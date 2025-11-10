@@ -40,8 +40,7 @@ export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
       test = await this.queryBus.execute(new GetPsyTestByIdQuery(testId));
     } else {
       this.logger.debug(
-        `User ${requestedBy ? requestedBy.id : 'anonymous'} 
-        is not a doctor or admin, fetching test without answers.`,
+        `User ${requestedBy.id} is not a doctor or admin, fetching test without answers.`,
       );
       test = await this.queryBus.execute(
         new GetPsyTestByIdWithoutAnswersQuery(testId),
@@ -64,7 +63,7 @@ export class PsyTestsOrchestratorImpl implements PsyTestsOrchestrator {
     return buffer;
   }
 
-  async getTestMarksSystem(testId: UUID): Promise<any> {
+  async getTestMarksSystem(testId: UUID): Promise<object | [] | null> {
     const marksSystem = await this.queryBus.execute(
       new GetPsyTestMarksSystemQuery(testId),
     );

@@ -32,7 +32,7 @@ export class PsyTestsController {
    * @throws {401} If the user is not authenticated.
    * @throws {403} If the user does not have the required role.
    */
-  @Roles([UserRole.PATIENT, UserRole.ADMIN])
+  @Roles([UserRole.DOCTOR, UserRole.ADMIN])
   @Get()
   getTests() {
     return this.psyTestsOrchestrator.getTests();
@@ -136,7 +136,7 @@ export class PsyTestsController {
       'The marks system and additional information for the specified psychological test.',
     type: MarksSystemDto,
   })
-  @Roles([UserRole.PATIENT, UserRole.ADMIN])
+  @Roles([UserRole.DOCTOR, UserRole.ADMIN])
   @Get(':testId/marks-system')
   getTestMarks(@Param('testId', new ParseUUIDPipe()) testId: UUID) {
     return this.psyTestsOrchestrator.getTestMarksSystem(testId);

@@ -24,7 +24,20 @@ export abstract class PsyTestsOrchestrator {
     requestedBy: User,
   ): Promise<PsyTestWithDetailsDto>;
 
+  /**
+   * Get the image associated with a psychological test.
+   * @param testId - The UUID of the psychological test
+   * @param imagePath - The path to the image file
+   * @returns A promise that resolves to a Buffer containing the image data
+   * @throws PsyTestImageNotFoundException if the image is not found
+   */
   abstract getTestImage(testId: UUID, imagePath: string): Promise<Buffer>;
 
-  abstract getTestMarksSystem(testId: UUID): Promise<any>;
+  /**
+   * Get the marks system for a psychological test.
+   * @param testId - The UUID of the psychological test
+   * @returns A promise that resolves to an object representing the marks system.
+   * @throws PsyTestNotFoundException if the marks system or test is not found
+   */
+  abstract getTestMarksSystem(testId: UUID): Promise<object | [] | null>;
 }

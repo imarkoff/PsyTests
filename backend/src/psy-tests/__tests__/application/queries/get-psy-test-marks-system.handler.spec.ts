@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { PsyTestsEngineGateway } from '../../../domain/interfaces/psy-tests-engine.gateway';
 import { randomUUID } from 'node:crypto';
 import { GetPsyTestsMarksSystemHandler } from '../../../application/queries/get-psy-test-marks-system/get-psy-tests-marks-system.handler';
-import { GetPsyTestImageQuery } from '../../../application/queries/get-psy-test-image/get-psy-test-image.query';
+import { GetPsyTestMarksSystemQuery } from '../../../application/queries/get-psy-test-marks-system/get-psy-test-marks-system.query';
 
 describe(GetPsyTestsMarksSystemHandler.name, () => {
   let getPsyTestsMarksSystemHandler: GetPsyTestsMarksSystemHandler;
@@ -36,7 +36,7 @@ describe(GetPsyTestsMarksSystemHandler.name, () => {
 
     const result = await getPsyTestsMarksSystemHandler.execute({
       testId: testId,
-    } as GetPsyTestImageQuery);
+    } as GetPsyTestMarksSystemQuery);
 
     expect(psyTestsEngineGateway.getTestMarksSystem).toHaveBeenCalledWith(
       testId,
@@ -49,7 +49,7 @@ describe(GetPsyTestsMarksSystemHandler.name, () => {
 
     const result = await getPsyTestsMarksSystemHandler.execute({
       testId: randomUUID(),
-    } as GetPsyTestImageQuery);
+    } as GetPsyTestMarksSystemQuery);
 
     expect(result).toBeNull();
   });
@@ -61,7 +61,7 @@ describe(GetPsyTestsMarksSystemHandler.name, () => {
     await expect(
       getPsyTestsMarksSystemHandler.execute({
         testId: randomUUID(),
-      } as GetPsyTestImageQuery),
+      } as GetPsyTestMarksSystemQuery),
     ).rejects.toThrow(mockError);
   });
 });

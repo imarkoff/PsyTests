@@ -148,7 +148,7 @@ describe(PsyTestsOrchestratorImpl.name, () => {
         await psyTestsOrchestrator.getTestMarksSystem(testId);
 
       const dispatchedQuery = queryBus.execute.mock
-        .calls[0][0] as GetPsyTestImageQuery;
+        .calls[0][0] as GetPsyTestMarksSystemQuery;
       expect(dispatchedQuery).toBeInstanceOf(GetPsyTestMarksSystemQuery);
       expect(dispatchedQuery.testId).toBe(testId);
       expect(result).toBe(mockMarksSystem);

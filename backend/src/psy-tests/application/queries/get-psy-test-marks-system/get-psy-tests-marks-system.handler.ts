@@ -8,9 +8,7 @@ export class GetPsyTestsMarksSystemHandler
 {
   constructor(private readonly psyTestsEngineGateway: PsyTestsEngineGateway) {}
 
-  execute({
-    testId,
-  }: GetPsyTestMarksSystemQuery): Promise<string | object | [] | null> {
+  execute({ testId }: GetPsyTestMarksSystemQuery): Promise<object | [] | null> {
     return this.psyTestsEngineGateway.getTestMarksSystem(testId);
   }
 }
