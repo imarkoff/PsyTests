@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package psy_tests_engine;
+
+service PsyTestsEngine {
+    rpc GetAllTests (Empty) returns (GetAllTestsResponse);
+    rpc GetTestById (GetTestByIdRequest) returns (GetTestByIdResponse);
+    rpc GetTestByIdWithoutAnswers (GetTestByIdRequest) returns (GetTestByIdResponse);
+    rpc GetTestImage (GetTestImageRequest) returns (GetTestImageResponse);
+    rpc GetTestMarksSystem (GetTestMarksSystemRequest) returns (GetTestMarksSystemResponse);
+}
+
+message Empty {}
+
+message GetAllTestsResponse {
+    repeated TestMetadata tests = 1;
+}
+
+message TestMetadata {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string type = 4;
+}
+
+message GetTestByIdRequest {
+    string test_id = 1;
+}
+
+message GetTestByIdResponse {
+    string json = 1;
+}
+
+message GetTestImageRequest {
+    string test_id = 1;
+    string image_path = 2;
+}
+
+message GetTestImageResponse {
+    bytes image_data = 1;
+}
+
+message GetTestMarksSystemRequest {
+    string test_id = 1;
+}
+
+message GetTestMarksSystemResponse {
+    string marks_system_json = 1;
+}

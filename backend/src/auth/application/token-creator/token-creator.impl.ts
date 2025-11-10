@@ -1,11 +1,10 @@
 import { User } from '../../../users/domain/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { JwtConfig } from '../../../core/config/jwt.config';
 import { TokenPayload } from '../../domain/types/token-payload.type';
 import { CreatedSession } from '../../domain/types/created-session.type';
 import { Injectable, Logger } from '@nestjs/common';
 import { TokenCreator } from './token-creator.abstract';
+import { JwtConfig, JwtConfigGetter } from '../../../core/config/configs/jwt';
 
 @Injectable()
 export class TokenCreatorImpl implements TokenCreator {
@@ -14,9 +13,9 @@ export class TokenCreatorImpl implements TokenCreator {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly jwtConfigGetter: JwtConfigGetter,
   ) {
-    this.jwtConfig = this.configService.get<JwtConfig>('jwt')!;
+    this.jwtConfig = this.jwtConfigGetter.get();
   }
 
   createTokens(user: User): CreatedSession {

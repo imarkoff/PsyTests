@@ -1,0 +1,46 @@
+import { PsyTestDto } from '../../presentation/dtos/psy-test.dto';
+import { UUID } from 'node:crypto';
+import { PsyTestWithDetailsDto } from '../../presentation/dtos/psy-test-with-details.dto';
+
+/**
+ * Gateway for interacting with the test engine.
+ * Provides methods to fetch psychological tests.
+ */
+export abstract class PsyTestsEngineGateway {
+  /**
+   * Fetches all psychological tests.
+   * @returns A promise that resolves to an array of PsyTest entities.
+   */
+  abstract getAllTests(): Promise<PsyTestDto[]>;
+
+  /**
+   * Fetches a psychological test by its ID.
+   * @param id - The ID of the psychological test.
+   * @returns A promise that resolves to a PsyTestWithDetails entity or null if not found.
+   */
+  abstract getTestById(id: UUID): Promise<PsyTestWithDetailsDto | null>;
+
+  /**
+   * Fetches a psychological test by its ID
+   * without answers or other sensitive details.
+   * @param id - The ID of the psychological test.
+   */
+  abstract getTestByIdWithoutAnswers(
+    id: UUID,
+  ): Promise<PsyTestWithDetailsDto | null>;
+
+  /**
+   * Fetches the image associated with a psychological test by its ID.
+   * @param id - The ID of the psychological test.
+   * @param imagePath - The path to the image within the test resources.
+   * @returns A promise that resolves to a Buffer containing the image data or null if not found.
+   */
+  abstract getTestImage(id: UUID, imagePath: string): Promise<Buffer | null>;
+
+  /**
+   * Fetches the marks system for a psychological test by its ID.
+   * @param id - The ID of the psychological test.
+   * @returns A promise that resolves to an object, array, or null representing the marks system.
+   */
+  abstract getTestMarksSystem(id: UUID): Promise<object | [] | null>;
+}

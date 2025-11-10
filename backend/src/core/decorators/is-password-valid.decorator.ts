@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import {
   registerDecorator,
   ValidationOptions,
@@ -7,19 +6,18 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import validator from 'validator';
-import { PasswordConfig } from '../config/password.config';
+import {
+  PasswordConfig,
+  PasswordConfigGetter,
+} from '../config/configs/password';
 
 @ValidatorConstraint({ name: 'IsPasswordValid', async: false })
 @Injectable()
 export class PasswordConstraint implements ValidatorConstraintInterface {
   private readonly passwordConfig: PasswordConfig;
 
-  constructor(config: ConfigService) {
-    const cfg = config.get<PasswordConfig>('password');
-    if (!cfg) {
-      throw new Error('Password configuration is not defined.');
-    }
-    this.passwordConfig = cfg;
+  constructor(passwordConfigGetter: PasswordConfigGetter) {
+    this.passwordConfig = passwordConfigGetter.get();
   }
 
   validate(value: any): boolean {

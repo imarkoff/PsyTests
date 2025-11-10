@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from '../../../infrastructure/strategies/jwt.strategy';
 import { PayloadValidator } from '../../../application/payload-validator/payload-validator.abstract';
 import { TokenPayload } from '../../../domain/types/token-payload.type';
@@ -9,6 +8,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { UserRole } from '../../../../shared/enums/user-role.enum';
 import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
+import { JwtConfigGetter } from '../../../../core/config/configs/jwt';
 
 describe('JwtStrategy', () => {
   let strategy: JwtStrategy;
@@ -18,7 +18,7 @@ describe('JwtStrategy', () => {
     validatePayload: jest.fn(),
   };
 
-  const mockConfigService = {
+  const mockConfigGetter = {
     get: jest.fn().mockReturnValue({ secret: 'test-secret' }),
   };
 
@@ -27,8 +27,8 @@ describe('JwtStrategy', () => {
       providers: [
         JwtStrategy,
         {
-          provide: ConfigService,
-          useValue: mockConfigService,
+          provide: JwtConfigGetter,
+          useValue: mockConfigGetter,
         },
         {
           provide: PayloadValidator,

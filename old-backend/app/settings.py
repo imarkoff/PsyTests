@@ -1,6 +1,11 @@
 import os
 
+from dotenv import load_dotenv
+
 from app.db import tests
+
+
+load_dotenv()
 
 
 class Settings:
@@ -16,6 +21,7 @@ class Settings:
     TOKEN_ALGORITHM: str = "HS256"
     CORS_ORIGINS: list[str] = os.getenv("CORS_ORIGINS", "").split(",")
     PSY_TESTS_DIR: str = os.path.dirname(tests.__file__)
+    PSY_TESTS_ENGINE_PORT: int = int(os.getenv("PSY_TESTS_ENGINE_PORT", 50051))
 
 
 settings = Settings()
