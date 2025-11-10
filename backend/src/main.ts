@@ -7,10 +7,13 @@ import { RolesGuard } from './auth/infrastructure/guards/roles.guard';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ControllerLoggerInterceptor } from './core/interceptors/controller-logger.interceptor';
 import { AppConfigGetter } from './core/config/configs/app';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const appConfig = app.get(AppConfigGetter).get();
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.useGlobalPipes(
     new ValidationPipe({
