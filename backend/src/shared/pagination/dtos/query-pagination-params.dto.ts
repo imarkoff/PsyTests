@@ -6,7 +6,7 @@ import { SortDirection } from '../enums/sort-direction.enum';
   description:
     'Parameters for paginating, sorting, and filtering query results',
 })
-export class QueryPaginationParams {
+export class QueryPaginationParamsDto {
   @ApiProperty({
     required: false,
     description: 'Current page number (0-indexed)',

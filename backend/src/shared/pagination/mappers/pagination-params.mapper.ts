@@ -1,4 +1,4 @@
-import { QueryPaginationParams } from '../types/query-pagination-params.type';
+import { QueryPaginationParamsDto } from '../dtos/query-pagination-params.dto';
 import {
   Filters,
   PaginationParams,
@@ -21,7 +21,7 @@ export class PaginationParamsMapper {
    * @returns The structured pagination parameters.
    */
   static toPaginationParams<T extends object>(
-    query: QueryPaginationParams,
+    query: QueryPaginationParamsDto,
   ): PaginationParams<T> {
     return {
       page: query.page,
