@@ -21,8 +21,8 @@ export class PrismaQuickFilterApplier {
     ) {
       const operator = quickFilter.operator || FilterOperator.OR;
 
-      const fieldFilters = searchableFields.map((field) => ({
-        [operator]: quickFilter.filters.map((filter) => ({
+      const mappedFilters = quickFilter.filters.map((filter) => ({
+        [FilterOperator.OR]: searchableFields.map((field) => ({
           [field]: {
             contains: filter,
             mode: 'insensitive',
@@ -31,7 +31,7 @@ export class PrismaQuickFilterApplier {
       }));
 
       return {
-        [operator]: fieldFilters,
+        [operator]: mappedFilters,
       };
     }
 
