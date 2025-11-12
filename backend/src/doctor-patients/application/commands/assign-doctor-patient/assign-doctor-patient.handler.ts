@@ -5,7 +5,7 @@ import { DoctorPatientsRepository } from '../../../domain/interfaces/doctor-pati
 import { DoctorPatientAlreadyExistsException } from '../../../domain/exceptions/doctor-patient-already-exists.exception';
 import { Logger } from '@nestjs/common';
 import { DoctorPatientMapper } from '../../mappers/doctor-patient.mapper';
-import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient-dto';
+import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 
 @CommandHandler(AssignDoctorPatientCommand)
 export class AssignDoctorPatientHandler
@@ -26,7 +26,7 @@ export class AssignDoctorPatientHandler
     );
 
     const existingDoctorPatient =
-      await this.doctorPatientRepository.getPatientByDoctorAndPatientId(
+      await this.doctorPatientRepository.getAssignedPatientByDoctorAndPatientId(
         doctorId,
         patientId,
       );

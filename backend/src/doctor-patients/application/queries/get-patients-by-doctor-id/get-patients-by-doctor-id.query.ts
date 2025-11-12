@@ -3,7 +3,7 @@ import { PaginatedList } from '../../../../shared/pagination/types/paginated-lis
 import { DoctorPatient } from '../../../domain/entities/doctor-patient.entity';
 import { UUID } from 'node:crypto';
 import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
-import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient-dto';
+import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 
 export class GetPatientsByDoctorIdQuery extends Query<
   PaginatedList<DoctorPatientDto, DoctorPatient>

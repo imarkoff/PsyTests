@@ -5,7 +5,7 @@ import { PaginatedList } from 'src/shared/pagination/types/paginated-list.type';
 import { DoctorPatientsRepository } from '../../../domain/interfaces/doctor-patients.repository';
 import { Logger } from '@nestjs/common';
 import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
-import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient-dto';
+import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 import { DoctorPatientMapper } from '../../mappers/doctor-patient.mapper';
 
 @QueryHandler(GetPatientsByDoctorIdQuery)
@@ -27,7 +27,7 @@ export class GetPatientsByDoctorIdHandler
     this.logger.debug(`Getting patients for doctor with ID: ${doctorId}.`);
 
     const dbPaginatedPatients =
-      await this.doctorPatientRepository.getPatientsByDoctorId(
+      await this.doctorPatientRepository.getAssignedPatientsByDoctorId(
         doctorId,
         paginationParams,
       );

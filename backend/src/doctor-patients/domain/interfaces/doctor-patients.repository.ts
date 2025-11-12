@@ -5,15 +5,25 @@ import { PaginationParams } from '../../../shared/pagination/types/pagination-pa
 
 export abstract class DoctorPatientsRepository {
   /**
-   * Get all patients associated with a specific doctor.
+   * Get all assigned patients associated with a specific doctor.
    * @param doctorId - The UUID of the doctor.
    * @param paginationParams - Pagination parameters for the query.
    * @return A paginated list of DoctorPatient entities.
    */
-  abstract getPatientsByDoctorId(
+  abstract getAssignedPatientsByDoctorId(
     doctorId: UUID,
     paginationParams: PaginationParams<DoctorPatient>,
   ): Promise<DbPaginated<DoctorPatient>>;
+
+  /**
+   * Get a specific assigned patient associated with a specific doctor by their IDs.
+   * @param doctorId - The UUID of the doctor.
+   * @param patientId - The UUID of the patient.
+   */
+  abstract getAssignedPatientByDoctorAndPatientId(
+    doctorId: UUID,
+    patientId: UUID,
+  ): Promise<DoctorPatient | null>;
 
   /**
    * Get a specific patient associated with a specific doctor by their IDs.

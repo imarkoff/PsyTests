@@ -21,7 +21,7 @@ export class PrismaDoctorPatientsRepository
     private readonly prismaPaginator: PrismaPaginator,
   ) {}
 
-  async getPatientsByDoctorId(
+  async getAssignedPatientsByDoctorId(
     doctorId: UUID,
     paginationParams: PaginationParams<DoctorPatient>,
   ): Promise<DbPaginated<DoctorPatient>> {
@@ -37,6 +37,7 @@ export class PrismaDoctorPatientsRepository
       ['patientId', 'assignedAt', 'needsAttention'],
       {
         doctorId: doctorId,
+        unassignedAt: null,
         deletedAt: null,
       },
       {
@@ -49,6 +50,37 @@ export class PrismaDoctorPatientsRepository
     );
 
     return paginatedPatients as DbPaginated<DoctorPatient>;
+  }
+
+  async getAssignedPatientByDoctorAndPatientId(
+    doctorId: UUID,
+    patientId: UUID,
+  ): Promise<DoctorPatient | null> {
+    this.logger.debug(
+      `Fetching assigned patient with ID: ${patientId} for doctor with ID: ${doctorId}.`,
+    );
+
+    const prismaPatient = await this.prismaService.doctorPatient.findFirst({
+      where: {
+        doctorId: doctorId,
+        patientId: patientId,
+        unassignedAt: null,
+        deletedAt: null,
+      },
+    });
+
+    if (!prismaPatient) {
+      this.logger.debug(
+        `No assigned patient found with ID: ${patientId} for doctor with ID: ${doctorId}.`,
+      );
+      return null;
+    }
+
+    this.logger.debug(
+      `Fetched assigned patient with ID: ${patientId} for doctor with ID: ${doctorId}.`,
+    );
+
+    return DoctorPatient.fromPersistence(prismaPatient);
   }
 
   async getPatientByDoctorAndPatientId(
@@ -88,15 +120,15 @@ export class PrismaDoctorPatientsRepository
     doctorId: UUID,
     patientsIds: UUID[],
   ): Promise<DoctorPatient[]> {
-    const jointIds = patientsIds.join(', ');
     this.logger.debug(
-      `Fetching patients with IDs: [${jointIds}] for doctor with ID: ${doctorId}.`,
+      `Fetching ${patientsIds.length} patients for doctor with ID: ${doctorId}.`,
     );
 
     const prismaPatients = await this.prismaService.doctorPatient.findMany({
       where: {
         doctorId: doctorId,
         patientId: { in: patientsIds },
+        unassignedAt: null,
         deletedAt: null,
       },
     });
