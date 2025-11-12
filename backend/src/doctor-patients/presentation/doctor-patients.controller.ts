@@ -17,7 +17,8 @@ import { User } from '../../users/domain/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { PatientCreateDto } from './dtos/patient-create.dto';
 import { DoctorPatientOrchestrator } from '../application/services/doctor-patient-orchestrator/doctor-patient-orchestrator.abstract';
-import { FilterOperator } from '../../shared/pagination/enums/filter-operator.enum';
+import { QueryPaginationParams } from '../../shared/pagination/types/query-pagination-params.type';
+import { PaginationParamsMapper } from '../../shared/pagination/mappers/pagination-params.mapper';
 
 @Controller('doctor-patients')
 @Roles([UserRole.DOCTOR, UserRole.ADMIN])
@@ -28,25 +29,25 @@ export class DoctorPatientsController {
   ) {}
 
   @Get()
-  getPatientsByDoctor(@UserFromAuth() user: User) {
-    return this.doctorPatientOrchestrator.getActivePatientsByDoctor(user.id, {
-      sortedFields: [],
-      page: 1,
-      pageSize: 10,
-    });
+  getPatientsByDoctor(
+    @Query() paginationParams: QueryPaginationParams,
+    @UserFromAuth() user: User,
+  ) {
+    return this.doctorPatientOrchestrator.getActivePatientsByDoctor(
+      user.id,
+      PaginationParamsMapper.toPaginationParams(paginationParams),
+    );
   }
 
   @Get('find')
-  findPatients(@Query('search') search: string, @UserFromAuth() user: User) {
-    return this.doctorPatientOrchestrator.findPatients(user.id, {
-      quickFilter: {
-        filters: search.split(' '),
-        operator: FilterOperator.OR,
-      },
-      sortedFields: [],
-      page: 1,
-      pageSize: 10,
-    });
+  findPatients(
+    @Query() paginationParams: QueryPaginationParams,
+    @UserFromAuth() user: User,
+  ) {
+    return this.doctorPatientOrchestrator.findPatients(
+      user.id,
+      PaginationParamsMapper.toPaginationParams(paginationParams),
+    );
   }
 
   @Get(':patientId')
