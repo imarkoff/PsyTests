@@ -1,5 +1,5 @@
 import { DoctorPatient } from '../../domain/entities/doctor-patient.entity';
-import { DoctorPatientDto } from '../../presentation/dtos/doctor-patient-dto';
+import { DoctorPatientDto } from '../../presentation/dtos/doctor-patient.dto';
 import { UserMapper } from '../../../users/application/mappers/user.mapper';
 
 export class DoctorPatientMapper {

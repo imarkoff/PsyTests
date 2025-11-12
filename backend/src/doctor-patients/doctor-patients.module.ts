@@ -30,6 +30,18 @@ import { GetDoctorPatientsByDoctorIdAndPatientIdsHandler } from './application/q
       provide: DoctorPatientCreator,
       useClass: DoctorPatientCreatorImpl,
     },
+    {
+      provide: DoctorPatientOrchestrator,
+      useClass: DoctorPatientOrchestratorImpl,
+    },
+    {
+      provide: DoctorPatientRemover,
+      useClass: DoctorPatientRemoverImpl,
+    },
+    {
+      provide: PatientsFinder,
+      useClass: PatientsFinderImpl,
+    },
     AssignDoctorPatientHandler,
     MarkDoctorPatientAsReadHandler,
     UnassignDoctorPatientHandler,

@@ -5,7 +5,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../../../../users/application/commands/create-user/create-user.command';
 import { AssignDoctorPatientCommand } from '../../commands/assign-doctor-patient/assign-doctor-patient.command';
-import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient-dto';
+import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 
 @Injectable()
 export class DoctorPatientCreatorImpl implements DoctorPatientCreator {

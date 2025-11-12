@@ -1,6 +1,6 @@
 import { UUID } from 'node:crypto';
 import { PatientCreateDto } from '../../../presentation/dtos/patient-create.dto';
-import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient-dto';
+import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 
 export abstract class DoctorPatientCreator {
   /**
