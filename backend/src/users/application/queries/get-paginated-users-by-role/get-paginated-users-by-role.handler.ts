@@ -25,9 +25,9 @@ export class GetPaginatedUsersByRoleHandler
       paginationParams,
     );
 
-    this.logger.log(
-      `Fetched ${paginatedDbUsers.items.length} users with role ${role}.
-      with page size ${paginationParams.pageSize} on page ${paginationParams.page}.`,
+    this.logger.debug(
+      `Fetched ${paginatedDbUsers.items.length} users with role ${role} ` +
+        `with page size ${paginationParams.pageSize} on page ${paginationParams.page}.`,
     );
 
     return PaginatedListMapper.toDto(
