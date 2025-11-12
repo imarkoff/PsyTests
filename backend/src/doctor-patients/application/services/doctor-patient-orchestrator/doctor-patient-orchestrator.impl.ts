@@ -16,6 +16,7 @@ import { GetPatientByIdAndDoctorIdQuery } from '../../queries/get-patient-by-id-
 import { AssignDoctorPatientCommand } from '../../commands/assign-doctor-patient/assign-doctor-patient.command';
 import { MarkDoctorPatientAsReadCommand } from '../../commands/mark-doctor-patient-as-read/mark-doctor-patient-as-read.command';
 import { User } from '../../../../users/domain/entities/user.entity';
+import { DoctorPatientNotFoundException } from '../../../domain/exceptions/doctor-patient-not-found.exception';
 
 @Injectable()
 export class DoctorPatientOrchestratorImpl
@@ -38,13 +39,19 @@ export class DoctorPatientOrchestratorImpl
     );
   }
 
-  getDoctorPatientByDoctorAndPatientIds(
+  async getDoctorPatientByDoctorAndPatientIds(
     doctorId: UUID,
     patientId: UUID,
-  ): Promise<DoctorPatientDto | null> {
-    return this.queryBus.execute(
+  ): Promise<DoctorPatientDto> {
+    const doctorPatient = await this.queryBus.execute(
       new GetPatientByIdAndDoctorIdQuery(doctorId, patientId),
     );
+
+    if (!doctorPatient) {
+      throw new DoctorPatientNotFoundException(doctorId, patientId);
+    }
+
+    return doctorPatient;
   }
 
   findPatients(

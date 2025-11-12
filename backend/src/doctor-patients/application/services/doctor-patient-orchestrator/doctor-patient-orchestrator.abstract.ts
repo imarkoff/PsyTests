@@ -23,12 +23,13 @@ export abstract class DoctorPatientOrchestrator {
    * Get the DoctorPatient relationship by doctor and patient IDs.
    * @param doctorId - The UUID of the doctor
    * @param patientId - The UUID of the patient
-   * @returns A promise that resolves to a DoctorPatientDto or null if not found
+   * @returns A promise that resolves to a DoctorPatientDto
+   * @throws DoctorPatientNotFoundException if the relationship does not exist
    */
   abstract getDoctorPatientByDoctorAndPatientIds(
     doctorId: UUID,
     patientId: UUID,
-  ): Promise<DoctorPatientDto | null>;
+  ): Promise<DoctorPatientDto>;
 
   /**
    * Find patients by search term for a specific doctor.
