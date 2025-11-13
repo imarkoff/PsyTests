@@ -88,7 +88,7 @@ export class DoctorPatientsController {
   @ApiParam({ name: 'patientId', format: 'uuid' })
   @ApiOkResponse({ type: DoctorPatientDto })
   @Get(':patientId')
-  assignPatient(
+  getDoctorPatient(
     @Param('patientId', new ParseUUIDPipe()) patientId: UUID,
     @UserFromAuth() user: User,
   ) {
