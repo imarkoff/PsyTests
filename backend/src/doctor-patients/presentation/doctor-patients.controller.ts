@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -15,12 +16,9 @@ import { UserRole } from '../../shared/enums/user-role.enum';
 import { UserFromAuth } from '../../core/decorators/user-from-auth.decorator';
 import { User } from '../../users/domain/entities/user.entity';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse,
-  ApiNotFoundResponse,
+  ApiCreatedResponse,
   ApiOkResponse,
-  ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
@@ -38,7 +36,7 @@ const PaginatedUserWithDoctorPatientInfoDto = createPaginatedListDto(
 );
 
 @ApiTags('Doctor Patients')
-@Controller('doctor-patients')
+@Controller('doctor/patients')
 @Roles([UserRole.DOCTOR])
 @ApiBearerAuth()
 export class DoctorPatientsController {
@@ -46,13 +44,11 @@ export class DoctorPatientsController {
     private readonly doctorPatientOrchestrator: DoctorPatientOrchestrator,
   ) {}
 
-  @ApiOperation({
-    summary: 'Get active patients assigned to the authenticated doctor',
-  })
+  /**
+   * Get active patients assigned to the authenticated doctor
+   * @throws {400} If pagination, sorting, or filtering parameters are invalid
+   */
   @ApiOkResponse({ type: PaginatedDoctorPatientDto })
-  @ApiBadRequestResponse({
-    description: 'Invalid pagination, sorting, or filtering parameters',
-  })
   @Get()
   getPatientsByDoctor(
     @Query() paginationParams: QueryPaginationParamsDto,
@@ -64,17 +60,17 @@ export class DoctorPatientsController {
     );
   }
 
-  @ApiOperation({
-    summary: 'Find all patients in the system.',
-    description:
-      'Allows the doctor to search for patients to assign to their care. ' +
-      'Also shows additional info if the patient is already assigned to the doctor.',
-  })
+  /**
+   * Find patients in the system to assign to the authenticated doctor
+   *
+   * @remarks
+   *  Allows searching for patients to assign to the doctor's care.
+   *  Also provides additional information if the patient is already assigned to the doctor.
+   *
+   * @throws {400} If pagination, sorting, or filtering parameters are invalid
+   */
   @Get('find')
   @ApiOkResponse({ type: PaginatedUserWithDoctorPatientInfoDto })
-  @ApiBadRequestResponse({
-    description: 'Invalid pagination, sorting, or filtering parameters',
-  })
   findPatients(
     @Query() paginationParams: QueryPaginationParamsDto,
     @UserFromAuth() user: User,
@@ -85,13 +81,12 @@ export class DoctorPatientsController {
     );
   }
 
-  @ApiOperation({
-    summary:
-      'Get the assignment details between the authenticated doctor and a specific patient',
-  })
+  /**
+   * Get the assignment details between the authenticated doctor and a specific patient
+   * @throws {404} If the patient is not assigned to the doctor
+   */
   @ApiParam({ name: 'patientId', format: 'uuid' })
   @ApiOkResponse({ type: DoctorPatientDto })
-  @ApiNotFoundResponse({ description: 'Patient not assigned to the doctor' })
   @Get(':patientId')
   assignPatient(
     @Param('patientId', new ParseUUIDPipe()) patientId: UUID,
@@ -103,14 +98,12 @@ export class DoctorPatientsController {
     );
   }
 
-  @ApiOperation({
-    summary: 'Create a new patient and assign them to the authenticated doctor',
-  })
-  @ApiOkResponse({ type: DoctorPatientDto })
-  @ApiBadRequestResponse({ description: 'Invalid patient creation data' })
-  @ApiConflictResponse({
-    description: 'Patient with given phone already exists',
-  })
+  /**
+   * Create a new patient and assign them to the authenticated doctor
+   * @throws {400} If patient creation data is invalid
+   * @throws {409} If a patient with the given phone already exists
+   */
+  @ApiCreatedResponse({ type: DoctorPatientDto })
   @Post()
   createDoctorPatient(
     @Body() patientCreate: PatientCreateDto,
@@ -122,15 +115,13 @@ export class DoctorPatientsController {
     );
   }
 
-  @ApiOperation({
-    summary:
-      'Assign an existing patient to the authenticated doctor by patient ID',
-  })
+  /**
+   * Assign an existing patient to the authenticated doctor by patient ID
+   * @throws {404} If the patient does not exist
+   * @throws {409} If the patient is already assigned to the doctor
+   */
   @ApiParam({ name: 'patientId', format: 'uuid' })
-  @ApiOkResponse({ type: DoctorPatientDto })
-  @ApiConflictResponse({
-    description: 'Patient is already assigned to the authenticated doctor',
-  })
+  @ApiCreatedResponse({ type: DoctorPatientDto })
   @Post(':patientId')
   assignExistingPatient(
     @Param('patientId', new ParseUUIDPipe()) patientId: UUID,
@@ -142,14 +133,14 @@ export class DoctorPatientsController {
     );
   }
 
-  @ApiOperation({
-    summary:
-      'Mark the doctor-patient assignment as read for the authenticated doctor',
-  })
+  /**
+   * Mark the doctor-patient assignment as read for the authenticated doctor
+   * @throws {204} If the assignment is marked as read successfully
+   * @throws {404} If the patient is not assigned to the doctor
+   */
   @ApiParam({ name: 'patientId', format: 'uuid' })
-  @ApiOkResponse({ description: 'Doctor-patient assignment marked as read' })
-  @ApiNotFoundResponse({ description: 'Patient not assigned to the doctor' })
   @Patch(':patientId/mark-as-read')
+  @HttpCode(204)
   markPatientAsRead(
     @Param('patientId', new ParseUUIDPipe()) patientId: UUID,
     @UserFromAuth() user: User,
@@ -160,15 +151,14 @@ export class DoctorPatientsController {
     );
   }
 
-  @ApiOperation({
-    summary: 'Unassign a patient from the authenticated doctor by patient ID',
-  })
+  /**
+   * Unassign a patient from the authenticated doctor by patient ID
+   * @throws {204} If the patient is unassigned successfully
+   * @throws {404} If the patient is not assigned to the doctor
+   */
   @ApiParam({ name: 'patientId', format: 'uuid' })
-  @ApiOkResponse({
-    description: 'Patient unassigned from the doctor successfully',
-  })
-  @ApiNotFoundResponse({ description: 'Patient not assigned to the doctor' })
   @Delete(':patientId')
+  @HttpCode(204)
   unassignPatient(
     @Param('patientId', new ParseUUIDPipe()) patientId: UUID,
     @UserFromAuth() user: User,

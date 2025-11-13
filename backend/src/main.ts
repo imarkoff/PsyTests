@@ -42,7 +42,7 @@ async function bootstrap() {
     .addTag('Psychological Tests', 'Endpoints for managing psychological tests')
     .addTag(
       'Doctor Patients',
-      'Endpoints for managing doctor-patient relationships',
+      "Endpoints for managing doctor-patient relationships from the doctor's perspective",
     )
     .build();
   const documentFactory = SwaggerModule.createDocument(app, swaggerConfig);
