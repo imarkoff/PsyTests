@@ -14,7 +14,7 @@ export class PaginatedListMapper {
       totalCount: dbPaginated.totalCount,
       totalPages: Math.ceil(dbPaginated.totalCount / paginationParams.pageSize),
       hasNextPage:
-        paginationParams.page * paginationParams.pageSize <
+        (paginationParams.page + 1) * paginationParams.pageSize <
         dbPaginated.totalCount,
       hasPreviousPage: paginationParams.page > 1,
     };
