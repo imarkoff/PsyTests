@@ -11,7 +11,7 @@ class RawResultsTableComponent(TableComponent):
     """Component to render raw results of passed MMPI test"""
 
     def __init__(self, document: Document, formatter: DocumentFormatter, test_result: TestResultDto):
-        (self.scales, self.values) = zip(*test_result.verdict.get("raw").items())
+        (self.scales, self.values) = zip(*test_result.verdict.raw.items())
         super().__init__(document, formatter)
 
     def _define_table(self) -> Table:

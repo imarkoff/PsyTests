@@ -13,7 +13,7 @@ class VerdictsTableComponent(TableComponent):
 
     def __init__(self, document: Document, formatter: DocumentFormatter, test_result: TestResultDto):
         super().__init__(document, formatter)
-        self.scale_verdicts: dict[str, list[str]] = test_result.verdict.get("scale_verdicts")
+        self.scale_verdicts: dict[str, list[str]] = test_result.verdict.scale_verdicts
 
     def _define_table(self) -> Table:
         table = self.doc.add_table(rows=0, cols=2, style="Table Grid")

@@ -22,7 +22,10 @@ class ScoreCounter:
 
         return score
 
-    def _get_mark(self, question_index: int, answer_index: int) -> int:
+    def _get_mark(self, question_index: int, answer_index: int | None) -> int:
+        if answer_index is None:
+            return 0
+
         question = self.test.questions[question_index]
         answer = question.answers[answer_index]
 
