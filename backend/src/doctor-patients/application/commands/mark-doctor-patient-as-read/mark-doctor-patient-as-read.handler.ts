@@ -19,8 +19,8 @@ export class MarkDoctorPatientAsReadHandler
     patientId,
   }: MarkDoctorPatientAsReadCommand): Promise<void> {
     this.logger.debug(
-      `Marking doctor-patient relationship as read 
-      for doctorId: ${doctorId} and patientId: ${patientId}`,
+      `Marking doctor-patient relationship as read ` +
+        `for doctorId: ${doctorId} and patientId: ${patientId}`,
     );
 
     const doctorPatient =
@@ -39,8 +39,8 @@ export class MarkDoctorPatientAsReadHandler
     );
 
     this.logger.debug(
-      `Successfully marked doctor-patient relationship as read 
-      for doctorId: ${doctorId} and patientId: ${patientId}`,
+      `Successfully marked doctor-patient relationship as read ` +
+        `for doctorId: ${doctorId} and patientId: ${patientId}`,
     );
   }
 }
