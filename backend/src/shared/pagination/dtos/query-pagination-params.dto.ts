@@ -26,8 +26,8 @@ export class QueryPaginationParamsDto {
     required: false,
     description:
       'Fields to sort by, with direction.<br/>' +
-      '<i>Format:</i> field:direction;field:direction<br/>' +
-      `<i>Directions:</i> ${SortDirection.ASC} for ascending, ${SortDirection.DESC} for descending`,
+      '<i>Format:</i> <code>field:direction;field:direction</code><br/>' +
+      `<i>Directions:</i> <code>${SortDirection.ASC}</code> for ascending, <code>${SortDirection.DESC}</code> for descending`,
     example: `name:${SortDirection.ASC};age:${SortDirection.DESC}`,
   })
   sortedFields?: string;
@@ -53,8 +53,8 @@ export class QueryPaginationParamsDto {
     required: false,
     description:
       'Advanced filters to apply.<br/>' +
-      '<i>Format:</i> field:operator:value;field:operator:value<br/>' +
-      '<i>Example operators:</i> equals, contains, onOrAfter, greaterThan, etc.',
+      '<i>Format:</i> <code>field:operator:value;field:operator:value</code><br/>' +
+      '<i>Example operators:</i> <code>equals</code>, <code>contains</code>, <code>onOrAfter</code>, <code>greaterThan</code>, etc.',
     example: 'last_login:onOrAfter:2020-01-01;name:contains:John',
   })
   filters?: string;
