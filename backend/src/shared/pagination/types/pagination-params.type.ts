@@ -9,8 +9,8 @@ export interface PaginationParams<TModel extends object> {
   page: number;
   pageSize: number;
   sortedFields: SortedField<TModel>[];
-  quickFilter?: QuickFilter;
-  filter?: Filter<TModel>;
+  quickFilters: QuickFilters | null;
+  filters: Filters<TModel> | null;
 }
 
 export interface SortedField<T extends object> {
@@ -18,12 +18,12 @@ export interface SortedField<T extends object> {
   direction: SortDirection;
 }
 
-export interface QuickFilter {
+export interface QuickFilters {
   filters: string[];
   operator: FilterOperator;
 }
 
-export interface Filter<T extends object> {
+export interface Filters<T extends object> {
   filters: FilterField<T>[];
   operator: FilterOperator;
 }

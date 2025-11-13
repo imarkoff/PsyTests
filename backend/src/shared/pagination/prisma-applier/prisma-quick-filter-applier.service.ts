@@ -1,5 +1,5 @@
 import { FilterOperator } from '../enums/filter-operator.enum';
-import { QuickFilter } from '../types/pagination-params.type';
+import { QuickFilters } from '../types/pagination-params.type';
 import {
   PrismaModelKey,
   PrismaModelOperations,
@@ -9,7 +9,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class PrismaQuickFilterApplier {
   applyQuickFilter<TPrismaModel extends PrismaModelKey, T extends object>(
-    quickFilter: QuickFilter | undefined,
+    quickFilter: QuickFilters | null,
     searchableFields: (keyof T)[] = [],
   ):
     | PrismaModelOperations<TPrismaModel>['whereClause']['AND']
@@ -21,8 +21,8 @@ export class PrismaQuickFilterApplier {
     ) {
       const operator = quickFilter.operator || FilterOperator.OR;
 
-      const fieldFilters = searchableFields.map((field) => ({
-        [operator]: quickFilter.filters.map((filter) => ({
+      const mappedFilters = quickFilter.filters.map((filter) => ({
+        [FilterOperator.OR]: searchableFields.map((field) => ({
           [field]: {
             contains: filter,
             mode: 'insensitive',
@@ -31,7 +31,7 @@ export class PrismaQuickFilterApplier {
       }));
 
       return {
-        [operator]: fieldFilters,
+        [operator]: mappedFilters,
       };
     }
 

@@ -11,8 +11,8 @@ import {
   PasswordConfigGetter,
 } from '../config/configs/password';
 
-@ValidatorConstraint({ name: 'IsPasswordValid', async: false })
 @Injectable()
+@ValidatorConstraint({ name: 'IsPasswordValid', async: false })
 export class PasswordConstraint implements ValidatorConstraintInterface {
   private readonly passwordConfig: PasswordConfig;
 

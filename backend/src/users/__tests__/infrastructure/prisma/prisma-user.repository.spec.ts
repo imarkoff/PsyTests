@@ -10,6 +10,14 @@ import { UserRole } from '../../../../shared/enums/user-role.enum';
 import { Prisma } from 'generated/prisma';
 import { randomUUID } from 'node:crypto';
 
+const paginationParams: PaginationParams<User> = {
+  page: 1,
+  pageSize: 10,
+  sortedFields: [],
+  quickFilters: null,
+  filters: null,
+};
+
 describe(PrismaUserRepository.name, () => {
   let repository: PrismaUserRepository;
   let prismaUserDelegate: jest.Mocked<Prisma.UserDelegate>;
@@ -50,38 +58,32 @@ describe(PrismaUserRepository.name, () => {
 
   describe(PrismaUserRepository.prototype.getUsers.name, () => {
     it('returns paginated users when users exist', async () => {
-      const params: PaginationParams<User> = {
-        page: 1,
-        pageSize: 10,
-        sortedFields: [],
-      };
       const mockPaginated = {
         items: [User.fromPersistence(createUserPersistence())],
         totalCount: 1,
       };
       prismaPaginator.applyPagination.mockResolvedValue(mockPaginated);
 
-      const result = await repository.getUsers(params);
+      const result = await repository.getUsers(paginationParams);
 
       expect(result).toEqual(mockPaginated);
       expect(prismaPaginator.applyPagination).toHaveBeenCalledWith(
         expect.any(Function),
         expect.any(Function),
-        params,
+        paginationParams,
         ['surname', 'name', 'patronymic', 'phone'],
         { deletedAt: null },
       );
     });
 
     it('returns empty paginated list when no users exist', async () => {
-      const params = { page: 1, pageSize: 10, sortedFields: [] };
       const mockPaginated = {
         items: [],
         totalCount: 0,
       };
       prismaPaginator.applyPagination.mockResolvedValue(mockPaginated);
 
-      const result = await repository.getUsers(params);
+      const result = await repository.getUsers(paginationParams);
 
       expect(result).toEqual(mockPaginated);
     });
@@ -90,20 +92,19 @@ describe(PrismaUserRepository.name, () => {
   describe(PrismaUserRepository.prototype.getUsersByRole.name, () => {
     it('returns paginated users for a specific role when users exist', async () => {
       const role = UserRole.ADMIN;
-      const params = { page: 1, pageSize: 10, sortedFields: [] };
       const mockPaginated = {
         items: [User.fromPersistence(createUserPersistence())],
         totalCount: 1,
       };
       prismaPaginator.applyPagination.mockResolvedValue(mockPaginated);
 
-      const result = await repository.getUsersByRole(role, params);
+      const result = await repository.getUsersByRole(role, paginationParams);
 
       expect(result).toEqual(mockPaginated);
       expect(prismaPaginator.applyPagination).toHaveBeenCalledWith(
         expect.any(Function),
         expect.any(Function),
-        params,
+        paginationParams,
         ['surname', 'name', 'patronymic', 'phone'],
         { role, deletedAt: null },
       );
@@ -111,14 +112,13 @@ describe(PrismaUserRepository.name, () => {
 
     it('returns empty paginated list when no users exist for the role', async () => {
       const role = 'NURSE' as UserRole;
-      const params = { page: 1, pageSize: 10, sortedFields: [] };
       const mockPaginated = {
         items: [],
         totalCount: 0,
       };
       prismaPaginator.applyPagination.mockResolvedValue(mockPaginated);
 
-      const result = await repository.getUsersByRole(role, params);
+      const result = await repository.getUsersByRole(role, paginationParams);
 
       expect(result).toEqual(mockPaginated);
     });

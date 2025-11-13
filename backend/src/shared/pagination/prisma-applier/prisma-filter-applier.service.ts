@@ -1,5 +1,5 @@
 import { FilterOperator } from '../enums/filter-operator.enum';
-import { Filter } from '../types/pagination-params.type';
+import { Filters } from '../types/pagination-params.type';
 import {
   PrismaModelKey,
   PrismaModelOperations,
@@ -9,15 +9,15 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class PrismaFilterApplier {
   applyFilters<TPrismaModel extends PrismaModelKey, T extends object>(
-    filter: Filter<T> | undefined,
+    filters: Filters<T> | null,
     filterFields: (keyof T)[],
   ):
     | PrismaModelOperations<TPrismaModel>['whereClause']['AND']
     | PrismaModelOperations<TPrismaModel>['whereClause']['OR'] {
-    if (filter && filterFields.length > 0) {
-      const operator = filter.operator || FilterOperator.AND;
+    if (filters && filterFields.length > 0) {
+      const operator = filters.operator || FilterOperator.AND;
 
-      const filterConditions = filter.filters
+      const filterConditions = filters.filters
         .filter((f) => filterFields.includes(f.field))
         .map((f) => ({
           [f.field]: { [this.mapOperator(f.operator)]: f.value },

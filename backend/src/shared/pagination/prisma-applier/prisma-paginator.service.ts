@@ -48,13 +48,16 @@ export class PrismaPaginator {
     const where: PrismaModelOperations<TPrismaModel>['whereClause'] = {
       ...whereClause,
       ...this.quickFilterApplier.applyQuickFilter(
-        paginationParams.quickFilter,
+        paginationParams.quickFilters,
         filterFields,
       ),
-      ...this.filterApplier.applyFilters(paginationParams.filter, filterFields),
+      ...this.filterApplier.applyFilters(
+        paginationParams.filters,
+        filterFields,
+      ),
     };
 
-    const skip = (paginationParams.page - 1) * paginationParams.pageSize;
+    const skip = paginationParams.page * paginationParams.pageSize;
     const take = paginationParams.pageSize;
 
     const total = await count({ where });
