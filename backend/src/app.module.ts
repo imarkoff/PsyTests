@@ -10,9 +10,11 @@ import { ControllerLoggerInterceptor } from './core/interceptors/controller-logg
 import { PsyTestsModule } from './psy-tests/psy-tests.module';
 import { CoreConfigModule } from './core/config/core-config.module';
 import { DoctorPatientsModule } from './doctor-patients/doctor-patients.module';
+import { AssignedTestsModule } from './assigned-tests/assigned-tests.module';
 
 @Module({
   imports: [
+    AssignedTestsModule,
     CoreConfigModule,
     UserModule,
     PsyTestsModule,
