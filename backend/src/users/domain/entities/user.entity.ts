@@ -1,234 +1,82 @@
-import { UUID } from 'crypto';
+import type { UUID } from 'crypto';
 import { UserRole } from '../../../shared/enums/user-role.enum';
 import { UserGender } from '../../../shared/enums/user-gender.enum';
-import { UserCreateDto } from '../../presentation/dtos/user-create.dto';
-import { randomUUID } from 'node:crypto';
-import { HashedPassword } from '../../../core/auth/password/types/hashed-password.type';
-import { UserUpdateDto } from '../../presentation/dtos/user-update.dto';
-import { User as PrismaUser } from 'generated/prisma';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
 
+/** Users of the system, including doctors and patients */
+@Entity()
 export class User {
-  private _id: UUID;
-  get id(): UUID {
-    return this._id;
-  }
-  private set id(id: UUID) {
-    this._id = id;
-  }
+  @PrimaryGeneratedColumn('uuid')
+  id: UUID;
 
-  private _name: string;
-  get name(): string {
-    return this._name;
-  }
-  private set name(name: string) {
-    this._name = name;
-  }
+  /** First name of the user */
+  @Column()
+  name: string;
 
-  private _surname: string;
-  get surname(): string {
-    return this._surname;
-  }
-  private set surname(surname: string) {
-    this._surname = surname;
-  }
+  /** Last name of the user */
+  @Column()
+  surname: string;
 
-  private _patronymic: string | null;
-  get patronymic(): string | null {
-    return this._patronymic;
-  }
-  private set patronymic(patronymic: string | null) {
-    this._patronymic = patronymic;
-  }
+  /** Patronymic of the user */
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  patronymic: string | null;
 
-  private _gender: UserGender;
-  get gender(): UserGender {
-    return this._gender;
-  }
-  private set gender(gender: UserGender) {
-    this._gender = gender;
-  }
+  /** Gender of the user */
+  @Column({
+    type: 'enum',
+    enum: UserGender,
+  })
+  gender: UserGender;
 
-  private _birthDate: Date;
-  get birthDate(): Date {
-    return this._birthDate;
-  }
-  private set birthDate(birthDate: Date) {
-    this._birthDate = birthDate;
-  }
+  /** Birthdate of the user */
+  @Column({ type: 'date' })
+  birthDate: Date;
 
-  private _phone: string;
-  get phone(): string {
-    return this._phone;
-  }
-  private set phone(phone: string) {
-    this._phone = phone;
-  }
+  /** Phone number of the user, must be unique and in E.164 format */
+  @Column()
+  phone: string;
 
-  private _password: Uint8Array;
-  get password(): Uint8Array {
-    return this._password;
-  }
-  private set password(password: Uint8Array) {
-    this._password = password;
-  }
+  /** Hashed password of the user */
+  @Column({ type: 'bytea' })
+  password: Uint8Array;
 
-  private _passwordSalt: Uint8Array;
-  get passwordSalt(): Uint8Array {
-    return this._passwordSalt;
-  }
-  private set passwordSalt(passwordSalt: Uint8Array) {
-    this._passwordSalt = passwordSalt;
-  }
+  /** Salt used for hashing the password */
+  @Column({ type: 'bytea' })
+  passwordSalt: Uint8Array;
 
-  private _role: UserRole;
-  get role(): UserRole {
-    return this._role;
-  }
-  private set role(role: UserRole) {
-    this._role = role;
-  }
+  /** Role of the user in the system */
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.PATIENT,
+  })
+  role: UserRole;
 
-  private _registeredById: UUID | null;
-  get registeredById(): UUID | null {
-    return this._registeredById;
-  }
-  private set registeredById(registeredById: UUID | null) {
-    this._registeredById = registeredById;
-  }
+  /** Timestamp when the user registered */
+  @Column({ type: 'timestamp' })
+  registeredAt: Date;
 
-  private _registeredAt: Date;
-  get registeredAt(): Date {
-    return this._registeredAt;
-  }
-  private set registeredAt(registeredAt: Date) {
-    this._registeredAt = registeredAt;
-  }
+  /** Timestamp of the user's last login */
+  @Column({ type: 'timestamp', nullable: true })
+  lastLoginAt: Date | null;
 
-  private _lastLoginAt: Date | null;
-  get lastLoginAt(): Date | null {
-    return this._lastLoginAt;
-  }
-  private set lastLoginAt(lastLoginAt: Date | null) {
-    this._lastLoginAt = lastLoginAt;
-  }
+  /** Timestamp when the user was deleted, null if not deleted */
+  @Column({ type: 'timestamp', nullable: true })
+  deletedAt: Date | null;
 
-  private _deletedAt: Date | null;
-  get deletedAt(): Date | null {
-    return this._deletedAt;
-  }
-  private set deletedAt(deletedAt: Date | null) {
-    this._deletedAt = deletedAt;
-  }
+  /** User who registered this user, null if self-registered */
+  @RelationId((user: User) => user.registeredBy)
+  registeredById: UUID | null;
 
-  private constructor(
-    id: UUID,
-    name: string,
-    surname: string,
-    patronymic: string | null,
-    gender: UserGender,
-    birthDate: Date,
-    phone: string,
-    password: Uint8Array,
-    passwordSalt: Uint8Array,
-    role: UserRole,
-    registeredById: UUID | null,
-    registeredAt: Date,
-    lastLoginAt: Date | null,
-    deletedAt: Date | null,
-  ) {
-    this.id = id;
-    this.name = name;
-    this.surname = surname;
-    this.patronymic = patronymic;
-    this.gender = gender;
-    this.birthDate = birthDate;
-    this.phone = phone;
-    this.password = password;
-    this.passwordSalt = passwordSalt;
-    this.role = role;
-    this.registeredById = registeredById;
-    this.registeredAt = registeredAt;
-    this.lastLoginAt = lastLoginAt;
-    this.deletedAt = deletedAt;
-  }
-
-  static create(
-    entity: UserCreateDto,
-    password: HashedPassword,
-    registeredById?: UUID,
-  ): User {
-    return new User(
-      randomUUID(),
-      entity.name,
-      entity.surname,
-      entity.patronymic,
-      entity.gender,
-      entity.birthDate,
-      entity.phone,
-      password.hash,
-      password.salt,
-      entity.role || UserRole.PATIENT,
-      registeredById || null,
-      new Date(),
-      null,
-      null,
-    );
-  }
-
-  static fromPersistence(persistenceUser: PrismaUser): User {
-    return new User(
-      persistenceUser.id as UUID,
-      persistenceUser.name,
-      persistenceUser.surname,
-      persistenceUser.patronymic,
-      persistenceUser.gender,
-      persistenceUser.birthDate,
-      persistenceUser.phone,
-      persistenceUser.password,
-      persistenceUser.passwordSalt,
-      persistenceUser.role,
-      persistenceUser.registeredById as UUID | null,
-      persistenceUser.registeredAt,
-      persistenceUser.lastLoginAt,
-      persistenceUser.deletedAt,
-    );
-  }
-
-  toPersistence(): PrismaUser {
-    return {
-      id: this.id,
-      name: this.name,
-      surname: this.surname,
-      patronymic: this.patronymic,
-      gender: this.gender,
-      birthDate: this.birthDate,
-      phone: this.phone,
-      password: this.password as Uint8Array<ArrayBuffer>,
-      passwordSalt: this.passwordSalt as Uint8Array<ArrayBuffer>,
-      role: this.role,
-      registeredById: this.registeredById,
-      registeredAt: this.registeredAt,
-      lastLoginAt: this.lastLoginAt,
-      deletedAt: this.deletedAt,
-    };
-  }
-
-  applyChanges(updateData: UserUpdateDto) {
-    this.name = updateData.name;
-    this.surname = updateData.surname;
-    this.patronymic = updateData.patronymic || null;
-    this.gender = updateData.gender;
-    this.birthDate = updateData.birthDate;
-    this.phone = updateData.phone;
-    return this;
-  }
-
-  changePassword(hashedPassword: HashedPassword) {
-    this.password = hashedPassword.hash;
-    this.passwordSalt = hashedPassword.salt;
-  }
-
-  updateLastLoginAt() {
-    this.lastLoginAt = new Date();
-  }
+  /** Many-to-one relationship to the user who registered this user */
+  @ManyToOne(() => User, { nullable: true })
+  @JoinColumn({ name: 'registeredById' })
+  registeredBy: User | null;
 }

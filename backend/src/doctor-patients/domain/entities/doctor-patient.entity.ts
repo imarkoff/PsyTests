@@ -1,7 +1,4 @@
-import {
-  DoctorPatient as PrismaDoctorPatient,
-  User as PrismaUser,
-} from 'generated/prisma';
+import { DoctorPatient as PrismaDoctorPatient } from 'generated/prisma';
 import { randomUUID, UUID } from 'node:crypto';
 import { User } from '../../../users/domain/entities/user.entity';
 
@@ -32,21 +29,16 @@ export class DoctorPatient {
   }
 
   static fromPersistence(persistence: PrismaDoctorPatient): DoctorPatient {
-    const persistenceWithDoctorAndPatient: PrismaDoctorPatient & {
-      doctor?: PrismaUser | null;
-      patient?: PrismaUser | null;
-    } = persistence;
-
     const entity = new DoctorPatient();
     entity.id = persistence.id as UUID;
     entity.doctorId = persistence.doctorId as UUID;
-    entity.doctor = persistenceWithDoctorAndPatient.doctor
-      ? User.fromPersistence(persistenceWithDoctorAndPatient.doctor)
-      : null;
+    // entity.doctor = persistenceWithDoctorAndPatient.doctor
+    //   ? User.fromPersistence(persistenceWithDoctorAndPatient.doctor)
+    //   : null;
     entity.patientId = persistence.patientId as UUID;
-    entity.patient = persistenceWithDoctorAndPatient.patient
-      ? User.fromPersistence(persistenceWithDoctorAndPatient.patient)
-      : null;
+    // entity.patient = persistenceWithDoctorAndPatient.patient
+    //   ? User.fromPersistence(persistenceWithDoctorAndPatient.patient)
+    //   : null;
     entity.assignedAt = persistence.assignedAt;
     entity.unassignedAt = persistence.unassignedAt;
     entity.needsAttention = persistence.needsAttention;

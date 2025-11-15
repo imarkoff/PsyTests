@@ -62,7 +62,7 @@ export class PrismaUserRepository implements UserRepository {
 
     if (user) {
       this.logger.debug(`User with ID ${id} found in the database.`);
-      return User.fromPersistence(user);
+      return user as User;
     } else {
       this.logger.debug(`User with ID ${id} not found in the database.`);
       return null;
@@ -76,7 +76,7 @@ export class PrismaUserRepository implements UserRepository {
 
     if (user) {
       this.logger.debug(`User with phone ${phone} found in the database.`);
-      return User.fromPersistence(user);
+      return user as User;
     } else {
       this.logger.debug(`User with phone ${phone} not found in the database.`);
       return null;
@@ -84,26 +84,26 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async createUser(data: User): Promise<User> {
-    const convertedUser = data.toPersistence();
-    const createdUser = await this.prisma.user.create({ data: convertedUser });
+    const createdUser = await this.prisma.user.create({
+      data: data as PrismaUser,
+    });
 
     this.logger.debug(
       `Created new user with ID ${createdUser.id} in the database.`,
     );
 
-    return User.fromPersistence(createdUser);
+    return createdUser as User;
   }
 
   async updateUser(updatedUser: User): Promise<User> {
-    const convertedUser = updatedUser.toPersistence();
     const user = await this.prisma.user.update({
       where: { id: updatedUser.id },
-      data: convertedUser,
+      data: updatedUser as PrismaUser,
     });
 
     this.logger.debug(`Updated user with ID ${user.id} in the database.`);
 
-    return User.fromPersistence(user);
+    return user as User;
   }
 
   async deleteUser(id: UUID) {
