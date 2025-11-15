@@ -18,6 +18,8 @@ import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-use
 import { GetUserModelByPhoneHandler } from './application/queries/get-user-model-by-phone/get-user-model-by-phone.handler';
 import { GetUserModelByIdHandler } from './application/queries/get-user-model-by-id/get-user-model-by-id.handler';
 import { UsersOrchestrator } from './application/services/users-orchestrator/users-orchestrator.abstract';
+import { FirstAdminCreator } from './application/services/first-admin-creator/first-admin-creator.abstract';
+import { FirstAdminCreatorImpl } from './application/services/first-admin-creator/first-admin-creator.impl';
 
 @Module({
   imports: [PrismaModule, CoreAuthModule, CqrsModule],
@@ -30,6 +32,10 @@ import { UsersOrchestrator } from './application/services/users-orchestrator/use
     {
       provide: UsersOrchestrator,
       useClass: UsersOrchestratorImpl,
+    },
+    {
+      provide: FirstAdminCreator,
+      useClass: FirstAdminCreatorImpl,
     },
     CreateUserHandler,
     UpdateUserHandler,
