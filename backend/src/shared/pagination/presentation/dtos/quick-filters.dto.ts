@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FilterOperator } from '../enums/filter-operator.enum';
-import { QuickFilters } from '../types/pagination-params.type';
+import { FilterOperator } from '../../domain/enums/filter-operator.enum';
+import { QuickFilters } from '../../domain/types/pagination-params.type';
 
 export class QuickFiltersDto implements QuickFilters {
   @ApiProperty({

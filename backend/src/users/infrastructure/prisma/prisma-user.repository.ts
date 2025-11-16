@@ -1,13 +1,13 @@
 import { User } from '../../domain/entities/user.entity';
 import { UserRole } from '../../../shared/enums/user-role.enum';
 import { PrismaService } from '../../../core/prisma/prisma.service';
-import { PrismaPaginator } from '../../../shared/pagination/prisma-applier/prisma-paginator.service';
-import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
+import { PrismaPaginator } from '../../../shared/pagination/application/prisma-applier/prisma-paginator.service';
+import { PaginationParams } from '../../../shared/pagination/domain/types/pagination-params.type';
 import { Injectable, Logger } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { UserRepository } from '../../domain/interfaces/user.repository.interface';
 import { User as PrismaUser } from 'generated/prisma';
-import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
+import { DbPaginated } from '../../../shared/pagination/domain/types/db-paginated.type';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {

@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { PaginationParams } from 'src/shared/pagination/types/pagination-params.type';
+import { PaginationParams } from 'src/shared/pagination/domain/types/pagination-params.type';
 import {
   AssignedTest,
   PrismaAssignedTest,
@@ -7,8 +7,8 @@ import {
 import { AssignedTestsRepository } from '../../interfaces/assigned-tests.repository';
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../../core/prisma/prisma.service';
-import { PrismaPaginator } from '../../../../shared/pagination/prisma-applier/prisma-paginator.service';
-import { DbPaginated } from '../../../../shared/pagination/types/db-paginated.type';
+import { PrismaPaginator } from '../../../../shared/pagination/application/prisma-applier/prisma-paginator.service';
+import { DbPaginated } from '../../../../shared/pagination/domain/types/db-paginated.type';
 
 @Injectable()
 export class PrismaAssignedTestsRepository implements AssignedTestsRepository {

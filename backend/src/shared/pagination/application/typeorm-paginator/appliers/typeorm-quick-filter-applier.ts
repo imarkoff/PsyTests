@@ -1,6 +1,6 @@
 import { Brackets, SelectQueryBuilder } from 'typeorm';
-import { QuickFilters } from '../../types/pagination-params.type';
-import { FilterOperator } from '../../enums/filter-operator.enum';
+import { QuickFilters } from '../../../domain/types/pagination-params.type';
+import { FilterOperator } from '../../../domain/enums/filter-operator.enum';
 
 export class TypeOrmQuickFilterApplier {
   applyQuickFilter<TModel extends object>(

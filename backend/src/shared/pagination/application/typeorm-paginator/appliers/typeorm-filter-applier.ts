@@ -1,5 +1,5 @@
 import { SelectQueryBuilder } from 'typeorm';
-import { Filters } from '../../types/pagination-params.type';
+import { Filters } from '../../../domain/types/pagination-params.type';
 
 export class TypeOrmFilterApplier {
   applyFilters<TModel extends object>(

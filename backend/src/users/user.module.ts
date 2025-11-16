@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './presentation/users.controller';
-import { PrismaUserRepository } from './infrastructure/prisma/prisma-user.repository';
-import { PrismaModule } from '../core/prisma/prisma.module';
 import { CoreAuthModule } from '../core/auth/core-auth.module';
 import { CreateUserHandler } from './application/commands/create-user/create-user.handler';
 import { UsersOrchestratorImpl } from './application/services/users-orchestrator/users-orchestrator.impl';
@@ -18,16 +16,18 @@ import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-use
 import { GetUserModelByPhoneHandler } from './application/queries/get-user-model-by-phone/get-user-model-by-phone.handler';
 import { GetUserModelByIdHandler } from './application/queries/get-user-model-by-id/get-user-model-by-id.handler';
 import { UsersOrchestrator } from './application/services/users-orchestrator/users-orchestrator.abstract';
+import { TypeormUserRepository } from './infrastructure/typeorm/typeorm-user.repository';
+import { TypeORMModule } from '../core/typeorm/typeorm.module';
 import { FirstAdminCreator } from './application/services/first-admin-creator/first-admin-creator.abstract';
 import { FirstAdminCreatorImpl } from './application/services/first-admin-creator/first-admin-creator.impl';
 
 @Module({
-  imports: [PrismaModule, CoreAuthModule, CqrsModule],
+  imports: [TypeORMModule, CoreAuthModule, CqrsModule],
   controllers: [UsersController],
   providers: [
     {
       provide: UserRepository,
-      useClass: PrismaUserRepository,
+      useClass: TypeormUserRepository,
     },
     {
       provide: UsersOrchestrator,

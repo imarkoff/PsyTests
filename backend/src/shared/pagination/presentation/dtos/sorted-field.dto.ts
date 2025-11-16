@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SortDirection } from '../enums/sort-direction.enum';
-import { SortedField } from '../types/pagination-params.type';
+import { SortDirection } from '../../domain/enums/sort-direction.enum';
+import { SortedField } from '../../domain/types/pagination-params.type';
 
 export class SortedFieldDto<T extends object> implements SortedField<T> {
   @ApiProperty({

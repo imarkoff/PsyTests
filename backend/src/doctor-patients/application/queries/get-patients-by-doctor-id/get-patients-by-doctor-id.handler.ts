@@ -1,10 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetPatientsByDoctorIdQuery } from './get-patients-by-doctor-id.query';
 import { DoctorPatient } from 'src/doctor-patients/domain/entities/doctor-patient.entity';
-import { PaginatedList } from 'src/shared/pagination/types/paginated-list.type';
+import { PaginatedList } from 'src/shared/pagination/domain/types/paginated-list.type';
 import { DoctorPatientsRepository } from '../../../domain/interfaces/doctor-patients.repository';
 import { Logger } from '@nestjs/common';
-import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
+import { PaginatedListMapper } from '../../../../shared/pagination/application/mappers/paginated-list.mapper';
 import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 import { DoctorPatientMapper } from '../../mappers/doctor-patient.mapper';
 

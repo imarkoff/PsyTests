@@ -1,13 +1,13 @@
-import { PaginationParams } from '../types/pagination-params.type';
+import { PaginationParams } from '../../domain/types/pagination-params.type';
 import {
   PrismaModelKey,
   PrismaModelOperations,
-} from '../../../core/prisma/prisma-model-operations.type';
+} from '../../../../core/prisma/prisma-model-operations.type';
 import { PrismaFilterApplier } from './prisma-filter-applier.service';
 import { PrismaQuickFilterApplier } from './prisma-quick-filter-applier.service';
 import { PrismaOrderApplier } from './prisma-order-applier.service';
 import { Injectable } from '@nestjs/common';
-import { DbPaginated } from '../types/db-paginated.type';
+import { DbPaginated } from '../../domain/types/db-paginated.type';
 
 type FindManyFunction<
   TPrismaModel extends PrismaModelKey,

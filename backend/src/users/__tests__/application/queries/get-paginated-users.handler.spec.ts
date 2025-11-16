@@ -4,8 +4,8 @@ import { UserRepository } from '../../../domain/interfaces/user.repository.inter
 import { Test } from '@nestjs/testing';
 import { User } from '../../../domain/entities/user.entity';
 import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
-import { DbPaginated } from '../../../../shared/pagination/types/db-paginated.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
+import { DbPaginated } from '../../../../shared/pagination/domain/types/db-paginated.type';
 import { GetPaginatedUsersQuery } from '../../../application/queries/get-paginated-users/get-paginated-users.query';
 
 describe(GetPaginatedUsersHandler.name, () => {

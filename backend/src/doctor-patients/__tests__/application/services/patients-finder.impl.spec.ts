@@ -2,10 +2,10 @@ import { PatientsFinderImpl } from '../../../application/services/patients-finde
 import { QueryBus } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
 import { User } from '../../../../users/domain/entities/user.entity';
 import { UserDto } from '../../../../users/presentation/dtos/user.dto';
-import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
+import { PaginatedListMapper } from '../../../../shared/pagination/application/mappers/paginated-list.mapper';
 import { UserMapper } from '../../../../users/application/mappers/user.mapper';
 import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
 import { DoctorPatientMapper } from '../../../application/mappers/doctor-patient.mapper';

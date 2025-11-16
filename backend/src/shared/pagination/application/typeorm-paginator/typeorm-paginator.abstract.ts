@@ -1,6 +1,6 @@
-import { PaginationParams } from '../types/pagination-params.type';
+import { PaginationParams } from '../../domain/types/pagination-params.type';
 import { FindManyOptions, FindOptionsRelations } from 'typeorm';
-import { DbPaginated } from '../types/db-paginated.type';
+import { DbPaginated } from '../../domain/types/db-paginated.type';
 
 /**
  * Paginates data from a TypeORM data source based on the provided pagination parameters.

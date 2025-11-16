@@ -1,10 +1,10 @@
-import { SortDirection } from '../enums/sort-direction.enum';
-import { FilterOperator } from '../enums/filter-operator.enum';
+import { SortDirection } from '../../domain/enums/sort-direction.enum';
+import { FilterOperator } from '../../domain/enums/filter-operator.enum';
 import { ApiExtraModels, ApiProperty, ApiSchema } from '@nestjs/swagger';
 import { SortedFieldDto } from './sorted-field.dto';
 import { QuickFiltersDto } from './quick-filters.dto';
 import { FiltersDto } from './filters.dto';
-import { PaginationParams } from '../types/pagination-params.type';
+import { PaginationParams } from '../../domain/types/pagination-params.type';
 
 @ApiSchema({
   description:

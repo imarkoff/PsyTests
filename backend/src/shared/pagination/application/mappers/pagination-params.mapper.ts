@@ -1,15 +1,15 @@
-import { QueryPaginationParamsDto } from '../dtos/query-pagination-params.dto';
+import { QueryPaginationParamsDto } from '../../presentation/dtos/query-pagination-params.dto';
 import {
   Filters,
   PaginationParams,
   QuickFilters,
   SortedField,
-} from '../types/pagination-params.type';
-import { SortDirection } from '../enums/sort-direction.enum';
-import { FilterOperator } from '../enums/filter-operator.enum';
-import { InvalidSortDirectionException } from '../exceptions/invalid-sort-direction.exception';
-import { InvalidSortedFieldFormatException } from '../exceptions/invalid-sorted-field-format.exception';
-import { InvalidFilterFormatException } from '../exceptions/invalid-filter-format.exception';
+} from '../../domain/types/pagination-params.type';
+import { SortDirection } from '../../domain/enums/sort-direction.enum';
+import { FilterOperator } from '../../domain/enums/filter-operator.enum';
+import { InvalidSortDirectionException } from '../../domain/exceptions/invalid-sort-direction.exception';
+import { InvalidSortedFieldFormatException } from '../../domain/exceptions/invalid-sorted-field-format.exception';
+import { InvalidFilterFormatException } from '../../domain/exceptions/invalid-filter-format.exception';
 
 /**
  * Mapper class to convert query pagination parameters into structured pagination parameters.

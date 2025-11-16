@@ -1,6 +1,6 @@
-import { PaginationParams } from '../types/pagination-params.type';
-import { DbPaginated } from '../types/db-paginated.type';
-import { PaginatedList } from '../types/paginated-list.type';
+import { PaginationParams } from '../../domain/types/pagination-params.type';
+import { DbPaginated } from '../../domain/types/db-paginated.type';
+import { PaginatedList } from '../../domain/types/paginated-list.type';
 
 export class PaginatedListMapper {
   static toDto<TDto extends object, TModel extends object>(

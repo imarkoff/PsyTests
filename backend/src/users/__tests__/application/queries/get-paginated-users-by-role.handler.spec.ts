@@ -3,9 +3,9 @@ import { GetPaginatedUsersByRoleHandler } from '../../../application/queries/get
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { User } from '../../../domain/entities/user.entity';
 import { Test } from '@nestjs/testing';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
 import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { DbPaginated } from '../../../../shared/pagination/types/db-paginated.type';
+import { DbPaginated } from '../../../../shared/pagination/domain/types/db-paginated.type';
 import { UserRole } from '../../../../shared/enums/user-role.enum';
 import { GetPaginatedUsersByRoleQuery } from '../../../application/queries/get-paginated-users-by-role/get-paginated-users-by-role.query';
 

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { PrismaUserRepository } from '../../../infrastructure/prisma/prisma-user.repository';
 import { PrismaService } from '../../../../core/prisma/prisma.service';
-import { PrismaPaginator } from '../../../../shared/pagination/prisma-applier/prisma-paginator.service';
+import { PrismaPaginator } from '../../../../shared/pagination/application/prisma-applier/prisma-paginator.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
 import { User } from '../../../domain/entities/user.entity';
 import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
 import { UserRole } from '../../../../shared/enums/user-role.enum';

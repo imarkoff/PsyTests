@@ -1,8 +1,8 @@
-import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../shared/pagination/domain/types/pagination-params.type';
 import { User } from '../entities/user.entity';
 import { UserRole } from '../../../shared/enums/user-role.enum';
 import { UUID } from 'crypto';
-import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
+import { DbPaginated } from '../../../shared/pagination/domain/types/db-paginated.type';
 
 export abstract class UserRepository {
   /**

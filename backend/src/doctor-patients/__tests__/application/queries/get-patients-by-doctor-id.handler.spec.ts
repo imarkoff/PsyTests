@@ -3,12 +3,12 @@ import { DoctorPatientsRepository } from '../../../domain/interfaces/doctor-pati
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
 import { createDoctorPatientFixture } from '../../fixtures/doctor-patient.fixture';
-import { DbPaginated } from '../../../../shared/pagination/types/db-paginated.type';
+import { DbPaginated } from '../../../../shared/pagination/domain/types/db-paginated.type';
 import { DoctorPatient } from '../../../domain/entities/doctor-patient.entity';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
 import { GetPatientsByDoctorIdQuery } from '../../../application/queries/get-patients-by-doctor-id/get-patients-by-doctor-id.query';
 import { DoctorPatientMapper } from '../../../application/mappers/doctor-patient.mapper';
-import { PaginatedList } from '../../../../shared/pagination/types/paginated-list.type';
+import { PaginatedList } from '../../../../shared/pagination/domain/types/paginated-list.type';
 import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 
 describe(GetPatientsByDoctorIdHandler.name, () => {

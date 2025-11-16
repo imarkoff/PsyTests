@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetPaginatedUsersByRoleQuery } from './get-paginated-users-by-role.query';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
-import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
+import { PaginatedListMapper } from '../../../../shared/pagination/application/mappers/paginated-list.mapper';
 import { UserMapper } from '../../mappers/user.mapper';
 import { Logger } from '@nestjs/common';
 

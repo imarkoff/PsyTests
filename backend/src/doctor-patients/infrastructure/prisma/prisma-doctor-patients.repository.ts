@@ -6,9 +6,9 @@ import {
 import { DoctorPatientsRepository } from '../../domain/interfaces/doctor-patients.repository';
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../core/prisma/prisma.service';
-import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
-import { PrismaPaginator } from '../../../shared/pagination/prisma-applier/prisma-paginator.service';
-import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
+import { PaginationParams } from '../../../shared/pagination/domain/types/pagination-params.type';
+import { PrismaPaginator } from '../../../shared/pagination/application/prisma-applier/prisma-paginator.service';
+import { DbPaginated } from '../../../shared/pagination/domain/types/db-paginated.type';
 
 @Injectable()
 export class PrismaDoctorPatientsRepository

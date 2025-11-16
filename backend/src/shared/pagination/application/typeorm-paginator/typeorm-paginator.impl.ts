@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { TypeOrmQuickFilterApplier } from './appliers/typeorm-quick-filter-applier';
 import { TypeOrmFilterApplier } from './appliers/typeorm-filter-applier';
 import { TypeOrmOrderApplier } from './appliers/typeorm-order-applier';
-import { DbPaginated } from '../types/db-paginated.type';
+import { DbPaginated } from '../../domain/types/db-paginated.type';
 import { TypeOrmRelationsApplier } from './appliers/typeorm-relations-applier';
 import { PaginateProps, TypeOrmPaginator } from './typeorm-paginator.abstract';
 

@@ -1,6 +1,6 @@
-import { FilterOperator } from '../enums/filter-operator.enum';
+import { FilterOperator } from '../../domain/enums/filter-operator.enum';
 import { ApiProperty, ApiSchema } from '@nestjs/swagger';
-import { SortDirection } from '../enums/sort-direction.enum';
+import { SortDirection } from '../../domain/enums/sort-direction.enum';
 
 @ApiSchema({
   description:

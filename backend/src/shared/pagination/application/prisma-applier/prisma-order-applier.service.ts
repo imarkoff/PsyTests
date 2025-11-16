@@ -1,4 +1,4 @@
-import { SortedField } from '../types/pagination-params.type';
+import { SortedField } from '../../domain/types/pagination-params.type';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

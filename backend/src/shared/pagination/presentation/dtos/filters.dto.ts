@@ -1,7 +1,7 @@
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
-import { FilterOperator } from '../enums/filter-operator.enum';
+import { FilterOperator } from '../../domain/enums/filter-operator.enum';
 import { FilterField } from './filter-field.dto';
-import { Filters } from '../types/pagination-params.type';
+import { Filters } from '../../domain/types/pagination-params.type';
 
 @ApiExtraModels(FilterField)
 export class FiltersDto<T extends object> implements Filters<T> {

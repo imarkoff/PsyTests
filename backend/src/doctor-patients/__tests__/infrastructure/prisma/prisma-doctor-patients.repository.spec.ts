@@ -1,12 +1,12 @@
 import { PrismaDoctorPatientsRepository } from '../../../infrastructure/prisma/prisma-doctor-patients.repository';
 import { PrismaService } from '../../../../core/prisma/prisma.service';
-import { PrismaPaginator } from '../../../../shared/pagination/prisma-applier/prisma-paginator.service';
+import { PrismaPaginator } from '../../../../shared/pagination/application/prisma-applier/prisma-paginator.service';
 import { Test } from '@nestjs/testing';
-import { DbPaginated } from '../../../../shared/pagination/types/db-paginated.type';
+import { DbPaginated } from '../../../../shared/pagination/domain/types/db-paginated.type';
 import { DoctorPatient } from '../../../domain/entities/doctor-patient.entity';
 import { createDoctorPatientFixture } from '../../fixtures/doctor-patient.fixture';
 import { randomUUID } from 'node:crypto';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
 import useRealTimers = jest.useRealTimers;
 
 describe(PrismaDoctorPatientsRepository.name, () => {

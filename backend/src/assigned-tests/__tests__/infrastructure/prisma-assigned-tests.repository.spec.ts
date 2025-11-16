@@ -1,12 +1,12 @@
 import { PrismaAssignedTestsRepository } from '../../domain/infrastructure/prisma/prisma-assigned-tests.repository';
 import { PrismaService } from '../../../core/prisma/prisma.service';
-import { PrismaPaginator } from '../../../shared/pagination/prisma-applier/prisma-paginator.service';
+import { PrismaPaginator } from '../../../shared/pagination/application/prisma-applier/prisma-paginator.service';
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
 import { createAssignedTestFixture } from '../fixtures/assigned-test.fixture';
-import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../shared/pagination/domain/types/pagination-params.type';
 import { AssignedTest } from '../../domain/entities/assigned-test.entity';
-import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
+import { DbPaginated } from '../../../shared/pagination/domain/types/db-paginated.type';
 
 describe(PrismaAssignedTestsRepository.name, () => {
   let repository: PrismaAssignedTestsRepository;
