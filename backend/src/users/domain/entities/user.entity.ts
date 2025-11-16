@@ -73,7 +73,7 @@ export class User {
   deletedAt: Date | null;
 
   /** User who registered this user, null if self-registered */
-  @Column()
+  @Column({ type: 'uuid', nullable: true })
   @RelationId((user: User) => user.registeredBy)
   registeredById: UUID | null;
 
