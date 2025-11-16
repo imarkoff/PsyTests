@@ -34,7 +34,7 @@ export class TypeOrmPaginatorImpl implements TypeOrmPaginator {
       paginationParams.quickFilters,
     );
     this.filterApplier.applyFilters(queryBuilder, paginationParams.filters);
-    this.relationsApplier.applyRelations(model, queryBuilder, include);
+    this.relationsApplier.applyRelations(queryBuilder, include);
 
     const totalItems = await queryBuilder.getCount();
 

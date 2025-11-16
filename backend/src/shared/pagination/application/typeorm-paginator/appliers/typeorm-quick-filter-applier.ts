@@ -8,7 +8,11 @@ export class TypeOrmQuickFilterApplier {
     queryBuilder: SelectQueryBuilder<TModel>,
     quickFilters: QuickFilters | null,
   ): void {
-    if (!quickFilters || !quickFilters.filters.length) {
+    if (
+      !quickFilters ||
+      !quickFilters.filters.length ||
+      !fieldsToFilter.length
+    ) {
       return;
     }
 
@@ -37,7 +41,9 @@ export class TypeOrmQuickFilterApplier {
     return new Brackets((qb) => {
       const paramValue = `%${filter}%`;
       fieldsToFilter.forEach((field, idx) => {
-        const column = `${queryAlias}.${String(field)}`;
+        const column = field.includes('.')
+          ? field
+          : `${queryAlias}.${String(field)}`;
         const clause = `${column} LIKE :${paramName}`;
         const params = { [paramName]: paramValue };
 
