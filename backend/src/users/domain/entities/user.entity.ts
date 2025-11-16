@@ -69,10 +69,11 @@ export class User {
   lastLoginAt: Date | null;
 
   /** Timestamp when the user was deleted, null if not deleted */
-  @DeleteDateColumn({ type: 'timestamp', name: 'deletedAt', nullable: true })
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
 
   /** User who registered this user, null if self-registered */
+  @Column()
   @RelationId((user: User) => user.registeredBy)
   registeredById: UUID | null;
 
