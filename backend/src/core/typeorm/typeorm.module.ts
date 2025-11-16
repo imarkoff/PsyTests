@@ -1,8 +1,16 @@
 import { Module } from '@nestjs/common';
-import { typeormProvider } from './typeorm.provider';
+import { DataSource } from 'typeorm';
+import { AppDataSource } from './data-source';
 
 @Module({
-  providers: [typeormProvider],
-  exports: [typeormProvider],
+  providers: [
+    {
+      provide: DataSource,
+      useFactory: async () => {
+        return AppDataSource.initialize();
+      },
+    },
+  ],
+  exports: [DataSource],
 })
 export class TypeORMModule {}
