@@ -1,49 +1,38 @@
-import { AssignedTest as PrismaAssignedTest } from 'generated/prisma';
-import { UUID } from 'node:crypto';
+import type { UUID } from 'node:crypto';
 import { User } from '../../../users/domain/entities/user.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  RelationId,
+} from 'typeorm';
 
-export type { PrismaAssignedTest };
-
-export class AssignedTest implements PrismaAssignedTest {
+@Entity()
+export class AssignedTest {
+  @PrimaryGeneratedColumn('uuid')
   id: UUID;
+
+  @Column({ type: 'uuid' })
   testId: UUID;
+
+  @Column()
+  @RelationId((assignedTest: AssignedTest) => assignedTest.assignedToPatient)
   assignedToPatientId: UUID;
+
+  @ManyToOne(() => User, { nullable: true })
   assignedToPatient: User | null;
+
+  @Column()
+  @RelationId((assignedTest: AssignedTest) => assignedTest.assignedByDoctor)
   assignedByDoctorId: UUID;
+
+  @ManyToOne(() => User, { nullable: true })
   assignedByDoctor: User | null;
+
+  @Column({ type: 'timestamp' })
   assignedAt: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
   unassignedAt: Date | null;
-
-  private constructor() {}
-
-  static fromPersistence(persistence: PrismaAssignedTest): AssignedTest {
-    const persistenceWithRelations = persistence as PrismaAssignedTest & {
-      assignedToPatient: User | null;
-      assignedByDoctor: User | null;
-    };
-
-    const assignedTest = new AssignedTest();
-    assignedTest.id = persistenceWithRelations.id as UUID;
-    assignedTest.testId = persistenceWithRelations.testId as UUID;
-    assignedTest.assignedToPatientId =
-      persistenceWithRelations.assignedToPatientId as UUID;
-    assignedTest.assignedToPatient = persistenceWithRelations.assignedToPatient;
-    assignedTest.assignedByDoctorId =
-      persistenceWithRelations.assignedByDoctorId as UUID;
-    assignedTest.assignedByDoctor = persistenceWithRelations.assignedByDoctor;
-    assignedTest.assignedAt = persistenceWithRelations.assignedAt;
-    assignedTest.unassignedAt = persistenceWithRelations.unassignedAt;
-    return assignedTest;
-  }
-
-  toPersistence(): PrismaAssignedTest {
-    return {
-      id: this.id,
-      testId: this.testId,
-      assignedToPatientId: this.assignedToPatientId,
-      assignedByDoctorId: this.assignedByDoctorId,
-      assignedAt: this.assignedAt,
-      unassignedAt: this.unassignedAt,
-    };
-  }
 }
