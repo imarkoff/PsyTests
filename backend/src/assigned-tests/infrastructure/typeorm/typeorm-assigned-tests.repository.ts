@@ -1,11 +1,11 @@
 import { UUID } from 'crypto';
 import { DbPaginated } from 'src/shared/pagination/domain/types/db-paginated.type';
 import { PaginationParams } from 'src/shared/pagination/domain/types/pagination-params.type';
-import { AssignedTest } from '../../entities/assigned-test.entity';
-import { AssignedTestsRepository } from '../../interfaces/assigned-tests.repository';
+import { AssignedTest } from '../../domain/entities/assigned-test.entity';
+import { AssignedTestsRepository } from '../../domain/interfaces/assigned-tests.repository';
 import { Injectable } from '@nestjs/common';
 import { DataSource, IsNull, Repository } from 'typeorm';
-import { TypeOrmPaginator } from '../../../../shared/pagination/application/typeorm-paginator/typeorm-paginator.abstract';
+import { TypeOrmPaginator } from '../../../shared/pagination/application/typeorm-paginator/typeorm-paginator.abstract';
 
 @Injectable()
 export class TypeOrmAssignedTestsRepository implements AssignedTestsRepository {

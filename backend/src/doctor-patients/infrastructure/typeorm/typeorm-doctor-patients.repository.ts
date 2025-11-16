@@ -25,7 +25,7 @@ export class TypeOrmDoctorPatientsRepository
     paginationParams: PaginationParams<DoctorPatient>,
   ): Promise<DbPaginated<DoctorPatient>> {
     return this.paginator.paginate({
-      model: this.repository.target,
+      model: DoctorPatient,
       paginationParams: paginationParams,
       where: {
         doctorId: doctorId,

@@ -1,4 +1,4 @@
-import { TypeOrmAssignedTestsRepository } from '../../domain/infrastructure/typeorm/typeorm-assigned-tests.repository';
+import { TypeOrmAssignedTestsRepository } from '../../infrastructure/typeorm/typeorm-assigned-tests.repository';
 import { AssignedTest } from '../../domain/entities/assigned-test.entity';
 import { DataSource, IsNull, Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';

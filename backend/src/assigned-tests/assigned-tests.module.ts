@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AssignedTestsRepository } from './domain/interfaces/assigned-tests.repository';
-import { TypeOrmAssignedTestsRepository } from './domain/infrastructure/typeorm/typeorm-assigned-tests.repository';
+import { TypeOrmAssignedTestsRepository } from './infrastructure/typeorm/typeorm-assigned-tests.repository';
 import { TypeORMModule } from '../core/typeorm/typeorm.module';
 
 @Module({
@@ -9,7 +9,7 @@ import { TypeORMModule } from '../core/typeorm/typeorm.module';
   providers: [
     {
       provide: AssignedTestsRepository,
-      useValue: TypeOrmAssignedTestsRepository,
+      useClass: TypeOrmAssignedTestsRepository,
     },
   ],
 })

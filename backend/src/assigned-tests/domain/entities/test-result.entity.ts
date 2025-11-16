@@ -14,10 +14,10 @@ export class TestResult {
   id: UUID;
 
   @Column('uuid')
-  testId: string;
+  testId: UUID;
 
   @RelationId((testResult: TestResult) => testResult.completedByPatient)
-  completedByPatientId: string;
+  completedByPatientId: UUID;
 
   @ManyToOne(() => User)
   completedByPatient: User;

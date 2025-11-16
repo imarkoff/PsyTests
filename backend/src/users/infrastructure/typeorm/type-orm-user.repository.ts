@@ -21,7 +21,7 @@ export class TypeOrmUserRepository implements UserRepository {
 
   getUsers(params: PaginationParams<User>): Promise<DbPaginated<User>> {
     return this.paginator.paginate({
-      model: this.repo.target,
+      model: User,
       paginationParams: params,
       filterFields: ['name', 'surname', 'patronymic', 'phone'],
     });
@@ -32,7 +32,7 @@ export class TypeOrmUserRepository implements UserRepository {
     params: PaginationParams<User>,
   ): Promise<DbPaginated<User>> {
     return this.paginator.paginate({
-      model: this.repo.target,
+      model: User,
       paginationParams: params,
       filterFields: ['name', 'surname', 'patronymic', 'phone'],
       where: { role },
