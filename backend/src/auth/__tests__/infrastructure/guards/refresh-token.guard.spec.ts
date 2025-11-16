@@ -1,56 +1,56 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { RefreshTokenGuard } from '../../../infrastructure/guards/refresh-token.guard';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadValidator } from '../../../application/payload-validator/payload-validator.abstract';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { RefreshTokenNotFoundException } from '../../../domain/exceptions/refresh-token-not-found.exception';
 import { TokenPayload } from '../../../domain/types/token-payload.type';
-import { User } from '../../../../users/domain/entities/user.entity';
 import type { Request } from 'express';
 import { randomUUID } from 'node:crypto';
 import { UserRole } from '../../../../shared/enums/user-role.enum';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
+import { JwtConfigGetter } from '../../../../core/config/configs/jwt';
+import { Test } from '@nestjs/testing';
 
 describe('RefreshTokenGuard', () => {
   let guard: RefreshTokenGuard;
-  let mockConfigService: jest.Mocked<ConfigService>;
-  let mockJwtService: jest.Mocked<JwtService>;
-  let mockPayloadValidator: jest.Mocked<PayloadValidator>;
-  let mockContext: jest.Mocked<ExecutionContext>;
-  let mockRequest: Request;
 
-  beforeEach(() => {
-    mockRequest = {
-      cookies: {},
-      user: undefined,
-    } as unknown as Request;
+  const configGetter: Pick<jest.Mocked<JwtConfigGetter>, 'get'> = {
+    get: jest.fn().mockReturnValue({
+      secret: 'test-secret',
+      accessTokenExpiresInMinutes: 15,
+      refreshTokenExpiresInDays: 7,
+    }),
+  };
+  const jwtService: Pick<jest.Mocked<JwtService>, 'verify'> = {
+    verify: jest.fn(),
+  };
+  const payloadValidator: Pick<
+    jest.Mocked<PayloadValidator>,
+    'validatePayload'
+  > = {
+    validatePayload: jest.fn(),
+  };
+  const mockRequest: Request = {
+    cookies: {},
+    user: undefined,
+  } as unknown as Request;
+  const mockContext: jest.Mocked<ExecutionContext> = {
+    switchToHttp: jest
+      .fn()
+      .mockReturnValue({ getRequest: jest.fn().mockReturnValue(mockRequest) }),
+  } as unknown as jest.Mocked<ExecutionContext>;
 
-    const mockHttp = {
-      getRequest: jest.fn().mockReturnValue(mockRequest),
-    };
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        RefreshTokenGuard,
+        { provide: JwtConfigGetter, useValue: configGetter },
+        { provide: JwtService, useValue: jwtService },
+        { provide: PayloadValidator, useValue: payloadValidator },
+      ],
+    }).compile();
 
-    mockContext = {
-      switchToHttp: jest.fn().mockReturnValue(mockHttp),
-    } as unknown as jest.Mocked<ExecutionContext>;
-
-    mockConfigService = {
-      get: jest.fn().mockReturnValue({ secret: 'test-secret' }),
-    } as unknown as jest.Mocked<ConfigService>;
-
-    mockJwtService = {
-      verify: jest.fn(),
-    } as unknown as jest.Mocked<JwtService>;
-
-    mockPayloadValidator = {
-      validatePayload: jest.fn(),
-    } as unknown as jest.Mocked<PayloadValidator>;
-
-    guard = new RefreshTokenGuard(
-      mockConfigService,
-      mockJwtService,
-      mockPayloadValidator,
-    );
+    guard = module.get(RefreshTokenGuard);
   });
 
   it('should be defined', () => {
@@ -62,21 +62,19 @@ describe('RefreshTokenGuard', () => {
       const refreshToken = 'valid-token';
       const uuid = randomUUID();
       const payload: TokenPayload = { sub: uuid, role: UserRole.PATIENT };
-      const user = User.fromPersistence(createUserPersistence({ id: uuid }));
+      const user = createUserFixture({ id: uuid });
 
       mockRequest.cookies.refreshToken = refreshToken;
-      mockJwtService.verify.mockReturnValue(payload);
-      mockPayloadValidator.validatePayload.mockResolvedValue(user);
+      jwtService.verify.mockReturnValue(payload);
+      payloadValidator.validatePayload.mockResolvedValue(user);
 
       const result = await guard.canActivate(mockContext);
 
       expect(result).toBe(true);
-      expect(mockJwtService.verify).toHaveBeenCalledWith(refreshToken, {
+      expect(jwtService.verify).toHaveBeenCalledWith(refreshToken, {
         secret: 'test-secret',
       });
-      expect(mockPayloadValidator.validatePayload).toHaveBeenCalledWith(
-        payload,
-      );
+      expect(payloadValidator.validatePayload).toHaveBeenCalledWith(payload);
       expect(mockRequest.user).toEqual(user);
     });
 
@@ -97,7 +95,7 @@ describe('RefreshTokenGuard', () => {
     it('throws an error if jwtService verification fails', async () => {
       mockRequest.cookies.refreshToken = 'invalid-token';
       const error = new UnauthorizedException('Invalid token');
-      mockJwtService.verify.mockImplementation(() => {
+      jwtService.verify.mockImplementation(() => {
         throw error;
       });
 
@@ -111,9 +109,9 @@ describe('RefreshTokenGuard', () => {
         role: UserRole.PATIENT,
       };
       mockRequest.cookies.refreshToken = refreshToken;
-      mockJwtService.verify.mockReturnValue(payload);
+      jwtService.verify.mockReturnValue(payload);
       const error = new UnauthorizedException('Invalid user');
-      mockPayloadValidator.validatePayload.mockRejectedValue(error);
+      payloadValidator.validatePayload.mockRejectedValue(error);
 
       await expect(guard.canActivate(mockContext)).rejects.toThrow(error);
     });

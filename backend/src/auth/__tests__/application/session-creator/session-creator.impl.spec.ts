@@ -1,17 +1,19 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { CommandBus } from '@nestjs/cqrs';
 import { SessionCreatorImpl } from '../../../application/session-creator/session-creator.impl';
 import { TokenCreator } from '../../../application/token-creator/token-creator.abstract';
 import { UpdateLastLoginCommand } from '../../../../users/application/commands/update-last-login/update-last-login.command';
-import { User } from 'src/users/domain/entities/user.entity';
 import { CreatedSession } from '../../../domain/types/created-session.type';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
 
-describe('SessionCreatorImpl', () => {
+describe(SessionCreatorImpl.name, () => {
   let service: SessionCreatorImpl;
-  let commandBus: jest.Mocked<CommandBus>;
-  let tokenCreator: jest.Mocked<TokenCreator>;
+  const commandBus: Pick<jest.Mocked<CommandBus>, 'execute'> = {
+    execute: jest.fn(),
+  };
+  const tokenCreator: Pick<jest.Mocked<TokenCreator>, 'createTokens'> = {
+    createTokens: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -19,23 +21,21 @@ describe('SessionCreatorImpl', () => {
         SessionCreatorImpl,
         {
           provide: CommandBus,
-          useValue: { execute: jest.fn() },
+          useValue: commandBus,
         },
         {
           provide: TokenCreator,
-          useValue: { createTokens: jest.fn() },
+          useValue: tokenCreator,
         },
       ],
     }).compile();
 
     service = module.get(SessionCreatorImpl);
-    commandBus = module.get(CommandBus);
-    tokenCreator = module.get(TokenCreator);
   });
 
   describe('createSession', () => {
     it('returns created session after updating last login and creating tokens', async () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       const createdSession: CreatedSession = {
         accessToken: 'at',
         accessTokenExpiresIn: new Date(Date.now() + 3600 * 1000),
@@ -55,7 +55,7 @@ describe('SessionCreatorImpl', () => {
     });
 
     it('propagates error when updating last login fails and does not call token creation', async () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       const err = new Error('db error');
       commandBus.execute.mockRejectedValue(err);
 
@@ -67,7 +67,7 @@ describe('SessionCreatorImpl', () => {
     });
 
     it('propagates error when token creation fails after successful last login update', async () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       commandBus.execute.mockResolvedValue(undefined);
       const err = new Error('token error');
       tokenCreator.createTokens.mockRejectedValue(err as never);

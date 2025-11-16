@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { ChangePasswordByAdminHandler } from '../../../application/commands/change-password-by-admin/change-password-by-admin.handler';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { ForbiddenToChangePasswordException } from '../../../domain/exceptions/forbidden-to-change-password.exception';
@@ -7,62 +6,64 @@ import { Test } from '@nestjs/testing';
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';
 import { randomUUID, UUID } from 'node:crypto';
 import { User } from '../../../domain/entities/user.entity';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
 import { UserRole } from '../../../../shared/enums/user-role.enum';
 import { PasswordService } from '../../../../core/auth/password/password.interface';
 import { Buffer } from 'node:buffer';
 import { ChangePasswordByAdminCommand } from '../../../application/commands/change-password-by-admin/change-password-by-admin.command';
+import { createUserFixture } from '../../fixtures/user.fixture';
 
-describe('ChangePasswordByAdminHandler', () => {
+describe(ChangePasswordByAdminHandler.name, () => {
   let handler: ChangePasswordByAdminHandler;
-  let userRepository: jest.Mocked<UserRepository>;
-  let roleValidator: jest.Mocked<RoleValidator>;
-  let passwordService: jest.Mocked<PasswordService>;
+
+  const userRepository: Pick<
+    jest.Mocked<UserRepository>,
+    'getUserById' | 'updateUser'
+  > = {
+    getUserById: jest.fn(),
+    updateUser: jest.fn(),
+  };
+  const roleValidator: Pick<jest.Mocked<RoleValidator>, 'isAdmin'> = {
+    isAdmin: jest
+      .fn()
+      .mockImplementation((role: UserRole) => role === UserRole.ADMIN),
+  };
+  const passwordService: Pick<jest.Mocked<PasswordService>, 'hashPassword'> = {
+    hashPassword: jest.fn(),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         {
           provide: UserRepository,
-          useValue: {
-            getUserById: jest.fn(),
-            updateUser: jest.fn(),
-          },
+          useValue: userRepository,
         },
         {
           provide: RoleValidator,
-          useValue: {
-            isAdmin: jest.fn(),
-          },
+          useValue: roleValidator,
         },
         {
           provide: PasswordService,
-          useValue: {
-            hashPassword: jest.fn(),
-          },
+          useValue: passwordService,
         },
         ChangePasswordByAdminHandler,
       ],
     }).compile();
 
     handler = module.get(ChangePasswordByAdminHandler);
-    userRepository = module.get(UserRepository);
-    roleValidator = module.get(RoleValidator);
-    passwordService = module.get(PasswordService);
   });
 
   it('changes the password when admin and user exist and admin has admin role', async () => {
-    const user = User.fromPersistence(createUserPersistence());
-    const changedBy = User.fromPersistence(
-      createUserPersistence({ role: UserRole.ADMIN }),
-    );
+    const user = createUserFixture();
+    const changedBy = createUserFixture({ role: UserRole.ADMIN });
     const newPassword = 'new-password';
     const hashedNewPassword = Buffer.from('hashed-new-secret');
     userRepository.getUserById.mockImplementation(
       (id: UUID): Promise<User> =>
         id === user.id ? Promise.resolve(user) : Promise.resolve(changedBy),
     );
-    roleValidator.isAdmin.mockReturnValue(true);
     passwordService.hashPassword.mockResolvedValue({
       hash: hashedNewPassword,
       salt: Buffer.from('some-salt'),
@@ -84,7 +85,7 @@ describe('ChangePasswordByAdminHandler', () => {
   it('throws UserNotFoundException when target user does not exist', async () => {
     const userId = randomUUID();
     const newPassword = 'irrelevant';
-    const changedBy = User.fromPersistence(createUserPersistence());
+    const changedBy = createUserFixture({ role: UserRole.ADMIN });
     userRepository.getUserById.mockImplementation((id: UUID) =>
       id === changedBy.id ? Promise.resolve(changedBy) : Promise.resolve(null),
     );
@@ -104,7 +105,7 @@ describe('ChangePasswordByAdminHandler', () => {
   });
 
   it('throws UserNotFoundException when admin (changedBy) does not exist', async () => {
-    const user = User.fromPersistence(createUserPersistence());
+    const user = createUserFixture();
     const changedById = randomUUID();
     const newPassword = 'irrelevant';
     userRepository.getUserById.mockImplementation((id: UUID) =>
@@ -126,13 +127,12 @@ describe('ChangePasswordByAdminHandler', () => {
   });
 
   it('throws ForbiddenToChangePasswordException when changedBy is not an admin', async () => {
-    const user = User.fromPersistence(createUserPersistence());
-    const changedBy = User.fromPersistence(createUserPersistence());
+    const user = createUserFixture();
+    const changedBy = createUserFixture({ role: UserRole.DOCTOR });
     const newPassword = 'new-password';
     userRepository.getUserById.mockImplementation((id: UUID) =>
       id === user.id ? Promise.resolve(user) : Promise.resolve(changedBy),
     );
-    roleValidator.isAdmin.mockReturnValue(false);
 
     await expect(
       handler.execute({

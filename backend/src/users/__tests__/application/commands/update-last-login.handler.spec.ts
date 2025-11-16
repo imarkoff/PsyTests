@@ -1,16 +1,20 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { UpdateLastLoginHandler } from '../../../application/commands/update-last-login/update-last-login.handler';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { Test } from '@nestjs/testing';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { User } from '../../../domain/entities/user.entity';
 import { UpdateLastLoginCommand } from '../../../application/commands/update-last-login/update-last-login.command';
 import { randomUUID } from 'node:crypto';
+import { createUserFixture } from '../../fixtures/user.fixture';
 
 describe(UpdateLastLoginHandler.name, () => {
   let handler: UpdateLastLoginHandler;
-  let userRepository: jest.Mocked<UserRepository>;
+  const userRepository: Pick<
+    jest.Mocked<UserRepository>,
+    'getUserById' | 'updateUser'
+  > = {
+    getUserById: jest.fn(),
+    updateUser: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -18,22 +22,16 @@ describe(UpdateLastLoginHandler.name, () => {
         UpdateLastLoginHandler,
         {
           provide: UserRepository,
-          useValue: {
-            getUserById: jest.fn(),
-            updateUser: jest.fn(),
-          },
+          useValue: userRepository,
         },
       ],
     }).compile();
 
     handler = module.get(UpdateLastLoginHandler);
-    userRepository = module.get(UserRepository);
   });
 
   it('updates last login timestamp when user exists', async () => {
-    const user = User.fromPersistence(
-      createUserPersistence({ lastLoginAt: null }),
-    );
+    const user = createUserFixture({ lastLoginAt: null });
     userRepository.getUserById.mockResolvedValue(user);
 
     await handler.execute({ userId: user.id } as UpdateLastLoginCommand);
@@ -55,9 +53,7 @@ describe(UpdateLastLoginHandler.name, () => {
   });
 
   it('propagates repository error when updateUser fails', async () => {
-    const user = User.fromPersistence(
-      createUserPersistence({ lastLoginAt: null }),
-    );
+    const user = createUserFixture({ lastLoginAt: null });
     userRepository.getUserById.mockResolvedValue(user);
     const repoError = new Error('update-failed');
     userRepository.updateUser.mockRejectedValue(repoError);

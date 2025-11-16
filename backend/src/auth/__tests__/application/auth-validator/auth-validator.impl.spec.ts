@@ -1,41 +1,43 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { QueryBus } from '@nestjs/cqrs';
 import { AuthValidatorImpl } from '../../../application/auth-validator/auth-validator.impl';
 import { GetUserModelByPhoneQuery } from '../../../../users/application/queries/get-user-model-by-phone/get-user-model-by-phone.query';
 import { InvalidLoginDetailsException } from '../../../domain/exceptions/invalid-login-details.exception';
 import { PasswordService } from '../../../../core/auth/password/password.interface';
-import { User } from '../../../../users/domain/entities/user.entity';
 import { Buffer } from 'node:buffer';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
 
-describe('AuthValidatorImpl', () => {
+describe(AuthValidatorImpl.name, () => {
   let service: AuthValidatorImpl;
-  let queryBus: jest.Mocked<QueryBus>;
-  let passwordService: jest.Mocked<PasswordService>;
+
+  const queryBus: Pick<jest.Mocked<QueryBus>, 'execute'> = {
+    execute: jest.fn(),
+  };
+  const passwordService: Pick<
+    jest.Mocked<PasswordService>,
+    'verifyPassword'
+  > = {
+    verifyPassword: jest.fn(),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthValidatorImpl,
         {
           provide: QueryBus,
-          useValue: {
-            execute: jest.fn(),
-          },
+          useValue: queryBus,
         },
         {
           provide: PasswordService,
-          useValue: {
-            verifyPassword: jest.fn(),
-          },
+          useValue: passwordService,
         },
       ],
     }).compile();
 
     service = module.get<AuthValidatorImpl>(AuthValidatorImpl);
-    queryBus = module.get(QueryBus);
-    passwordService = module.get(PasswordService);
   });
 
   describe('validateUser', () => {
@@ -44,13 +46,11 @@ describe('AuthValidatorImpl', () => {
       const password = 'password';
       const passwordHash = Buffer.from('hash');
       const passwordSalt = Buffer.from('salt');
-      const user = User.fromPersistence(
-        createUserPersistence({
-          phone,
-          password: passwordHash,
-          passwordSalt,
-        }),
-      );
+      const user = createUserFixture({
+        phone,
+        password: passwordHash,
+        passwordSalt,
+      });
       queryBus.execute.mockResolvedValue(user);
       passwordService.verifyPassword.mockResolvedValue(true);
 
@@ -83,13 +83,11 @@ describe('AuthValidatorImpl', () => {
       const password = 'wrongpassword';
       const passwordHash = Buffer.from('hash');
       const passwordSalt = Buffer.from('salt');
-      const user = User.fromPersistence(
-        createUserPersistence({
-          phone,
-          password: passwordHash,
-          passwordSalt,
-        }),
-      );
+      const user = createUserFixture({
+        phone,
+        password: passwordHash,
+        passwordSalt,
+      });
       queryBus.execute.mockResolvedValue(user);
       passwordService.verifyPassword.mockResolvedValue(false);
 

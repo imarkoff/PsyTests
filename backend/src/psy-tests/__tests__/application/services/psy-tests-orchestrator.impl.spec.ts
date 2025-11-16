@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { PsyTestsOrchestratorImpl } from '../../../application/services/psy-tests-orchestrator/psy-tests-orchestrator.impl';
 import { QueryBus } from '@nestjs/cqrs';
 import { RoleValidator } from '../../../../core/validations/role-validator/role-validator.interface';
@@ -8,46 +7,45 @@ import { randomUUID } from 'node:crypto';
 import { GetPsyTestByIdQuery } from '../../../application/queries/get-psy-test-by-id/get-psy-test-by-id.query';
 import { createPsyTestDtoFixture } from '../../fixtures/psy-test-dto.fixture';
 import { GetPsyTestByIdWithoutAnswersQuery } from '../../../application/queries/get-psy-test-by-id-without-answers/get-psy-test-by-id-without-answers.query';
-import { User } from '../../../../users/domain/entities/user.entity';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
 import { UserRole } from '../../../../shared/enums/user-role.enum';
 import { PsyTestNotFoundException } from '../../../domain/exceptions/psy-test-not-found.exception';
 import { GetPsyTestImageQuery } from '../../../application/queries/get-psy-test-image/get-psy-test-image.query';
 import { PsyTestImageNotFoundException } from '../../../domain/exceptions/psy-test-image-not-found.exception';
 import { GetPsyTestMarksSystemQuery } from '../../../application/queries/get-psy-test-marks-system/get-psy-test-marks-system.query';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
 
 describe(PsyTestsOrchestratorImpl.name, () => {
   let psyTestsOrchestrator: PsyTestsOrchestratorImpl;
-  let queryBus: jest.Mocked<QueryBus>;
-  let roleValidator: jest.Mocked<RoleValidator>;
+
+  const queryBus: Pick<jest.Mocked<QueryBus>, 'execute'> = {
+    execute: jest.fn(),
+  };
+  const roleValidator: Pick<jest.Mocked<RoleValidator>, 'isDoctorOrAdmin'> = {
+    isDoctorOrAdmin: jest
+      .fn()
+      .mockImplementation(
+        (role: UserRole) => role === UserRole.DOCTOR || role === UserRole.ADMIN,
+      ),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         PsyTestsOrchestratorImpl,
         {
           provide: QueryBus,
-          useValue: {
-            execute: jest.fn(),
-          },
+          useValue: queryBus,
         },
         {
           provide: RoleValidator,
-          useValue: {
-            isDoctorOrAdmin: jest
-              .fn()
-              .mockImplementation(
-                (role: UserRole) =>
-                  role === UserRole.DOCTOR || role === UserRole.ADMIN,
-              ),
-          },
+          useValue: roleValidator,
         },
       ],
     }).compile();
 
     psyTestsOrchestrator = module.get(PsyTestsOrchestratorImpl);
-    queryBus = module.get(QueryBus);
-    roleValidator = module.get(RoleValidator);
   });
 
   describe('getTests', () => {
@@ -64,9 +62,7 @@ describe(PsyTestsOrchestratorImpl.name, () => {
       'should fetch test with full details for %s role',
       async (role) => {
         const mockTest = createPsyTestDtoFixture();
-        const user = User.fromPersistence(
-          createUserPersistence({ role: role }),
-        );
+        const user = createUserFixture({ role: role });
         queryBus.execute.mockResolvedValueOnce(mockTest);
 
         await psyTestsOrchestrator.getTestById(mockTest.id, user);
@@ -81,9 +77,7 @@ describe(PsyTestsOrchestratorImpl.name, () => {
 
     it(`should fetch test without answers for ${UserRole.PATIENT} role`, async () => {
       const mockTest = createPsyTestDtoFixture();
-      const user = User.fromPersistence(
-        createUserPersistence({ role: UserRole.PATIENT }),
-      );
+      const user = createUserFixture({ role: UserRole.PATIENT });
       queryBus.execute.mockResolvedValueOnce(mockTest);
 
       await psyTestsOrchestrator.getTestById(mockTest.id, user);
@@ -99,9 +93,7 @@ describe(PsyTestsOrchestratorImpl.name, () => {
 
     it('should throw PsyTestNotFoundException if test does not exist', async () => {
       const nonExistentTestId = randomUUID();
-      const user = User.fromPersistence(
-        createUserPersistence({ role: UserRole.PATIENT }),
-      );
+      const user = createUserFixture({ role: UserRole.PATIENT });
       queryBus.execute.mockResolvedValueOnce(null);
 
       await expect(

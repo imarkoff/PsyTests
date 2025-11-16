@@ -1,45 +1,45 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { GetPaginatedUsersByRoleHandler } from '../../../application/queries/get-paginated-users-by-role/get-paginated-users-by-role.handler';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { User } from '../../../domain/entities/user.entity';
 import { Test } from '@nestjs/testing';
 import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
 import { DbPaginated } from '../../../../shared/pagination/domain/types/db-paginated.type';
 import { UserRole } from '../../../../shared/enums/user-role.enum';
 import { GetPaginatedUsersByRoleQuery } from '../../../application/queries/get-paginated-users-by-role/get-paginated-users-by-role.query';
+import { createUserFixture } from '../../fixtures/user.fixture';
+
+const paginationParams: PaginationParams<User> = {
+  page: 0,
+  pageSize: 10,
+  sortedFields: [],
+  quickFilters: null,
+  filters: null,
+};
 
 describe(GetPaginatedUsersByRoleHandler.name, () => {
   let handler: GetPaginatedUsersByRoleHandler;
-  let userRepository: jest.Mocked<UserRepository>;
+  const userRepository: Pick<jest.Mocked<UserRepository>, 'getUsersByRole'> = {
+    getUsersByRole: jest.fn(),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         GetPaginatedUsersByRoleHandler,
         {
           provide: UserRepository,
-          useValue: {
-            getUsersByRole: jest.fn(),
-          },
+          useValue: userRepository,
         },
       ],
     }).compile();
     handler = module.get(GetPaginatedUsersByRoleHandler);
-    userRepository = module.get(UserRepository);
   });
 
   it('returns paginated users for a valid role and query with users', async () => {
     const role = UserRole.DOCTOR;
-    const paginationParams: PaginationParams<User> = {
-      page: 1,
-      pageSize: 10,
-      sortedFields: [],
-    };
-    const mockUsers = [
-      User.fromPersistence(createUserPersistence()),
-      User.fromPersistence(createUserPersistence()),
-    ] as User[];
+    const mockUsers = [createUserFixture(), createUserFixture()];
     const paginatedDbUsers: DbPaginated<User> = {
       items: mockUsers,
       totalCount: 2,
@@ -63,11 +63,6 @@ describe(GetPaginatedUsersByRoleHandler.name, () => {
 
   it('returns empty paginated list when no users are found for the role', async () => {
     const role = UserRole.ADMIN;
-    const paginationParams: PaginationParams<User> = {
-      page: 1,
-      pageSize: 10,
-      sortedFields: [],
-    };
     const paginatedDbUsers: DbPaginated<User> = {
       items: [],
       totalCount: 0,
@@ -92,10 +87,7 @@ describe(GetPaginatedUsersByRoleHandler.name, () => {
   it('returns paginated users for a different role, page and page size', async () => {
     const role = 'NURSE' as UserRole;
     const paginationParams = { page: 2, pageSize: 5 };
-    const mockUsers = [
-      User.fromPersistence(createUserPersistence()),
-      User.fromPersistence(createUserPersistence()),
-    ] as User[];
+    const mockUsers = [createUserFixture(), createUserFixture()];
     const paginatedDbUsers = {
       items: mockUsers,
       totalCount: 12,
@@ -121,9 +113,7 @@ describe(GetPaginatedUsersByRoleHandler.name, () => {
   it('returns paginated users when total pages exceed current page for a specific role', async () => {
     const role = UserRole.DOCTOR;
     const paginationParams = { page: 1, pageSize: 10 };
-    const mockUsers = Array.from({ length: 10 }, () =>
-      User.fromPersistence(createUserPersistence()),
-    );
+    const mockUsers = Array.from({ length: 10 }, () => createUserFixture());
     const paginatedDbUsers = {
       items: mockUsers,
       totalCount: 25,

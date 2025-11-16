@@ -4,7 +4,6 @@ import { Test } from '@nestjs/testing';
 import { DoctorPatientOrchestrator } from '../../application/services/doctor-patient-orchestrator/doctor-patient-orchestrator.abstract';
 import { PaginatedList } from '../../../shared/pagination/domain/types/paginated-list.type';
 import { DoctorPatient } from '../../domain/entities/doctor-patient.entity';
-import { createUserPersistence } from '../../../__tests__/fixtures/user.fixture';
 import { UserRole } from '../../../shared/enums/user-role.enum';
 import { User } from '../../../users/domain/entities/user.entity';
 import { QueryPaginationParamsDto } from '../../../shared/pagination/presentation/dtos/query-pagination-params.dto';
@@ -15,13 +14,12 @@ import { PaginationException } from '../../../shared/pagination/domain/exception
 import { randomUUID } from 'node:crypto';
 import { DoctorPatientNotFoundException } from '../../domain/exceptions/doctor-patient-not-found.exception';
 import { createPatientCreateFixture } from '../fixtures/patient-create.fixture';
+import { createUserFixture } from '../../../users/__tests__/fixtures/user.fixture';
 
 describe(DoctorPatientsController.name, () => {
   let controller: DoctorPatientsController;
 
-  const doctor = User.fromPersistence(
-    createUserPersistence({ role: UserRole.DOCTOR }),
-  );
+  const doctor = createUserFixture({ role: UserRole.DOCTOR });
   const queryPaginationParamsDto: QueryPaginationParamsDto = {
     page: 1,
     pageSize: 10,
