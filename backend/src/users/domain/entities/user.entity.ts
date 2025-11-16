@@ -3,6 +3,7 @@ import { UserRole } from '../../../shared/enums/user-role.enum';
 import { UserGender } from '../../../shared/enums/user-gender.enum';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -68,7 +69,7 @@ export class User {
   lastLoginAt: Date | null;
 
   /** Timestamp when the user was deleted, null if not deleted */
-  @Column({ type: 'timestamp', nullable: true })
+  @DeleteDateColumn({ type: 'timestamp', name: 'deletedAt', nullable: true })
   deletedAt: Date | null;
 
   /** User who registered this user, null if self-registered */

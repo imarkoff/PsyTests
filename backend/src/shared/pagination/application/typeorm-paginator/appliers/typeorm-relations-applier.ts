@@ -1,8 +1,12 @@
-import { FindOptionsRelations, SelectQueryBuilder } from 'typeorm';
+import {
+  EntityTarget,
+  FindOptionsRelations,
+  SelectQueryBuilder,
+} from 'typeorm';
 
 export class TypeOrmRelationsApplier {
   applyRelations<TModel extends object>(
-    model: TModel,
+    model: EntityTarget<TModel>,
     queryBuilder: SelectQueryBuilder<TModel>,
     include: FindOptionsRelations<TModel>,
   ): void {

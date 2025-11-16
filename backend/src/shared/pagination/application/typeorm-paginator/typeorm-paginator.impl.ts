@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityTarget } from 'typeorm';
 import { TypeOrmQuickFilterApplier } from './appliers/typeorm-quick-filter-applier';
 import { TypeOrmFilterApplier } from './appliers/typeorm-filter-applier';
 import { TypeOrmOrderApplier } from './appliers/typeorm-order-applier';
@@ -50,10 +50,8 @@ export class TypeOrmPaginatorImpl implements TypeOrmPaginator {
       totalCount: totalItems,
     };
   }
-  private getBuilder<TModel extends object>(model: TModel) {
-    const repository = this.dataSource.getRepository<TModel>(
-      model.constructor.name,
-    );
+  private getBuilder<TModel extends object>(model: EntityTarget<TModel>) {
+    const repository = this.dataSource.getRepository(model);
     const alias =
       repository.metadata.targetName || repository.metadata.name || 't';
     return repository.createQueryBuilder(alias);

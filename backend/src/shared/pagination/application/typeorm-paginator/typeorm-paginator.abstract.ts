@@ -1,5 +1,5 @@
 import { PaginationParams } from '../../domain/types/pagination-params.type';
-import { FindManyOptions, FindOptionsRelations } from 'typeorm';
+import { EntityTarget, FindManyOptions, FindOptionsRelations } from 'typeorm';
 import { DbPaginated } from '../../domain/types/db-paginated.type';
 
 /**
@@ -18,7 +18,7 @@ export abstract class TypeOrmPaginator {
 
 export interface PaginateProps<TModel extends object> {
   /** The model (entity) to paginate. */
-  model: TModel;
+  model: EntityTarget<TModel>;
 
   /** The pagination parameters to apply. */
   paginationParams: PaginationParams<TModel>;
