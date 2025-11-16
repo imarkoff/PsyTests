@@ -1,8 +1,4 @@
 import { Global, Module } from '@nestjs/common';
-import { PrismaPaginator } from './application/prisma-applier/prisma-paginator.service';
-import { PrismaFilterApplier } from './application/prisma-applier/prisma-filter-applier.service';
-import { PrismaOrderApplier } from './application/prisma-applier/prisma-order-applier.service';
-import { PrismaQuickFilterApplier } from './application/prisma-applier/prisma-quick-filter-applier.service';
 import { TypeOrmPaginator } from './application/typeorm-paginator/typeorm-paginator.abstract';
 import { TypeOrmPaginatorImpl } from './application/typeorm-paginator/typeorm-paginator.impl';
 import { TypeOrmQuickFilterApplier } from './application/typeorm-paginator/appliers/typeorm-quick-filter-applier';
@@ -15,10 +11,6 @@ import { TypeORMModule } from '../../core/typeorm/typeorm.module';
 @Module({
   imports: [TypeORMModule],
   providers: [
-    PrismaFilterApplier,
-    PrismaOrderApplier,
-    PrismaQuickFilterApplier,
-    PrismaPaginator,
     {
       provide: TypeOrmPaginator,
       useClass: TypeOrmPaginatorImpl,
@@ -28,6 +20,6 @@ import { TypeORMModule } from '../../core/typeorm/typeorm.module';
     TypeOrmOrderApplier,
     TypeOrmRelationsApplier,
   ],
-  exports: [PrismaPaginator, TypeOrmPaginator],
+  exports: [TypeOrmPaginator],
 })
 export class PaginationModule {}
