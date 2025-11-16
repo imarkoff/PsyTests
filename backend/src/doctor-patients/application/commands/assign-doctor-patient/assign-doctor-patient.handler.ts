@@ -1,6 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AssignDoctorPatientCommand } from './assign-doctor-patient.command';
-import { DoctorPatient } from 'src/doctor-patients/domain/entities/doctor-patient.entity';
 import { DoctorPatientsRepository } from '../../../domain/interfaces/doctor-patients.repository';
 import { DoctorPatientAlreadyExistsException } from '../../../domain/exceptions/doctor-patient-already-exists.exception';
 import { Logger } from '@nestjs/common';
@@ -38,7 +37,10 @@ export class AssignDoctorPatientHandler
       throw new DoctorPatientAlreadyExistsException(doctorId, patientId);
     }
 
-    const newDoctorPatient = DoctorPatient.create(doctorId, patientId);
+    const newDoctorPatient = DoctorPatientMapper.createNewRelation(
+      doctorId,
+      patientId,
+    );
 
     const createdDoctorPatient =
       await this.doctorPatientRepository.createDoctorPatient(newDoctorPatient);

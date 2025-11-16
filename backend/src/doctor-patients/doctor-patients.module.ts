@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { DoctorPatientsRepository } from './domain/interfaces/doctor-patients.repository';
-import { PrismaDoctorPatientsRepository } from './infrastructure/prisma/prisma-doctor-patients.repository';
 import { DoctorPatientsController } from './presentation/doctor-patients.controller';
 import { AssignDoctorPatientHandler } from './application/commands/assign-doctor-patient/assign-doctor-patient.handler';
 import { GetPatientsByDoctorIdHandler } from './application/queries/get-patients-by-doctor-id/get-patients-by-doctor-id.handler';
@@ -17,14 +16,16 @@ import { DoctorPatientRemoverImpl } from './application/services/doctor-patient-
 import { PatientsFinder } from './application/services/patients-finder/patients-finder.abstract';
 import { PatientsFinderImpl } from './application/services/patients-finder/patients-finder.impl';
 import { GetDoctorPatientsByDoctorIdAndPatientIdsHandler } from './application/queries/get-doctor-patients-by-doctor-id-and-patient-ids/get-doctor-patients-by-doctor-id-and-patient-ids.handler';
+import { TypeOrmDoctorPatientsRepository } from './infrastructure/typeorm/typeorm-doctor-patients.repository';
+import { TypeORMModule } from '../core/typeorm/typeorm.module';
 
 @Module({
-  imports: [CqrsModule],
+  imports: [CqrsModule, TypeORMModule],
   controllers: [DoctorPatientsController],
   providers: [
     {
       provide: DoctorPatientsRepository,
-      useClass: PrismaDoctorPatientsRepository,
+      useClass: TypeOrmDoctorPatientsRepository,
     },
     {
       provide: DoctorPatientCreator,

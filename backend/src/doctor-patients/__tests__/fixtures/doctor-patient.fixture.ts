@@ -1,13 +1,10 @@
-import {
-  DoctorPatient,
-  PrismaDoctorPatient,
-} from '../../domain/entities/doctor-patient.entity';
+import { DoctorPatient } from '../../domain/entities/doctor-patient.entity';
 import { randomUUID } from 'node:crypto';
 
 export const createDoctorPatientFixture = (
   overrides?: Partial<DoctorPatient>,
 ): DoctorPatient => {
-  const persistence: PrismaDoctorPatient = {
+  const persistence: DoctorPatient = {
     id: randomUUID(),
     doctorId: randomUUID(),
     doctor: null,
@@ -20,5 +17,7 @@ export const createDoctorPatientFixture = (
     ...overrides,
   };
 
-  return DoctorPatient.fromPersistence(persistence);
+  const doctorPatient = new DoctorPatient();
+  Object.assign(doctorPatient, persistence);
+  return doctorPatient;
 };

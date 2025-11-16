@@ -1,6 +1,7 @@
 import { DoctorPatient } from '../../domain/entities/doctor-patient.entity';
 import { DoctorPatientDto } from '../../presentation/dtos/doctor-patient.dto';
 import { UserMapper } from '../../../users/application/mappers/user.mapper';
+import { randomUUID, UUID } from 'node:crypto';
 
 export class DoctorPatientMapper {
   static toDto(entity: DoctorPatient): DoctorPatientDto {
@@ -15,5 +16,16 @@ export class DoctorPatientMapper {
     dto.needsAttention = entity.needsAttention;
     dto.deletedAt = entity.deletedAt;
     return dto;
+  }
+
+  static createNewRelation(doctorId: UUID, patientId: UUID): DoctorPatient {
+    const entity = new DoctorPatient();
+    entity.id = randomUUID();
+    entity.doctorId = doctorId;
+    entity.patientId = patientId;
+    entity.assignedAt = new Date();
+    entity.unassignedAt = null;
+    entity.needsAttention = false;
+    return entity;
   }
 }
