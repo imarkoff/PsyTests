@@ -1,43 +1,44 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { GetPaginatedUsersHandler } from '../../../application/queries/get-paginated-users/get-paginated-users.handler';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { Test } from '@nestjs/testing';
 import { User } from '../../../domain/entities/user.entity';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
-import { DbPaginated } from '../../../../shared/pagination/types/db-paginated.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
+import { DbPaginated } from '../../../../shared/pagination/domain/types/db-paginated.type';
 import { GetPaginatedUsersQuery } from '../../../application/queries/get-paginated-users/get-paginated-users.query';
+import { createUserFixture } from '../../fixtures/user.fixture';
+
+const paginationParams: PaginationParams<User> = {
+  page: 1,
+  pageSize: 10,
+  sortedFields: [],
+  filters: null,
+  quickFilters: null,
+};
 
 describe(GetPaginatedUsersHandler.name, () => {
   let handler: GetPaginatedUsersHandler;
-  let userRepository: jest.Mocked<UserRepository>;
+
+  const userRepository: Pick<jest.Mocked<UserRepository>, 'getUsers'> = {
+    getUsers: jest.fn(),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         GetPaginatedUsersHandler,
         {
           provide: UserRepository,
-          useValue: {
-            getUsers: jest.fn(),
-          },
+          useValue: userRepository,
         },
       ],
     }).compile();
     handler = module.get(GetPaginatedUsersHandler);
-    userRepository = module.get(UserRepository);
   });
 
   it('returns paginated users for a valid query with users', async () => {
-    const paginationParams: PaginationParams<User> = {
-      page: 1,
-      pageSize: 10,
-      sortedFields: [],
-    };
-    const mockUsers = [
-      User.fromPersistence(createUserPersistence()),
-      User.fromPersistence(createUserPersistence()),
-    ] as User[];
+    const mockUsers = [createUserFixture(), createUserFixture()];
     const paginatedDbUsers: DbPaginated<User> = {
       items: mockUsers,
       totalCount: 2,
@@ -56,11 +57,6 @@ describe(GetPaginatedUsersHandler.name, () => {
   });
 
   it('returns empty paginated list when no users are found', async () => {
-    const paginationParams: PaginationParams<User> = {
-      page: 1,
-      pageSize: 10,
-      sortedFields: [],
-    };
     const paginatedDbUsers: DbPaginated<User> = {
       items: [],
       totalCount: 0,
@@ -80,10 +76,7 @@ describe(GetPaginatedUsersHandler.name, () => {
 
   it('returns paginated users for a different page and page size', async () => {
     const paginationParams = { page: 2, pageSize: 5 };
-    const mockUsers = [
-      User.fromPersistence(createUserPersistence()),
-      User.fromPersistence(createUserPersistence()),
-    ] as User[];
+    const mockUsers = [createUserFixture(), createUserFixture()];
     const paginatedDbUsers = {
       items: mockUsers,
       totalCount: 12,
@@ -104,9 +97,7 @@ describe(GetPaginatedUsersHandler.name, () => {
 
   it('returns paginated users when total pages exceed current page', async () => {
     const paginationParams = { page: 1, pageSize: 10 };
-    const mockUsers = Array.from({ length: 10 }, () =>
-      User.fromPersistence(createUserPersistence()),
-    );
+    const mockUsers = Array.from({ length: 10 }, () => createUserFixture());
     const paginatedDbUsers = {
       items: mockUsers,
       totalCount: 25,

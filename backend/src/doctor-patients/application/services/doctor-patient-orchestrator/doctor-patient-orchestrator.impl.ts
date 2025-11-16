@@ -3,8 +3,8 @@ import { DoctorPatient } from 'src/doctor-patients/domain/entities/doctor-patien
 import { DoctorPatientDto } from 'src/doctor-patients/presentation/dtos/doctor-patient.dto';
 import { PatientCreateDto } from 'src/doctor-patients/presentation/dtos/patient-create.dto';
 import { UserWithDoctorPatientInfoDto } from 'src/doctor-patients/presentation/dtos/user-with-doctor-patient-info.dto';
-import { PaginatedList } from 'src/shared/pagination/types/paginated-list.type';
-import { PaginationParams } from 'src/shared/pagination/types/pagination-params.type';
+import { PaginatedList } from 'src/shared/pagination/domain/types/paginated-list.type';
+import { PaginationParams } from 'src/shared/pagination/domain/types/pagination-params.type';
 import { DoctorPatientOrchestrator } from './doctor-patient-orchestrator.abstract';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';

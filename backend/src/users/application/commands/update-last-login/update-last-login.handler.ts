@@ -28,7 +28,7 @@ export class UpdateLastLoginHandler
       throw new UserNotFoundException(userId);
     }
 
-    user.updateLastLoginAt();
+    user.lastLoginAt = new Date();
     await this.userRepository.updateUser(user);
 
     this.logger.log(

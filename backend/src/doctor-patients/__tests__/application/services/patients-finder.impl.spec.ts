@@ -2,18 +2,18 @@ import { PatientsFinderImpl } from '../../../application/services/patients-finde
 import { QueryBus } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
 import { User } from '../../../../users/domain/entities/user.entity';
 import { UserDto } from '../../../../users/presentation/dtos/user.dto';
-import { PaginatedListMapper } from '../../../../shared/pagination/mappers/paginated-list.mapper';
+import { PaginatedListMapper } from '../../../../shared/pagination/application/mappers/paginated-list.mapper';
 import { UserMapper } from '../../../../users/application/mappers/user.mapper';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
 import { DoctorPatientMapper } from '../../../application/mappers/doctor-patient.mapper';
 import { createDoctorPatientFixture } from '../../fixtures/doctor-patient.fixture';
 import { UserWithDoctorPatientInfoDto } from '../../../presentation/dtos/user-with-doctor-patient-info.dto';
 import { GetPaginatedUsersByRoleQuery } from '../../../../users/application/queries/get-paginated-users-by-role/get-paginated-users-by-role.query';
 import { UserRole } from '../../../../shared/enums/user-role.enum';
 import { GetDoctorPatientsByDoctorIdAndPatientIdsQuery } from '../../../application/queries/get-doctor-patients-by-doctor-id-and-patient-ids/get-doctor-patients-by-doctor-id-and-patient-ids.query';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
 
 const paginationParams: PaginationParams<User> = {
   page: 0,
@@ -51,10 +51,7 @@ describe(PatientsFinderImpl.name, () => {
     const paginatedPatients = PaginatedListMapper.toDto<UserDto, User>(
       paginationParams,
       {
-        items: [
-          User.fromPersistence(createUserPersistence()),
-          User.fromPersistence(createUserPersistence()),
-        ],
+        items: [createUserFixture(), createUserFixture()],
         totalCount: 2,
       },
       (user) => UserMapper.toDto(user),
@@ -138,10 +135,7 @@ describe(PatientsFinderImpl.name, () => {
 
   it('should call GetDoctorPatientsByDoctorIdAndPatientIdsQuery with correct parameters', async () => {
     const doctorId = randomUUID();
-    const patients = [
-      User.fromPersistence(createUserPersistence()),
-      User.fromPersistence(createUserPersistence()),
-    ];
+    const patients = [createUserFixture(), createUserFixture()];
     const paginatedPatients = PaginatedListMapper.toDto<UserDto, User>(
       paginationParams,
       {

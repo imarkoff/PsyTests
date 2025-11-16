@@ -1,7 +1,7 @@
 import { UUID } from 'node:crypto';
-import { PaginationParams } from '../../../../shared/pagination/types/pagination-params.type';
+import { PaginationParams } from '../../../../shared/pagination/domain/types/pagination-params.type';
 import { DoctorPatient } from '../../../domain/entities/doctor-patient.entity';
-import { PaginatedList } from '../../../../shared/pagination/types/paginated-list.type';
+import { PaginatedList } from '../../../../shared/pagination/domain/types/paginated-list.type';
 import { DoctorPatientDto } from '../../../presentation/dtos/doctor-patient.dto';
 import { PatientCreateDto } from '../../../presentation/dtos/patient-create.dto';
 import { UserWithDoctorPatientInfoDto } from '../../../presentation/dtos/user-with-doctor-patient-info.dto';

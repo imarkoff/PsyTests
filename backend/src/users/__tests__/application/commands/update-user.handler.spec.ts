@@ -1,41 +1,43 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { UpdateLastLoginHandler } from '../../../application/commands/update-last-login/update-last-login.handler';
 import { PhoneIsAlreadyTakenException } from '../../../domain/exceptions/phone-is-already-taken.exception';
 import { UpdateUserHandler } from '../../../application/commands/update-user/update-user.handler';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { Test } from '@nestjs/testing';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { User } from '../../../domain/entities/user.entity';
 import { createUserUpdateDtoFixture } from '../../fixtures/user-update-dto.fixture';
 import { UpdateUserCommand } from '../../../application/commands/update-user/update-user.command';
 import { randomUUID } from 'node:crypto';
+import { createUserFixture } from '../../fixtures/user.fixture';
 
 describe(UpdateLastLoginHandler.name, () => {
   let handler: UpdateUserHandler;
-  let userRepository: jest.Mocked<UserRepository>;
+  const userRepository: Pick<
+    jest.Mocked<UserRepository>,
+    'getUserById' | 'getUserByPhone' | 'updateUser'
+  > = {
+    getUserById: jest.fn(),
+    getUserByPhone: jest.fn(),
+    updateUser: jest.fn(),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         UpdateUserHandler,
         {
           provide: UserRepository,
-          useValue: {
-            getUserById: jest.fn(),
-            getUserByPhone: jest.fn(),
-            updateUser: jest.fn(),
-          },
+          useValue: userRepository,
         },
       ],
     }).compile();
 
     handler = module.get(UpdateUserHandler);
-    userRepository = module.get(UserRepository);
   });
 
   it('updates user when phone is unchanged and user exists', async () => {
-    const user = User.fromPersistence(createUserPersistence());
+    const user = createUserFixture();
     const updateData = createUserUpdateDtoFixture({
       phone: user.phone,
     });
@@ -55,7 +57,7 @@ describe(UpdateLastLoginHandler.name, () => {
   });
 
   it('updates user when phone is changed and new phone is unique', async () => {
-    const user = User.fromPersistence(createUserPersistence());
+    const user = createUserFixture();
     const updateData = createUserUpdateDtoFixture();
     userRepository.getUserById.mockResolvedValue(user);
 
@@ -76,6 +78,7 @@ describe(UpdateLastLoginHandler.name, () => {
   it('throws UserNotFoundException when user does not exist', async () => {
     const userId = randomUUID();
     const updateData = createUserUpdateDtoFixture();
+    userRepository.getUserById.mockResolvedValue(null);
 
     await expect(
       handler.execute({ userId, updateData } as UpdateUserCommand),
@@ -87,11 +90,9 @@ describe(UpdateLastLoginHandler.name, () => {
   });
 
   it('throws PhoneIsAlreadyTakenException when new phone belongs to another user', async () => {
-    const user = User.fromPersistence(createUserPersistence());
+    const user = createUserFixture();
     const takenPhone = '+44444444444';
-    const userWithTakenPhone = User.fromPersistence(
-      createUserPersistence({ phone: takenPhone }),
-    );
+    const userWithTakenPhone = createUserFixture({ phone: takenPhone });
     const updateData = createUserUpdateDtoFixture({ phone: takenPhone });
     userRepository.getUserById.mockResolvedValue(user);
     userRepository.getUserByPhone.mockResolvedValue(userWithTakenPhone);

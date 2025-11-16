@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { UsersController } from '../../presentation/users.controller';
 import { UsersOrchestrator } from '../../application/services/users-orchestrator/users-orchestrator.abstract';
 import { Test } from '@nestjs/testing';
-import { createUserPersistence } from '../../../__tests__/fixtures/user.fixture';
-import { User } from '../../domain/entities/user.entity';
 import { UserMapper } from '../../application/mappers/user.mapper';
 import { randomUUID } from 'node:crypto';
 import { UserNotFoundException } from '../../domain/exceptions/user-not-found.exception';
+import { createUserFixture } from '../fixtures/user.fixture';
 
 describe(UsersController.name, () => {
   let controller: UsersController;
-  let usersOrchestrator: jest.Mocked<UsersOrchestrator>;
+  const usersOrchestrator: Omit<jest.Mocked<UsersOrchestrator>, ''> = {
+    getUserById: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -18,19 +18,16 @@ describe(UsersController.name, () => {
       providers: [
         {
           provide: UsersOrchestrator,
-          useValue: {
-            getUserById: jest.fn(),
-          },
+          useValue: usersOrchestrator,
         },
       ],
     }).compile();
     controller = module.get(UsersController);
-    usersOrchestrator = module.get(UsersOrchestrator);
   });
 
   describe(UsersController.prototype.getCurrentUser.name, () => {
     it('returns user dto for authenticated user', () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       const expectedDto = UserMapper.toDto(user);
 
       const result = controller.getCurrentUser(user);
@@ -41,9 +38,7 @@ describe(UsersController.name, () => {
 
   describe('getUserById', () => {
     it('returns user when user is found by id', async () => {
-      const mockUser = UserMapper.toDto(
-        User.fromPersistence(createUserPersistence()),
-      );
+      const mockUser = UserMapper.toDto(createUserFixture());
       usersOrchestrator.getUserById.mockResolvedValue(mockUser);
 
       const result = await controller.getUserById(mockUser.id);

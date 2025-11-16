@@ -24,9 +24,9 @@ import {
 } from '@nestjs/swagger';
 import { PatientCreateDto } from './dtos/patient-create.dto';
 import { DoctorPatientOrchestrator } from '../application/services/doctor-patient-orchestrator/doctor-patient-orchestrator.abstract';
-import { QueryPaginationParamsDto } from '../../shared/pagination/dtos/query-pagination-params.dto';
-import { PaginationParamsMapper } from '../../shared/pagination/mappers/pagination-params.mapper';
-import { createPaginatedListDto } from '../../shared/pagination/dtos/paginated-list.dto';
+import { QueryPaginationParamsDto } from '../../shared/pagination/presentation/dtos/query-pagination-params.dto';
+import { PaginationParamsMapper } from '../../shared/pagination/application/mappers/pagination-params.mapper';
+import { createPaginatedListDto } from '../../shared/pagination/presentation/dtos/paginated-list.dto';
 import { UserWithDoctorPatientInfoDto } from './dtos/user-with-doctor-patient-info.dto';
 import { DoctorPatientDto } from './dtos/doctor-patient.dto';
 

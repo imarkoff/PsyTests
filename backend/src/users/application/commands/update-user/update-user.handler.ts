@@ -33,7 +33,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
 
     await this.checkCanUpdatePhone(user.phone, updateData.phone);
 
-    user.applyChanges(updateData);
+    UserMapper.applyUpdates(user, updateData);
     await this.userRepository.updateUser(user);
 
     this.logger.log(`User with ID ${userId} successfully updated.`);

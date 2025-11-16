@@ -52,7 +52,11 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       userCreateDto.password,
     );
 
-    const user = User.create(userCreateDto, hashedPassword, registeredById);
+    const user = UserMapper.fromCreateDto(
+      userCreateDto,
+      hashedPassword,
+      registeredById,
+    );
     const createdUser = await this.userRepository.createUser(user);
 
     this.logger.log(`User created with ID: ${createdUser.id}`);

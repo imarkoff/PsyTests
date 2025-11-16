@@ -1,51 +1,49 @@
 import { JwtService } from '@nestjs/jwt';
 import { TokenCreatorImpl } from '../../../application/token-creator/token-creator.impl';
-import { User } from '../../../../users/domain/entities/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
 import { JwtConfigGetter } from '../../../../core/config/configs/jwt';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
 
 describe(TokenCreatorImpl.name, () => {
-  jest.useFakeTimers().setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
-
-  let jwtService: JwtService;
-  let jwtConfigGetter: JwtConfigGetter;
   let tokenCreator: TokenCreatorImpl;
+  const jwtService: Pick<jest.Mocked<JwtService>, 'sign'> = {
+    sign: jest
+      .fn()
+      .mockImplementationOnce(() => 'access-jwt')
+      .mockImplementationOnce(() => 'refresh-jwt'),
+  };
+  const jwtConfigGetter: Pick<jest.Mocked<JwtConfigGetter>, 'get'> = {
+    get: jest.fn().mockReturnValueOnce({
+      secret: 'secret',
+      accessTokenExpiresInMinutes: 60,
+      refreshTokenExpiresInDays: 7,
+    }),
+  };
 
   beforeEach(async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TokenCreatorImpl,
         {
           provide: JwtService,
-          useValue: {
-            sign: jest
-              .fn()
-              .mockImplementationOnce(() => 'access-jwt')
-              .mockImplementationOnce(() => 'refresh-jwt'),
-          },
+          useValue: jwtService,
         },
         {
           provide: JwtConfigGetter,
-          useValue: {
-            get: jest.fn().mockReturnValue({
-              secret: 'secret',
-              accessTokenExpiresInMinutes: 60,
-              refreshTokenExpiresInDays: 7,
-            }),
-          },
+          useValue: jwtConfigGetter,
         },
       ],
     }).compile();
 
-    jwtService = module.get(JwtService);
-    jwtConfigGetter = module.get(JwtConfigGetter);
     tokenCreator = module.get(TokenCreatorImpl);
   });
 
   describe('createTokens', () => {
     it('creates access and refresh tokens with correct values and expiration offsets based on config', () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       const expectedAccessExpiry = new Date('2020-01-01T00:00:00.000Z');
       const expectedRefreshExpiry = new Date('2020-01-01T00:00:00.000Z');
 
@@ -64,15 +62,18 @@ describe(TokenCreatorImpl.name, () => {
     });
 
     it('returns expirations equal to now when configured expirations are zero', () => {
-      const user = User.fromPersistence(createUserPersistence());
-      jwtConfigGetter.get = jest.fn().mockReturnValue({
+      const user = createUserFixture();
+      jwtConfigGetter.get.mockReturnValue({
         secret: 's',
         accessTokenExpiresInMinutes: 0,
         refreshTokenExpiresInDays: 0,
       });
-      tokenCreator = new TokenCreatorImpl(jwtService, jwtConfigGetter);
+      const tokenCreatorWithZeroExpiry = new TokenCreatorImpl(
+        jwtService as unknown as JwtService,
+        jwtConfigGetter as unknown as JwtConfigGetter,
+      );
 
-      const result = tokenCreator.createTokens(user);
+      const result = tokenCreatorWithZeroExpiry.createTokens(user);
 
       const now = new Date();
       expect(result.accessTokenExpiresIn.getTime()).toBe(now.getTime());
@@ -80,12 +81,13 @@ describe(TokenCreatorImpl.name, () => {
     });
 
     it('propagates errors thrown by JwtService.sign during token creation', () => {
-      jwtService.sign = jest.fn().mockImplementation(() => {
-        throw new Error('sign failure');
+      const error = new Error('sign failure');
+      jwtService.sign.mockImplementation(() => {
+        throw error;
       });
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
 
-      expect(() => tokenCreator.createTokens(user)).toThrow('sign failure');
+      expect(() => tokenCreator.createTokens(user)).toThrow(error);
     });
   });
 });

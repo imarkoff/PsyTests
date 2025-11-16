@@ -1,1 +1,5 @@
-export { UserRole } from 'generated/prisma';
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  DOCTOR = 'DOCTOR',
+  PATIENT = 'PATIENT',
+}

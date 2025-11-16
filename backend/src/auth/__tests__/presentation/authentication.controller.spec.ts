@@ -3,27 +3,27 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthenticationController } from '../../presentation/authentication.controller';
 import { SessionCreator } from '../../application/session-creator/session-creator.abstract';
 import { RefreshTokenCookieSetter } from '../../application/refresh-token-cookie-setter/refresh-token-cookie-setter.abstract';
-import { User } from '../../../users/domain/entities/user.entity';
 import type { Response } from 'express';
-import { createUserPersistence } from '../../../__tests__/fixtures/user.fixture';
 import { LocalAuthGuard } from '../../infrastructure/guards/local-auth.guard';
 import { RefreshTokenGuard } from '../../infrastructure/guards/refresh-token.guard';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../../../core/decorators/public.decorator';
 import { SetRefreshTokenInterceptor } from '../../infrastructure/interceptors/set-refresh-token.interceptor';
 import { RequestMethod } from '@nestjs/common';
+import { createUserFixture } from '../../../users/__tests__/fixtures/user.fixture';
 
 describe('AuthenticationController', () => {
   let controller: AuthenticationController;
-  let sessionCreator: SessionCreator;
-  let refreshTokenSetter: RefreshTokenCookieSetter;
   let reflector: Reflector;
 
-  const mockSessionCreator = {
+  const sessionCreator: Pick<jest.Mocked<SessionCreator>, 'createSession'> = {
     createSession: jest.fn(),
   };
 
-  const mockRefreshTokenSetter = {
+  const refreshTokenSetter: Pick<
+    jest.Mocked<RefreshTokenCookieSetter>,
+    'clearRefreshTokenCookie'
+  > = {
     clearRefreshTokenCookie: jest.fn(),
   };
 
@@ -33,11 +33,11 @@ describe('AuthenticationController', () => {
       providers: [
         {
           provide: SessionCreator,
-          useValue: mockSessionCreator,
+          useValue: sessionCreator,
         },
         {
           provide: RefreshTokenCookieSetter,
-          useValue: mockRefreshTokenSetter,
+          useValue: refreshTokenSetter,
         },
         Reflector,
       ],
@@ -48,12 +48,8 @@ describe('AuthenticationController', () => {
       .useValue({ canActivate: () => true })
       .compile();
 
-    controller = module.get<AuthenticationController>(AuthenticationController);
-    sessionCreator = module.get<SessionCreator>(SessionCreator);
-    refreshTokenSetter = module.get<RefreshTokenCookieSetter>(
-      RefreshTokenCookieSetter,
-    );
-    reflector = module.get<Reflector>(Reflector);
+    controller = module.get(AuthenticationController);
+    reflector = module.get(Reflector);
   });
 
   afterEach(() => {
@@ -66,7 +62,7 @@ describe('AuthenticationController', () => {
 
   describe('login', () => {
     it('should create a session for the authenticated user', async () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       const session = { accessToken: 'some-access-token' };
       (sessionCreator.createSession as jest.Mock).mockResolvedValue(session);
 
@@ -99,7 +95,7 @@ describe('AuthenticationController', () => {
 
   describe('refreshToken', () => {
     it('should create a new session for the user from the refresh token', async () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       const newSession = { accessToken: 'new-access-token' };
       (sessionCreator.createSession as jest.Mock).mockResolvedValue(newSession);
 

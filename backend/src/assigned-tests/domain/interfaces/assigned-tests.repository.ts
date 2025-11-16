@@ -1,7 +1,7 @@
 import { UUID } from 'node:crypto';
 import { AssignedTest } from '../entities/assigned-test.entity';
-import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
-import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
+import { PaginationParams } from '../../../shared/pagination/domain/types/pagination-params.type';
+import { DbPaginated } from '../../../shared/pagination/domain/types/db-paginated.type';
 
 export abstract class AssignedTestsRepository {
   abstract getById(assignedTestId: UUID): Promise<AssignedTest | null>;

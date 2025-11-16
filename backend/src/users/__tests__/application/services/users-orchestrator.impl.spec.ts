@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { UsersOrchestratorImpl } from '../../../application/services/users-orchestrator/users-orchestrator.impl';
 import { QueryBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { User } from '../../../domain/entities/user.entity';
 import { GetUserByIdQuery } from '../../../application/queries/get-user-by-id/get-user-by-id.query';
 import { UserNotFoundException } from '../../../domain/exceptions/user-not-found.exception';
 import { randomUUID } from 'node:crypto';
+import { createUserFixture } from '../../fixtures/user.fixture';
 
 describe(UsersOrchestratorImpl.name, () => {
   let orchestrator: UsersOrchestratorImpl;
-  let queryBus: jest.Mocked<QueryBus>;
+  const queryBus: Pick<jest.Mocked<QueryBus>, 'execute'> = {
+    execute: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,20 +18,17 @@ describe(UsersOrchestratorImpl.name, () => {
         UsersOrchestratorImpl,
         {
           provide: QueryBus,
-          useValue: {
-            execute: jest.fn(),
-          },
+          useValue: queryBus,
         },
       ],
     }).compile();
 
     orchestrator = module.get(UsersOrchestratorImpl);
-    queryBus = module.get(QueryBus);
   });
 
   describe(UsersOrchestratorImpl.prototype.getUserById.name, () => {
     it('returns user when user is found', async () => {
-      const user = User.fromPersistence(createUserPersistence());
+      const user = createUserFixture();
       queryBus.execute.mockResolvedValue(user);
 
       const result = await orchestrator.getUserById(user.id);

@@ -6,20 +6,18 @@ import { lookup as mimeLookup } from 'mime-types';
 import { PsyTestsController } from '../../presentation/psy-tests.controller';
 import { PsyTestsOrchestrator } from '../../application/services/psy-tests-orchestrator/psy-tests-orchestrator.abstract';
 import { createPsyTestDtoFixture } from '../fixtures/psy-test-dto.fixture';
-import { createUserPersistence } from '../../../__tests__/fixtures/user.fixture';
-import { User } from '../../../users/domain/entities/user.entity';
 import { UserRole } from '../../../shared/enums/user-role.enum';
 import { PsyTestNotFoundException } from '../../domain/exceptions/psy-test-not-found.exception';
 import { PsyTestImageNotFoundException } from '../../domain/exceptions/psy-test-image-not-found.exception';
+import { createUserFixture } from '../../../users/__tests__/fixtures/user.fixture';
 jest.mock('mime-types', () => ({
   lookup: jest.fn(),
 }));
 
 describe('PsyTestsController', () => {
   let controller: PsyTestsController;
-  let orchestrator: jest.Mocked<PsyTestsOrchestrator>;
 
-  const mockOrchestrator = {
+  const orchestrator: jest.Mocked<PsyTestsOrchestrator> = {
     getTests: jest.fn(),
     getTestById: jest.fn(),
     getTestImage: jest.fn(),
@@ -32,13 +30,12 @@ describe('PsyTestsController', () => {
       providers: [
         {
           provide: PsyTestsOrchestrator,
-          useValue: mockOrchestrator,
+          useValue: orchestrator,
         },
       ],
     }).compile();
 
     controller = module.get<PsyTestsController>(PsyTestsController);
-    orchestrator = module.get(PsyTestsOrchestrator);
   });
 
   afterEach(() => {
@@ -60,9 +57,7 @@ describe('PsyTestsController', () => {
   describe('getTestById', () => {
     it('should call orchestrator with correct params and return a test', async () => {
       const testId: UUID = randomUUID();
-      const user = User.fromPersistence(
-        createUserPersistence({ role: UserRole.PATIENT }),
-      );
+      const user = createUserFixture({ role: UserRole.PATIENT });
       const test = createPsyTestDtoFixture();
       orchestrator.getTestById.mockResolvedValue(test);
 
@@ -74,9 +69,7 @@ describe('PsyTestsController', () => {
 
     it('should propagate error from orchestrator', async () => {
       const testId: UUID = randomUUID();
-      const user = User.fromPersistence(
-        createUserPersistence({ role: UserRole.PATIENT }),
-      );
+      const user = createUserFixture({ role: UserRole.PATIENT });
       const error = new PsyTestNotFoundException(testId);
       orchestrator.getTestById.mockRejectedValue(error);
 

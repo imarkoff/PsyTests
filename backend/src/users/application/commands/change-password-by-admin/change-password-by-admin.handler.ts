@@ -60,7 +60,8 @@ export class ChangePasswordByAdminHandler
 
     const hashedPassword = await this.passwordService.hashPassword(newPassword);
 
-    user.changePassword(hashedPassword);
+    user.password = hashedPassword.hash;
+    user.passwordSalt = hashedPassword.salt;
     await this.userRepository.updateUser(user);
 
     this.logger.debug(

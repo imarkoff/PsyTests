@@ -1,1 +1,4 @@
-export { Gender as UserGender } from 'generated/prisma';
+export enum UserGender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}

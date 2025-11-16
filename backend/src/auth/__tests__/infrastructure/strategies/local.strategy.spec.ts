@@ -1,16 +1,13 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { LocalStrategy } from '../../../infrastructure/strategies/local.strategy';
 import { AuthValidator } from '../../../application/auth-validator/auth-validator.abstract';
-import { User } from '../../../../users/domain/entities/user.entity';
 import { UnauthorizedException } from '@nestjs/common';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
 
 describe('LocalStrategy', () => {
   let strategy: LocalStrategy;
-  let authValidator: AuthValidator;
 
-  const mockAuthValidator = {
+  const authValidator: Pick<jest.Mocked<AuthValidator>, 'validateUser'> = {
     validateUser: jest.fn(),
   };
 
@@ -20,13 +17,12 @@ describe('LocalStrategy', () => {
         LocalStrategy,
         {
           provide: AuthValidator,
-          useValue: mockAuthValidator,
+          useValue: authValidator,
         },
       ],
     }).compile();
 
     strategy = module.get<LocalStrategy>(LocalStrategy);
-    authValidator = module.get<AuthValidator>(AuthValidator);
   });
 
   afterEach(() => {
@@ -41,7 +37,7 @@ describe('LocalStrategy', () => {
     it('should return a user when credentials are valid', async () => {
       const phoneNumber = '+1234567890';
       const password = 'password';
-      const expectedUser = User.fromPersistence(createUserPersistence());
+      const expectedUser = createUserFixture();
       (authValidator.validateUser as jest.Mock).mockResolvedValue(expectedUser);
 
       const result = await strategy.validate(phoneNumber, password);

@@ -1,13 +1,10 @@
-import {
-  AssignedTest,
-  PrismaAssignedTest,
-} from '../../domain/entities/assigned-test.entity';
+import { AssignedTest } from '../../domain/entities/assigned-test.entity';
 import { randomUUID } from 'node:crypto';
 
 export const createAssignedTestFixture = (
   overrides?: Partial<AssignedTest>,
 ): AssignedTest => {
-  const persistence: PrismaAssignedTest = {
+  const persistence: Partial<AssignedTest> = {
     id: randomUUID(),
     testId: randomUUID(),
     assignedToPatientId: randomUUID(),
@@ -17,5 +14,7 @@ export const createAssignedTestFixture = (
     ...overrides,
   };
 
-  return AssignedTest.fromPersistence(persistence);
+  const assignedTest = new AssignedTest();
+  Object.assign(assignedTest, persistence);
+  return assignedTest;
 };

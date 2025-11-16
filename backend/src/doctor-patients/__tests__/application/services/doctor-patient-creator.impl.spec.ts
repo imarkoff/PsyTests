@@ -4,13 +4,11 @@ import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
 import { createPatientCreateFixture } from '../../fixtures/patient-create.fixture';
 import { UserMapper } from '../../../../users/application/mappers/user.mapper';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { User } from '../../../../users/domain/entities/user.entity';
-import { DoctorPatient } from '../../../domain/entities/doctor-patient.entity';
 import { DoctorPatientMapper } from '../../../application/mappers/doctor-patient.mapper';
 import { PhoneIsAlreadyTakenException } from '../../../../users/domain/exceptions/phone-is-already-taken.exception';
 import { CreateUserCommand } from '../../../../users/application/commands/create-user/create-user.command';
 import { AssignDoctorPatientCommand } from '../../../application/commands/assign-doctor-patient/assign-doctor-patient.command';
+import { createUserFixture } from '../../../../users/__tests__/fixtures/user.fixture';
 
 describe(DoctorPatientCreatorImpl.name, () => {
   let service: DoctorPatientCreatorImpl;
@@ -39,10 +37,10 @@ describe(DoctorPatientCreatorImpl.name, () => {
     const doctorId = randomUUID();
     const patientCreateDto = createPatientCreateFixture();
     const createdUser = UserMapper.toDto(
-      User.fromPersistence(createUserPersistence({ registeredById: doctorId })),
+      createUserFixture({ registeredById: doctorId }),
     );
     const expectedDoctorPatientDto = DoctorPatientMapper.toDto(
-      DoctorPatient.create(doctorId, createdUser.id),
+      DoctorPatientMapper.createNewRelation(doctorId, createdUser.id),
     );
     commandBus.execute
       .mockResolvedValueOnce(createdUser)
@@ -89,7 +87,7 @@ describe(DoctorPatientCreatorImpl.name, () => {
     const doctorId = randomUUID();
     const patientCreateDto = createPatientCreateFixture();
     const createdUser = UserMapper.toDto(
-      User.fromPersistence(createUserPersistence({ registeredById: doctorId })),
+      createUserFixture({ registeredById: doctorId }),
     );
     commandBus.execute
       .mockResolvedValueOnce(createdUser)

@@ -1,35 +1,34 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { Test } from '@nestjs/testing';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { User } from '../../../domain/entities/user.entity';
 import { UserMapper } from '../../../application/mappers/user.mapper';
 import { GetUserByPhoneHandler } from '../../../application/queries/get-user-by-phone/get-user-by-phone.handler';
 import { GetUserByPhoneQuery } from '../../../application/queries/get-user-by-phone/get-user-by-phone.query';
+import { createUserFixture } from '../../fixtures/user.fixture';
 
 describe(GetUserByPhoneHandler.name, () => {
   let handler: GetUserByPhoneHandler;
-  let userRepository: jest.Mocked<UserRepository>;
+  const userRepository: Pick<jest.Mocked<UserRepository>, 'getUserByPhone'> = {
+    getUserByPhone: jest.fn(),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         GetUserByPhoneHandler,
         {
           provide: UserRepository,
-          useValue: {
-            getUserByPhone: jest.fn(),
-          },
+          useValue: userRepository,
         },
       ],
     }).compile();
 
     handler = module.get(GetUserByPhoneHandler);
-    userRepository = module.get(UserRepository);
   });
 
   it('returns user dto when user is found', async () => {
-    const mockUser = User.fromPersistence(createUserPersistence());
+    const mockUser = createUserFixture();
     userRepository.getUserByPhone.mockResolvedValue(mockUser);
 
     const result = await handler.execute({
@@ -42,6 +41,7 @@ describe(GetUserByPhoneHandler.name, () => {
 
   it('returns null when user is not found', async () => {
     const phoneNumber = '+1234567890';
+    userRepository.getUserByPhone.mockResolvedValue(null);
 
     const result = await handler.execute({
       phoneNumber,

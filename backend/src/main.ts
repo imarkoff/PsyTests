@@ -8,6 +8,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ControllerLoggerInterceptor } from './core/interceptors/controller-logger.interceptor';
 import { AppConfigGetter } from './core/config/configs/app';
 import { useContainer } from 'class-validator';
+import 'reflect-metadata';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

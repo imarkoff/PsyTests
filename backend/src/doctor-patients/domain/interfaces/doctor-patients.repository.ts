@@ -1,7 +1,7 @@
 import { UUID } from 'node:crypto';
 import { DoctorPatient } from '../entities/doctor-patient.entity';
-import { DbPaginated } from '../../../shared/pagination/types/db-paginated.type';
-import { PaginationParams } from '../../../shared/pagination/types/pagination-params.type';
+import { DbPaginated } from '../../../shared/pagination/domain/types/db-paginated.type';
+import { PaginationParams } from '../../../shared/pagination/domain/types/pagination-params.type';
 
 export abstract class DoctorPatientsRepository {
   /**

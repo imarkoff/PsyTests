@@ -1,35 +1,34 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { UserRepository } from '../../../domain/interfaces/user.repository.interface';
 import { Test } from '@nestjs/testing';
-import { createUserPersistence } from '../../../../__tests__/fixtures/user.fixture';
-import { User } from '../../../domain/entities/user.entity';
 import { randomUUID } from 'node:crypto';
 import { GetUserModelByIdHandler } from '../../../application/queries/get-user-model-by-id/get-user-model-by-id.handler';
 import { GetUserModelByIdQuery } from '../../../application/queries/get-user-model-by-id/get-user-model-by-id.query';
+import { createUserFixture } from '../../fixtures/user.fixture';
 
 describe(GetUserModelByIdHandler.name, () => {
   let handler: GetUserModelByIdHandler;
-  let userRepository: jest.Mocked<UserRepository>;
+  const userRepository: Pick<jest.Mocked<UserRepository>, 'getUserById'> = {
+    getUserById: jest.fn(),
+  };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         GetUserModelByIdHandler,
         {
           provide: UserRepository,
-          useValue: {
-            getUserById: jest.fn(),
-          },
+          useValue: userRepository,
         },
       ],
     }).compile();
 
     handler = module.get(GetUserModelByIdHandler);
-    userRepository = module.get(UserRepository);
   });
 
   it('returns user dto when user is found', async () => {
-    const mockUser = User.fromPersistence(createUserPersistence());
+    const mockUser = createUserFixture();
     userRepository.getUserById.mockResolvedValue(mockUser);
 
     const result = await handler.execute({
