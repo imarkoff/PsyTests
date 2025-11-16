@@ -41,6 +41,7 @@ describe(GetUserByPhoneHandler.name, () => {
 
   it('returns null when user is not found', async () => {
     const phoneNumber = '+1234567890';
+    userRepository.getUserByPhone.mockResolvedValue(null);
 
     const result = await handler.execute({
       phoneNumber,

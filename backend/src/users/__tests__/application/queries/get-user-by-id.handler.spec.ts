@@ -42,6 +42,7 @@ describe(GetUserByIdHandler.name, () => {
 
   it('returns null when user is not found', async () => {
     const userId = randomUUID();
+    userRepository.getUserById.mockResolvedValue(null);
 
     const result = await handler.execute({ userId } as GetUserByIdQuery);
 

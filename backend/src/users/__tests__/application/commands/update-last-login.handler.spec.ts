@@ -17,6 +17,8 @@ describe(UpdateLastLoginHandler.name, () => {
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       providers: [
         UpdateLastLoginHandler,
@@ -43,6 +45,7 @@ describe(UpdateLastLoginHandler.name, () => {
 
   it('throws UserNotFoundException when user does not exist', async () => {
     const userId = randomUUID();
+    userRepository.getUserById.mockResolvedValue(null);
 
     await expect(
       handler.execute({ userId } as UpdateLastLoginCommand),

@@ -51,10 +51,10 @@ describe(GetPaginatedUsersByRoleHandler.name, () => {
       paginationParams,
     } as GetPaginatedUsersByRoleQuery);
 
-    expect(result.items).toHaveLength(2);
-    expect(result.totalCount).toBe(2);
-    expect(result.page).toBe(1);
-    expect(result.pageSize).toBe(10);
+    expect(result.items).toHaveLength(paginatedDbUsers.items.length);
+    expect(result.totalCount).toBe(paginatedDbUsers.totalCount);
+    expect(result.page).toBe(paginationParams.page);
+    expect(result.pageSize).toBe(paginationParams.pageSize);
     expect(userRepository.getUsersByRole).toHaveBeenCalledWith(
       role,
       paginationParams,
@@ -74,10 +74,10 @@ describe(GetPaginatedUsersByRoleHandler.name, () => {
       paginationParams,
     } as GetPaginatedUsersByRoleQuery);
 
-    expect(result.items).toHaveLength(0);
-    expect(result.totalCount).toBe(0);
-    expect(result.page).toBe(1);
-    expect(result.pageSize).toBe(10);
+    expect(result.items).toHaveLength(paginatedDbUsers.items.length);
+    expect(result.totalCount).toBe(paginatedDbUsers.totalCount);
+    expect(result.page).toBe(paginationParams.page);
+    expect(result.pageSize).toBe(paginationParams.pageSize);
     expect(userRepository.getUsersByRole).toHaveBeenCalledWith(
       role,
       paginationParams,

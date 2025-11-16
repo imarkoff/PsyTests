@@ -4,7 +4,6 @@ import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
 import { createPatientCreateFixture } from '../../fixtures/patient-create.fixture';
 import { UserMapper } from '../../../../users/application/mappers/user.mapper';
-import { DoctorPatient } from '../../../domain/entities/doctor-patient.entity';
 import { DoctorPatientMapper } from '../../../application/mappers/doctor-patient.mapper';
 import { PhoneIsAlreadyTakenException } from '../../../../users/domain/exceptions/phone-is-already-taken.exception';
 import { CreateUserCommand } from '../../../../users/application/commands/create-user/create-user.command';
@@ -41,7 +40,7 @@ describe(DoctorPatientCreatorImpl.name, () => {
       createUserFixture({ registeredById: doctorId }),
     );
     const expectedDoctorPatientDto = DoctorPatientMapper.toDto(
-      DoctorPatient.create(doctorId, createdUser.id),
+      DoctorPatientMapper.createNewRelation(doctorId, createdUser.id),
     );
     commandBus.execute
       .mockResolvedValueOnce(createdUser)
