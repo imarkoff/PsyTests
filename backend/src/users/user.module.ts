@@ -16,7 +16,7 @@ import { GetUserByIdHandler } from './application/queries/get-user-by-id/get-use
 import { GetUserModelByPhoneHandler } from './application/queries/get-user-model-by-phone/get-user-model-by-phone.handler';
 import { GetUserModelByIdHandler } from './application/queries/get-user-model-by-id/get-user-model-by-id.handler';
 import { UsersOrchestrator } from './application/services/users-orchestrator/users-orchestrator.abstract';
-import { TypeormUserRepository } from './infrastructure/typeorm/typeorm-user.repository';
+import { TypeOrmUserRepository } from './infrastructure/typeorm/type-orm-user.repository';
 import { TypeORMModule } from '../core/typeorm/typeorm.module';
 import { FirstAdminCreator } from './application/services/first-admin-creator/first-admin-creator.abstract';
 import { FirstAdminCreatorImpl } from './application/services/first-admin-creator/first-admin-creator.impl';
@@ -27,7 +27,7 @@ import { FirstAdminCreatorImpl } from './application/services/first-admin-creato
   providers: [
     {
       provide: UserRepository,
-      useClass: TypeormUserRepository,
+      useClass: TypeOrmUserRepository,
     },
     {
       provide: UsersOrchestrator,

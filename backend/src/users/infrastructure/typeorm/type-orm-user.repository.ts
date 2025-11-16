@@ -9,7 +9,7 @@ import { UUID } from 'node:crypto';
 import { TypeOrmPaginator } from '../../../shared/pagination/application/typeorm-paginator/typeorm-paginator.abstract';
 
 @Injectable()
-export class TypeormUserRepository implements UserRepository {
+export class TypeOrmUserRepository implements UserRepository {
   private repo: Repository<User>;
 
   constructor(
