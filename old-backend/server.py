@@ -140,8 +140,10 @@ class PsyTestsEngine(PsyTestsEngineServicer):
             return GetTestMarksSystemResponse(
                 marks_system_json=json.dumps(marks_system)
             )
-        except NotFoundError:
-            return GetTestMarksSystemResponse(marks_system_json="")
+        except NotFoundError as e:
+            context.set_code(StatusCode.NOT_FOUND)
+            context.set_details(e.message)
+        return GetTestMarksSystemResponse()
 
 
 async def serve():
