@@ -1,4 +1,5 @@
 export interface PsyTestsEngineConfig {
-  url: string;
+  host: string;
+  port: number;
   protoPath: string;
 }

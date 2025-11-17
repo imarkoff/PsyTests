@@ -6,7 +6,13 @@ import {
   ParseUUIDPipe,
   Res,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import type { UUID } from 'node:crypto';
 import { Roles } from '../../core/decorators/roles.decorator';
 import { UserRole } from '../../shared/enums/user-role.enum';
@@ -79,7 +85,7 @@ export class PsyTestsController {
     format: 'uuid',
     description: 'The UUID of the psychological test.',
   })
-  @ApiParam({
+  @ApiQuery({
     name: 'imagePath',
     description:
       'The relative path to the image file inside the test resources.',

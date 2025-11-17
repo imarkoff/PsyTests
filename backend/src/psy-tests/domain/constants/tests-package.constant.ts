@@ -17,7 +17,7 @@ export const TESTS_CLIENTS: ClientsModuleAsyncOptions = [
         options: {
           package: TESTS_PROTO_PACKAGE,
           protoPath: testsEngineConfig.protoPath,
-          url: testsEngineConfig.url,
+          url: `${testsEngineConfig.host}:${testsEngineConfig.port}`,
         },
       };
     },

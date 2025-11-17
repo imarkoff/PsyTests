@@ -12,9 +12,10 @@ import { GrpcTestsEngineGateway } from './infrastructure/grpc/grpc-tests-engine.
 import { GetPsyTestByIdWithoutAnswersHandler } from './application/queries/get-psy-test-by-id-without-answers/get-psy-test-by-id-without-answers.handler';
 import { GetPsyTestImageHandler } from './application/queries/get-psy-test-image/get-psy-test-image.handler';
 import { GetPsyTestsMarksSystemHandler } from './application/queries/get-psy-test-marks-system/get-psy-tests-marks-system.handler';
+import { GrpcModule } from '../shared/grpc/grpc.module';
 
 @Module({
-  imports: [CqrsModule, ClientsModule.registerAsync(TESTS_CLIENTS)],
+  imports: [CqrsModule, GrpcModule, ClientsModule.registerAsync(TESTS_CLIENTS)],
   controllers: [PsyTestsController],
   providers: [
     {
