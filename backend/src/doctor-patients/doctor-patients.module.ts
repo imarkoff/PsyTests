@@ -18,6 +18,7 @@ import { PatientsFinderImpl } from './application/services/patients-finder/patie
 import { GetDoctorPatientsByDoctorIdAndPatientIdsHandler } from './application/queries/get-doctor-patients-by-doctor-id-and-patient-ids/get-doctor-patients-by-doctor-id-and-patient-ids.handler';
 import { TypeOrmDoctorPatientsRepository } from './infrastructure/typeorm/typeorm-doctor-patients.repository';
 import { TypeORMModule } from '../core/typeorm/typeorm.module';
+import { GetAssignedDoctorPatientByDoctorIdAndPatientIdHandler } from './application/queries/get-assigned-doctor-patient-by-doctor-id-and-patient-id/get-assigned-doctor-patient-by-doctor-id-and-patient-id.handler';
 
 @Module({
   imports: [CqrsModule, TypeORMModule],
@@ -46,6 +47,7 @@ import { TypeORMModule } from '../core/typeorm/typeorm.module';
     AssignDoctorPatientHandler,
     MarkDoctorPatientAsReadHandler,
     UnassignDoctorPatientHandler,
+    GetAssignedDoctorPatientByDoctorIdAndPatientIdHandler,
     GetDoctorPatientsByDoctorIdAndPatientIdsHandler,
     GetPatientByIdAndDoctorIdHandler,
     GetPatientsByDoctorIdHandler,
