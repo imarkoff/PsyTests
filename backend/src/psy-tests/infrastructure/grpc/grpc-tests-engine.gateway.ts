@@ -8,8 +8,9 @@ import {
 } from '../../domain/constants/tests-package.constant';
 import { type ClientGrpc } from '@nestjs/microservices';
 import { UUID } from 'node:crypto';
-import { firstValueFrom } from 'rxjs';
 import { PsyTestWithDetailsDto } from '../../presentation/dtos/psy-test-with-details.dto';
+import { status } from '@grpc/grpc-js';
+import { GrpcFetcher } from '../../../shared/grpc/application/grpc-fetcher/grpc-fetcher.abstract';
 
 @Injectable()
 export class GrpcTestsEngineGateway
@@ -20,6 +21,7 @@ export class GrpcTestsEngineGateway
 
   constructor(
     @Inject(TESTS_PACKAGE_NAME) private readonly client: ClientGrpc,
+    private readonly grpcFetcher: GrpcFetcher,
   ) {}
 
   onModuleInit() {
@@ -31,22 +33,36 @@ export class GrpcTestsEngineGateway
     this.logger.debug('Getting all psychological tests from Tests Engine...');
 
     const observable = this.testsClient.getAllTests({});
-    const response = await firstValueFrom(observable);
 
-    this.logger.debug(
-      `Retrieved ${response.tests.length} tests from Tests Engine.`,
-    );
-
-    return response.tests;
+    return this.grpcFetcher.fetch({
+      request: observable,
+      onSuccess: (response) => {
+        this.logger.debug(
+          'Retrieved all psychological tests from Tests Engine.',
+        );
+        return response.tests as PsyTestDto[];
+      },
+    });
   }
+
   async getTestById(id: UUID): Promise<PsyTestWithDetailsDto | null> {
     this.logger.debug(
       `Getting psychological test by ID ${id} from Tests Engine...`,
     );
 
-    const observable = this.testsClient.getTestById({ testId: id });
-    const response = await firstValueFrom(observable);
-    return this.parseTestJson(id, response.json);
+    return this.grpcFetcher.fetch({
+      request: this.testsClient.getTestById({ testId: id }),
+      onSuccess: (response) => {
+        this.logger.debug(`Retrieved test with ID ${id} from Tests Engine.`);
+        return this.parseTestJson(id, response.json);
+      },
+      onFailure: {
+        [status.NOT_FOUND]: () => {
+          this.logger.debug(`Test with ID ${id} not found in Tests Engine.`);
+          return null;
+        },
+      },
+    });
   }
 
   async getTestByIdWithoutAnswers(
@@ -59,9 +75,21 @@ export class GrpcTestsEngineGateway
     const observable = this.testsClient.getTestByIdWithoutAnswers({
       testId: id,
     });
-    const response = await firstValueFrom(observable);
-
-    return this.parseTestJson(id, response.json);
+    return this.grpcFetcher.fetch({
+      request: observable,
+      onSuccess: (response) => {
+        this.logger.debug(
+          `Retrieved test with ID ${id} without answers from Tests Engine.`,
+        );
+        return this.parseTestJson(id, response.json);
+      },
+      onFailure: {
+        [status.NOT_FOUND]: () => {
+          this.logger.debug(`Test with ID ${id} not found in Tests Engine.`);
+          return null;
+        },
+      },
+    });
   }
 
   private parseTestJson(
@@ -77,6 +105,32 @@ export class GrpcTestsEngineGateway
     return JSON.parse(json) as PsyTestWithDetailsDto;
   }
 
+  async getTestMetadataById(id: UUID): Promise<PsyTestDto | null> {
+    this.logger.debug(
+      `Getting metadata for psychological test by ID ${id} from Tests Engine...`,
+    );
+
+    const observable = this.testsClient.getTestMetadataById({ testId: id });
+
+    return this.grpcFetcher.fetch({
+      request: observable,
+      onSuccess: (response) => {
+        this.logger.debug(
+          `Retrieved metadata for test with ID ${id} from Tests Engine.`,
+        );
+        return response as PsyTestDto;
+      },
+      onFailure: {
+        [status.NOT_FOUND]: () => {
+          this.logger.debug(
+            `Metadata for test with ID ${id} not found in Tests Engine.`,
+          );
+          return null;
+        },
+      },
+    });
+  }
+
   async getTestImage(id: UUID, imagePath: string): Promise<Buffer | null> {
     this.logger.debug(
       `Getting image for psychological test by ID ${id} from Tests Engine...`,
@@ -85,19 +139,24 @@ export class GrpcTestsEngineGateway
       testId: id,
       imagePath: imagePath,
     });
-    const response = await firstValueFrom(observable);
 
-    if (!response.imageData) {
-      this.logger.debug(
-        `Image for test with ID ${id} not found in Tests Engine.`,
-      );
-      return null;
-    }
-
-    this.logger.debug(
-      `Retrieved image for test with ID ${id} from Tests Engine.`,
-    );
-    return response.imageData;
+    return this.grpcFetcher.fetch({
+      request: observable,
+      onSuccess: (response) => {
+        this.logger.debug(
+          `Retrieved image for test with ID ${id} from Tests Engine.`,
+        );
+        return response.imageData;
+      },
+      onFailure: {
+        [status.NOT_FOUND]: () => {
+          this.logger.debug(
+            `Image for test with ID ${id} not found in Tests Engine.`,
+          );
+          return null;
+        },
+      },
+    });
   }
 
   async getTestMarksSystem(id: UUID): Promise<object | [] | null> {
@@ -105,18 +164,30 @@ export class GrpcTestsEngineGateway
       `Getting marks system for psychological test by ID ${id} from Tests Engine...`,
     );
     const observable = this.testsClient.getTestMarksSystem({ testId: id });
-    const response = await firstValueFrom(observable);
 
-    if (!response.marksSystemJson) {
-      this.logger.debug(
-        `Marks system for test with ID ${id} not found in Tests Engine.`,
-      );
-      return null;
-    }
+    return this.grpcFetcher.fetch({
+      request: observable,
+      onSuccess: (response) => {
+        if (!response.marksSystemJson) {
+          this.logger.debug(
+            `Marks system for test with ID ${id} not found in Tests Engine.`,
+          );
+          return null;
+        }
 
-    this.logger.debug(
-      `Retrieved marks system for test with ID ${id} from Tests Engine.`,
-    );
-    return JSON.parse(response.marksSystemJson) as object | [];
+        this.logger.debug(
+          `Retrieved marks system for test with ID ${id} from Tests Engine.`,
+        );
+        return JSON.parse(response.marksSystemJson) as object | [];
+      },
+      onFailure: {
+        [status.NOT_FOUND]: () => {
+          this.logger.debug(
+            `Marks system for test with ID ${id} not found in Tests Engine.`,
+          );
+          return null;
+        },
+      },
+    });
   }
 }

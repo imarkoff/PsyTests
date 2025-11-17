@@ -21,6 +21,13 @@ export abstract class PsyTestsEngineGateway {
   abstract getTestById(id: UUID): Promise<PsyTestWithDetailsDto | null>;
 
   /**
+   * Fetches metadata of a psychological test by its ID.
+   * @param id - The ID of the psychological test.
+   * @returns A promise that resolves to a PsyTest entity or null if not found.
+   */
+  abstract getTestMetadataById(id: UUID): Promise<PsyTestDto | null>;
+
+  /**
    * Fetches a psychological test by its ID
    * without answers or other sensitive details.
    * @param id - The ID of the psychological test.
