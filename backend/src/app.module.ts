@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserModule } from './users/user.module';
-import { PrismaModule } from './core/prisma/prisma.module';
 import { PaginationModule } from './shared/pagination/pagination.module';
 import { ValidationsModule } from './core/validations/validations.module';
 import { AuthModule } from './auth/auth.module';
@@ -19,7 +18,6 @@ import { AssignedTestsModule } from './assigned-tests/assigned-tests.module';
     UserModule,
     PsyTestsModule,
     DoctorPatientsModule,
-    PrismaModule,
     PaginationModule,
     DecoratorsModule,
     ValidationsModule,

@@ -1,6 +1,6 @@
-import { UserRole } from 'generated/prisma';
 import { RoleValidator } from './role-validator.interface';
 import { Injectable } from '@nestjs/common';
+import { UserRole } from '../../../shared/enums/user-role.enum';
 
 @Injectable()
 export class RoleValidatorImpl implements RoleValidator {
