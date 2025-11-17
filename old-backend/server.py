@@ -3,6 +3,7 @@ import json
 import logging
 from typing import Any
 from uuid import UUID
+from grpc import ServicerContext, StatusCode
 import grpc.aio as grpc
 
 from proto.psy_tests_engine_pb2_grpc import (
@@ -62,6 +63,27 @@ class PsyTestsEngine(PsyTestsEngineServicer):
         ]
         return GetAllTestsResponse(tests=test_metadata_list)
 
+    async def GetTestMetadataById(
+        self,
+        request: GetTestByIdRequest,
+        context: ServicerContext
+    ):
+        try:
+            test = await self.test_service.get_base_test(
+                test_id=UUID(request.test_id)
+            )
+
+            return TestMetadata(
+                id=str(test.id),
+                name=test.name,
+                description=test.description,
+                type=test.type,
+            )
+        except NotFoundError as e:
+            context.set_code(StatusCode.NOT_FOUND)
+            context.set_details(e.message)
+            return TestMetadata()
+
     async def GetTestById(self, request: GetTestByIdRequest, context: Any):
         try:
             test_bundle = await self.test_service.get_test(
@@ -70,7 +92,9 @@ class PsyTestsEngine(PsyTestsEngineServicer):
             return GetTestByIdResponse(
                 json=test_bundle.model.model_dump_json()
             )
-        except NotFoundError:
+        except NotFoundError as e:
+            context.set_code(StatusCode.NOT_FOUND)
+            context.set_details(e.message)
             return GetTestByIdResponse(json="")
 
     async def GetTestByIdWithoutAnswers(
@@ -85,8 +109,10 @@ class PsyTestsEngine(PsyTestsEngineServicer):
             return GetTestByIdResponse(
                 json=test.model_dump_json()
             )
-        except NotFoundError:
-            return GetTestByIdResponse(json="")
+        except NotFoundError as e:
+            context.set_code(StatusCode.NOT_FOUND)
+            context.set_details(e.message)
+            return GetTestByIdResponse()
 
     async def GetTestImage(self, request: GetTestImageRequest, context: Any):
         try:
@@ -95,8 +121,10 @@ class PsyTestsEngine(PsyTestsEngineServicer):
                 image_path=request.image_path
             )
             return GetTestImageResponse(image_data=image)
-        except NotFoundError:
-            return GetTestImageResponse(image_data=b"")
+        except NotFoundError as e:
+            context.set_code(StatusCode.NOT_FOUND)
+            context.set_details(e.message)
+            return GetTestImageResponse()
 
     async def GetTestMarksSystem(
         self,

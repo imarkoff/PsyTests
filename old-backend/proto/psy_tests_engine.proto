@@ -4,6 +4,7 @@ package psy_tests_engine;
 
 service PsyTestsEngine {
     rpc GetAllTests (Empty) returns (GetAllTestsResponse);
+    rpc GetTestMetadataById (GetTestByIdRequest) returns (TestMetadata);
     rpc GetTestById (GetTestByIdRequest) returns (GetTestByIdResponse);
     rpc GetTestByIdWithoutAnswers (GetTestByIdRequest) returns (GetTestByIdResponse);
     rpc GetTestImage (GetTestImageRequest) returns (GetTestImageResponse);
