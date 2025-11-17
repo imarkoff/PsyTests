@@ -20,6 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs",
+    "db:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:create -d src/core/typeorm/data-source.ts",
     "migration:generate": "npm run typeorm -- migration:generate -d src/core/typeorm/data-source.ts",
     "migration:run": "npm run typeorm -- migration:run -d src/core/typeorm/data-source.ts",
     "migration:revert": "npm run typeorm -- migration:revert -d src/core/typeorm/data-source.ts"
@@ -43,16 +44,14 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "pg": "^8.14.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "0.3.27",
-    "uuid": "^13.0.0",
-    "pg": "^8.14.1"
+    "typeorm-extension": "^3.7.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.19.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
@@ -62,6 +61,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/mime-types": "^3.0.1",
+    "@types/node": "^22.19.1",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",
@@ -75,7 +75,9 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
   "jest": {
