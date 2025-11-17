@@ -6,6 +6,12 @@ import { DbPaginated } from '../../../shared/pagination/domain/types/db-paginate
 export abstract class AssignedTestsRepository {
   abstract getById(assignedTestId: UUID): Promise<AssignedTest | null>;
 
+  abstract getAssignedTestByTestIdDoctorIdAndPatientId(
+    testId: UUID,
+    doctorId: UUID,
+    patientId: UUID,
+  ): Promise<AssignedTest | null>;
+
   abstract getAssignedTestByTestIdAndPatientId(
     testId: UUID,
     patientId: UUID,

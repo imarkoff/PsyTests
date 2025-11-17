@@ -22,6 +22,19 @@ export class TypeOrmAssignedTestsRepository implements AssignedTestsRepository {
     return this.repository.findOneBy({ id: assignedTestId });
   }
 
+  getAssignedTestByTestIdDoctorIdAndPatientId(
+    testId: UUID,
+    doctorId: UUID,
+    patientId: UUID,
+  ): Promise<AssignedTest | null> {
+    return this.repository.findOneBy({
+      testId: testId,
+      assignedByDoctorId: doctorId,
+      assignedToPatientId: patientId,
+      unassignedAt: IsNull(),
+    });
+  }
+
   getAssignedTestByTestIdAndPatientId(
     testId: UUID,
     patientId: UUID,
