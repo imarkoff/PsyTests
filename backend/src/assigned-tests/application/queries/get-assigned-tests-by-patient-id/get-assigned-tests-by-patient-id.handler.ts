@@ -3,7 +3,7 @@ import { GetAssignedTestsByPatientIdQuery } from './get-assigned-tests-by-patien
 import { AssignedTestDto } from 'src/assigned-tests/presentation/dtos/assigned-test.dto';
 import { AssignedTestsRepository } from '../../../domain/interfaces/assigned-tests.repository';
 import { AssignedTestMapper } from '../../mappers/assigned-test.mapper';
-import { GetPsyTestMetadataByIdQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id/get-psy-test-metadata-by-id.query';
+import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
 import { PsyTestDto } from '../../../../psy-tests/presentation/dtos/psy-test.dto';
 
 @QueryHandler(GetAssignedTestsByPatientIdQuery)
@@ -21,11 +21,11 @@ export class GetAssignedTestsByPatientIdHandler
     const assignedTests =
       await this.repository.getAssignedTestsByPatientId(patientId);
 
-    const psyTests: (PsyTestDto | null)[] = [];
+    const psyTests: PsyTestDto[] = [];
 
     for (const at of assignedTests) {
       const test = await this.queryBus.execute(
-        new GetPsyTestMetadataByIdQuery(at.testId),
+        new GetPsyTestMetadataByIdOrThrowQuery(at.testId),
       );
       psyTests.push(test);
     }

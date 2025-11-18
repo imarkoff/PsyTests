@@ -13,7 +13,7 @@ import { GetPsyTestByIdWithoutAnswersHandler } from './application/queries/get-p
 import { GetPsyTestImageHandler } from './application/queries/get-psy-test-image/get-psy-test-image.handler';
 import { GetPsyTestsMarksSystemHandler } from './application/queries/get-psy-test-marks-system/get-psy-tests-marks-system.handler';
 import { GrpcModule } from '../shared/grpc/grpc.module';
-import { GetPsyTestMetadataByIdHandler } from './application/queries/get-psy-test-metadata-by-id/get-psy-test-metadata-by-id.handler';
+import { GetPsyTestMetadataByIdOrThrowHandler } from './application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.handler';
 
 @Module({
   imports: [CqrsModule, GrpcModule, ClientsModule.registerAsync(TESTS_CLIENTS)],
@@ -30,7 +30,7 @@ import { GetPsyTestMetadataByIdHandler } from './application/queries/get-psy-tes
     GetPsyTestsHandler,
     GetPsyTestByIdHandler,
     GetPsyTestByIdWithoutAnswersHandler,
-    GetPsyTestMetadataByIdHandler,
+    GetPsyTestMetadataByIdOrThrowHandler,
     GetPsyTestImageHandler,
     GetPsyTestsMarksSystemHandler,
   ],
