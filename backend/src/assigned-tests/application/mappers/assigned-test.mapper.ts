@@ -6,10 +6,9 @@ import { User } from '../../../users/domain/entities/user.entity';
 import { UUID } from 'node:crypto';
 
 export class AssignedTestMapper {
-  static toDto(entity: AssignedTest, test: PsyTestDto | null): AssignedTestDto {
+  static toDto(entity: AssignedTest, test: PsyTestDto): AssignedTestDto {
     const dto = new AssignedTestDto();
     dto.id = entity.id;
-    dto.testId = entity.testId;
     dto.test = test;
     dto.assignedToPatientId = entity.assignedToPatientId;
     dto.assignedToPatient = entity.assignedToPatient

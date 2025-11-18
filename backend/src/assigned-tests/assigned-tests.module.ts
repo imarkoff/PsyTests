@@ -12,6 +12,11 @@ import { GetAssignedTestsByPatientIdHandler } from './application/queries/get-as
 import { UnassignTestHandler } from './application/commands/unassign-test/unassign-test.handler';
 import { PatientAssignedTestsOrchestrator } from './application/services/patient-assigned-tests-orchestrator/patient-assigned-tests-orchestrator.abstract';
 import { PatientAssignedTestsOrchestratorImpl } from './application/services/patient-assigned-tests-orchestrator/patient-assigned-tests-orchestrator.impl';
+import { TestResultsRepository } from './domain/interfaces/test-results.repository';
+import { TypeOrmTestResultsRepository } from './infrastructure/typeorm/typeorm-test-results.repository';
+import { GetAssignedTestByTestIdAndPatientIdHandler } from './application/queries/get-assigned-test-by-test-id-and-patient-id/get-assigned-test-by-test-id-and-patient-id.handler';
+import { PassAssignedTestHandler } from './application/commands/pass-assigned-test/pass-assigned-test.handler';
+import { GetShortTestResultsByPatientIdHandler } from './application/queries/get-short-test-results-by-patient-id/get-short-test-results-by-patient-id.handler';
 
 @Module({
   imports: [CqrsModule, TypeORMModule],
@@ -25,6 +30,10 @@ import { PatientAssignedTestsOrchestratorImpl } from './application/services/pat
       useClass: TypeOrmAssignedTestsRepository,
     },
     {
+      provide: TestResultsRepository,
+      useClass: TypeOrmTestResultsRepository,
+    },
+    {
       provide: DoctorPatientsAssignedTestsOrchestrator,
       useClass: DoctorPatientsAssignedTestsOrchestratorImpl,
     },
@@ -33,8 +42,11 @@ import { PatientAssignedTestsOrchestratorImpl } from './application/services/pat
       useClass: PatientAssignedTestsOrchestratorImpl,
     },
     AssignTestToPatientHandler,
+    PassAssignedTestHandler,
     UnassignTestHandler,
+    GetAssignedTestByTestIdAndPatientIdHandler,
     GetAssignedTestsByPatientIdHandler,
+    GetShortTestResultsByPatientIdHandler,
   ],
 })
 export class AssignedTestsModule {}

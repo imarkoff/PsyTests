@@ -11,13 +11,9 @@ export class AssignedTestDto {
   @ApiProperty({ format: 'uuid' })
   id: UUID;
 
-  /** Unique identifier for the test that has been assigned */
-  @ApiProperty({ format: 'uuid' })
-  testId: UUID;
-
   /** The test entity that has been assigned */
   @ApiProperty({ type: () => PsyTestDto })
-  test: PsyTestDto | null;
+  test: PsyTestDto;
 
   /** Unique identifier for the patient to whom the test is assigned */
   @ApiProperty({ format: 'uuid' })

@@ -2,8 +2,7 @@ import { CommandHandler, ICommandHandler, QueryBus } from '@nestjs/cqrs';
 import { AssignTestToPatientCommand } from './assign-test-to-patient.command';
 import { AssignedTestDto } from '../../../presentation/dtos/assigned-test.dto';
 import { AssignedTestsRepository } from '../../../domain/interfaces/assigned-tests.repository';
-import { GetPsyTestMetadataByIdQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id/get-psy-test-metadata-by-id.query';
-import { PsyTestNotFoundException } from '../../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
+import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
 import { GetUserModelByIdQuery } from '../../../../users/application/queries/get-user-model-by-id/get-user-model-by-id.query';
 import { UserNotFoundException } from '../../../../users/domain/exceptions/user-not-found.exception';
 import { AssignedTestMapper } from '../../mappers/assigned-test.mapper';
@@ -29,7 +28,9 @@ export class AssignTestToPatientHandler
     await this.checkDoctorPatientRelationExists(doctorId, patientId);
     await this.validateIfTestAlreadyAssigned(testId, patientId);
 
-    const test = await this.getPsyTest(testId);
+    const test = await this.queryBus.execute(
+      new GetPsyTestMetadataByIdOrThrowQuery(testId),
+    );
     const doctor = await this.getUserModel(doctorId);
     const patient = await this.getUserModel(patientId);
 
@@ -64,16 +65,6 @@ export class AssignTestToPatientHandler
     if (!doctorPatient) {
       throw new DoctorPatientNotFoundException(doctorId, patientId);
     }
-  }
-
-  private async getPsyTest(testId: UUID) {
-    const test = await this.queryBus.execute(
-      new GetPsyTestMetadataByIdQuery(testId),
-    );
-    if (!test) {
-      throw new PsyTestNotFoundException(testId);
-    }
-    return test;
   }
 
   private async getUserModel(userId: UUID) {
