@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PsyTestsEngineGateway } from '../../domain/interfaces/psy-tests-engine.gateway';
-import { PsyTestDto } from 'src/psy-tests/presentation/dtos/psy-test.dto';
 import { TestsEngineClient } from '../../domain/interfaces/tests-engine.client';
 import {
   TESTS_ENGINE_NAME,
@@ -8,9 +7,10 @@ import {
 } from '../../domain/constants/tests-package.constant';
 import { type ClientGrpc } from '@nestjs/microservices';
 import { UUID } from 'node:crypto';
-import { PsyTestWithDetailsDto } from '../../presentation/dtos/psy-test-with-details.dto';
 import { status } from '@grpc/grpc-js';
 import { GrpcFetcher } from '../../../shared/grpc/application/grpc-fetcher/grpc-fetcher.abstract';
+import { PsyTest } from '../../domain/entities/psy-test.entity';
+import { PsyTestWithDetails } from '../../domain/entities/psy-test-with-details.entity';
 
 @Injectable()
 export class GrpcTestsEngineGateway
@@ -29,7 +29,7 @@ export class GrpcTestsEngineGateway
       this.client.getService<TestsEngineClient>(TESTS_ENGINE_NAME);
   }
 
-  async getAllTests(): Promise<PsyTestDto[]> {
+  async getAllTests(): Promise<PsyTest[]> {
     this.logger.debug('Getting all psychological tests from Tests Engine...');
 
     const observable = this.testsClient.getAllTests({});
@@ -40,12 +40,12 @@ export class GrpcTestsEngineGateway
         this.logger.debug(
           'Retrieved all psychological tests from Tests Engine.',
         );
-        return response.tests as PsyTestDto[];
+        return response.tests;
       },
     });
   }
 
-  async getTestById(id: UUID): Promise<PsyTestWithDetailsDto | null> {
+  async getTestById(id: UUID): Promise<PsyTestWithDetails | null> {
     this.logger.debug(
       `Getting psychological test by ID ${id} from Tests Engine...`,
     );
@@ -67,7 +67,7 @@ export class GrpcTestsEngineGateway
 
   async getTestByIdWithoutAnswers(
     id: UUID,
-  ): Promise<PsyTestWithDetailsDto | null> {
+  ): Promise<PsyTestWithDetails | null> {
     this.logger.debug(
       `Getting psychological test by ID ${id} without answers from Tests Engine...`,
     );
@@ -95,17 +95,17 @@ export class GrpcTestsEngineGateway
   private parseTestJson(
     testId: UUID,
     json: string | undefined,
-  ): PsyTestWithDetailsDto | null {
+  ): PsyTestWithDetails | null {
     if (!json) {
       this.logger.debug(`Test with ID ${testId} not found in Tests Engine.`);
       return null;
     }
 
     this.logger.debug(`Retrieved test with ID ${testId} from Tests Engine.`);
-    return JSON.parse(json) as PsyTestWithDetailsDto;
+    return JSON.parse(json) as PsyTestWithDetails;
   }
 
-  async getTestMetadataById(id: UUID): Promise<PsyTestDto | null> {
+  async getTestMetadataById(id: UUID): Promise<PsyTest | null> {
     this.logger.debug(
       `Getting metadata for psychological test by ID ${id} from Tests Engine...`,
     );
@@ -118,7 +118,7 @@ export class GrpcTestsEngineGateway
         this.logger.debug(
           `Retrieved metadata for test with ID ${id} from Tests Engine.`,
         );
-        return response as PsyTestDto;
+        return response;
       },
       onFailure: {
         [status.NOT_FOUND]: () => {

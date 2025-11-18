@@ -1,20 +1,14 @@
 import { UUID } from 'node:crypto';
 import { Observable } from 'rxjs';
+import { PsyTest } from '../entities/psy-test.entity';
 
-type Empty = object;
+export type Empty = object;
 
-type TestMetadata = {
-  id: UUID;
-  name: string;
-  description: string;
-  type: string;
-};
+export type GetAllTestsResponse = { tests: PsyTest[] };
 
-type GetAllTestsResponse = { tests: TestMetadata[] };
-
-type GetTestByIdRequest = { testId: UUID };
-type GetTestByIdResponse = { json: string };
-type GetTestMetadataByIdResponse = TestMetadata;
+export type GetTestByIdRequest = { testId: UUID };
+export type GetTestByIdResponse = { json: string };
+type GetTestMetadataByIdResponse = PsyTest;
 
 type GetTestImageRequest = { testId: UUID; imagePath: string };
 type GetTestImageResponse = { imageData: Buffer };

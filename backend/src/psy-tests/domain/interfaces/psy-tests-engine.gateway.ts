@@ -1,6 +1,6 @@
-import { PsyTestDto } from '../../presentation/dtos/psy-test.dto';
 import { UUID } from 'node:crypto';
-import { PsyTestWithDetailsDto } from '../../presentation/dtos/psy-test-with-details.dto';
+import { PsyTest } from '../entities/psy-test.entity';
+import { PsyTestWithDetails } from '../entities/psy-test-with-details.entity';
 
 /**
  * Gateway for interacting with the test engine.
@@ -11,21 +11,21 @@ export abstract class PsyTestsEngineGateway {
    * Fetches all psychological tests.
    * @returns A promise that resolves to an array of PsyTest entities.
    */
-  abstract getAllTests(): Promise<PsyTestDto[]>;
+  abstract getAllTests(): Promise<PsyTest[]>;
 
   /**
    * Fetches a psychological test by its ID.
    * @param id - The ID of the psychological test.
    * @returns A promise that resolves to a PsyTestWithDetails entity or null if not found.
    */
-  abstract getTestById(id: UUID): Promise<PsyTestWithDetailsDto | null>;
+  abstract getTestById(id: UUID): Promise<PsyTestWithDetails | null>;
 
   /**
    * Fetches metadata of a psychological test by its ID.
    * @param id - The ID of the psychological test.
    * @returns A promise that resolves to a PsyTest entity or null if not found.
    */
-  abstract getTestMetadataById(id: UUID): Promise<PsyTestDto | null>;
+  abstract getTestMetadataById(id: UUID): Promise<PsyTest | null>;
 
   /**
    * Fetches a psychological test by its ID
@@ -34,7 +34,7 @@ export abstract class PsyTestsEngineGateway {
    */
   abstract getTestByIdWithoutAnswers(
     id: UUID,
-  ): Promise<PsyTestWithDetailsDto | null>;
+  ): Promise<PsyTestWithDetails | null>;
 
   /**
    * Fetches the image associated with a psychological test by its ID.
