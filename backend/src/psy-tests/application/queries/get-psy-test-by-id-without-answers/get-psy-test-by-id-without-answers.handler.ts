@@ -3,6 +3,7 @@ import { GetPsyTestByIdWithoutAnswersQuery } from './get-psy-test-by-id-without-
 import { PsyTestsEngineGateway } from '../../../domain/interfaces/psy-tests-engine.gateway';
 
 import { PsyTestWithDetailsDto } from '../../../presentation/dtos/psy-test-with-details.dto';
+import { PsyTestMapper } from '../../mappers/psy-test.mapper';
 
 @QueryHandler(GetPsyTestByIdWithoutAnswersQuery)
 export class GetPsyTestByIdWithoutAnswersHandler
@@ -10,9 +11,12 @@ export class GetPsyTestByIdWithoutAnswersHandler
 {
   constructor(private readonly psyTestsEngineGateway: PsyTestsEngineGateway) {}
 
-  execute({
+  async execute({
     testId,
   }: GetPsyTestByIdWithoutAnswersQuery): Promise<PsyTestWithDetailsDto | null> {
-    return this.psyTestsEngineGateway.getTestByIdWithoutAnswers(testId);
+    const test =
+      await this.psyTestsEngineGateway.getTestByIdWithoutAnswers(testId);
+    if (!test) return null;
+    return PsyTestMapper.withDetailsToDto(test);
   }
 }

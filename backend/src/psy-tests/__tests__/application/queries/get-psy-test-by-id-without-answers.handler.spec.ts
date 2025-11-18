@@ -1,14 +1,18 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Test } from '@nestjs/testing';
 import { PsyTestsEngineGateway } from '../../../domain/interfaces/psy-tests-engine.gateway';
-import { createPsyTestDtoFixture } from '../../fixtures/psy-test-dto.fixture';
 import { randomUUID } from 'node:crypto';
 import { GetPsyTestByIdWithoutAnswersHandler } from '../../../application/queries/get-psy-test-by-id-without-answers/get-psy-test-by-id-without-answers.handler';
 import { GetPsyTestByIdWithoutAnswersQuery } from '../../../application/queries/get-psy-test-by-id-without-answers/get-psy-test-by-id-without-answers.query';
+import { createPsyTestFixture } from '../../fixtures/psy-test.fixture';
+import { PsyTestMapper } from '../../../application/mappers/psy-test.mapper';
+import { PsyTestWithDetailsDto } from '../../../presentation/dtos/psy-test-with-details.dto';
 
 describe(GetPsyTestByIdWithoutAnswersHandler.name, () => {
   let getPsyTestByIdWithoutAnswersHandler: GetPsyTestByIdWithoutAnswersHandler;
-  let psyTestsEngineGateway: jest.Mocked<PsyTestsEngineGateway>;
+  let psyTestsEngineGateway: Pick<
+    jest.Mocked<PsyTestsEngineGateway>,
+    'getTestByIdWithoutAnswers'
+  >;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -30,7 +34,8 @@ describe(GetPsyTestByIdWithoutAnswersHandler.name, () => {
   });
 
   it('should call psyTestsEngineGateway.getTestByIdWithoutAnswers and return its result', async () => {
-    const mockPsyTest = createPsyTestDtoFixture();
+    const mockPsyTest = createPsyTestFixture();
+    const expectedDto = PsyTestMapper.withDetailsToDto(mockPsyTest);
     psyTestsEngineGateway.getTestByIdWithoutAnswers.mockResolvedValue(
       mockPsyTest,
     );
@@ -40,7 +45,8 @@ describe(GetPsyTestByIdWithoutAnswersHandler.name, () => {
     } as GetPsyTestByIdWithoutAnswersQuery);
 
     expect(psyTestsEngineGateway.getTestByIdWithoutAnswers).toHaveBeenCalled();
-    expect(result).toBe(mockPsyTest);
+    expect(result).toEqual(expectedDto);
+    expect(result).toBeInstanceOf(PsyTestWithDetailsDto);
   });
 
   it('should return null if test not found', async () => {

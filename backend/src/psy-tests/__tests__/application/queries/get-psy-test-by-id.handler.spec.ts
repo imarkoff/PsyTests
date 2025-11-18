@@ -1,14 +1,18 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Test } from '@nestjs/testing';
 import { PsyTestsEngineGateway } from '../../../domain/interfaces/psy-tests-engine.gateway';
-import { createPsyTestDtoFixture } from '../../fixtures/psy-test-dto.fixture';
 import { GetPsyTestByIdHandler } from '../../../application/queries/get-psy-test-by-id/get-psy-test-by-id.handler';
 import { GetPsyTestByIdQuery } from '../../../application/queries/get-psy-test-by-id/get-psy-test-by-id.query';
 import { randomUUID } from 'node:crypto';
+import { createPsyTestFixture } from '../../fixtures/psy-test.fixture';
+import { PsyTestMapper } from '../../../application/mappers/psy-test.mapper';
+import { PsyTestWithDetailsDto } from '../../../presentation/dtos/psy-test-with-details.dto';
 
 describe(GetPsyTestByIdHandler.name, () => {
   let getPsyTestByIdHandler: GetPsyTestByIdHandler;
-  let psyTestsEngineGateway: jest.Mocked<PsyTestsEngineGateway>;
+  let psyTestsEngineGateway: Pick<
+    jest.Mocked<PsyTestsEngineGateway>,
+    'getTestById'
+  >;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -28,7 +32,8 @@ describe(GetPsyTestByIdHandler.name, () => {
   });
 
   it('should call psyTestsEngineGateway.getTestById and return its result', async () => {
-    const mockPsyTest = createPsyTestDtoFixture();
+    const mockPsyTest = createPsyTestFixture();
+    const expectedDto = PsyTestMapper.withDetailsToDto(mockPsyTest);
     psyTestsEngineGateway.getTestById.mockResolvedValue(mockPsyTest);
 
     const result = await getPsyTestByIdHandler.execute({
@@ -36,7 +41,8 @@ describe(GetPsyTestByIdHandler.name, () => {
     } as GetPsyTestByIdQuery);
 
     expect(psyTestsEngineGateway.getTestById).toHaveBeenCalled();
-    expect(result).toBe(mockPsyTest);
+    expect(result).toEqual(expectedDto);
+    expect(result).toBeInstanceOf(PsyTestWithDetailsDto);
   });
 
   it('should return null if test not found', async () => {

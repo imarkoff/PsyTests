@@ -1,13 +1,17 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { GetPsyTestsHandler } from '../../../application/queries/get-psy-tests/get-psy-tests.handler';
 import { Test } from '@nestjs/testing';
 import { PsyTestsEngineGateway } from '../../../domain/interfaces/psy-tests-engine.gateway';
 import { PsyTestDto } from '../../../presentation/dtos/psy-test.dto';
-import { createPsyTestDtoFixture } from '../../fixtures/psy-test-dto.fixture';
+import { createPsyTestFixture } from '../../fixtures/psy-test.fixture';
+import { PsyTestMapper } from '../../../application/mappers/psy-test.mapper';
+import { PsyTestWithDetailsDto } from '../../../presentation/dtos/psy-test-with-details.dto';
 
 describe(GetPsyTestsHandler.name, () => {
   let getPsyTestsHandler: GetPsyTestsHandler;
-  let psyTestsEngineGateway: jest.Mocked<PsyTestsEngineGateway>;
+  let psyTestsEngineGateway: Pick<
+    jest.Mocked<PsyTestsEngineGateway>,
+    'getAllTests'
+  >;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -26,14 +30,24 @@ describe(GetPsyTestsHandler.name, () => {
     psyTestsEngineGateway = module.get(PsyTestsEngineGateway);
   });
 
-  it('should call psyTestsEngineGateway.getAllTests and return its result', async () => {
-    const mockPsyTests: PsyTestDto[] = [createPsyTestDtoFixture()];
+  it('calls psyTestsEngineGateway.getAllTests', async () => {
+    psyTestsEngineGateway.getAllTests.mockResolvedValue([]);
+
+    await getPsyTestsHandler.execute();
+
+    expect(psyTestsEngineGateway.getAllTests).toHaveBeenCalled();
+  });
+
+  it('should return an array of PsyTestDto', async () => {
+    const mockPsyTests = [createPsyTestFixture()];
+    const expectedDtos = mockPsyTests.map((test) => PsyTestMapper.toDto(test));
     psyTestsEngineGateway.getAllTests.mockResolvedValue(mockPsyTests);
 
     const result = await getPsyTestsHandler.execute();
 
-    expect(psyTestsEngineGateway.getAllTests).toHaveBeenCalled();
-    expect(result).toBe(mockPsyTests);
+    expect(result).toEqual(expectedDtos);
+    expect(result[0]).toBeInstanceOf(PsyTestDto);
+    expect(result[0]).not.toBeInstanceOf(PsyTestWithDetailsDto);
   });
 
   it('should propagate errors from psyTestsEngineGateway.getAllTests', async () => {
