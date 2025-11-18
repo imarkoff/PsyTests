@@ -7,7 +7,7 @@ import { PatientAssignedTestsOrchestrator } from '../application/services/patien
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Roles([UserRole.PATIENT])
-@Controller('patients/assigned-tests')
+@Controller('patient/tests/assigned')
 @ApiBearerAuth()
 export class PatientAssignedTestsController {
   constructor(
