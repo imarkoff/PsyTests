@@ -16,6 +16,7 @@ export class TestResult {
   @Column('uuid')
   testId: UUID;
 
+  @Column('uuid')
   @RelationId((testResult: TestResult) => testResult.completedByPatient)
   completedByPatientId: UUID;
 
