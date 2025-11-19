@@ -4,6 +4,7 @@ import { TypeORMModule } from '../core/typeorm/typeorm.module';
 import { AssignedTestsRepository } from './domain/interfaces/assigned-tests.repository';
 import { TypeOrmAssignedTestsRepository } from './infrastructure/typeorm/typeorm-assigned-tests.repository';
 import { DoctorPatientsAssignedTestsController } from './presentation/doctor-patients-assigned-tests.controller';
+import { DoctorPatientsTestResultsController } from './presentation/doctor-patients-test-results.controller';
 import { PatientAssignedTestsController } from './presentation/patient-assigned-tests.controller';
 import { PatientTestResultsController } from './presentation/patient-test-results.controller';
 import { DoctorPatientsAssignedTestsOrchestrator } from './application/services/doctor-patients-assigned-tests-orchestrator/doctor-patients-assigned-tests-orchestrator.asbtract';
@@ -20,11 +21,15 @@ import { PassAssignedTestHandler } from './application/commands/pass-assigned-te
 import { PatientTestResultsOrchestrator } from './application/services/patient-test-results-orchestrator/patient-test-results-orchestrator.abstract';
 import { PatientTestResultsOrchestratorImpl } from './application/services/patient-test-results-orchestrator/patient-test-results-orchestrator.impl';
 import { GetShortTestResultsByPatientIdHandler } from './application/queries/get-short-test-results-by-patient-id/get-short-test-results-by-patient-id.handler';
+import { DoctorPatientsTestResultsOrchestrator } from './application/services/doctor-patients-test-results-orchestrator/doctor-patients-test-results-orchestrator.abstract';
+import { DoctorPatientsTestResultsOrchestratorImpl } from './application/services/doctor-patients-test-results-orchestrator/doctor-patients-test-results-orchestrator.impl';
+import { GetTestResultByIdHandler } from './application/queries/get-test-result-by-id/get-test-result-by-id.handler';
 
 @Module({
   imports: [CqrsModule, TypeORMModule],
   controllers: [
     DoctorPatientsAssignedTestsController,
+    DoctorPatientsTestResultsController,
     PatientAssignedTestsController,
     PatientTestResultsController,
   ],
@@ -42,6 +47,10 @@ import { GetShortTestResultsByPatientIdHandler } from './application/queries/get
       useClass: DoctorPatientsAssignedTestsOrchestratorImpl,
     },
     {
+      provide: DoctorPatientsTestResultsOrchestrator,
+      useClass: DoctorPatientsTestResultsOrchestratorImpl,
+    },
+    {
       provide: PatientAssignedTestsOrchestrator,
       useClass: PatientAssignedTestsOrchestratorImpl,
     },
@@ -55,6 +64,7 @@ import { GetShortTestResultsByPatientIdHandler } from './application/queries/get
     GetAssignedTestByTestIdAndPatientIdHandler,
     GetAssignedTestsByPatientIdHandler,
     GetShortTestResultsByPatientIdHandler,
+    GetTestResultByIdHandler,
   ],
 })
 export class AssignedTestsModule {}

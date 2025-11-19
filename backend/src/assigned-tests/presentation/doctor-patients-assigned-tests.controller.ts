@@ -7,7 +7,7 @@ import { UserFromAuth } from '../../core/decorators/user-from-auth.decorator';
 import { User } from '../../users/domain/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Controller(`doctor/patients/:patientId/tests`)
+@Controller(`doctor/patients/:patientId/tests/assigned`)
 @Roles([UserRole.ADMIN, UserRole.DOCTOR])
 @ApiBearerAuth()
 export class DoctorPatientsAssignedTestsController {
