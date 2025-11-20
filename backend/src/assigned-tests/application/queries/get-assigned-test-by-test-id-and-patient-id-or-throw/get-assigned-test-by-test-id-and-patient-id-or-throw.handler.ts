@@ -19,13 +19,13 @@ export class GetAssignedTestByTestIdAndPatientIdOrThrowHandler
     testId,
     patientId,
   }: GetAssignedTestByTestIdAndPatientIdOrThrowQuery): Promise<AssignedTestDto> {
-    const testResult =
+    const assignedTest =
       await this.repository.getAssignedTestByTestIdAndPatientId(
         testId,
         patientId,
       );
 
-    if (!testResult) {
+    if (!assignedTest) {
       throw new AssignedTestByTestIdAndPatientIdNotFoundException(
         testId,
         patientId,
@@ -36,6 +36,6 @@ export class GetAssignedTestByTestIdAndPatientIdOrThrowHandler
       new GetPsyTestMetadataByIdOrThrowQuery(testId),
     );
 
-    return AssignedTestMapper.toDto(testResult, psyTest);
+    return AssignedTestMapper.toDto(assignedTest, psyTest);
   }
 }

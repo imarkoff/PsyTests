@@ -19,9 +19,7 @@ export class GetTestResultByIdHandler
   }: GetTestResultByIdQuery): Promise<TestResultDto | null> {
     const testResult = await this.repository.getById(testResultId);
 
-    if (!testResult) {
-      return null;
-    }
+    if (!testResult) return null;
 
     const test = await this.queryBus.execute(
       new GetPsyTestMetadataByIdOrThrowQuery(testResult.testId),
