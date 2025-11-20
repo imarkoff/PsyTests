@@ -14,7 +14,7 @@ describe(PatientTestResultsOrchestratorImpl.name, () => {
   let commandBus: Pick<jest.Mocked<CommandBus>, 'execute'>;
 
   const mockPatientId = randomUUID();
-  const mockAnswers = { question1: 'answer1' };
+  const mockAnswers: Record<string, any> = { question1: 'answer1' };
   const mockTestResultShortDto = createTestResultShortDtoFixture();
   const mockTestId = mockTestResultShortDto.test.id;
 
@@ -65,9 +65,9 @@ describe(PatientTestResultsOrchestratorImpl.name, () => {
       const commandCall = commandBus.execute.mock.calls[0][0];
       expect(commandCall).toBeInstanceOf(PassAssignedTestCommand);
       expect(commandBus.execute).toHaveBeenCalledWith(
-        expect.objectContaining({
+        expect.objectContaining(<PassAssignedTestCommand>{
           testId: mockTestId,
-          patientId: mockPatientId,
+          passedByPatientId: mockPatientId,
           answers: mockAnswers,
         }),
       );
