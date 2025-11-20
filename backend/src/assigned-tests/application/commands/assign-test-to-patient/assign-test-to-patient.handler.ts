@@ -25,8 +25,8 @@ export class AssignTestToPatientHandler
     doctorId,
     patientId,
   }: AssignTestToPatientCommand): Promise<AssignedTestDto> {
-    await this.checkDoctorPatientRelationExists(doctorId, patientId);
-    await this.validateIfTestAlreadyAssigned(testId, patientId);
+    await this.ensureDoctorPatientRelationExists(doctorId, patientId);
+    await this.ensureTestIsNotAssigned(testId, patientId);
 
     const test = await this.getTestMetadata(testId);
     const doctor = await this.getUserModel(doctorId);
@@ -42,18 +42,7 @@ export class AssignTestToPatientHandler
     return AssignedTestMapper.toDto(savedAssignedTest, test);
   }
 
-  private async validateIfTestAlreadyAssigned(testId: UUID, patientId: UUID) {
-    const existingAssignment =
-      await this.repository.getAssignedTestByTestIdAndPatientId(
-        testId,
-        patientId,
-      );
-    if (existingAssignment) {
-      throw new TestAlreadyAssignedException(testId, patientId);
-    }
-  }
-
-  private async checkDoctorPatientRelationExists(
+  private async ensureDoctorPatientRelationExists(
     doctorId: UUID,
     patientId: UUID,
   ) {
@@ -65,6 +54,17 @@ export class AssignTestToPatientHandler
     );
     if (!doctorPatient) {
       throw new DoctorPatientNotFoundException(doctorId, patientId);
+    }
+  }
+
+  private async ensureTestIsNotAssigned(testId: UUID, patientId: UUID) {
+    const existingAssignment =
+      await this.repository.getAssignedTestByTestIdAndPatientId(
+        testId,
+        patientId,
+      );
+    if (existingAssignment) {
+      throw new TestAlreadyAssignedException(testId, patientId);
     }
   }
 
