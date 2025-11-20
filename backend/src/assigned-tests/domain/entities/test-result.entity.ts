@@ -21,7 +21,7 @@ export class TestResult {
   completedByPatientId: UUID;
 
   @ManyToOne(() => User)
-  completedByPatient: User;
+  completedByPatient: User | null;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   completedAt: Date;
@@ -31,4 +31,23 @@ export class TestResult {
 
   @Column('jsonb', { nullable: true })
   verdictData?: Record<string, any>;
+
+  static create({
+    testId,
+    passedByPatientId,
+    answers,
+  }: CreateTestResultProps): TestResult {
+    const testResult = new TestResult();
+    testResult.testId = testId;
+    testResult.completedByPatientId = passedByPatientId;
+    testResult.resultsData = answers;
+    testResult.completedAt = new Date();
+    return testResult;
+  }
+}
+
+interface CreateTestResultProps {
+  testId: UUID;
+  passedByPatientId: UUID;
+  answers: Record<string, any>;
 }

@@ -35,4 +35,25 @@ export class AssignedTest {
 
   @Column({ type: 'timestamp', nullable: true })
   unassignedAt: Date | null;
+
+  static create({
+    testId,
+    doctor,
+    patient,
+  }: CreateAssignedTestProps): AssignedTest {
+    const entity = new AssignedTest();
+    entity.testId = testId;
+    entity.assignedByDoctorId = doctor.id;
+    entity.assignedByDoctor = doctor;
+    entity.assignedToPatientId = patient.id;
+    entity.assignedToPatient = patient;
+    entity.assignedAt = new Date();
+    return entity;
+  }
+}
+
+export interface CreateAssignedTestProps {
+  testId: UUID;
+  doctor: User;
+  patient: User;
 }

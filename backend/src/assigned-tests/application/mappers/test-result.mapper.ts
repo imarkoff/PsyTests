@@ -1,7 +1,6 @@
 import { TestResult } from '../../domain/entities/test-result.entity';
 import { TestResultDto } from '../../presentation/dtos/test-result.dto';
 import { PsyTestDto } from '../../../psy-tests/presentation/dtos/psy-test.dto';
-import { UUID } from 'node:crypto';
 import { TestResultShortDto } from '../../presentation/dtos/test-result-short.dto';
 
 export class TestResultMapper {
@@ -22,18 +21,5 @@ export class TestResultMapper {
     dto.test = test;
     dto.completedAt = entity.completedAt;
     return dto;
-  }
-
-  static createNewEntity(
-    testId: UUID,
-    passedByPatientId: UUID,
-    answers: Record<string, any>,
-  ): TestResult {
-    const testResult = new TestResult();
-    testResult.testId = testId;
-    testResult.completedByPatientId = passedByPatientId;
-    testResult.resultsData = answers;
-    testResult.completedAt = new Date();
-    return testResult;
   }
 }

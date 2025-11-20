@@ -6,6 +6,7 @@ import { TestResultShortDto } from '../../../presentation/dtos/test-result-short
 import { TestResultMapper } from '../../mappers/test-result.mapper';
 import { GetAssignedTestByTestIdAndPatientIdQuery } from '../../queries/get-assigned-test-by-test-id-and-patient-id/get-assigned-test-by-test-id-and-patient-id.query';
 import { UUID } from 'node:crypto';
+import { TestResult } from '../../../domain/entities/test-result.entity';
 
 @CommandHandler(PassAssignedTestCommand)
 export class PassAssignedTestHandler
@@ -23,11 +24,11 @@ export class PassAssignedTestHandler
   }: PassAssignedTestCommand): Promise<TestResultShortDto> {
     const assignedTest = await this.getAssignedTest(testId, passedByPatientId);
 
-    const testResult = TestResultMapper.createNewEntity(
+    const testResult = TestResult.create({
       testId,
       passedByPatientId,
       answers,
-    );
+    });
 
     const savedTestResult = await this.testResultsRepository.create(testResult);
 

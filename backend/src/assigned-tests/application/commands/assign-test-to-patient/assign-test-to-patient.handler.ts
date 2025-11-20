@@ -10,6 +10,7 @@ import { UUID } from 'node:crypto';
 import { TestAlreadyAssignedException } from '../../../domain/exceptions/test-already-assigned.exception';
 import { DoctorPatientNotFoundException } from '../../../../doctor-patients/domain/exceptions/doctor-patient-not-found.exception';
 import { GetAssignedDoctorPatientByDoctorIdAndPatientIdQuery } from '../../../../doctor-patients/application/queries/get-assigned-doctor-patient-by-doctor-id-and-patient-id/get-assigned-doctor-patient-by-doctor-id-and-patient-id.query';
+import { AssignedTest } from '../../../domain/entities/assigned-test.entity';
 
 @CommandHandler(AssignTestToPatientCommand)
 export class AssignTestToPatientHandler
@@ -34,7 +35,11 @@ export class AssignTestToPatientHandler
     const doctor = await this.getUserModel(doctorId);
     const patient = await this.getUserModel(patientId);
 
-    const assignedTest = AssignedTestMapper.create(testId, doctor, patient);
+    const assignedTest = AssignedTest.create({
+      testId,
+      doctor,
+      patient,
+    });
     const savedAssignedTest = await this.repository.createTest(assignedTest);
 
     return AssignedTestMapper.toDto(savedAssignedTest, test);
