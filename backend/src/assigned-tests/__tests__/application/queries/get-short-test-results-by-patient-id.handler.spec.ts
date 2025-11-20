@@ -1,14 +1,14 @@
-import { GetShortTestResultsByPatientIdHandler } from '../../application/queries/get-short-test-results-by-patient-id/get-short-test-results-by-patient-id.handler';
+import { GetShortTestResultsByPatientIdHandler } from '../../../application/queries/get-short-test-results-by-patient-id/get-short-test-results-by-patient-id.handler';
 import { QueryBus } from '@nestjs/cqrs';
-import { TestResultsRepository } from '../../domain/interfaces/test-results.repository';
+import { TestResultsRepository } from '../../../domain/interfaces/test-results.repository';
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
-import { createTestResultFixture } from '../fixtures/test-result.fixture';
-import { createPsyTestDtoFixture } from '../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
-import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
-import { PsyTestNotFoundException } from '../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
-import { TestResultMapper } from '../../application/mappers/test-result.mapper';
-import { GetShortTestResultsByPatientIdQuery } from '../../application/queries/get-short-test-results-by-patient-id/get-short-test-results-by-patient-id.query';
+import { createTestResultFixture } from '../../fixtures/test-result.fixture';
+import { createPsyTestDtoFixture } from '../../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
+import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
+import { PsyTestNotFoundException } from '../../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
+import { TestResultMapper } from '../../../application/mappers/test-result.mapper';
+import { GetShortTestResultsByPatientIdQuery } from '../../../application/queries/get-short-test-results-by-patient-id/get-short-test-results-by-patient-id.query';
 
 describe(GetShortTestResultsByPatientIdHandler.name, () => {
   let handler: GetShortTestResultsByPatientIdHandler;

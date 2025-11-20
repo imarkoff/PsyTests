@@ -1,14 +1,14 @@
-import { GetAssignedTestsByPatientIdHandler } from '../../application/queries/get-assigned-tests-by-patient-id/get-assigned-tests-by-patient-id.handler';
+import { GetAssignedTestsByPatientIdHandler } from '../../../application/queries/get-assigned-tests-by-patient-id/get-assigned-tests-by-patient-id.handler';
 import { QueryBus } from '@nestjs/cqrs';
-import { AssignedTestsRepository } from '../../domain/interfaces/assigned-tests.repository';
-import { createAssignedTestFixture } from '../fixtures/assigned-test.fixture';
-import { createPsyTestDtoFixture } from '../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
+import { AssignedTestsRepository } from '../../../domain/interfaces/assigned-tests.repository';
+import { createAssignedTestFixture } from '../../fixtures/assigned-test.fixture';
+import { createPsyTestDtoFixture } from '../../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
-import { PsyTestNotFoundException } from '../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
-import { GetAssignedTestsByPatientIdQuery } from '../../application/queries/get-assigned-tests-by-patient-id/get-assigned-tests-by-patient-id.query';
-import { AssignedTestMapper } from '../../application/mappers/assigned-test.mapper';
-import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
+import { PsyTestNotFoundException } from '../../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
+import { GetAssignedTestsByPatientIdQuery } from '../../../application/queries/get-assigned-tests-by-patient-id/get-assigned-tests-by-patient-id.query';
+import { AssignedTestMapper } from '../../../application/mappers/assigned-test.mapper';
+import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
 
 describe(GetAssignedTestsByPatientIdHandler.name, () => {
   let handler: GetAssignedTestsByPatientIdHandler;

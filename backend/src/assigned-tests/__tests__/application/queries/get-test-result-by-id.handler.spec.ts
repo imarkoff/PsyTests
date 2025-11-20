@@ -1,14 +1,14 @@
-import { GetTestResultByIdHandler } from '../../application/queries/get-test-result-by-id/get-test-result-by-id.handler';
-import { createPsyTestDtoFixture } from '../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
-import { createTestResultFixture } from '../fixtures/test-result.fixture';
+import { GetTestResultByIdHandler } from '../../../application/queries/get-test-result-by-id/get-test-result-by-id.handler';
+import { createPsyTestDtoFixture } from '../../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
+import { createTestResultFixture } from '../../fixtures/test-result.fixture';
 import { QueryBus } from '@nestjs/cqrs';
-import { TestResultsRepository } from '../../domain/interfaces/test-results.repository';
+import { TestResultsRepository } from '../../../domain/interfaces/test-results.repository';
 import { Test } from '@nestjs/testing';
-import { TestResultMapper } from '../../application/mappers/test-result.mapper';
-import { GetTestResultByIdQuery } from '../../application/queries/get-test-result-by-id/get-test-result-by-id.query';
+import { TestResultMapper } from '../../../application/mappers/test-result.mapper';
+import { GetTestResultByIdQuery } from '../../../application/queries/get-test-result-by-id/get-test-result-by-id.query';
 import { randomUUID } from 'node:crypto';
-import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
-import { PsyTestNotFoundException } from '../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
+import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
+import { PsyTestNotFoundException } from '../../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
 
 describe(GetTestResultByIdHandler.name, () => {
   let handler: GetTestResultByIdHandler;

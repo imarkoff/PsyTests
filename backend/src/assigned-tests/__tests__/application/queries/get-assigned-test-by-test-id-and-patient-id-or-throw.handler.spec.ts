@@ -1,14 +1,14 @@
-import { GetAssignedTestByTestIdAndPatientIdOrThrowHandler } from '../../application/queries/get-assigned-test-by-test-id-and-patient-id-or-throw/get-assigned-test-by-test-id-and-patient-id-or-throw.handler';
+import { GetAssignedTestByTestIdAndPatientIdOrThrowHandler } from '../../../application/queries/get-assigned-test-by-test-id-and-patient-id-or-throw/get-assigned-test-by-test-id-and-patient-id-or-throw.handler';
 import { QueryBus } from '@nestjs/cqrs';
-import { AssignedTestsRepository } from '../../domain/interfaces/assigned-tests.repository';
+import { AssignedTestsRepository } from '../../../domain/interfaces/assigned-tests.repository';
 import { Test } from '@nestjs/testing';
-import { createPsyTestDtoFixture } from '../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
-import { createAssignedTestFixture } from '../fixtures/assigned-test.fixture';
-import { AssignedTestMapper } from '../../application/mappers/assigned-test.mapper';
-import { GetAssignedTestByTestIdAndPatientIdOrThrowQuery } from '../../application/queries/get-assigned-test-by-test-id-and-patient-id-or-throw/get-assigned-test-by-test-id-and-patient-id-or-throw.query';
-import { AssignedTestByTestIdAndPatientIdNotFoundException } from '../../domain/exceptions/assigned-test-by-test-id-and-patient-id-not-found.exception';
-import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
-import { PsyTestNotFoundException } from '../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
+import { createPsyTestDtoFixture } from '../../../../psy-tests/__tests__/fixtures/psy-test-dto.fixture';
+import { createAssignedTestFixture } from '../../fixtures/assigned-test.fixture';
+import { AssignedTestMapper } from '../../../application/mappers/assigned-test.mapper';
+import { GetAssignedTestByTestIdAndPatientIdOrThrowQuery } from '../../../application/queries/get-assigned-test-by-test-id-and-patient-id-or-throw/get-assigned-test-by-test-id-and-patient-id-or-throw.query';
+import { AssignedTestByTestIdAndPatientIdNotFoundException } from '../../../domain/exceptions/assigned-test-by-test-id-and-patient-id-not-found.exception';
+import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
+import { PsyTestNotFoundException } from '../../../../psy-tests/domain/exceptions/psy-test-not-found.exception';
 
 describe(GetAssignedTestByTestIdAndPatientIdOrThrowHandler.name, () => {
   let handler: GetAssignedTestByTestIdAndPatientIdOrThrowHandler;
