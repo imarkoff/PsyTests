@@ -1,13 +1,14 @@
 import { IQueryHandler, QueryBus, QueryHandler } from '@nestjs/cqrs';
-import { GetAssignedTestByTestIdAndPatientIdQuery } from './get-assigned-test-by-test-id-and-patient-id.query';
+import { GetAssignedTestByTestIdAndPatientIdOrThrowQuery } from './get-assigned-test-by-test-id-and-patient-id-or-throw.query';
 import { AssignedTestDto } from 'src/assigned-tests/presentation/dtos/assigned-test.dto';
 import { AssignedTestsRepository } from '../../../domain/interfaces/assigned-tests.repository';
 import { AssignedTestMapper } from '../../mappers/assigned-test.mapper';
 import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
+import { AssignedTestByTestIdAndPatientIdNotFoundException } from '../../../domain/exceptions/assigned-test-by-test-id-and-patient-id-not-found.exception';
 
-@QueryHandler(GetAssignedTestByTestIdAndPatientIdQuery)
-export class GetAssignedTestByTestIdAndPatientIdHandler
-  implements IQueryHandler<GetAssignedTestByTestIdAndPatientIdQuery>
+@QueryHandler(GetAssignedTestByTestIdAndPatientIdOrThrowQuery)
+export class GetAssignedTestByTestIdAndPatientIdOrThrowHandler
+  implements IQueryHandler<GetAssignedTestByTestIdAndPatientIdOrThrowQuery>
 {
   constructor(
     private readonly queryBus: QueryBus,
@@ -17,13 +18,19 @@ export class GetAssignedTestByTestIdAndPatientIdHandler
   async execute({
     testId,
     patientId,
-  }: GetAssignedTestByTestIdAndPatientIdQuery): Promise<AssignedTestDto | null> {
+  }: GetAssignedTestByTestIdAndPatientIdOrThrowQuery): Promise<AssignedTestDto> {
     const testResult =
       await this.repository.getAssignedTestByTestIdAndPatientId(
         testId,
         patientId,
       );
-    if (!testResult) return null;
+
+    if (!testResult) {
+      throw new AssignedTestByTestIdAndPatientIdNotFoundException(
+        testId,
+        patientId,
+      );
+    }
 
     const psyTest = await this.queryBus.execute(
       new GetPsyTestMetadataByIdOrThrowQuery(testId),

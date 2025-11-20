@@ -16,7 +16,7 @@ import { PatientAssignedTestsOrchestrator } from './application/services/patient
 import { PatientAssignedTestsOrchestratorImpl } from './application/services/patient-assigned-tests-orchestrator/patient-assigned-tests-orchestrator.impl';
 import { TestResultsRepository } from './domain/interfaces/test-results.repository';
 import { TypeOrmTestResultsRepository } from './infrastructure/typeorm/typeorm-test-results.repository';
-import { GetAssignedTestByTestIdAndPatientIdHandler } from './application/queries/get-assigned-test-by-test-id-and-patient-id/get-assigned-test-by-test-id-and-patient-id.handler';
+import { GetAssignedTestByTestIdAndPatientIdOrThrowHandler } from './application/queries/get-assigned-test-by-test-id-and-patient-id-or-throw/get-assigned-test-by-test-id-and-patient-id-or-throw.handler';
 import { PassAssignedTestHandler } from './application/commands/pass-assigned-test/pass-assigned-test.handler';
 import { PatientTestResultsOrchestrator } from './application/services/patient-test-results-orchestrator/patient-test-results-orchestrator.abstract';
 import { PatientTestResultsOrchestratorImpl } from './application/services/patient-test-results-orchestrator/patient-test-results-orchestrator.impl';
@@ -61,7 +61,7 @@ import { GetTestResultByIdHandler } from './application/queries/get-test-result-
     AssignTestToPatientHandler,
     PassAssignedTestHandler,
     UnassignTestHandler,
-    GetAssignedTestByTestIdAndPatientIdHandler,
+    GetAssignedTestByTestIdAndPatientIdOrThrowHandler,
     GetAssignedTestsByPatientIdHandler,
     GetShortTestResultsByPatientIdHandler,
     GetTestResultByIdHandler,
