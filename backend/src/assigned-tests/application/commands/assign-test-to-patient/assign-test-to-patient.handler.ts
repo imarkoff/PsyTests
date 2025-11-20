@@ -3,14 +3,13 @@ import { AssignTestToPatientCommand } from './assign-test-to-patient.command';
 import { AssignedTestDto } from '../../../presentation/dtos/assigned-test.dto';
 import { AssignedTestsRepository } from '../../../domain/interfaces/assigned-tests.repository';
 import { GetPsyTestMetadataByIdOrThrowQuery } from '../../../../psy-tests/application/queries/get-psy-test-metadata-by-id-or-throw/get-psy-test-metadata-by-id-or-throw.query';
-import { GetUserModelByIdQuery } from '../../../../users/application/queries/get-user-model-by-id/get-user-model-by-id.query';
-import { UserNotFoundException } from '../../../../users/domain/exceptions/user-not-found.exception';
 import { AssignedTestMapper } from '../../mappers/assigned-test.mapper';
 import { UUID } from 'node:crypto';
 import { TestAlreadyAssignedException } from '../../../domain/exceptions/test-already-assigned.exception';
 import { DoctorPatientNotFoundException } from '../../../../doctor-patients/domain/exceptions/doctor-patient-not-found.exception';
 import { GetAssignedDoctorPatientByDoctorIdAndPatientIdQuery } from '../../../../doctor-patients/application/queries/get-assigned-doctor-patient-by-doctor-id-and-patient-id/get-assigned-doctor-patient-by-doctor-id-and-patient-id.query';
 import { AssignedTest } from '../../../domain/entities/assigned-test.entity';
+import { GetUserModelByIdOrThrowQuery } from '../../../../users/application/queries/get-user-model-by-id-or-throw/get-user-model-by-id-or-throw.query';
 
 @CommandHandler(AssignTestToPatientCommand)
 export class AssignTestToPatientHandler
@@ -29,9 +28,7 @@ export class AssignTestToPatientHandler
     await this.checkDoctorPatientRelationExists(doctorId, patientId);
     await this.validateIfTestAlreadyAssigned(testId, patientId);
 
-    const test = await this.queryBus.execute(
-      new GetPsyTestMetadataByIdOrThrowQuery(testId),
-    );
+    const test = await this.getTestMetadata(testId);
     const doctor = await this.getUserModel(doctorId);
     const patient = await this.getUserModel(patientId);
 
@@ -51,7 +48,6 @@ export class AssignTestToPatientHandler
         testId,
         patientId,
       );
-
     if (existingAssignment) {
       throw new TestAlreadyAssignedException(testId, patientId);
     }
@@ -72,11 +68,13 @@ export class AssignTestToPatientHandler
     }
   }
 
+  private async getTestMetadata(testId: UUID) {
+    return this.queryBus.execute(
+      new GetPsyTestMetadataByIdOrThrowQuery(testId),
+    );
+  }
+
   private async getUserModel(userId: UUID) {
-    const user = await this.queryBus.execute(new GetUserModelByIdQuery(userId));
-    if (!user) {
-      throw new UserNotFoundException(userId);
-    }
-    return user;
+    return this.queryBus.execute(new GetUserModelByIdOrThrowQuery(userId));
   }
 }

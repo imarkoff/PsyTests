@@ -20,6 +20,7 @@ import { TypeOrmUserRepository } from './infrastructure/typeorm/type-orm-user.re
 import { TypeORMModule } from '../core/typeorm/typeorm.module';
 import { FirstAdminCreator } from './application/services/first-admin-creator/first-admin-creator.abstract';
 import { FirstAdminCreatorImpl } from './application/services/first-admin-creator/first-admin-creator.impl';
+import { GetUserModelByIdOrThrowHandler } from './application/queries/get-user-model-by-id-or-throw/get-user-model-by-id-or-throw.handler';
 
 @Module({
   imports: [TypeORMModule, CoreAuthModule, CqrsModule],
@@ -47,6 +48,7 @@ import { FirstAdminCreatorImpl } from './application/services/first-admin-creato
     GetUserByIdHandler,
     GetUserByPhoneHandler,
     GetUserModelByIdHandler,
+    GetUserModelByIdOrThrowHandler,
     GetUserModelByPhoneHandler,
   ],
   exports: [],
