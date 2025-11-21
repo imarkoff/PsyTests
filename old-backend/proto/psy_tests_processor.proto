@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package psy_tests_processor;
+
+import "google/protobuf/struct.proto";
+
+service PsyTestsProcessor {
+    rpc CalculateVerdict (CalculateVerdictRequest) returns (CalculateVerdictResponse);
+    rpc GenerateDocument (GenerateDocumentRequest) returns (GenerateDocumentResponse);
+}
+
+message CalculateVerdictRequest {
+    string test_id = 1;
+    User user = 2;
+    google.protobuf.Struct answers = 3; 
+}
+
+message CalculateVerdictResponse {
+    google.protobuf.Struct verdict = 1;
+}
+
+message GenerateDocumentRequest {
+    string test_id = 1;
+    User user = 2;
+    google.protobuf.Struct test_result = 3;
+}
+
+message User {
+    string name = 1;
+    string surname = 2;
+    string patronymic = 3;
+    string birth_date = 4; // ISO format YYYY-MM-DD
+    string gender = 5; // "male" or "female"
+}
+
+message GenerateDocumentResponse {
+    bytes document_data = 1;
+    string filename = 2;
+}

@@ -38,6 +38,17 @@ services:
       - DOMAIN=${DOMAIN}
       - SECRET_KEY=${SECRET_KEY}
 
+  psy-tests-engine:
+    build: old-backend
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./old-backend/:/code
+    command: ["python", "server.py"]
+    environment:
+      - PSY_TESTS_ENGINE_PORT=50051
+      - DOMAIN=${DOMAIN}
+
   postgres:
     image: "postgres:17.2"
     volumes:
