@@ -15,5 +15,9 @@ export const psyTestsEngineConfig = (): {
       process.cwd(),
       parseProcessEnv('PSY_TESTS_ENGINE_PROTO_PATH'),
     ),
+    processorProtoPath: path.join(
+      process.cwd(),
+      parseProcessEnv('PSY_TESTS_PROCESSOR_PROTO_PATH'),
+    ),
   },
 });

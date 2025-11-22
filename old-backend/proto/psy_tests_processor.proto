@@ -5,7 +5,10 @@ package psy_tests_processor;
 import "google/protobuf/struct.proto";
 
 service PsyTestsProcessor {
+    // Calculates the verdict for a psychological test based on user answers.
     rpc CalculateVerdict (CalculateVerdictRequest) returns (CalculateVerdictResponse);
+
+    // Generates a document (e.g., PDF) for the test result.
     rpc GenerateDocument (GenerateDocumentRequest) returns (GenerateDocumentResponse);
 }
 
@@ -31,6 +34,15 @@ message User {
     string patronymic = 3;
     string birth_date = 4; // ISO format YYYY-MM-DD
     string gender = 5; // "male" or "female"
+}
+
+message TestResult {
+    string test_result_id = 1;
+    string test_id = 2;
+    User passed_by = 3;
+    google.protobuf.Struct results = 4;
+    google.protobuf.Struct verdict = 5;
+    string passed_at = 6;
 }
 
 message GenerateDocumentResponse {

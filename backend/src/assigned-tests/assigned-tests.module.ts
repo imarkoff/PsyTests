@@ -24,9 +24,19 @@ import { GetShortTestResultsByPatientIdHandler } from './application/queries/get
 import { DoctorPatientsTestResultsOrchestrator } from './application/services/doctor-patients-test-results-orchestrator/doctor-patients-test-results-orchestrator.abstract';
 import { DoctorPatientsTestResultsOrchestratorImpl } from './application/services/doctor-patients-test-results-orchestrator/doctor-patients-test-results-orchestrator.impl';
 import { GetTestResultByIdHandler } from './application/queries/get-test-result-by-id/get-test-result-by-id.handler';
+import { GrpcModule } from '../shared/grpc/grpc.module';
+import { ClientsModule } from '@nestjs/microservices';
+import { TESTS_PROCESSOR_CLIENTS } from './domain/constants/tests-processor-package.constant';
+import { PsyTestsProcessorGateway } from './domain/interfaces/psy-tests-processor.gateway';
+import { GrpcTestsProcessorGateway } from './infrastructure/grpc/grpc-tests-processor.gateway';
 
 @Module({
-  imports: [CqrsModule, TypeORMModule],
+  imports: [
+    CqrsModule,
+    TypeORMModule,
+    GrpcModule,
+    ClientsModule.registerAsync(TESTS_PROCESSOR_CLIENTS),
+  ],
   controllers: [
     DoctorPatientsAssignedTestsController,
     DoctorPatientsTestResultsController,
@@ -41,6 +51,10 @@ import { GetTestResultByIdHandler } from './application/queries/get-test-result-
     {
       provide: TestResultsRepository,
       useClass: TypeOrmTestResultsRepository,
+    },
+    {
+      provide: PsyTestsProcessorGateway,
+      useClass: GrpcTestsProcessorGateway,
     },
     {
       provide: DoctorPatientsAssignedTestsOrchestrator,

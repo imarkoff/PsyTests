@@ -45,54 +45,90 @@ class PsyTestsProcessor(PsyTestsProcessorServicer):
         request: CalculateVerdictRequest,
         context: ServicerContext
     ):
-        answers_data = MessageToDict(request.answers)
-        answers = answers_data
-        patient = self._create_user_dto(request.user)
+        """
+        Calculates the verdict for a psychological test based on user answers.
 
-        test_id = UUID(request.test_id)
-        test_bundle = await self.test_service.get_test(test_id)
+        Args:
+            request (CalculateVerdictRequest):
+                The gRPC request containing test ID, user details, and answers.
+            context (ServicerContext): The gRPC context.
 
-        verdict = await test_bundle.service.get_verdict(answers, patient)
+        Returns:
+            CalculateVerdictResponse:
+                The response containing the calculated verdict.
 
-        verdict_dict = verdict.model_dump()
-        verdict_struct = Struct()
-        verdict_struct.update(verdict_dict)
+        Raises:
+            grpc.RpcError: If the test is not found (NOT_FOUND).
+        """
+        try:
+            answers_data = MessageToDict(request.answers)
+            answers = answers_data
+            patient = self._create_user_dto(request.user)
 
-        return CalculateVerdictResponse(verdict=verdict_struct)
+            test_id = UUID(request.test_id)
+            test_bundle = await self.test_service.get_test(test_id)
+
+            verdict = await test_bundle.service.get_verdict(answers, patient)
+
+            verdict_dict = verdict.model_dump()
+            verdict_struct = Struct()
+            verdict_struct.update(verdict_dict)
+
+            return CalculateVerdictResponse(verdict=verdict_struct)
+        except NotFoundError as e:
+            context.abort(StatusCode.NOT_FOUND, str(e))
 
     async def GenerateDocument(
         self,
         request: GenerateDocumentRequest,
         context: ServicerContext
     ):
-        test_result_data = MessageToDict(request.test_result)
+        """
+        Generates a document (e.g., PDF) for the test result.
 
-        if not test_result_data and request.test_result_json:
-            try:
-                test_result_data = json.loads(request.test_result_json)
-            except json.JSONDecodeError:
-                pass
+        Args:
+            request (GenerateDocumentRequest):
+                The gRPC request containing test result
+                with user details, test ID, answers and verdict.
+            context (ServicerContext): The gRPC context.
 
-        test_result = TestResultDto(**test_result_data)
+        Returns:
+            GenerateDocumentResponse:
+                The response containing the generated document
+                data and filename.
 
-        patient = self._create_user_dto(request.user)
+        Raises:
+            grpc.RpcError: If the test is not found (NOT_FOUND).
+        """
+        try:
+            test_id = UUID(request.test_result.test_id)
+            test_bundle = await self.test_service.get_test(test_id)
 
-        test_id = UUID(request.test_id)
-        test_bundle = await self.test_service.get_test(test_id)
+            test_result = TestResultDto(
+                id=UUID(request.test_result.test_result_id),
+                test=test_bundle.test,
+                results=request.test_result.results,
+                verdict=request.test_result.verdict,
+                passed_at=datetime.fromisoformat(request.test_result.passed_at)
+            )
 
-        DocumentGenerator = test_bundle.service.get_document_generator()
+            patient = self._create_user_dto(request.user)
 
-        generator = DocumentGenerator(test_result, patient)
+            DocumentGenerator = test_bundle.service.get_document_generator()
 
-        with open(generator.path, 'rb') as f:
-            document_data = f.read()
+            generator = DocumentGenerator(test_result, patient)
 
-        filename = generator._generate_file_name()
+            with open(generator.path, 'rb') as f:
+                document_data = f.read()
 
-        if os.path.exists(generator.path):
-            os.remove(generator.path)
+            filename = generator._generate_file_name()
 
-        return GenerateDocumentResponse(
-            document_data=document_data,
-            filename=filename
-        )
+            if os.path.exists(generator.path):
+                os.remove(generator.path)
+
+            return GenerateDocumentResponse(
+                document_data=document_data,
+                filename=filename
+            )
+        except NotFoundError as e:
+            context.abort(StatusCode.NOT_FOUND, str(e))

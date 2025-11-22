@@ -16,7 +16,6 @@ class TestResultDto(BaseModel):
 
     id: UUID
     test: TestBase
-    patient_id: UUID
     results: dict[str, Any]
     verdict: TestVerdictTypes | None
     passed_at: datetime
@@ -27,7 +26,6 @@ class TestResultDto(BaseModel):
             "example": {
                 "id": "399738b5-7f16-44b7-8e75-314a65e75868",
                 "test": TestBase.model_json_schema()["example"],
-                "patient_id": "123e4567-e89b-12d3-a456-426614174000",
                 "results": {
                     "_": [1, 2, 3, 4, None],
                 },
@@ -42,7 +40,6 @@ class TestResultDto(BaseModel):
         return cls(
             id=test_result.id,
             test=test,
-            patient_id=test_result.patient_id,
             results=test_result.results,
             verdict=test_result.verdict,
             passed_at=test_result.passed_at
